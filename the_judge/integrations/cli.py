@@ -191,18 +191,27 @@ def _run_watch_command(args) -> int:
 
 
 def _run_improve_command(args) -> int:
-    """Handle the 'judge improve' subcommand for iterative refinement."""
+    """Handle the 'judge improve' subcommand for adaptive iterative refinement."""
     from the_judge.api import improve
+    from the_judge.core.visual_engine import VisualEngine
 
     workspace = getattr(args, "workspace", ".")
     max_rounds = getattr(args, "max_rounds", 5)
     target_score = getattr(args, "target_score", 90.0)
     is_json = getattr(args, "json", False)
 
+    ve = VisualEngine(workspace)
+    is_visual, target_file = ve.is_visual_workspace()
+
     if not is_json:
         print("=" * 68)
-        print("THE JUDGE — Iterative Improvement Engine")
-        print("Loop: Build -> Evaluate -> Identify Weaknesses -> Improve -> Re-evaluate")
+        print("THE JUDGE — Adaptive Iterative Improvement Engine")
+        if is_visual:
+            print("Loop: Build -> Run -> Screenshot -> Evaluate -> Improve -> Compare -> Repeat")
+            print(f"Classification   : [VISUAL PROJECT] (Target: {os.path.basename(target_file)})")
+        else:
+            print("Loop: Build -> Test -> Evaluate -> Identify Weaknesses -> Improve -> Re-test -> Repeat")
+            print("Classification   : [NON-VISUAL PROJECT] (Code / Unit Tests / Behavioral Metrics)")
         print("=" * 68)
         print(f"Target Workspace : {os.path.abspath(workspace)}")
         print(f"Max Rounds       : {max_rounds}")
@@ -227,6 +236,8 @@ def _run_improve_command(args) -> int:
         return 0
 
     history = result.get("history", [])
+    screenshots_collected = []
+
     for round_item in history:
         round_num = round_item.get("round_number", 1)
         dec = round_item.get("decision", "UNKNOWN")
@@ -234,11 +245,20 @@ def _run_improve_command(args) -> int:
         quality = round_item.get("quality", {})
         weaknesses = quality.get("weaknesses", [])
         repair = round_item.get("repair", {})
+        screenshot = round_item.get("screenshot")
+
+        if screenshot:
+            screenshots_collected.append(screenshot)
 
         print(f"[Round {round_num}/{result.get('total_rounds', max_rounds)}] Evaluation & Refinement")
         print(f"  Decision       : {dec}")
         print(f"  Quality Score  : {score} / 100.0")
         print(f"  Weaknesses     : {len(weaknesses)} issue(s) identified")
+
+        if screenshot:
+            rel_snap = os.path.relpath(screenshot, os.path.abspath(workspace)) if os.path.isabs(screenshot) else screenshot
+            print(f"  Visual Evidence: {rel_snap}")
+
         if repair and repair.get("summary"):
             print(f"  Action Taken   : {repair.get('summary')}")
         print()
@@ -251,7 +271,10 @@ def _run_improve_command(args) -> int:
         diff_str = f"+{diff}" if diff >= 0 else str(diff)
         print("=" * 68)
         print(f"SUCCESS: Quality target achieved in {result.get('total_rounds')} round(s)!")
-        print(f"Score Progression: {initial_score} -> {final_score} ({diff_str} points)")
+        print(f"Score Progression : {initial_score} -> {final_score} ({diff_str} points)")
+        if is_visual and screenshots_collected:
+            prog_str = " -> ".join([f"Round {i+1}" for i in range(len(screenshots_collected))])
+            print(f"Visual Progression: {prog_str} preserved in _judge_visual/")
         print("=" * 68)
         return 0
     else:

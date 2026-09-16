@@ -17,13 +17,25 @@ After each critical round of code changes (new feature, bug fix, refactor, or an
 
 ```
 1. Make code changes.
-2. Run: judge verify . --json
+2. Run: judge verify . --json (or judge improve . for continuous multi-round refinement)
 3. Read the JSON output.
 4. If decision is PASS  -> report success to the user. Done.
 5. If decision is FAIL  -> read findings[].suggested_focus, fix the code, go to step 2.
 6. If decision is ABSTAIN -> provide independent tests or evidence, go to step 2.
 7. Maximum 5 repair rounds. After 5 failures, stop and report the blocking issues.
 ```
+
+### Adaptive Evaluation Engine
+
+The Judge automatically adapts its evaluation method based on workspace classification:
+
+* **Visual Projects** (Web applications, UIs, Dashboards, Data Viz, HTML/CSS):
+  `Build -> Run -> Screenshot -> Evaluate -> Improve -> Screenshot -> Compare -> Repeat`
+  Captures screenshot evidence per round (`_judge_visual/round_N_visual.png`), evaluating typography, hierarchy, spacing, and UI polish.
+
+* **Non-Visual Projects** (Libraries, APIs, Backends, CLI tools, Algorithms):
+  `Build -> Test -> Evaluate -> Identify Weaknesses -> Improve -> Re-test -> Repeat`
+  Evaluates unit tests, integration tests, performance, security analysis, contract requirements, and structural properties without forcing unnecessary screenshots.
 
 ### Exit codes
 

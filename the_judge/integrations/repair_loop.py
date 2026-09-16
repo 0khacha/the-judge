@@ -61,15 +61,20 @@ class AgentRepairLoop:
         agent_repair_func: Callable[[str, Dict[str, Any]], RepairCallbackResult],
         task_spec: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """Improve a workspace until it passes verification and the quality bar.
+        """Improve a workspace until it passes verification and the quality bar."""
+        from the_judge.core.visual_engine import VisualEngine
 
-        The repair callback keeps the original boolean contract. It may also
-        return ``{"improved": bool, "summary": str}``, which is recorded in
-        round history. A claimed improvement with no workspace change ends the
-        loop instead of manufacturing meaningless rounds.
-        """
         self.rounds_history.clear()
         previous_evidence: Optional[Dict[str, Any]] = None
+
+        visual_engine = VisualEngine(workspace)
+        is_visual, target_visual_file = visual_engine.is_visual_workspace()
+        artifacts_dir = (
+            os.path.join(workspace, "_judge_visual")
+            if os.path.isdir(workspace)
+            else os.path.join(os.path.dirname(workspace), "_judge_visual")
+        )
+        previous_screenshot: Optional[str] = None
 
         for round_idx in range(1, self.max_rounds + 1):
             current_evidence = capture_evidence(workspace)
@@ -82,12 +87,35 @@ class AgentRepairLoop:
             verification_feedback = self.adapter.result_to_feedback(verification_result)
             quality = self._evaluate_quality(workspace, verification_result)
 
+            current_screenshot = None
+            visual_eval = {"is_visual": False}
+
+            if is_visual and target_visual_file:
+                current_screenshot = visual_engine.capture_screenshot(
+                    target_visual_file, round_idx, artifacts_dir
+                )
+                visual_eval = visual_engine.evaluate_visual_aspects(
+                    target_visual_file, current_screenshot, previous_screenshot
+                )
+                previous_screenshot = current_screenshot
+
+                # Merge visual weaknesses into quality evaluation if present
+                for vis_w in visual_eval.get("weaknesses", []):
+                    if not any(w.get("id") == vis_w.get("id") for w in quality["weaknesses"]):
+                        quality["weaknesses"].append(vis_w)
+                        # Slightly adjust score if visual defects found
+                        quality["score"] = min(quality["score"], visual_eval.get("score", quality["score"]))
+
             round_record = {
                 "round_id": f"ROUND-{round_idx}",
                 "round_number": round_idx,
                 "workspace_hash": verification_result.provenance.get("workspace_hash", ""),
                 "implementation_hash": implementation_hash,
                 "judge_version": "v4.0",
+                "is_visual": is_visual,
+                "target_visual_file": target_visual_file if is_visual else None,
+                "screenshot": current_screenshot,
+                "visual_inspection": visual_eval,
                 "decision": verification_result.decision,
                 "numeric_score": verification_result.numeric_score,
                 "quality": quality,
@@ -110,6 +138,8 @@ class AgentRepairLoop:
                 break
 
             feedback = self._build_improvement_feedback(verification_feedback, quality)
+            feedback["is_visual"] = is_visual
+            feedback["visual_inspection"] = visual_eval
             repair_before_hash = self._compute_implementation_hash(workspace)
             repair_result = agent_repair_func(workspace, feedback)
             repaired, repair_summary = self._normalise_repair_result(repair_result)

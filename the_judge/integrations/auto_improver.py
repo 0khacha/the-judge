@@ -181,7 +181,7 @@ class AutoImprover:
         return False
 
     def _enhance_web_file(self, filepath: str) -> bool:
-        """Polishes HTML/CSS files with modern semantic structure and meta tags."""
+        """Polishes HTML/CSS files with modern semantic structure, typography, and card layout."""
         try:
             with open(filepath, "r", encoding="utf-8") as f:
                 content = f.read()
@@ -189,8 +189,30 @@ class AutoImprover:
             if filepath.endswith(".html"):
                 modified = False
                 if "<!DOCTYPE html>" not in content and "<html" not in content:
-                    content = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Enhanced App</title>\n</head>\n<body>\n" + content + "\n</body>\n</html>"
+                    content = (
+                        "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n"
+                        "  <meta charset=\"UTF-8\">\n"
+                        "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                        "  <title>Enhanced App</title>\n"
+                        "  <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n"
+                        "  <style>\n"
+                        "    body { font-family: 'Inter', sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #f8fafc; }\n"
+                        "    .card { background: #1e293b; border-radius: 12px; padding: 24px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); border: 1px solid #334155; }\n"
+                        "  </style>\n"
+                        "</head>\n<body>\n<div class=\"card\">\n"
+                        + content
+                        + "\n</div>\n</body>\n</html>"
+                    )
                     modified = True
+                elif "font-family" not in content.lower():
+                    font_tag = '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">\n'
+                    style_tag = '<style>body { font-family: "Inter", sans-serif; line-height: 1.6; }</style>\n'
+                    if "</head>" in content:
+                        content = content.replace("</head>", f"{font_tag}{style_tag}</head>")
+                    else:
+                        content = font_tag + style_tag + content
+                    modified = True
+
                 if modified:
                     with open(filepath, "w", encoding="utf-8") as f:
                         f.write(content)
