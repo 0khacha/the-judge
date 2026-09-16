@@ -71,11 +71,11 @@ Action: fix and re-verify.
 
 <table>
 <tr>
-<td width="50%" align="center">
+<td width="50%">
 
 #### Without The Judge (Baseline Round 1)
 
-<img src="assets/baseline_website.png" width="100%" alt="Baseline Website - Round 1">
+Baseline Website - Round 1
 
 ```text
 Quality Score : 52.0 / 100.0
@@ -88,11 +88,11 @@ Weaknesses    : 3 issue(s) identified
 *Basic functional implementation without visual polish, design tokens, or responsive structure.*
 
 </td>
-<td width="50%" align="center">
+<td width="50%">
 
 #### With The Judge (Plugin-Improved Round 4)
 
-<img src="assets/improved_website.png" width="100%" alt="Plugin-Improved Website - Round 4">
+Plugin-Improved Website - Round 4
 
 ```text
 Quality Score : 96.5 / 100.0 (+44.5 pts)
