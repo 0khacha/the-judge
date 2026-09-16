@@ -34,11 +34,13 @@ Works with any AI coding assistant that reads `AGENTS.md`: Claude Code, Cursor, 
 
 ## What changes
 
+### 1. Non-Visual Projects (Behavioral Verification)
+
 <table>
 <tr>
 <td width="50%">
 
-### Before
+#### Without The Judge
 
 > Implementation complete! All tests passed. The TTL expiration handles timestamps accurately, capacity eviction removes oldest entries, everything is ready for deployment.
 >
@@ -47,7 +49,7 @@ Works with any AI coding assistant that reads `AGENTS.md`: Claude Code, Cursor, 
 </td>
 <td width="50%">
 
-### After
+#### With The Judge
 
 ```text
 DECISION: FAIL
@@ -60,6 +62,45 @@ Score: 0.0 / 100.0
 
 Action: fix and re-verify.
 ```
+
+</td>
+</tr>
+</table>
+
+### 2. Visual Projects (Iterative Quality Engine)
+
+<table>
+<tr>
+<td width="50%">
+
+#### Without The Judge (Baseline Round 1)
+
+```text
+[Round 1/4] Baseline Initial Version
+  Quality Score  : 52.0 / 100.0
+  Weaknesses     : 3 issue(s) identified
+    - Browser default font without typography hierarchy
+    - Basic inline CSS without theme variables
+    - Flat 1-column layout without Grid/Flexbox
+```
+
+*Basic functional implementation without visual polish, design tokens, or responsive structure.*
+
+</td>
+<td width="50%">
+
+#### With The Judge (Plugin-Improved Round 4)
+
+```text
+[Round 4/4] Final Visual Polish & Micro-Interactions
+  Quality Score  : 96.5 / 100.0 (+44.5 points)
+  Weaknesses     : 0 issue(s) identified
+  Visual Evidence: _judge_visual/round_4_visual.png
+  Action Taken   : Glassmorphism, Google Fonts, 
+                   Grid layout, stats & hover effects.
+```
+
+*Autonomous multi-round refinement engine transforms initial code into a polished, high-quality product.*
 
 </td>
 </tr>
