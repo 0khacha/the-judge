@@ -145,31 +145,56 @@ class VisualEngine:
             return False
 
     def _capture_html_screenshot(self, html_path: str, output_png: str) -> bool:
-        """Instantly capture visual snapshot using PIL image renderer."""
+        """Capture actual rendered browser UI screenshot using Selenium or Chrome CLI."""
+        abs_path = os.path.abspath(html_path)
+        file_url = "file:///" + abs_path.replace("\\", "/")
+
+        # 1. Try Selenium Webdriver (Real Headless Browser Rendering)
         try:
-            from PIL import Image, ImageDraw
-            img = Image.new("RGB", (1280, 800), color=(15, 23, 42))
-            draw = ImageDraw.Draw(img)
+            from selenium import webdriver
+            from selenium.webdriver.chrome.options import Options
 
-            draw.rectangle([0, 0, 1280, 50], fill=(30, 41, 59))
-            draw.text((20, 16), "The Judge Visual Sandbox Browser", fill=(248, 250, 252))
-            draw.text((1050, 16), f"File: {os.path.basename(html_path)}", fill=(148, 163, 184))
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--hide-scrollbars")
+            driver = webdriver.Chrome(options=options)
+            driver.set_window_size(1280, 900)
+            driver.get(file_url)
+            driver.save_screenshot(output_png)
+            driver.quit()
 
-            draw.rectangle([40, 80, 1240, 760], fill=(30, 41, 59), outline=(51, 65, 85), width=2)
-
-            with open(html_path, "r", encoding="utf-8", errors="ignore") as f:
-                content = f.read(600)
-
-            draw.text((60, 100), "Rendered UI View & DOM Structure:", fill=(203, 213, 225))
-            y_pos = 140
-            for line in content.splitlines()[:25]:
-                draw.text((70, y_pos), line[:110], fill=(56, 189, 248))
-                y_pos += 22
-
-            img.save(output_png)
-            return True
+            if os.path.exists(output_png) and os.path.getsize(output_png) > 1000:
+                return True
         except Exception:
-            return False
+            pass
+
+        # 2. Try Chrome CLI fallback
+        chrome_bins = [
+            r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+            r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+            r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        ]
+        for cbin in chrome_bins:
+            if os.path.exists(cbin):
+                try:
+                    cmd = [
+                        cbin,
+                        "--headless=new",
+                        "--disable-gpu",
+                        "--no-sandbox",
+                        f"--screenshot={output_png}",
+                        "--window-size=1280,900",
+                        file_url,
+                    ]
+                    subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=4)
+                    if os.path.exists(output_png) and os.path.getsize(output_png) > 1000:
+                        return True
+                except Exception:
+                    pass
+
+        return False
 
     def _generate_visual_summary_image(self, target_file: str, round_num: int, output_png: str) -> str:
         """Fallback: Generate visual snapshot image using PIL if headless browser is unavailable."""
