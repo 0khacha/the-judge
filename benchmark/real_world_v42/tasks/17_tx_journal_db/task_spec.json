@@ -1,0 +1,46 @@
+{
+  "task_id": "17_tx_journal_db",
+  "name": "tx_journal_db",
+  "description": "In-memory database supporting transactional atomicity: begin, commit, rollback, and nested savepoints.",
+  "interface": {
+    "class": "TxJournalDB"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Commit persists uncommitted mutations to global state.",
+      "category": "state",
+      "priority": "critical",
+      "properties": [
+        "tx_commit_persistence"
+      ],
+      "examples": [
+        "begin(), set('a', 1), commit() -> get('a') returns 1"
+      ],
+      "edge_cases": [
+        "multiple keys"
+      ],
+      "verification_methods": [
+        "unit_test"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Rollback discards uncommitted mutations and restores previous state.",
+      "category": "state",
+      "priority": "critical",
+      "properties": [
+        "tx_rollback_atomicity"
+      ],
+      "examples": [
+        "set('a', 1), begin(), set('a', 2), rollback() -> get('a') returns 1"
+      ],
+      "edge_cases": [
+        "delete key inside uncommitted transaction"
+      ],
+      "verification_methods": [
+        "behavioral_probe"
+      ]
+    }
+  ]
+}

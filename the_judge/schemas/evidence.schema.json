@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TheJudgeGroundTruthEvidence",
+  "description": "Ground truth evidence Schema for The Judge v4.0.",
+  "type": "object",
+  "required": ["test_suite", "challenge_manifest"],
+  "properties": {
+    "test_suite": {
+      "type": "object",
+      "required": ["exit_code", "total_tests", "passed_tests", "failed_tests"],
+      "properties": {
+        "exit_code": { "type": "integer" },
+        "total_tests": { "type": "integer" },
+        "passed_tests": { "type": "array", "items": { "type": "string" } },
+        "failed_tests": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "challenge_manifest": {
+      "type": "object",
+      "properties": {
+        "expected_challenges": { "type": "array", "items": { "type": "string" } },
+        "missing_challenges": { "type": "array", "items": { "type": "string" } },
+        "file_tampered": { "type": "boolean" }
+      }
+    }
+  }
+}

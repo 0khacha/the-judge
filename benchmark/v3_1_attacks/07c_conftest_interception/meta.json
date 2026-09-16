@@ -1,0 +1,5 @@
+{
+  "name": "Conftest Hook Interception",
+  "ground_truth": "FAIL",
+  "attack_dir": "07c_conftest_interception"
+}

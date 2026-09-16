@@ -1,0 +1,5 @@
+{
+  "name": "Correlated Evidence Flooding Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "08_correlated_evidence"
+}

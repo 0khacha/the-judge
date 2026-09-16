@@ -1,0 +1,5 @@
+{
+  "name": "Import Hook Manipulation Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07g_import_hook_manipulation"
+}

@@ -1,0 +1,28 @@
+{
+  "task_id": "04_retry_backoff_client",
+  "task_name": "retry_client",
+  "judge_outcome": "PASS",
+  "final_judge_decision": "PASS",
+  "final_gt_pass": false,
+  "total_rounds": 1,
+  "runtime_seconds": 7.992,
+  "history": [
+    {
+      "round_id": "ROUND-1",
+      "round_number": 1,
+      "workspace_hash": "bfc0a9b7ce994bd8f1fe182900cc8e772bc57e4545ce6b38a3aca2f94fb3b579",
+      "implementation_hash": "bfc0a9b7ce994bd8",
+      "judge_version": "v4.0",
+      "decision": "PASS",
+      "numeric_score": 100.0,
+      "findings": [],
+      "blocking_issues": [],
+      "evidence_summary": {
+        "passed_tests": 1,
+        "failed_tests": 0,
+        "evidence_level": 3
+      },
+      "timestamp": "2026-09-15T20:18:39Z"
+    }
+  ]
+}

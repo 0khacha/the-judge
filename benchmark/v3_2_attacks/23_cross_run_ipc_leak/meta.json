@@ -1,0 +1,5 @@
+{
+  "name": "Cross-Run IPC Socket Leak Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "23_cross_run_ipc_leak"
+}

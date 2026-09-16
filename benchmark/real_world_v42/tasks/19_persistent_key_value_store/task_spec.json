@@ -1,0 +1,46 @@
+{
+  "task_id": "19_persistent_key_value_store",
+  "name": "persistent_key_value_store",
+  "description": "Key-value store appending operations to write-ahead log (WAL) and recovering state upon restart.",
+  "interface": {
+    "class": "PersistentKVStore"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Persist mutations to log file.",
+      "category": "persistence",
+      "priority": "critical",
+      "properties": [
+        "wal_log_persistence"
+      ],
+      "examples": [
+        "set('k', 'v') writes to log"
+      ],
+      "edge_cases": [
+        "delete key log record"
+      ],
+      "verification_methods": [
+        "unit_test"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Recover exact in-memory state from log file upon store instantiation.",
+      "category": "persistence",
+      "priority": "critical",
+      "properties": [
+        "wal_recovery"
+      ],
+      "examples": [
+        "instantiate new store instance with existing log file -> get('k') returns 'v'"
+      ],
+      "edge_cases": [
+        "corrupted trailing log line"
+      ],
+      "verification_methods": [
+        "behavioral_probe"
+      ]
+    }
+  ]
+}

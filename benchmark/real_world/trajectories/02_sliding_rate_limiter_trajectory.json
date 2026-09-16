@@ -1,0 +1,28 @@
+{
+  "task_id": "02_sliding_rate_limiter",
+  "task_name": "sliding_window_rate_limiter",
+  "judge_outcome": "PASS",
+  "final_judge_decision": "PASS",
+  "final_gt_pass": false,
+  "total_rounds": 1,
+  "runtime_seconds": 8.039,
+  "history": [
+    {
+      "round_id": "ROUND-1",
+      "round_number": 1,
+      "workspace_hash": "8508dca8add1c246c84c070c24fd3ff1166c16248ba88baa5961569eb9cf5615",
+      "implementation_hash": "8508dca8add1c246",
+      "judge_version": "v4.0",
+      "decision": "PASS",
+      "numeric_score": 100.0,
+      "findings": [],
+      "blocking_issues": [],
+      "evidence_summary": {
+        "passed_tests": 1,
+        "failed_tests": 0,
+        "evidence_level": 3
+      },
+      "timestamp": "2026-09-15T20:17:53Z"
+    }
+  ]
+}

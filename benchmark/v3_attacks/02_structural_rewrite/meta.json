@@ -1,0 +1,5 @@
+{
+  "name": "Structural Rewrite Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "02_structural_rewrite"
+}

@@ -1,0 +1,39 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing & Coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Build & Package Output
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Logs & Temporary Execution Artifacts
+*.log
+*.tmp
+scratch/
+test_ev*.json
+findings.json
+judge_evidence.json
+judge_history.json
+score_report.json
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo

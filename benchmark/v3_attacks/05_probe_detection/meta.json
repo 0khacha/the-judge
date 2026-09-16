@@ -1,0 +1,5 @@
+{
+  "name": "Probe Input Detection Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "05_probe_detection"
+}

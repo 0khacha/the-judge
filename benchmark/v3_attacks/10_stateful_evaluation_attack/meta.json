@@ -1,0 +1,5 @@
+{
+  "name": "Stateful Evaluation Cross-Call Retention Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "10_stateful_evaluation_attack"
+}

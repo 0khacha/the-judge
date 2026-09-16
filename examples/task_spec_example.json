@@ -1,0 +1,31 @@
+{
+  "name": "api_rate_limiter",
+  "description": "Sliding window rate limiter enforcing request rate constraints per client key.",
+  "interface": {
+    "class": "SlidingWindowRateLimiter",
+    "methods": [
+      "is_allowed(key: str) -> bool"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Allow requests up to capacity limit within window."
+    },
+    {
+      "id": "REQ-002",
+      "description": "Reject requests exceeding capacity limit."
+    }
+  ],
+  "constraints": [
+    "Thread-safe counter increments.",
+    "State isolation between distinct client keys."
+  ],
+  "security_properties": [
+    "No memory leakage from expired keys."
+  ],
+  "limits": {
+    "timeout_seconds": 15,
+    "max_memory_mb": 256
+  }
+}

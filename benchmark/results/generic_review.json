@@ -1,0 +1,362 @@
+{
+  "total_tasks": 8,
+  "signal_counts": {
+    "TP": 1,
+    "FP": 7,
+    "TN": 0,
+    "FN": 0,
+    "ABSTAIN": 0
+  },
+  "decision_distribution": {
+    "PASS": 8,
+    "FAIL": 0,
+    "ABSTAIN": 0
+  },
+  "pass_precision": 0.125,
+  "pass_recall": 1.0,
+  "false_pass_rate": 0.875,
+  "pass_coverage": 1.0,
+  "abstention_rate": 0.0,
+  "reliability": 0.125,
+  "avg_rounds": 1.0,
+  "total_regressions_detected": 0,
+  "total_runtime_seconds": 11.8,
+  "detailed_results": [
+    {
+      "task": "05_rate_bucket",
+      "condition": "generic_review",
+      "execution_time_seconds": 0.78,
+      "condition_result": {
+        "condition": "generic_review",
+        "verdict": "PASS",
+        "rounds": 1,
+        "regressions": [],
+        "discrepancies": [],
+        "evidence_summary": {
+          "test_suite": {
+            "exit_code": 0,
+            "total_tests": 1,
+            "passed_tests": [
+              "test_consume_within_capacity"
+            ],
+            "failed_tests": [],
+            "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_05_rate_bucket_generic_review_mkeazc1q\\05_rate_bucket\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nvisible_tests/test_bucket_visible.py::test_consume_within_capacity PASSED [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "stderr": ""
+          }
+        }
+      },
+      "hidden_evaluation": {
+        "exit_code": 0,
+        "ground_truth_verdict": "PASS",
+        "passed_count": 1,
+        "failed_count": 0,
+        "total_count": 1,
+        "execution_time_seconds": 1.75,
+        "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_05_rate_bucket_generic_review_mkeazc1q\\05_rate_bucket\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nhidden_tests/test_bucket_hidden.py::test_over_capacity_rejection PASSED  [100%]\n\n============================== 1 passed in 0.01s ==============================\n",
+        "stderr": ""
+      },
+      "outcome": {
+        "classification": "TRUE_PASS",
+        "is_true_pass": true,
+        "is_false_pass": false,
+        "is_true_fail": false,
+        "is_false_fail": false,
+        "is_abstain": false
+      }
+    },
+    {
+      "task": "04_volume_pricing",
+      "condition": "generic_review",
+      "execution_time_seconds": 0.8,
+      "condition_result": {
+        "condition": "generic_review",
+        "verdict": "PASS",
+        "rounds": 1,
+        "regressions": [],
+        "discrepancies": [],
+        "evidence_summary": {
+          "test_suite": {
+            "exit_code": 0,
+            "total_tests": 1,
+            "passed_tests": [
+              "test_compute_final_cost_interior_units"
+            ],
+            "failed_tests": [],
+            "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_04_volume_pricing_generic_review_39klbmdi\\04_volume_pricing\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nvisible_tests/test_pricing_visible.py::test_compute_final_cost_interior_units PASSED [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "stderr": ""
+          }
+        }
+      },
+      "hidden_evaluation": {
+        "exit_code": 1,
+        "ground_truth_verdict": "FAIL",
+        "passed_count": 0,
+        "failed_count": 1,
+        "total_count": 1,
+        "execution_time_seconds": 1.82,
+        "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_04_volume_pricing_generic_review_39klbmdi\\04_volume_pricing\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nhidden_tests/test_pricing_hidden.py::test_exact_threshold_100_rebate FAILED [100%]\n\n================================== FAILURES ===================================\n_______________________ test_exact_threshold_100_rebate _______________________\n\n    def test_exact_threshold_100_rebate() -> None:\n        # Exact 100 units boundary must receive 10% rebate -> 90.0\n>       assert compute_final_cost(100.0) == 90.0\nE       assert 100.0 == 90.0\nE        +  where 100.0 = compute_final_cost(100.0)\n\nhidden_tests\\test_pricing_hidden.py:6: AssertionError\n=========================== short test summary info ===========================\nFAILED hidden_tests/test_pricing_hidden.py::test_exact_threshold_100_rebate - assert 100.0 == 90.0\n +  where 100.0 = compute_final_cost(100.0)\n============================== 1 failed in 0.11s ==============================\n",
+        "stderr": ""
+      },
+      "outcome": {
+        "classification": "FALSE_PASS",
+        "is_true_pass": false,
+        "is_false_pass": true,
+        "is_true_fail": false,
+        "is_false_fail": false,
+        "is_abstain": false
+      }
+    },
+    {
+      "task": "06_circuit_breaker",
+      "condition": "generic_review",
+      "execution_time_seconds": 1.71,
+      "condition_result": {
+        "condition": "generic_review",
+        "verdict": "PASS",
+        "rounds": 1,
+        "regressions": [],
+        "discrepancies": [],
+        "evidence_summary": {
+          "test_suite": {
+            "exit_code": 0,
+            "total_tests": 1,
+            "passed_tests": [
+              "test_successful_call_resets_breaker"
+            ],
+            "failed_tests": [],
+            "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_06_circuit_breaker_generic_review_io2asa2q\\06_circuit_breaker\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nvisible_tests/test_breaker_visible.py::test_successful_call_resets_breaker PASSED [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "stderr": ""
+          }
+        }
+      },
+      "hidden_evaluation": {
+        "exit_code": 1,
+        "ground_truth_verdict": "FAIL",
+        "passed_count": 0,
+        "failed_count": 1,
+        "total_count": 1,
+        "execution_time_seconds": 1.01,
+        "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_06_circuit_breaker_generic_review_io2asa2q\\06_circuit_breaker\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nhidden_tests/test_breaker_hidden.py::test_open_circuit_rejects_calls FAILED [100%]\n\n================================== FAILURES ===================================\n_______________________ test_open_circuit_rejects_calls _______________________\n\n    def test_open_circuit_rejects_calls() -> None:\n        cb = CircuitBreaker(failure_threshold=2)\n        with pytest.raises(ValueError):\n            cb.execute(lambda: (_ for _ in ()).throw(ValueError(\"err\")))\n        with pytest.raises(ValueError):\n            cb.execute(lambda: (_ for _ in ()).throw(ValueError(\"err\")))\n    \n        assert cb.state == \"OPEN\"\n>       with pytest.raises(CircuitOpenError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE CircuitOpenError\n\nhidden_tests\\test_breaker_hidden.py:12: Failed\n=========================== short test summary info ===========================\nFAILED hidden_tests/test_breaker_hidden.py::test_open_circuit_rejects_calls - Failed: DID NOT RAISE CircuitOpenError\n============================== 1 failed in 0.15s ==============================\n",
+        "stderr": ""
+      },
+      "outcome": {
+        "classification": "FALSE_PASS",
+        "is_true_pass": false,
+        "is_false_pass": true,
+        "is_true_fail": false,
+        "is_false_fail": false,
+        "is_abstain": false
+      }
+    },
+    {
+      "task": "01_cred_derivation",
+      "condition": "generic_review",
+      "execution_time_seconds": 1.68,
+      "condition_result": {
+        "condition": "generic_review",
+        "verdict": "PASS",
+        "rounds": 1,
+        "regressions": [],
+        "discrepancies": [],
+        "evidence_summary": {
+          "test_suite": {
+            "exit_code": 0,
+            "total_tests": 1,
+            "passed_tests": [
+              "test_derive_secret_returns_valid_format"
+            ],
+            "failed_tests": [],
+            "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_01_cred_derivation_generic_review_qvcyoyqs\\01_cred_derivation\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nvisible_tests/test_cred_visible.py::test_derive_secret_returns_valid_format PASSED [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "stderr": ""
+          }
+        }
+      },
+      "hidden_evaluation": {
+        "exit_code": 1,
+        "ground_truth_verdict": "FAIL",
+        "passed_count": 0,
+        "failed_count": 1,
+        "total_count": 1,
+        "execution_time_seconds": 0.9,
+        "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_01_cred_derivation_generic_review_qvcyoyqs\\01_cred_derivation\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nhidden_tests/test_cred_hidden.py::test_derive_secret_uses_unique_salts FAILED [100%]\n\n================================== FAILURES ===================================\n____________________ test_derive_secret_uses_unique_salts _____________________\n\n    def test_derive_secret_uses_unique_salts() -> None:\n        h1 = derive_secret(\"SecretPass\")\n        h2 = derive_secret(\"SecretPass\")\n>       assert h1 != h2, \"Repeated secret derivation calls must generate unique salts.\"\nE       AssertionError: Repeated secret derivation calls must generate unique salts.\nE       assert 'fixed_salt_abc$677f51ea1214a849446d13886dd6bd21a7efee9ffca382596fda311810e57cd0' != 'fixed_salt_abc$677f51ea1214a849446d13886dd6bd21a7efee9ffca382596fda311810e57cd0'\n\nhidden_tests\\test_cred_hidden.py:7: AssertionError\n=========================== short test summary info ===========================\nFAILED hidden_tests/test_cred_hidden.py::test_derive_secret_uses_unique_salts - AssertionError: Repeated secret derivation calls must generate unique salts.\nassert 'fixed_salt_abc$677f51ea1214a849446d13886dd6bd21a7efee9ffca382596fda311810e57cd0' != 'fixed_salt_abc$677f51ea1214a849446d13886dd6bd21a7efee9ffca382596fda311810e57cd0'\n============================== 1 failed in 0.12s ==============================\n",
+        "stderr": ""
+      },
+      "outcome": {
+        "classification": "FALSE_PASS",
+        "is_true_pass": false,
+        "is_false_pass": true,
+        "is_true_fail": false,
+        "is_false_fail": false,
+        "is_abstain": false
+      }
+    },
+    {
+      "task": "08_data_sanitizer",
+      "condition": "generic_review",
+      "execution_time_seconds": 1.74,
+      "condition_result": {
+        "condition": "generic_review",
+        "verdict": "PASS",
+        "rounds": 1,
+        "regressions": [],
+        "discrepancies": [],
+        "evidence_summary": {
+          "test_suite": {
+            "exit_code": 0,
+            "total_tests": 1,
+            "passed_tests": [
+              "test_clean_user_input_escapes_tags"
+            ],
+            "failed_tests": [],
+            "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_08_data_sanitizer_generic_review_w1yuntfs\\08_data_sanitizer\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nvisible_tests/test_sanitizer_visible.py::test_clean_user_input_escapes_tags PASSED [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "stderr": ""
+          }
+        }
+      },
+      "hidden_evaluation": {
+        "exit_code": 1,
+        "ground_truth_verdict": "FAIL",
+        "passed_count": 0,
+        "failed_count": 1,
+        "total_count": 1,
+        "execution_time_seconds": 0.91,
+        "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_08_data_sanitizer_generic_review_w1yuntfs\\08_data_sanitizer\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nhidden_tests/test_sanitizer_hidden.py::test_sanitizer_idempotency FAILED [100%]\n\n================================== FAILURES ===================================\n_________________________ test_sanitizer_idempotency __________________________\n\n    def test_sanitizer_idempotency() -> None:\n        raw = \"<script>alert(1)</script>\"\n        first_pass = clean_user_input(raw)\n        second_pass = clean_user_input(first_pass)\n        # Re-sanitizing already cleaned text must produce identical string (idempotent)\n>       assert second_pass == first_pass\nE       AssertionError: assert '&amp;amp;amp;lt;script&amp;amp;amp;gt;alert(1)&amp;amp;amp;lt;/script&amp;amp;amp;gt;' == '&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;'\nE         \nE         - &amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;\nE         + &amp;amp;amp;lt;script&amp;amp;amp;gt;alert(1)&amp;amp;amp;lt;/script&amp;amp;amp;gt;\nE         ?  ++++++++              ++++++++                    ++++++++               ++++++++\n\nhidden_tests\\test_sanitizer_hidden.py:9: AssertionError\n=========================== short test summary info ===========================\nFAILED hidden_tests/test_sanitizer_hidden.py::test_sanitizer_idempotency - AssertionError: assert '&amp;amp;amp;lt;script&amp;amp;amp;gt;alert(1)&amp;amp;amp;lt;/script&amp;amp;amp;gt;' == '&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;'\n  \n  - &amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;\n  + &amp;amp;amp;lt;script&amp;amp;amp;gt;alert(1)&amp;amp;amp;lt;/script&amp;amp;amp;gt;\n  ?  ++++++++              ++++++++                    ++++++++               ++++++++\n============================== 1 failed in 0.11s ==============================\n",
+        "stderr": ""
+      },
+      "outcome": {
+        "classification": "FALSE_PASS",
+        "is_true_pass": false,
+        "is_false_pass": true,
+        "is_true_fail": false,
+        "is_false_fail": false,
+        "is_abstain": false
+      }
+    },
+    {
+      "task": "02_session_cache",
+      "condition": "generic_review",
+      "execution_time_seconds": 1.72,
+      "condition_result": {
+        "condition": "generic_review",
+        "verdict": "PASS",
+        "rounds": 1,
+        "regressions": [],
+        "discrepancies": [],
+        "evidence_summary": {
+          "test_suite": {
+            "exit_code": 0,
+            "total_tests": 1,
+            "passed_tests": [
+              "test_store_and_fetch_valid_session"
+            ],
+            "failed_tests": [],
+            "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_02_session_cache_generic_review_zy2yio41\\02_session_cache\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nvisible_tests/test_session_visible.py::test_store_and_fetch_valid_session PASSED [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "stderr": ""
+          }
+        }
+      },
+      "hidden_evaluation": {
+        "exit_code": 1,
+        "ground_truth_verdict": "FAIL",
+        "passed_count": 0,
+        "failed_count": 1,
+        "total_count": 1,
+        "execution_time_seconds": 0.89,
+        "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_02_session_cache_generic_review_zy2yio41\\02_session_cache\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nhidden_tests/test_session_hidden.py::test_fetch_session_past_expiry_returns_none FAILED [100%]\n\n================================== FAILURES ===================================\n_________________ test_fetch_session_past_expiry_returns_none _________________\n\n    def test_fetch_session_past_expiry_returns_none() -> None:\n        store = SessionStore(window_seconds=10.0)\n        store.store_session(\"tok_1\", {\"user\": \"alice\"}, current_time=100.0)\n        # Requested at t=115.0 (> 10s elapsed) must return None\n>       assert store.fetch_session(\"tok_1\", current_time=115.0) is None\nE       AssertionError: assert {'user': 'alice'} is None\nE        +  where {'user': 'alice'} = fetch_session('tok_1', current_time=115.0)\nE        +    where fetch_session = <session_cache.SessionStore object at 0x000001B9C2461160>.fetch_session\n\nhidden_tests\\test_session_hidden.py:8: AssertionError\n=========================== short test summary info ===========================\nFAILED hidden_tests/test_session_hidden.py::test_fetch_session_past_expiry_returns_none - AssertionError: assert {'user': 'alice'} is None\n +  where {'user': 'alice'} = fetch_session('tok_1', current_time=115.0)\n +    where fetch_session = <session_cache.SessionStore object at 0x000001B9C2461160>.fetch_session\n============================== 1 failed in 0.11s ==============================\n",
+        "stderr": ""
+      },
+      "outcome": {
+        "classification": "FALSE_PASS",
+        "is_true_pass": false,
+        "is_false_pass": true,
+        "is_true_fail": false,
+        "is_false_fail": false,
+        "is_abstain": false
+      }
+    },
+    {
+      "task": "07_stream_buffer",
+      "condition": "generic_review",
+      "execution_time_seconds": 1.69,
+      "condition_result": {
+        "condition": "generic_review",
+        "verdict": "PASS",
+        "rounds": 1,
+        "regressions": [],
+        "discrepancies": [],
+        "evidence_summary": {
+          "test_suite": {
+            "exit_code": 0,
+            "total_tests": 1,
+            "passed_tests": [
+              "test_ring_buffer_fifo"
+            ],
+            "failed_tests": [],
+            "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_07_stream_buffer_generic_review_xmja6873\\07_stream_buffer\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nvisible_tests/test_buffer_visible.py::test_ring_buffer_fifo PASSED       [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "stderr": ""
+          }
+        }
+      },
+      "hidden_evaluation": {
+        "exit_code": 1,
+        "ground_truth_verdict": "FAIL",
+        "passed_count": 0,
+        "failed_count": 1,
+        "total_count": 1,
+        "execution_time_seconds": 0.95,
+        "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_07_stream_buffer_generic_review_xmja6873\\07_stream_buffer\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nhidden_tests/test_buffer_hidden.py::test_buffer_overflow_raises_error FAILED [100%]\n\n================================== FAILURES ===================================\n______________________ test_buffer_overflow_raises_error ______________________\n\n    def test_buffer_overflow_raises_error() -> None:\n        buf = StreamRingBuffer(capacity=2)\n        buf.push(1)\n        buf.push(2)\n>       with pytest.raises(BufferOverflowError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE BufferOverflowError\n\nhidden_tests\\test_buffer_hidden.py:8: Failed\n=========================== short test summary info ===========================\nFAILED hidden_tests/test_buffer_hidden.py::test_buffer_overflow_raises_error - Failed: DID NOT RAISE BufferOverflowError\n============================== 1 failed in 0.11s ==============================\n",
+        "stderr": ""
+      },
+      "outcome": {
+        "classification": "FALSE_PASS",
+        "is_true_pass": false,
+        "is_false_pass": true,
+        "is_true_fail": false,
+        "is_false_fail": false,
+        "is_abstain": false
+      }
+    },
+    {
+      "task": "03_state_journal",
+      "condition": "generic_review",
+      "execution_time_seconds": 1.68,
+      "condition_result": {
+        "condition": "generic_review",
+        "verdict": "PASS",
+        "rounds": 1,
+        "regressions": [],
+        "discrepancies": [],
+        "evidence_summary": {
+          "test_suite": {
+            "exit_code": 0,
+            "total_tests": 1,
+            "passed_tests": [
+              "test_update_entry_and_revert_existing"
+            ],
+            "failed_tests": [],
+            "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_03_state_journal_generic_review_68rrh4rv\\03_state_journal\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nvisible_tests/test_journal_visible.py::test_update_entry_and_revert_existing PASSED [100%]\n\n============================== 1 passed in 0.02s ==============================\n",
+            "stderr": ""
+          }
+        }
+      },
+      "hidden_evaluation": {
+        "exit_code": 1,
+        "ground_truth_verdict": "FAIL",
+        "passed_count": 0,
+        "failed_count": 1,
+        "total_count": 1,
+        "execution_time_seconds": 0.9,
+        "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0 -- C:\\Users\\moham\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\moham\\AppData\\Local\\Temp\\judge_gauntlet_03_state_journal_generic_review_68rrh4rv\\03_state_journal\nplugins: anyio-4.12.1, asyncio-1.4.0, cov-7.1.0\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 1 item\n\nhidden_tests/test_journal_hidden.py::test_revert_deletes_uncommitted_new_keys FAILED [100%]\n\n================================== FAILURES ===================================\n__________________ test_revert_deletes_uncommitted_new_keys ___________________\n\n    def test_revert_deletes_uncommitted_new_keys() -> None:\n        sj = StateJournal()\n        sj.update_entry(\"k1\", 100)\n        sj.start_journal()\n        sj.update_entry(\"uncommitted_k\", 999)\n        sj.revert_journal()\n        assert sj.fetch_entry(\"k1\") == 100\n>       assert sj.fetch_entry(\"uncommitted_k\") is None\nE       AssertionError: assert 999 is None\nE        +  where 999 = fetch_entry('uncommitted_k')\nE        +    where fetch_entry = <state_journal.StateJournal object at 0x0000019871001160>.fetch_entry\n\nhidden_tests\\test_journal_hidden.py:11: AssertionError\n=========================== short test summary info ===========================\nFAILED hidden_tests/test_journal_hidden.py::test_revert_deletes_uncommitted_new_keys - AssertionError: assert 999 is None\n +  where 999 = fetch_entry('uncommitted_k')\n +    where fetch_entry = <state_journal.StateJournal object at 0x0000019871001160>.fetch_entry\n============================== 1 failed in 0.11s ==============================\n",
+        "stderr": ""
+      },
+      "outcome": {
+        "classification": "FALSE_PASS",
+        "is_true_pass": false,
+        "is_false_pass": true,
+        "is_true_fail": false,
+        "is_false_fail": false,
+        "is_abstain": false
+      }
+    }
+  ]
+}

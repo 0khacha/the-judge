@@ -1,0 +1,5 @@
+{
+  "name": "Stdout Log Flooding Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "27_stdout_log_flooding"
+}

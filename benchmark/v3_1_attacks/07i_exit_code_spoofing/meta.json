@@ -1,0 +1,5 @@
+{
+  "name": "Exit Code Spoofing Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07i_exit_code_spoofing"
+}

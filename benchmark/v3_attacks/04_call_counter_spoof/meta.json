@@ -1,0 +1,5 @@
+{
+  "name": "Call-Counter State Spoofing Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "04_call_counter_spoof"
+}

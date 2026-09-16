@@ -1,0 +1,7 @@
+import re
+
+def sanitize_html(raw_html: str) -> str:
+    # Strip script tags case-insensitively
+    cleaned = re.sub(r"(?i)<script.*?>.*?</script>", "", raw_html)
+    cleaned = re.sub(r"(?i)<script.*?>", "", cleaned)
+    return cleaned

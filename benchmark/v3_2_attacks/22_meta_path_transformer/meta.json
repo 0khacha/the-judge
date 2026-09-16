@@ -1,0 +1,5 @@
+{
+  "name": "Sys Meta Path Bytecode Transformer Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "22_meta_path_transformer"
+}

@@ -1,0 +1,46 @@
+{
+  "task_id": "18_idempotent_event_processor",
+  "name": "idempotent_event_processor",
+  "description": "Event processor processing event streams with deduplication storage guaranteeing exactly-once side effects.",
+  "interface": {
+    "class": "IdempotentProcessor"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Process event exactly once per event_id, skipping duplicate events.",
+      "category": "idempotency",
+      "priority": "critical",
+      "properties": [
+        "exactly_once_idempotency"
+      ],
+      "examples": [
+        "process(evt_1), process(evt_1) -> side effect count is 1"
+      ],
+      "edge_cases": [
+        "concurrent duplicate events"
+      ],
+      "verification_methods": [
+        "behavioral_probe"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Return original processing result for duplicate event requests.",
+      "category": "idempotency",
+      "priority": "important",
+      "properties": [
+        "cached_duplicate_result"
+      ],
+      "examples": [
+        "process(evt_1) -> 'OK', process(evt_1) -> 'OK'"
+      ],
+      "edge_cases": [
+        "failed event retries"
+      ],
+      "verification_methods": [
+        "unit_test"
+      ]
+    }
+  ]
+}

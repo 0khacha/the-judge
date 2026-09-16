@@ -1,0 +1,825 @@
+{
+  "experiment_name": "The Judge v4.1 Real-World Agent Evaluation",
+  "timestamp": "2026-09-15T20:20:25Z",
+  "total_tasks": 12,
+  "control_group": {
+    "name": "Agent Alone (Baseline)",
+    "success_rate": "0.0%",
+    "passed_tasks": 0,
+    "failed_tasks": 12,
+    "avg_rounds": 1.0
+  },
+  "treatment_group": {
+    "name": "Agent + The Judge v4.0",
+    "success_rate": "33.3%",
+    "passed_tasks": 4,
+    "failed_tasks": 8,
+    "avg_rounds": 1.67,
+    "false_pass_count": 8,
+    "false_pass_rate": "66.7%",
+    "false_fail_count": 2,
+    "false_fail_rate": "16.7%"
+  },
+  "control_results": [
+    {
+      "task_id": "01_rest_auth_jwt",
+      "task_name": "jwt_token_manager",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "02_sliding_rate_limiter",
+      "task_name": "sliding_window_rate_limiter",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "03_lru_cache_ttl",
+      "task_name": "lru_cache_ttl",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "04_retry_backoff_client",
+      "task_name": "retry_client",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "05_bounded_fifo_queue",
+      "task_name": "bounded_fifo_queue",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "06_path_traversal_sanitizer",
+      "task_name": "path_sanitizer",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "07_password_hasher_salt",
+      "task_name": "password_hasher",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "08_transaction_journal_db",
+      "task_name": "transaction_db",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "09_input_sanitizer_xss",
+      "task_name": "input_sanitizer",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "10_csv_aggregation_pipeline",
+      "task_name": "csv_aggregator",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "11_json_schema_validator",
+      "task_name": "json_validator",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    },
+    {
+      "task_id": "12_session_store",
+      "task_name": "session_store",
+      "initial_gt_pass": false,
+      "final_gt_pass": false,
+      "rounds": 1,
+      "decision": "FAIL"
+    }
+  ],
+  "treatment_results": [
+    {
+      "task_id": "01_rest_auth_jwt",
+      "task_name": "jwt_token_manager",
+      "judge_outcome": "MAX_ROUNDS_EXCEEDED",
+      "final_judge_decision": "FAIL",
+      "final_gt_pass": true,
+      "total_rounds": 4,
+      "runtime_seconds": 30.948,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "d7e61947fc59f4e3eef1edc1c86858fc3734107929900ecba824abd07722142c",
+          "implementation_hash": "d7e61947fc59f4e3",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 70.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_uniqueness_jwt_token_manager_revoke_token",
+              "property": "prop_uniqueness_jwt_token_manager_revoke_token",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_jwt_token_manager_revoke_token."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:17:19Z"
+        },
+        {
+          "round_id": "ROUND-2",
+          "round_number": 2,
+          "workspace_hash": "046357afddce477fb7bd7a25fbda6b0a24591ae3220efddae7c40ac184c18eec",
+          "implementation_hash": "046357afddce477f",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 70.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_uniqueness_jwt_token_manager_revoke_token",
+              "property": "prop_uniqueness_jwt_token_manager_revoke_token",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_jwt_token_manager_revoke_token."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:17:27Z"
+        },
+        {
+          "round_id": "ROUND-3",
+          "round_number": 3,
+          "workspace_hash": "046357afddce477fb7bd7a25fbda6b0a24591ae3220efddae7c40ac184c18eec",
+          "implementation_hash": "046357afddce477f",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 70.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_uniqueness_jwt_token_manager_revoke_token",
+              "property": "prop_uniqueness_jwt_token_manager_revoke_token",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_jwt_token_manager_revoke_token."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:17:34Z"
+        },
+        {
+          "round_id": "ROUND-4",
+          "round_number": 4,
+          "workspace_hash": "046357afddce477fb7bd7a25fbda6b0a24591ae3220efddae7c40ac184c18eec",
+          "implementation_hash": "046357afddce477f",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 70.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_uniqueness_jwt_token_manager_revoke_token",
+              "property": "prop_uniqueness_jwt_token_manager_revoke_token",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_jwt_token_manager_revoke_token."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:17:42Z"
+        }
+      ]
+    },
+    {
+      "task_id": "02_sliding_rate_limiter",
+      "task_name": "sliding_window_rate_limiter",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": false,
+      "total_rounds": 1,
+      "runtime_seconds": 8.039,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "8508dca8add1c246c84c070c24fd3ff1166c16248ba88baa5961569eb9cf5615",
+          "implementation_hash": "8508dca8add1c246",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:17:53Z"
+        }
+      ]
+    },
+    {
+      "task_id": "03_lru_cache_ttl",
+      "task_name": "lru_cache_ttl",
+      "judge_outcome": "MAX_ROUNDS_EXCEEDED",
+      "final_judge_decision": "FAIL",
+      "final_gt_pass": true,
+      "total_rounds": 4,
+      "runtime_seconds": 31.445,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "198d255114f13334e1333e4cabc3ed27ba89b089256805eede64640eebd1f004",
+          "implementation_hash": "198d255114f13334",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 70.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "property": "prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_expiration_lru_cache_ttl_LRUCacheTTL."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_expiration_lru_cache_ttl_LRUCacheTTL"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:18:05Z"
+        },
+        {
+          "round_id": "ROUND-2",
+          "round_number": 2,
+          "workspace_hash": "07724a2f1b8ba26b0a3b4d8fe34c9d9ebb59314f6c84532db62e27a8e671e4bb",
+          "implementation_hash": "07724a2f1b8ba26b",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 70.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "property": "prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_expiration_lru_cache_ttl_LRUCacheTTL."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_expiration_lru_cache_ttl_LRUCacheTTL"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:18:12Z"
+        },
+        {
+          "round_id": "ROUND-3",
+          "round_number": 3,
+          "workspace_hash": "07724a2f1b8ba26b0a3b4d8fe34c9d9ebb59314f6c84532db62e27a8e671e4bb",
+          "implementation_hash": "07724a2f1b8ba26b",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 70.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "property": "prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_expiration_lru_cache_ttl_LRUCacheTTL."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_expiration_lru_cache_ttl_LRUCacheTTL"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:18:20Z"
+        },
+        {
+          "round_id": "ROUND-4",
+          "round_number": 4,
+          "workspace_hash": "07724a2f1b8ba26b0a3b4d8fe34c9d9ebb59314f6c84532db62e27a8e671e4bb",
+          "implementation_hash": "07724a2f1b8ba26b",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 70.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "property": "prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_expiration_lru_cache_ttl_LRUCacheTTL."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_expiration_lru_cache_ttl_LRUCacheTTL",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_expiration_lru_cache_ttl_LRUCacheTTL"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:18:28Z"
+        }
+      ]
+    },
+    {
+      "task_id": "04_retry_backoff_client",
+      "task_name": "retry_client",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": false,
+      "total_rounds": 1,
+      "runtime_seconds": 7.992,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "bfc0a9b7ce994bd8f1fe182900cc8e772bc57e4545ce6b38a3aca2f94fb3b579",
+          "implementation_hash": "bfc0a9b7ce994bd8",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:18:39Z"
+        }
+      ]
+    },
+    {
+      "task_id": "05_bounded_fifo_queue",
+      "task_name": "bounded_fifo_queue",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": false,
+      "total_rounds": 1,
+      "runtime_seconds": 7.926,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "68463a88817c58d10658bda1b90323fbcbbe8685eebc29cb78af08136059c92e",
+          "implementation_hash": "68463a88817c58d1",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 90.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 2,
+            "failed_tests": 0,
+            "evidence_level": 2
+          },
+          "timestamp": "2026-09-15T20:18:50Z"
+        }
+      ]
+    },
+    {
+      "task_id": "06_path_traversal_sanitizer",
+      "task_name": "path_sanitizer",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": false,
+      "total_rounds": 1,
+      "runtime_seconds": 8.022,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "d90749b3832698e90a0dd3fc00568e0291dc0e02f1d616dfd0ddf4f12efc7d5f",
+          "implementation_hash": "d90749b3832698e9",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 2,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:19:00Z"
+        }
+      ]
+    },
+    {
+      "task_id": "07_password_hasher_salt",
+      "task_name": "password_hasher",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": true,
+      "total_rounds": 2,
+      "runtime_seconds": 18.054,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "0a29c28e66f53837a65cbea7071907e085959a7988076fe0d76d32a1ce2431c3",
+          "implementation_hash": "0a29c28e66f53837",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 80.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_uniqueness_password_hasher_hash_password",
+              "property": "prop_uniqueness_password_hasher_hash_password",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_password_hasher_hash_password."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_uniqueness_password_hasher_hash_password",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_uniqueness_password_hasher_hash_password"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:19:12Z"
+        },
+        {
+          "round_id": "ROUND-2",
+          "round_number": 2,
+          "workspace_hash": "c64b46def584c7a2bea49a1f4e1695943854508e2def8fa8e8e514e973cbc4ca",
+          "implementation_hash": "c64b46def584c7a2",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 2,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:19:21Z"
+        }
+      ]
+    },
+    {
+      "task_id": "08_transaction_journal_db",
+      "task_name": "transaction_db",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": true,
+      "total_rounds": 2,
+      "runtime_seconds": 15.206,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "afc0bd344021af8894a0b7b6d6b1717dac92a8f1e078f464bf0f5456747c608b",
+          "implementation_hash": "afc0bd344021af88",
+          "judge_version": "v4.0",
+          "decision": "FAIL",
+          "numeric_score": 80.0,
+          "findings": [
+            {
+              "id": "BEH-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Behavioral test failed: test_prop_rollback_isolation_transaction_db_TransactionDB",
+              "property": "prop_rollback_isolation_transaction_db_TransactionDB",
+              "observed": "Behavioral test execution failed.",
+              "expected": "Test passes with return value matching observable spec.",
+              "suggested_focus": "Review state transitions and boundary logic tested in test_prop_rollback_isolation_transaction_db_TransactionDB."
+            },
+            {
+              "id": "GATE-001",
+              "category": "behavior",
+              "severity": "high",
+              "description": "Test suite failure: test_prop_rollback_isolation_transaction_db_TransactionDB",
+              "property": null,
+              "observed": null,
+              "expected": null,
+              "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+            }
+          ],
+          "blocking_issues": [
+            "Test suite failure: test_prop_rollback_isolation_transaction_db_TransactionDB"
+          ],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 1,
+            "evidence_level": 1
+          },
+          "timestamp": "2026-09-15T20:19:32Z"
+        },
+        {
+          "round_id": "ROUND-2",
+          "round_number": 2,
+          "workspace_hash": "03e63b63f63aeaeac7bd68ca9abde6e81fc005640ea46856bd76bdadfeec2be3",
+          "implementation_hash": "03e63b63f63aeaea",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 2,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:19:39Z"
+        }
+      ]
+    },
+    {
+      "task_id": "09_input_sanitizer_xss",
+      "task_name": "input_sanitizer",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": false,
+      "total_rounds": 1,
+      "runtime_seconds": 7.928,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "7ff35b1463777670378f13feffacb47843c03928b6de02593aead6e7a63531a2",
+          "implementation_hash": "7ff35b1463777670",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 2,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:19:50Z"
+        }
+      ]
+    },
+    {
+      "task_id": "10_csv_aggregation_pipeline",
+      "task_name": "csv_aggregator",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": false,
+      "total_rounds": 1,
+      "runtime_seconds": 8.084,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "8f2ae03f75959bd54e58f572610ac2263e6c9eec5affae6d6a77127d4770006a",
+          "implementation_hash": "8f2ae03f75959bd5",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:20:01Z"
+        }
+      ]
+    },
+    {
+      "task_id": "11_json_schema_validator",
+      "task_name": "json_validator",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": false,
+      "total_rounds": 1,
+      "runtime_seconds": 8.114,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "c1a4f5e5fd8d25acf22774255aedd1db15c4b9b4755d6af031436f8a105a04ad",
+          "implementation_hash": "c1a4f5e5fd8d25ac",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:20:12Z"
+        }
+      ]
+    },
+    {
+      "task_id": "12_session_store",
+      "task_name": "session_store",
+      "judge_outcome": "PASS",
+      "final_judge_decision": "PASS",
+      "final_gt_pass": false,
+      "total_rounds": 1,
+      "runtime_seconds": 8.022,
+      "history": [
+        {
+          "round_id": "ROUND-1",
+          "round_number": 1,
+          "workspace_hash": "35c12b67a7798fa0f2b63530ef675035e9f14dc1c1e2084dc6849dc2e5c1b06b",
+          "implementation_hash": "35c12b67a7798fa0",
+          "judge_version": "v4.0",
+          "decision": "PASS",
+          "numeric_score": 100.0,
+          "findings": [],
+          "blocking_issues": [],
+          "evidence_summary": {
+            "passed_tests": 1,
+            "failed_tests": 0,
+            "evidence_level": 3
+          },
+          "timestamp": "2026-09-15T20:20:23Z"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+import time
+
+class LRUCacheTTL:
+    def __init__(self, capacity: int, ttl_seconds: float):
+        self.capacity = capacity
+        self.ttl = ttl_seconds
+        self.cache = {}
+        self.timestamps = {}
+
+    def set(self, key: str, val: str) -> None:
+        if len(self.cache) >= self.capacity and key not in self.cache:
+            oldest = min(self.timestamps, key=self.timestamps.get)
+            del self.cache[oldest]
+            del self.timestamps[oldest]
+        self.cache[key] = val
+        self.timestamps[key] = time.time()
+
+    def get(self, key: str) -> str:
+        if key not in self.cache:
+            return None
+        # BUG: Expiration threshold set incorrectly (+100s)
+        if time.time() - self.timestamps[key] > self.ttl + 100.0:
+            del self.cache[key]
+            del self.timestamps[key]
+            return None
+        return self.cache[key]

@@ -1,0 +1,5 @@
+{
+  "name": "Sitecustomize Import Hijack Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "20_sitecustomize_hijack"
+}

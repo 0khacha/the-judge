@@ -1,0 +1,15 @@
+def aggregate_csv(csv_text: str) -> dict:
+    lines = csv_text.strip().splitlines()
+    total = 0.0
+    count = 0
+    for line in lines:
+        s = line.strip()
+        if not s or s.lower().startswith("val") or s.lower().startswith("id"):
+            continue
+        try:
+            val = float(s.split(",")[-1])
+            total += val
+            count += 1
+        except ValueError:
+            continue
+    return {"sum": total, "avg": total / count if count else 0.0}

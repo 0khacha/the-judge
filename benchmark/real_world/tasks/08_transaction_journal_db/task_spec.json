@@ -1,0 +1,13 @@
+{
+  "name": "transaction_db",
+  "description": "In-memory key-value database with atomic transaction rollback.",
+  "interface": {
+    "class": "TransactionDB"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Support checkpoint and rollback."
+    }
+  ]
+}

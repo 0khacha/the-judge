@@ -1,0 +1,5 @@
+{
+  "name": "Symlink Substitution Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07l_symlink_substitution"
+}

@@ -1,0 +1,171 @@
+{
+  "task_id": "01_rest_auth_jwt",
+  "task_name": "jwt_token_manager",
+  "judge_outcome": "MAX_ROUNDS_EXCEEDED",
+  "final_judge_decision": "FAIL",
+  "final_gt_pass": true,
+  "total_rounds": 4,
+  "runtime_seconds": 30.948,
+  "history": [
+    {
+      "round_id": "ROUND-1",
+      "round_number": 1,
+      "workspace_hash": "d7e61947fc59f4e3eef1edc1c86858fc3734107929900ecba824abd07722142c",
+      "implementation_hash": "d7e61947fc59f4e3",
+      "judge_version": "v4.0",
+      "decision": "FAIL",
+      "numeric_score": 70.0,
+      "findings": [
+        {
+          "id": "BEH-001",
+          "category": "behavior",
+          "severity": "high",
+          "description": "Behavioral test failed: test_prop_uniqueness_jwt_token_manager_revoke_token",
+          "property": "prop_uniqueness_jwt_token_manager_revoke_token",
+          "observed": "Behavioral test execution failed.",
+          "expected": "Test passes with return value matching observable spec.",
+          "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_jwt_token_manager_revoke_token."
+        },
+        {
+          "id": "GATE-001",
+          "category": "behavior",
+          "severity": "high",
+          "description": "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token",
+          "property": null,
+          "observed": null,
+          "expected": null,
+          "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+        }
+      ],
+      "blocking_issues": [
+        "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token"
+      ],
+      "evidence_summary": {
+        "passed_tests": 1,
+        "failed_tests": 1,
+        "evidence_level": 1
+      },
+      "timestamp": "2026-09-15T20:17:19Z"
+    },
+    {
+      "round_id": "ROUND-2",
+      "round_number": 2,
+      "workspace_hash": "046357afddce477fb7bd7a25fbda6b0a24591ae3220efddae7c40ac184c18eec",
+      "implementation_hash": "046357afddce477f",
+      "judge_version": "v4.0",
+      "decision": "FAIL",
+      "numeric_score": 70.0,
+      "findings": [
+        {
+          "id": "BEH-001",
+          "category": "behavior",
+          "severity": "high",
+          "description": "Behavioral test failed: test_prop_uniqueness_jwt_token_manager_revoke_token",
+          "property": "prop_uniqueness_jwt_token_manager_revoke_token",
+          "observed": "Behavioral test execution failed.",
+          "expected": "Test passes with return value matching observable spec.",
+          "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_jwt_token_manager_revoke_token."
+        },
+        {
+          "id": "GATE-001",
+          "category": "behavior",
+          "severity": "high",
+          "description": "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token",
+          "property": null,
+          "observed": null,
+          "expected": null,
+          "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+        }
+      ],
+      "blocking_issues": [
+        "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token"
+      ],
+      "evidence_summary": {
+        "passed_tests": 1,
+        "failed_tests": 1,
+        "evidence_level": 1
+      },
+      "timestamp": "2026-09-15T20:17:27Z"
+    },
+    {
+      "round_id": "ROUND-3",
+      "round_number": 3,
+      "workspace_hash": "046357afddce477fb7bd7a25fbda6b0a24591ae3220efddae7c40ac184c18eec",
+      "implementation_hash": "046357afddce477f",
+      "judge_version": "v4.0",
+      "decision": "FAIL",
+      "numeric_score": 70.0,
+      "findings": [
+        {
+          "id": "BEH-001",
+          "category": "behavior",
+          "severity": "high",
+          "description": "Behavioral test failed: test_prop_uniqueness_jwt_token_manager_revoke_token",
+          "property": "prop_uniqueness_jwt_token_manager_revoke_token",
+          "observed": "Behavioral test execution failed.",
+          "expected": "Test passes with return value matching observable spec.",
+          "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_jwt_token_manager_revoke_token."
+        },
+        {
+          "id": "GATE-001",
+          "category": "behavior",
+          "severity": "high",
+          "description": "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token",
+          "property": null,
+          "observed": null,
+          "expected": null,
+          "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+        }
+      ],
+      "blocking_issues": [
+        "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token"
+      ],
+      "evidence_summary": {
+        "passed_tests": 1,
+        "failed_tests": 1,
+        "evidence_level": 1
+      },
+      "timestamp": "2026-09-15T20:17:34Z"
+    },
+    {
+      "round_id": "ROUND-4",
+      "round_number": 4,
+      "workspace_hash": "046357afddce477fb7bd7a25fbda6b0a24591ae3220efddae7c40ac184c18eec",
+      "implementation_hash": "046357afddce477f",
+      "judge_version": "v4.0",
+      "decision": "FAIL",
+      "numeric_score": 70.0,
+      "findings": [
+        {
+          "id": "BEH-001",
+          "category": "behavior",
+          "severity": "high",
+          "description": "Behavioral test failed: test_prop_uniqueness_jwt_token_manager_revoke_token",
+          "property": "prop_uniqueness_jwt_token_manager_revoke_token",
+          "observed": "Behavioral test execution failed.",
+          "expected": "Test passes with return value matching observable spec.",
+          "suggested_focus": "Review state transitions and boundary logic tested in test_prop_uniqueness_jwt_token_manager_revoke_token."
+        },
+        {
+          "id": "GATE-001",
+          "category": "behavior",
+          "severity": "high",
+          "description": "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token",
+          "property": null,
+          "observed": null,
+          "expected": null,
+          "suggested_focus": "Ensure target code does not tamper with test collection or obscure verification."
+        }
+      ],
+      "blocking_issues": [
+        "Test suite failure: test_prop_uniqueness_jwt_token_manager_revoke_token"
+      ],
+      "evidence_summary": {
+        "passed_tests": 1,
+        "failed_tests": 1,
+        "evidence_level": 1
+      },
+      "timestamp": "2026-09-15T20:17:42Z"
+    }
+  ]
+}

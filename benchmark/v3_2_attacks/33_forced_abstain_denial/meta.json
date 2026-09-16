@@ -1,0 +1,5 @@
+{
+  "name": "Forced ABSTAIN Denial of Verification Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "33_forced_abstain_denial"
+}

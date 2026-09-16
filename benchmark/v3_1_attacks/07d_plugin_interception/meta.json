@@ -1,0 +1,5 @@
+{
+  "name": "Plugin Interception Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07d_plugin_interception"
+}

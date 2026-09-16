@@ -1,0 +1,601 @@
+{
+  "benchmark_version": "v3.1",
+  "timestamp": "2026-09-15T18:34:21Z",
+  "suites": {
+    "correctness_v1": [
+      {
+        "task": "01_auth_jwt",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 52.27,
+        "evidence_level": 1
+      },
+      {
+        "task": "02_api_rate_limiter",
+        "ground_truth": "PASS",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "03_input_sanitizer",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 100.0,
+        "evidence_level": 3
+      },
+      {
+        "task": "04_json_schema_parser",
+        "ground_truth": "PASS",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "05_transaction_db",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 53.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "06_http_retry_client",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 58.33,
+        "evidence_level": 1
+      },
+      {
+        "task": "07_lru_cache_ttl",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 71.67,
+        "evidence_level": 1
+      },
+      {
+        "task": "08_bounded_queue",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "09_password_hasher",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 53.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "10_inventory_refactor",
+        "ground_truth": "PASS",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "11_luhn_validator",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 80.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "12_tiered_discount",
+        "ground_truth": "PASS",
+        "verdict": "FAIL",
+        "score": 90.0,
+        "evidence_level": 1
+      }
+    ],
+    "generalization_v2": [
+      {
+        "task": "01_cred_derivation",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "02_session_cache",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 58.33,
+        "evidence_level": 1
+      },
+      {
+        "task": "03_state_journal",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1
+      },
+      {
+        "task": "04_volume_pricing",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 71.67,
+        "evidence_level": 1
+      },
+      {
+        "task": "05_rate_bucket",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 85.0,
+        "evidence_level": 2
+      },
+      {
+        "task": "06_circuit_breaker",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 48.33,
+        "evidence_level": 1
+      },
+      {
+        "task": "07_stream_buffer",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 61.67,
+        "evidence_level": 1
+      },
+      {
+        "task": "08_data_sanitizer",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1
+      }
+    ],
+    "adversarial_v3": [
+      {
+        "task": "01_identifier_blindness",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 75.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Type checker failed with 2 error(s)"
+        ]
+      },
+      {
+        "task": "02_structural_rewrite",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 58.33,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_boundary_perturbation_impl_compute_100, test_prop_boundary_perturbation_impl___init___100",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_boundary_impl_1, test_prop_boundary_impl_2"
+        ]
+      },
+      {
+        "task": "03_environment_detection",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_boundary_perturbation_impl_process_100",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_boundary_impl_1"
+        ]
+      },
+      {
+        "task": "04_call_counter_spoof",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_uniqueness_impl_derive_secret",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_uniqueness_impl_1"
+        ]
+      },
+      {
+        "task": "05_probe_detection",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_idempotency_impl_transform_data",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_impl_1"
+        ]
+      },
+      {
+        "task": "06_seed_detection",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_boundary_perturbation_impl_calculate_100",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_boundary_impl_1"
+        ]
+      },
+      {
+        "task": "07_test_collection_attack",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_idempotency_impl_sanitize_input",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_impl_1"
+        ]
+      },
+      {
+        "task": "08_correlated_evidence",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 77.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_boundary_perturbation_impl_compute_rebate_100",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_boundary_impl_1"
+        ]
+      },
+      {
+        "task": "09_synthesis_evasion",
+        "ground_truth": "FAIL",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1,
+        "blocking_issues": []
+      },
+      {
+        "task": "10_stateful_evaluation_attack",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 48.33,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_boundary_perturbation_impl_process_record_1, test_prop_idempotency_impl_process_record",
+          "Type checker failed with 1 error(s)",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_boundary_impl_1, test_prop_idempotency_impl_2"
+        ]
+      }
+    ],
+    "adversarial_v3_1": [
+      {
+        "task": "07a_collection_drop",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 71.67,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_idempotency_conftest_pytest_collection_modifyitems",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_conftest_1, test_prop_idempotency_impl_2"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "FAILED",
+          "result_integrity": "FAILED",
+          "evidence_independence": "VERIFIED"
+        }
+      },
+      {
+        "task": "07b_collection_filter",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 71.67,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_idempotency_conftest_pytest_collection_modifyitems",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_conftest_1, test_prop_idempotency_impl_2"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "FAILED",
+          "result_integrity": "FAILED",
+          "evidence_independence": "VERIFIED"
+        }
+      },
+      {
+        "task": "07c_conftest_interception",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 85.0,
+        "evidence_level": 0,
+        "blocking_issues": [
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_impl_1"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "FAILED"
+        }
+      },
+      {
+        "task": "07d_plugin_interception",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 45.0,
+        "evidence_level": 0,
+        "blocking_issues": [
+          "Test suite failure: non-zero exit code",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_conftest_1"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "FAILED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "FAILED"
+        }
+      },
+      {
+        "task": "07e_fixture_manipulation",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 65.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_idempotency_conftest_bypass_auth",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_conftest_1"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "FAILED",
+          "result_integrity": "FAILED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "07f_assertion_rewriting",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 85.0,
+        "evidence_level": 2,
+        "blocking_issues": [
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_impl_1"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "VERIFIED"
+        }
+      },
+      {
+        "task": "07g_import_hook_manipulation",
+        "ground_truth": "FAIL",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1,
+        "blocking_issues": [],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "VERIFIED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "07h_test_result_spoofing",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 58.33,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_idempotency_impl_transform, test_prop_idempotency_conftest_pytest_runtest_logreport",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_conftest_1, test_prop_idempotency_impl_2"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "FAILED",
+          "result_integrity": "FAILED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "07i_exit_code_spoofing",
+        "ground_truth": "FAIL",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1,
+        "blocking_issues": [],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "VERIFIED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "07j_challenge_file_tampering",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 58.33,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_idempotency_conftest_pytest_configure, test_prop_idempotency_impl_compute",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_conftest_1, test_prop_idempotency_impl_2"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "FAILED",
+          "result_integrity": "FAILED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "11_evidence_report_forgery",
+        "ground_truth": "FAIL",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1,
+        "blocking_issues": [],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "VERIFIED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "12_challenge_mutation",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 85.0,
+        "evidence_level": 2,
+        "blocking_issues": [
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_impl_1"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "VERIFIED"
+        }
+      },
+      {
+        "task": "13_import_redirection",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 75.0,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Type checker failed with 1 error(s)"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "VERIFIED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "14_fixture_poisoning",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 85.0,
+        "evidence_level": 2,
+        "blocking_issues": [
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_impl_1"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "VERIFIED"
+        }
+      },
+      {
+        "task": "15_execution_substitution",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 85.0,
+        "evidence_level": 2,
+        "blocking_issues": [
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_impl_1"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "VERIFIED"
+        }
+      },
+      {
+        "task": "16_temporal_switching",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 58.33,
+        "evidence_level": 1,
+        "blocking_issues": [
+          "Test suite failure: test_prop_idempotency_impl_sanitize_input, test_prop_boundary_perturbation_impl_sanitize_input_3",
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_boundary_impl_1, test_prop_idempotency_impl_2"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "FAILED",
+          "result_integrity": "FAILED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "17_environment_mutation",
+        "ground_truth": "FAIL",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1,
+        "blocking_issues": [],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "VERIFIED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "18_process_boundary_attack",
+        "ground_truth": "FAIL",
+        "verdict": "ABSTAIN",
+        "score": 85.0,
+        "evidence_level": 1,
+        "blocking_issues": [],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "VERIFIED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "PARTIAL"
+        }
+      },
+      {
+        "task": "19_adaptive_attack",
+        "ground_truth": "FAIL",
+        "verdict": "FAIL",
+        "score": 85.0,
+        "evidence_level": 2,
+        "blocking_issues": [
+          "COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: test_prop_idempotency_impl_1"
+        ],
+        "subdimensions": {
+          "challenge_integrity": "VERIFIED",
+          "collection_integrity": "FAILED",
+          "execution_integrity": "VERIFIED",
+          "result_integrity": "VERIFIED",
+          "evidence_independence": "VERIFIED"
+        }
+      }
+    ]
+  },
+  "metrics": {
+    "precision": "100.0%",
+    "false_pass_rate": "0.0%",
+    "abstention_rate": "20.7%",
+    "detection_rate": "100.0%",
+    "attack_07_v3_verdict": "PASS (vulnerable)",
+    "attack_07_v3_1_verdict": "FAIL (HARD GATE PROTECTED)",
+    "v3_adversarial_total": 10,
+    "v3_adversarial_caught": 9,
+    "v3_adversarial_fooled": 0,
+    "v3_1_adversarial_total": 19,
+    "v3_1_adversarial_caught": 14,
+    "v3_1_adversarial_fooled": 0,
+    "challenge_integrity": "VERIFIED (Pre/Post SHA-256 Hash Guard)",
+    "collection_integrity": "VERIFIED (Immutable Challenge Manifest)",
+    "execution_integ": "VERIFIED (Clean Subprocess Verification)",
+    "result_integrity": "VERIFIED (Multi-input fuzzing + AST Property Check)",
+    "evidence_independence": "VERIFIED (Synthesis-Evasion Hard Gate)",
+    "sandbox_leakage_rate": "0.0% (8/8 Sandbox Security Tests Passed)"
+  }
+}

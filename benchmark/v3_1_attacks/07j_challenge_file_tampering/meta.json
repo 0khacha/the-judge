@@ -1,0 +1,5 @@
+{
+  "name": "Challenge File Tampering Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07j_challenge_file_tampering"
+}

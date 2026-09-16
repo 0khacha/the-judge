@@ -1,0 +1,5 @@
+{
+  "name": "PTH File Import Injection Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "21_pth_file_injection"
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TheJudgeVerificationResult",
+  "description": "Structured verification output from The Judge v4.2 contract-aware verification layer.",
+  "type": "object",
+  "required": ["decision", "numeric_score", "trust_profile", "findings", "provenance"],
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ABSTAIN"]
+    },
+    "numeric_score": {
+      "type": "number"
+    },
+    "trust_profile": {
+      "type": "object"
+    },
+    "specification_coverage": {
+      "type": "object",
+      "properties": {
+        "total_requirements": { "type": "integer" },
+        "verified_count": { "type": "integer" },
+        "partially_verified_count": { "type": "integer" },
+        "unverified_count": { "type": "integer" },
+        "critical_coverage_pct": { "type": "number" },
+        "overall_coverage_pct": { "type": "number" },
+        "specification_escape_rate_pct": { "type": "number" }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "severity", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "category": { "type": "string" },
+          "severity": { "type": "string", "enum": ["blocking", "high", "medium", "low"] },
+          "property": { "type": "string" },
+          "observed": { "type": "string" },
+          "expected": { "type": "string" },
+          "suggested_focus": { "type": "string" }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["evidence_level"],
+      "properties": {
+        "evidence_level": { "type": "integer" },
+        "total_tests": { "type": "integer" },
+        "passed_tests": { "type": "integer" },
+        "failed_tests": { "type": "integer" }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "duration_seconds": { "type": "number" },
+        "judge_version": { "type": "string" }
+      }
+    }
+  }
+}

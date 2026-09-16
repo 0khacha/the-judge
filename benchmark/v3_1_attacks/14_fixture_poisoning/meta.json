@@ -1,0 +1,5 @@
+{
+  "name": "Fixture Poisoning Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "14_fixture_poisoning"
+}

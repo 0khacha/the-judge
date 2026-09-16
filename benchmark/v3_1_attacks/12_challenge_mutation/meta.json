@@ -1,0 +1,5 @@
+{
+  "name": "Challenge Mutation Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "12_challenge_mutation"
+}

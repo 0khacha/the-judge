@@ -1,0 +1,17 @@
+{
+  "name": "jwt_token_manager",
+  "description": "JWT session token manager issuing, validating, and revoking tokens.",
+  "interface": {
+    "class": "JWTTokenManager"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Issue valid tokens with unique IDs."
+    },
+    {
+      "id": "REQ-002",
+      "description": "Reject expired or revoked tokens."
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Execution Substitution Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "15_execution_substitution"
+}

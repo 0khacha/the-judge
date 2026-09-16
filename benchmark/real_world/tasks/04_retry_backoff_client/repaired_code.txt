@@ -1,0 +1,12 @@
+class RetryClient:
+    def __init__(self, max_attempts: int = 3):
+        self.max_attempts = max_attempts
+
+    def execute(self, func) -> bool:
+        attempts = 0
+        while attempts < self.max_attempts:
+            try:
+                return func()
+            except Exception:
+                attempts += 1
+        return False

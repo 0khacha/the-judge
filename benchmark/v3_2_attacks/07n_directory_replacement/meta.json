@@ -1,0 +1,5 @@
+{
+  "name": "Directory Replacement Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07n_directory_replacement"
+}

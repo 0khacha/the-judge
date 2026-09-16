@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TheJudgeTaskSpecification",
+  "description": "Task contract specification for The Judge v4.2 contract-aware verification layer.",
+  "type": "object",
+  "required": ["name", "description", "interface"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique identifier of the task or component."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description or specification of requirement."
+    },
+    "interface": {
+      "type": "object",
+      "description": "Callable interface signature constraints."
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["functional", "boundary", "state", "error_handling", "security", "performance", "determinism", "concurrency", "persistence", "idempotency", "compatibility"]
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["critical", "important", "optional"]
+          },
+          "properties": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "examples": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "edge_cases": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "verification_methods": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "status": { "type": "string" }
+        }
+      }
+    },
+    "security_properties": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "timeout_seconds": { "type": "number", "default": 30 },
+        "max_memory_mb": { "type": "number", "default": 512 }
+      }
+    }
+  }
+}

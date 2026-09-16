@@ -1,0 +1,5 @@
+{
+  "name": "Manifest Injection Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "30_manifest_injection_attack"
+}

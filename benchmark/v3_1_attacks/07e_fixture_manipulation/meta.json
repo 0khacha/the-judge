@@ -1,0 +1,5 @@
+{
+  "name": "Fixture Manipulation Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07e_fixture_manipulation"
+}

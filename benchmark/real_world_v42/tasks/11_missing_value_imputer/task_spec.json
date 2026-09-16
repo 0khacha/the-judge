@@ -1,0 +1,46 @@
+{
+  "task_id": "11_missing_value_imputer",
+  "name": "missing_value_imputer",
+  "description": "Dataset missing value imputer supporting mean, median, constant, or forward fill strategies.",
+  "interface": {
+    "class": "MissingValueImputer"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Impute missing values (None/NaN) using mean or constant strategy.",
+      "category": "functional",
+      "priority": "critical",
+      "properties": [
+        "constant_mean_imputation"
+      ],
+      "examples": [
+        "[1, None, 3] mean -> [1, 2.0, 3]"
+      ],
+      "edge_cases": [
+        "all values missing"
+      ],
+      "verification_methods": [
+        "unit_test"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Forward fill strategy replaces missing value with latest valid prior value.",
+      "category": "state",
+      "priority": "critical",
+      "properties": [
+        "forward_fill_imputation"
+      ],
+      "examples": [
+        "[10, None, None, 20] ffill -> [10, 10, 10, 20]"
+      ],
+      "edge_cases": [
+        "leading missing values remain None"
+      ],
+      "verification_methods": [
+        "behavioral_probe"
+      ]
+    }
+  ]
+}

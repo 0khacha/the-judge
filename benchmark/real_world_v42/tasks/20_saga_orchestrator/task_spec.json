@@ -1,0 +1,46 @@
+{
+  "task_id": "20_saga_orchestrator",
+  "name": "saga_orchestrator",
+  "description": "Saga pattern orchestrator executing steps sequentially and triggering compensating actions in reverse order on step failure.",
+  "interface": {
+    "class": "SagaOrchestrator"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Execute all saga steps in forward order when all steps succeed.",
+      "category": "functional",
+      "priority": "critical",
+      "properties": [
+        "forward_saga_execution"
+      ],
+      "examples": [
+        "step1, step2 -> success"
+      ],
+      "edge_cases": [
+        "empty saga"
+      ],
+      "verification_methods": [
+        "unit_test"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Trigger compensating actions in reverse order for executed steps when a step fails.",
+      "category": "state",
+      "priority": "critical",
+      "properties": [
+        "compensating_action_rollback"
+      ],
+      "examples": [
+        "s1 ok, s2 ok, s3 fails -> undo s2, undo s1"
+      ],
+      "edge_cases": [
+        "compensation error handling"
+      ],
+      "verification_methods": [
+        "behavioral_probe"
+      ]
+    }
+  ]
+}

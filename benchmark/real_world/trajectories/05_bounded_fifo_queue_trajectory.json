@@ -1,0 +1,28 @@
+{
+  "task_id": "05_bounded_fifo_queue",
+  "task_name": "bounded_fifo_queue",
+  "judge_outcome": "PASS",
+  "final_judge_decision": "PASS",
+  "final_gt_pass": false,
+  "total_rounds": 1,
+  "runtime_seconds": 7.926,
+  "history": [
+    {
+      "round_id": "ROUND-1",
+      "round_number": 1,
+      "workspace_hash": "68463a88817c58d10658bda1b90323fbcbbe8685eebc29cb78af08136059c92e",
+      "implementation_hash": "68463a88817c58d1",
+      "judge_version": "v4.0",
+      "decision": "PASS",
+      "numeric_score": 90.0,
+      "findings": [],
+      "blocking_issues": [],
+      "evidence_summary": {
+        "passed_tests": 2,
+        "failed_tests": 0,
+        "evidence_level": 2
+      },
+      "timestamp": "2026-09-15T20:18:50Z"
+    }
+  ]
+}

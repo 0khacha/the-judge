@@ -1,0 +1,21 @@
+{
+  "task_id": "basic_lru_cache",
+  "name": "cache",
+  "description": "LRUCache evicting least recently used key on capacity boundary.",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Basic get and set functionality",
+      "category": "functional",
+      "priority": "critical",
+      "properties": ["basic_get_set"]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Evict least recently used key when full",
+      "category": "state",
+      "priority": "critical",
+      "properties": ["lru_eviction"]
+    }
+  ]
+}

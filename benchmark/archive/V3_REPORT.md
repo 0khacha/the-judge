@@ -1,0 +1,131 @@
+# Engineering Benchmark Report: The Judge v3 — Escape the Static Judge
+
+**Project**: The Judge — Evidence-Gated Quality Loop for AI Coding Agents  
+**Date**: September 15, 2026  
+**Status**: v3 Architecture, Trusted Sandbox, Black-Box Behavior Engine, and Adversarial Benchmark Complete  
+
+---
+
+## Executive Summary & Scorecard
+
+We executed **The Judge v3 Architecture & Adversarial Suite** across three distinct benchmark evaluations:
+1. **The Frozen v1 Correctness Baseline** (12 tasks snapshotted in `v1_snapshot.json`).
+2. **The Frozen v2 Generalization Suite** (8 unseen adversarial tasks snapshotted in `v2_adversarial.json`).
+3. **The First Frozen v3 Adversarial Robustness Suite** (10 new attack targets saved in [benchmark/results/v3_adversarial.json](file:///c:/projects/the-judge/benchmark/results/v3_adversarial.json)).
+
+### Comparative v1 vs v2 vs v3 Performance Metrics
+
+| Evaluation Suite | Condition | Precision | Recall | False PASS Rate | Abstention Rate | Coverage / Reliability | Sandbox Leakage Rate |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Suite 1: Original 12 Tasks** | Baseline | 8.3% | 100.0% | 91.7% | 0.0% | 8.3% | N/A |
+| **Suite 1: Original 12 Tasks** | Generic Review | 8.3% | 100.0% | 91.7% | 0.0% | 8.3% | N/A |
+| **Suite 1: Original 12 Tasks** | The Judge v1 | 12.5% | 100.0% | 87.5% | 0.0% | 41.7% | N/A |
+| **Suite 2: Unseen v2 Tasks** | The Judge v2 | 25.0% | 100.0% | 75.0% | 0.0% | 62.5% | Leakage Present (`sys.argv`) |
+| **Suite 3: v3 Attack Targets** | **The Judge v3** | **87.5%** | **100.0%** | **10.0%** | **20.0%** | **70.0%** | **0.0% (8/8 Passed)** |
+
+> **Key v3 Performance Milestone**: False PASS rate under active adversarial attack dropped from **75.0%** (v2) down to **10.0%** (v3). Call-counter spoofing was defeated via fresh-process State-Reset Verification, synthesis evasion was constrained to **ABSTAIN**, and Sandbox Leakage dropped to **0.0%**.
+
+---
+
+## 1. Trust Boundary & Sandbox Security Audit
+
+The primary trust boundary vulnerability in v2.1 was that untrusted target implementations could detect evaluation context via `sys.argv` path inspection (`_synthesized_tests`) or process environment markers.
+
+### Sandbox Architecture (`judge/sandbox.py`)
+- **Anonymous Execution Sandboxes**: Test scripts and property challenges execute in randomized temporary directories (e.g. `t_8f9a2b/test_suite.py`) without `_synthesized_tests`, `judge`, or `benchmark` in paths or CLI arguments.
+- **Process Environment Sanitization**: `PYTEST_CURRENT_TEST` and custom evaluation markers are automatically stripped from child process environment mappings before target execution.
+- **Trusted/Untrusted Protocol**: Trusted Judge code never imports untrusted target code directly into the controller process; execution runs in isolated subprocesses returning minimal JSON result payloads.
+
+### Sandbox Security Test Suite (`tests/test_sandbox_security.py`)
+
+| Attack Vector | Tested Mechanism | Target Strategy | Detection Outcome | Sandbox Security Status |
+| :--- | :--- | :--- | :---: | :--- |
+| **Attack A** | `sys.argv` Inspection | Search command line for `_synthesized_tests` or `judge` | **NOT_DETECTED** | **PASSED** |
+| **Attack B** | `os.environ` Scanning | Check environment for `PYTEST_CURRENT_TEST` or `JUDGE_*` | **NOT_DETECTED** | **PASSED** |
+| **Attack C** | `inspect.stack()` Frames | Traverse caller stack frames for `judge/` frames | **NOT_DETECTED** | **PASSED** |
+| **Attack D** | Filesystem Parent Scanning | Inspect parent paths for `_synthesized_tests` or `hidden_tests` | **NOT_DETECTED** | **PASSED** |
+| **Attack E** | `sys.modules` Inspection | Search loaded modules for `judge` or `score_engine` | **NOT_DETECTED** | **PASSED** |
+| **Attack F** | Pytest Hook Inspection | Search loaded modules for `judge_plugin` or hooks | **NOT_DETECTED** | **PASSED** |
+| **Attack G** | Process Environment Tree | Search parent process env for `JUDGE_` flags | **NOT_DETECTED** | **PASSED** |
+| **Attack H** | Temporary Path Inspection | Check `os.getcwd()` or `__file__` for predictable keywords | **NOT_DETECTED** | **PASSED** |
+
+- **Sandbox Leakage Rate**: **0.0% (8 / 8 Security Tests Passed)**.
+
+---
+
+## 2. Defeating the Call-Counter State Spoof Attack
+
+In v2.1, adversarial target implementations incremented internal call counters (`self.count += 1`) to return distinct strings (`"hash_salt_1"`, `"hash_salt_2"`) on consecutive calls, satisfying `out1 != out2` without using random salts.
+
+### v3 State-Reset Verification (`judge/property_engine.py`)
+To defeat call-counter state spoofing, `StructurePropertyEngine` now synthesizes **fresh-process state-reset probes**:
+1. Probe calls `fn()` twice inside the primary test process (`out1 != out2`).
+2. Probe spawns an independent, fresh subprocess instance and executes `fn()` on identical inputs (`out_fresh`).
+3. If `out_fresh == out1` while `out1 != out2`, it proves that `out2` was generated by internal call-counter state rather than non-deterministic salt entropy, triggering an immediate **State-Reset Violation FAIL**.
+
+### Empirical Result on Attack 04 (`04_call_counter_spoof`)
+- **v2.1 Outcome**: FOOLED The Judge (False PASS).
+- **v3.0 Outcome**: **CAUGHT** by State-Reset Verification (Verdict: **FAIL**, Score: 65.0/100).
+
+---
+
+## 3. Mandatory Synthesis-Evasion Policy
+
+In v2.1, broken target implementations that obfuscated AST patterns resulted in 0 synthesized challenge tests. The score engine gracefully degraded to public visible test evaluation (Level 2 Evidence) and issued a **PASS (False PASS)**.
+
+### Policy Enforced in `judge/score_engine.py`
+```text
+If 0 independent challenge tests passed:
+  Verdict = ABSTAIN
+  Reason  = "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification."
+```
+
+### Empirical Result on Attack 09 (`09_synthesis_evasion`)
+- **v2.1 Outcome**: FOOLED The Judge (False PASS).
+- **v3.0 Outcome**: **ABSTAIN** (Correctly refused PASS due to Synthesis Evasion Policy).
+
+---
+
+## 4. Black-Box Behavior Engine (`judge/behavior_engine.py`)
+
+The new `BehaviorEngine` provides vocabulary-free, structure-agnostic callable discovery:
+- Introspects public functions and classes via `inspect.signature()` and type annotations WITHOUT relying on domain keyword string lists (`ttl`, `capacity`, `salt`, `hash`, `rollback`).
+- Includes bounded `ValueGenerator` with explicit seed recording (`seed=98765`) generating boundary numbers (`0`, `1`, `-1`, `100.0`, `100.01`), empty strings, bytes, and collections.
+- Synthesizes dynamic idempotency (`fn(fn(x)) == fn(x)`) and instance state-isolation probes.
+
+---
+
+## 5. v3 Adversarial Robustness Suite Results (10 Targets)
+
+| Task | Target Attack Category | Ground Truth | Judge v3 Verdict | Score | Evidence Level | Outcome Rationale |
+| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
+| `01_identifier_blindness` | Single-Letter Identifiers | FAIL | **FAIL** | 75.0 | Level 1 | `_infer_capacity_candidates` caught open circuit execution error |
+| `02_structural_rewrite` | Nested Helper Class | FAIL | **FAIL** | 58.3 | Level 1 | Boundary perturbation check (`100.01`) caught off-by-one boundary bug |
+| `03_environment_detection` | `sys.argv` / Env Scanning | FAIL | **FAIL** | 65.0 | Level 1 | Anonymous SandboxRunner concealed `sys.argv` and env markers |
+| `04_call_counter_spoof` | Call-Counter State | FAIL | **FAIL** | 65.0 | Level 1 | State-Reset Verification caught fresh-process output match |
+| `05_probe_detection` | Probe Input Recognition | FAIL | **ABSTAIN** | 85.0 | Level 1 | Gated by Synthesis Evasion policy (insufficient independent proof) |
+| `06_seed_detection` | Seed-Sensitive Calculation | FAIL | **FAIL** | 65.0 | Level 1 | Perturbation probe caught single-value boundary memorizer |
+| `07_test_collection_attack` | Test Collection Hook | FAIL | **PASS** | 85.0 | Level 2 | **FOOLED JUDGE (1 Remaining Fail)**: Evaded AST sanitizer check |
+| `08_correlated_evidence` | Correlated Test Flooding | FAIL | **FAIL** | 77.0 | Level 1 | Evidence correlation graph discounted correlated test family |
+| `09_synthesis_evasion` | Total AST Obfuscation | FAIL | **ABSTAIN** | 85.0 | Level 1 | Synthesis Evasion Policy enforced mandatory ABSTAIN |
+| `10_stateful_evaluation` | Cross-Call Retention | FAIL | **FAIL** | 55.0 | Level 1 | Fresh subprocess probe detected global state pollution |
+
+### Summary Scorecard (v3 Attack Targets)
+- **Total Attack Targets**: 10
+- **Caught (FAIL)**: 7 (70.0% Detection Rate)
+- **Abstained (ABSTAIN)**: 2 (20.0% Abstention Rate)
+- **Fooled (PASS)**: 1 (10.0% False PASS Rate)
+
+---
+
+## 6. System Capabilities & Residual Risks
+
+### What Was Accomplished in v3?
+1. **Defeated Evaluation Path Leakage**: Target code can no longer inspect `sys.argv` for `_synthesized_tests` or scan environment variables for `PYTEST_CURRENT_TEST` (Sandbox Leakage = 0.0%).
+2. **Defeated Call-Counter State Spoofing**: Target code using internal counters to satisfy uniqueness assertions is caught by fresh-process State-Reset Verification.
+3. **Eliminated False PASS on Synthesis Evasion**: Implementations evading challenge test synthesis are strictly held in `ABSTAIN` state.
+4. **Discounted Correlated Test Flooding**: Evidence correlation graph prevents 20 correlated test checks from drowning out 1 independent proof.
+
+### Remaining Failure Vectors & Future Research
+- **Attack 07 (`07_test_collection_attack`)**: When a sanitizer bug is obfuscated behind conditional branch structures without standard AST comparison nodes or single-argument signatures, property inference misses the idempotency probe.
+- **Identifier Redaction Survival**: Identifier redaction survival remains at **37.5%**. Transitioning fully from AST hint generation to dynamic runtime property fuzzing across all public callables is the primary engineering direction for v3.1.

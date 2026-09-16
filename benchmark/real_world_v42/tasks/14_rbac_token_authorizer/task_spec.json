@@ -1,0 +1,46 @@
+{
+  "task_id": "14_rbac_token_authorizer",
+  "name": "rbac_token_authorizer",
+  "description": "Hierarchical role-based access controller validating resource permission claims.",
+  "interface": {
+    "class": "RBACAuthorizer"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Grant permission if role has direct permission.",
+      "category": "security",
+      "priority": "critical",
+      "properties": [
+        "direct_role_permission"
+      ],
+      "examples": [
+        "editor role has 'edit_post' -> True"
+      ],
+      "edge_cases": [
+        "unknown role returns False"
+      ],
+      "verification_methods": [
+        "unit_test"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Inherit permissions from child/parent role relationships.",
+      "category": "security",
+      "priority": "critical",
+      "properties": [
+        "role_hierarchy_inheritance"
+      ],
+      "examples": [
+        "admin inherits from editor -> admin can 'edit_post'"
+      ],
+      "edge_cases": [
+        "circular role inheritance"
+      ],
+      "verification_methods": [
+        "behavioral_probe"
+      ]
+    }
+  ]
+}

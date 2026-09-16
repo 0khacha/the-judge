@@ -1,0 +1,9 @@
+import os
+
+def sanitize_path(user_path: str) -> str:
+    parts = []
+    for part in user_path.replace("\\", "/").split("/"):
+        if part in ("", ".", ".."):
+            continue
+        parts.append(part)
+    return "/".join(parts)

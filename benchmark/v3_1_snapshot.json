@@ -1,0 +1,29 @@
+{
+  "version": "v3.1",
+  "timestamp": "2026-09-15T18:49:52Z",
+  "v3_1_metrics": {
+    "precision": "100.0%",
+    "recall": "100.0%",
+    "false_pass_rate": "0.0%",
+    "abstention_rate": "20.7%",
+    "detection_rate": "100.0%",
+    "sandbox_leakage": "0.0%",
+    "total_adversarial_attacks": 29,
+    "attack_07_verdict": "FAIL (HARD GATE PROTECTED)"
+  },
+  "file_hashes": {
+    "benchmark/results/v3_1_adversarial.json": "b9805f04cc5538e8cac358baac76b68a41cec88b8e3d38a3050c817d67feab25",
+    "benchmark/V3_1_REPORT.md": "0179be2b64c37e7478fc631612d694042812536d0292606d231351998c72fd24",
+    "benchmark/results/v3_1_root_cause.md": "83e7fe0e96baca260deec3d4b457cd2fa3ed7f31d837c4c61e798eaa420cb87c",
+    "benchmark/v2_1_snapshot.json": "d4b52757679b7da9bc390017ce4f64cfe4162fb4256be3d9fd400421a58c1847",
+    "benchmark/v1_snapshot.json": "c1a3c32b622e106cccfaeed2fa7a27247c1ba4b249f7c6c977d56ae2916f2e01",
+    "benchmark/results/v3_adversarial.json": "f078ce85ac43d7fcc8adbcc42bd937cb5dfcc647a284c77bd396b2afa09e34ed",
+    "benchmark/V3_REPORT.md": "c5d9b507e7446bbe9b4adbc774716848a43f09be0e0ddadc0f845212c3251759",
+    "judge/score_engine.py": "13846958d12837ebda56a8adfcc02b7a699f6a6f30783c26ff3c42119dd8272b",
+    "judge/property_engine.py": "126013463a93a53d4d00895674a1c315cbfec986c2013dc1fe68e3b7ae149121",
+    "judge/sandbox.py": "c566d178062c0cbe2985ae82334491405fb8e1fb058125111f6e49e45a66e323",
+    "judge/test_synthesizer.py": "efbf8348f978741dc6e408f71e08812f5f4fbf112c18c9d8598e4693d6125fb1",
+    "judge/evidence.py": "caae8fe5cdb771e0bbdab777e394ab4c0630fb3a00e171f2f749f581f882d849",
+    "tests/test_test_collection_attack.py": "0f2df4b788b36baad723b1aa7ba023a47e0b92c5c5fb435042540c39dfc61875"
+  }
+}

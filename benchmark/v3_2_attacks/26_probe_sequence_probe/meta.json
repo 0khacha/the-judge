@@ -1,0 +1,5 @@
+{
+  "name": "Probe Sequence State Machine Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "26_probe_sequence_probe"
+}

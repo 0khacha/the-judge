@@ -1,0 +1,40 @@
+{
+  "version": "v4.0_FINAL",
+  "timestamp": "2026-09-15T20:00:59Z",
+  "v4_0_final_metrics": {
+    "public_api_verified": true,
+    "agent_adapter_verified": true,
+    "repair_loop_verified": true,
+    "multi_round_regression_protection_verified": true,
+    "json_schemas_verified": true,
+    "cli_and_demo_verified": true,
+    "repository_tests_passing": "47/47",
+    "historical_suites_frozen": true
+  },
+  "file_hashes": {
+    "the_judge/__init__.py": "18b9af39f14879cd8765afef0495319b350b7822929cfabf1f12af37dd36dfbc",
+    "the_judge/api.py": "05eaf902e66e5586620291aae16ad37c29a979d287e99c6ce2dacad35ffff1d9",
+    "the_judge/core/__init__.py": "63cdf6d9eec8c660f9ceed33ba146231369fde351fe79de6fe7cefdbad9a77cd",
+    "the_judge/core/sandbox.py": "d8233ffa729762e8f812e2a2eb6988e3b07577fb6b341c6eea0a5fac38e8be8f",
+    "the_judge/core/behavior_engine.py": "d56b56f9adf307d03307f6266268b4a716d12c56d81401d746358dca28f39efe",
+    "the_judge/core/property_engine.py": "e350fe3feb343696737a37472bce07cd706a38ac4f55814c5fd69742a332d4b6",
+    "the_judge/core/evidence.py": "b64e37b5df2a74d2006bdf889c25f3e75d8c65ec0246a9dd2095f35d1c65cdb5",
+    "the_judge/core/score_engine.py": "1dccb4fb23f71cb16797a9911ddb3f1047298acc653ef4053e183aafb76297d6",
+    "the_judge/core/decision.py": "7abc551d41f02a1442b305d961ab2ce83dff3264e4b4133eb8c4d2d1dd3c710a",
+    "the_judge/integrations/__init__.py": "a546a81dcd47d93a102b2dfe3069f0f3842f734c6d98c4418aba6a777df4abde",
+    "the_judge/integrations/agent_adapter.py": "f80889fc46e54d799a8ebdf33579406d31d3d6c8ea0bbd1f9b594519765e962a",
+    "the_judge/integrations/repair_loop.py": "a80318a845ba39940cac5b8a9c051680ec95038b4575a71f07edf0a9d50cf86a",
+    "the_judge/integrations/cli.py": "9dcfe13ee7ced22121bc1005947607ca81c52dbfd9992febd34376894e390384",
+    "the_judge/integrations/demo.py": "12cd75c1b04f66f40304b1170a57e92fd53731cabdbadf67ab7729bdb392de2e",
+    "the_judge/schemas/task.schema.json": "66611a8c69322bc6e9274171d8fa22db3f7417ecfb37071cef3db1c836adbcd1",
+    "the_judge/schemas/result.schema.json": "a8f5352e5e91446a0f4abd010b114dad3b9ff650e6cde0317354b19c9086a900",
+    "the_judge/schemas/evidence.schema.json": "9ad03d4cb9930b4b65d2ef2afac1f5bc7c48379c1e94d6513aad0406cb77c15f",
+    "tests/test_v4_agent_repair_loop.py": "5dbeed2bab2277eadab52a26d87dadd3ec0e725121d212dd54db82b957861a0b",
+    "README.md": "b1b367e57ee71d049ef1cc2dbd0c40de025bf90c2915144a8c61cb3bcac98df0",
+    "ARCHITECTURE.md": "616a95fb69c14c94b2d9bc342eaf0fbfc49b61392250079eceb31225ffb84de9",
+    "SECURITY.md": "f51ad38fa77cb5e220b5c0bbc3fa9f721348bdf8be795a316dbaab2888dcb1ea",
+    "THREAT_MODEL.md": "73b006364644ebd8f5c5d3c9325ecc2af9c22fbbd7fa9d1ff3a5c1ca0fa5257c",
+    "V4_REPORT.md": "b0981bf47857c2dff66fefcf68864bc201ea6f400fb7a647dbc83398a1e4fc02",
+    "benchmark/v3_2_FINAL_SNAPSHOT.json": "c0f23060c2f1de52eb09500b5abc41bd8d824c03578eea7f5ee164615b32368e"
+  }
+}

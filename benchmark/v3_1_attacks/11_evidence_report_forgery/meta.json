@@ -1,0 +1,5 @@
+{
+  "name": "Evidence Report Forgery Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "11_evidence_report_forgery"
+}

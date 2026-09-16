@@ -1,0 +1,13 @@
+{
+  "name": "csv_aggregator",
+  "description": "Parses CSV numeric data lines and computes sum and average.",
+  "interface": {
+    "function": "aggregate_csv"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Compute accurate sum and average ignoring header or empty lines."
+    }
+  ]
+}

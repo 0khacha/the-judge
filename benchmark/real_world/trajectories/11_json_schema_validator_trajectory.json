@@ -1,0 +1,28 @@
+{
+  "task_id": "11_json_schema_validator",
+  "task_name": "json_validator",
+  "judge_outcome": "PASS",
+  "final_judge_decision": "PASS",
+  "final_gt_pass": false,
+  "total_rounds": 1,
+  "runtime_seconds": 8.114,
+  "history": [
+    {
+      "round_id": "ROUND-1",
+      "round_number": 1,
+      "workspace_hash": "c1a4f5e5fd8d25acf22774255aedd1db15c4b9b4755d6af031436f8a105a04ad",
+      "implementation_hash": "c1a4f5e5fd8d25ac",
+      "judge_version": "v4.0",
+      "decision": "PASS",
+      "numeric_score": 100.0,
+      "findings": [],
+      "blocking_issues": [],
+      "evidence_summary": {
+        "passed_tests": 1,
+        "failed_tests": 0,
+        "evidence_level": 3
+      },
+      "timestamp": "2026-09-15T20:20:12Z"
+    }
+  ]
+}

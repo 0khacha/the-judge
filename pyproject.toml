@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "the-judge"
+version = "1.0.0"
+description = "Evidence-based verification for AI-generated software"
+readme = "README.md"
+authors = [{ name = "@0khacha" }]
+license = "MIT"
+requires-python = ">=3.9"
+dependencies = [
+    "pytest>=7.0.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0"
+]
+
+[project.scripts]
+judge = "the_judge.integrations.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["the_judge*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = ["benchmark", "starter_task", "examples", "demo"]
+

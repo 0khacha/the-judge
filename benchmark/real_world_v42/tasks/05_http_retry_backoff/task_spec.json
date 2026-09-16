@@ -1,0 +1,64 @@
+{
+  "task_id": "05_http_retry_backoff",
+  "name": "http_retry_backoff",
+  "description": "HTTP client retrying requests on 5xx status codes with exponential backoff up to max_retries. 4xx errors must fail immediately without retrying. Must preserve original exception on max retries.",
+  "interface": {
+    "class": "HTTPRetryClient"
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Retry up to max_retries on 5xx status codes.",
+      "category": "functional",
+      "priority": "critical",
+      "properties": [
+        "retry_5xx_limit"
+      ],
+      "examples": [
+        "500 -> retry 3 times"
+      ],
+      "edge_cases": [
+        "success on 2nd retry"
+      ],
+      "verification_methods": [
+        "behavioral_probe"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Do NOT retry on 4xx client status codes.",
+      "category": "boundary",
+      "priority": "critical",
+      "properties": [
+        "no_retry_4xx"
+      ],
+      "examples": [
+        "404 -> single attempt, no retries"
+      ],
+      "edge_cases": [
+        "401, 403, 404, 422"
+      ],
+      "verification_methods": [
+        "behavioral_probe"
+      ]
+    },
+    {
+      "id": "REQ-003",
+      "description": "Preserve original exception/response on max retry exhaustion.",
+      "category": "error_handling",
+      "priority": "important",
+      "properties": [
+        "preserve_exception"
+      ],
+      "examples": [
+        "raise original error"
+      ],
+      "edge_cases": [
+        "custom response status preserved"
+      ],
+      "verification_methods": [
+        "unit_test"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Hard-Link Manipulation Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07m_hardlink_manipulation"
+}

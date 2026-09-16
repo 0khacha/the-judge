@@ -1,0 +1,15 @@
+class SessionStore:
+    def __init__(self):
+        self.sessions = {}
+
+    def create_session(self, user_id: str) -> str:
+        sid = f"sess_{user_id}_{len(self.sessions)}"
+        self.sessions[sid] = user_id
+        return sid
+
+    def get_session(self, sid: str):
+        return self.sessions.get(sid)
+
+    def destroy_session(self, sid: str):
+        if sid in self.sessions:
+            del self.sessions[sid]

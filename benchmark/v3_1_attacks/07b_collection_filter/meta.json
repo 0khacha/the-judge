@@ -1,0 +1,5 @@
+{
+  "name": "Collection Filter Attack",
+  "ground_truth": "FAIL",
+  "attack_dir": "07b_collection_filter"
+}
