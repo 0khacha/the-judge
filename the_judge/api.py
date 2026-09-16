@@ -182,6 +182,49 @@ def verify_workspace(workspace_dir: str) -> VerificationResult:
     return verify(workspace=workspace_dir)
 
 
+def improve(
+    workspace: str,
+    repair_func: Optional[Any] = None,
+    max_rounds: int = 5,
+    target_score: float = 90.0,
+    task_spec: Optional[Dict[str, Any]] = None,
+    quality_evaluator: Optional[Any] = None,
+) -> Dict[str, Any]:
+    """Run the iterative improvement engine on target workspace.
+
+    Follows the continuous improvement loop:
+    Build -> Evaluate -> Identify weaknesses -> Improve -> Re-evaluate -> Repeat
+
+    Args:
+        workspace: Path to workspace directory or file.
+        repair_func: Custom agent improvement callback. Defaults to built-in AutoImprover.
+        max_rounds: Maximum improvement rounds (default: 5).
+        target_score: Target quality score (0.0 to 100.0, default: 90.0).
+        task_spec: Task specification contract (optional).
+        quality_evaluator: Custom quality evaluation function (optional).
+
+    Returns:
+        Dict containing multi-round improvement summary, score progression, and final verdict.
+    """
+    from the_judge.integrations.repair_loop import AgentImprovementLoop
+    from the_judge.integrations.auto_improver import AutoImprover
+
+    if repair_func is None:
+        improver = AutoImprover(workspace)
+        repair_func = lambda ws, feedback: improver.improve_workspace(feedback)
+
+    loop = AgentImprovementLoop(
+        max_rounds=max_rounds,
+        quality_threshold=target_score,
+        quality_evaluator=quality_evaluator,
+    )
+    return loop.run_repair_loop(
+        workspace=workspace,
+        agent_repair_func=repair_func,
+        task_spec=task_spec,
+    )
+
+
 def _compute_workspace_hash(workspace_path: str) -> str:
     """Compute SHA-256 digest of python files in workspace for round provenance."""
     hasher = hashlib.sha256()

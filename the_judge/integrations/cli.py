@@ -47,10 +47,12 @@ def main(args_list=None) -> int:
     init_parser.add_argument("target", choices=["vscode"], help="Target IDE")
     init_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace")
 
-    # watch command
-    watch_parser = subparsers.add_parser("watch", help="Watch workspace and re-verify on file changes")
-    watch_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace directory")
-    watch_parser.add_argument("--debounce", type=float, default=2.0, help="Debounce interval in seconds (default: 2.0)")
+    # improve command
+    improve_parser = subparsers.add_parser("improve", help="Run multi-round iterative improvement loop")
+    improve_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace directory or file")
+    improve_parser.add_argument("--max-rounds", type=int, default=5, help="Maximum improvement rounds (default: 5)")
+    improve_parser.add_argument("--target-score", type=float, default=90.0, help="Target quality score threshold (default: 90.0)")
+    improve_parser.add_argument("--json", action="store_true", help="Output machine-readable JSON history")
 
     args = parser.parse_args(args_list)
 
@@ -66,6 +68,9 @@ def main(args_list=None) -> int:
 
     if args.command == "watch":
         return _run_watch_command(args)
+
+    if args.command == "improve":
+        return _run_improve_command(args)
 
     workspace_path = getattr(args, "workspace", ".")
     is_json = getattr(args, "json", False)
@@ -183,6 +188,79 @@ def _run_watch_command(args) -> int:
         pass
 
     return 0
+
+
+def _run_improve_command(args) -> int:
+    """Handle the 'judge improve' subcommand for iterative refinement."""
+    from the_judge.api import improve
+
+    workspace = getattr(args, "workspace", ".")
+    max_rounds = getattr(args, "max_rounds", 5)
+    target_score = getattr(args, "target_score", 90.0)
+    is_json = getattr(args, "json", False)
+
+    if not is_json:
+        print("=" * 68)
+        print("THE JUDGE — Iterative Improvement Engine")
+        print("Loop: Build -> Evaluate -> Identify Weaknesses -> Improve -> Re-evaluate")
+        print("=" * 68)
+        print(f"Target Workspace : {os.path.abspath(workspace)}")
+        print(f"Max Rounds       : {max_rounds}")
+        print(f"Quality Target   : {target_score} / 100.0")
+        print()
+
+    old_argv = list(sys.argv)
+    try:
+        sys.argv = [sys.argv[0]]
+        result = improve(workspace=workspace, max_rounds=max_rounds, target_score=target_score)
+    except Exception as e:
+        if is_json:
+            print(json.dumps({"error": str(e), "outcome": "ERROR"}, indent=2))
+        else:
+            print(f"[IMPROVEMENT ENGINE ERROR] {e}")
+        return 3
+    finally:
+        sys.argv = old_argv
+
+    if is_json:
+        print(json.dumps(result, indent=2))
+        return 0
+
+    history = result.get("history", [])
+    for round_item in history:
+        round_num = round_item.get("round_number", 1)
+        dec = round_item.get("decision", "UNKNOWN")
+        score = round_item.get("numeric_score", 0.0)
+        quality = round_item.get("quality", {})
+        weaknesses = quality.get("weaknesses", [])
+        repair = round_item.get("repair", {})
+
+        print(f"[Round {round_num}/{result.get('total_rounds', max_rounds)}] Evaluation & Refinement")
+        print(f"  Decision       : {dec}")
+        print(f"  Quality Score  : {score} / 100.0")
+        print(f"  Weaknesses     : {len(weaknesses)} issue(s) identified")
+        if repair and repair.get("summary"):
+            print(f"  Action Taken   : {repair.get('summary')}")
+        print()
+
+    outcome = result.get("outcome", "COMPLETED")
+    if outcome in ("PASS", "QUALITY_TARGET_MET"):
+        initial_score = history[0].get("numeric_score", 0.0) if history else 0.0
+        final_score = result.get("quality", {}).get("score", 0.0)
+        diff = round(final_score - initial_score, 1)
+        diff_str = f"+{diff}" if diff >= 0 else str(diff)
+        print("=" * 68)
+        print(f"SUCCESS: Quality target achieved in {result.get('total_rounds')} round(s)!")
+        print(f"Score Progression: {initial_score} -> {final_score} ({diff_str} points)")
+        print("=" * 68)
+        return 0
+    else:
+        print("=" * 68)
+        print(f"OUTCOME: {outcome}")
+        if result.get("reason"):
+            print(f"Reason: {result.get('reason')}")
+        print("=" * 68)
+        return 1
 
 
 def _run_contract_command(workspace_path: str, is_json: bool, task_spec_path: str = None) -> None:

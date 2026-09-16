@@ -72,7 +72,8 @@ Use `findings[].suggested_focus` to determine what to fix. Use `findings[].id` t
 ### Quick reference
 
 ```bash
-judge verify .                 # Human-readable report
+judge improve .                # Continuous multi-round improvement engine (Build -> Evaluate -> Improve)
+judge verify .                 # Human-readable evaluation report
 judge verify . --json          # Machine-readable JSON for agents
 judge verify path/to/file.py   # Verify a single file
 judge contract .              # Inspect requirement coverage

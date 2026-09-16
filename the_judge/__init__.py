@@ -1,9 +1,10 @@
-from .api import verify, verify_workspace
+from .api import verify, verify_workspace, improve
 from .core.decision import Finding, VerificationResult
 
 __all__ = [
     "verify",
     "verify_workspace",
+    "improve",
     "VerificationResult",
     "Finding",
 ]

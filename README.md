@@ -28,7 +28,7 @@ Check the [installation instructions](INSTALL.md) for Claude Code, Cursor, Winds
 
 ## What it does
 
-A verification plugin for AI coding agents. After each critical round of code changes, The Judge runs your tests in an isolated sandbox, checks behavioral properties, and returns a structured PASS / FAIL / ABSTAIN decision with actionable findings.
+A verification & continuous improvement engine for AI coding agents. The Judge doesn't just score or evaluate code — it actively drives multi-round improvements (`Build -> Evaluate -> Identify weaknesses -> Improve -> Re-evaluate -> Repeat`) until your project meets a high-quality bar.
 
 Works with any AI coding assistant that reads `AGENTS.md`: Claude Code, Cursor, Windsurf, Codex, Antigravity.
 
