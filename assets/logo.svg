@@ -1,5 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
-  <title id="title">The Judge</title>
-  <path d="M128 28 204 58v57c0 49-31 89-76 113-45-24-76-64-76-113V58z" fill="none" stroke="#0F9E9A" stroke-linejoin="round" stroke-width="14"/>
-  <path d="m83 128 29 29 61-66" fill="none" stroke="#0F9E9A" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+  <title id="title">The Judge - Verification & Improvement Engine</title>
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0F9E9A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0D7C79;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Gavel handle -->
+  <rect x="140" y="130" width="80" height="16" rx="8" fill="url(#grad1)" transform="rotate(45 180 138)"/>
+
+  <!-- Gavel head -->
+  <rect x="60" y="60" width="60" height="36" rx="6" fill="url(#grad1)"/>
+
+  <!-- Circular arrows for continuous improvement -->
+  <path d="M 180 90 A 50 50 0 1 1 130 40" fill="none" stroke="#0F9E9A" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 130 40 L 140 35 L 135 45 Z" fill="#0F9E9A"/>
+
+  <path d="M 76 166 A 50 50 0 1 1 126 216" fill="none" stroke="#0F9E9A" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 126 216 L 116 221 L 121 211 Z" fill="#0F9E9A"/>
+
+  <!-- Quality bar indicators -->
+  <rect x="190" y="180" width="10" height="30" rx="2" fill="#0F9E9A" opacity="0.4"/>
+  <rect x="205" y="165" width="10" height="45" rx="2" fill="#0F9E9A" opacity="0.6"/>
+  <rect x="220" y="150" width="10" height="60" rx="2" fill="#0F9E9A" opacity="1"/>
 </svg>

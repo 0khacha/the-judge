@@ -1,8 +1,14 @@
 <p align="center">
-  <img src="assets/logo.svg" width="140" alt="The Judge">
+  <img src="assets/logo.svg" width="180" alt="The Judge">
+</p>
+
+<h1 align="center">The Judge</h1>
+
+<p align="center">
+  <strong>Adversarial verification & continuous improvement engine</strong>
 </p>
 <p align="center">
-  <strong>Stop AI agents from shipping broken code.</strong>
+  Drive any project to high quality through evidence-based evaluation and multi-round refinement
 </p>
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/0khacha/the-judge?style=flat" alt="License"></a>
@@ -28,9 +34,11 @@ Check the [installation instructions](INSTALL.md) for Claude Code, Cursor, Winds
 
 ## What it does
 
-A verification & continuous improvement engine for AI coding agents. The Judge doesn't just score or evaluate code — it actively drives multi-round improvements (`Build -> Evaluate -> Identify weaknesses -> Improve -> Re-evaluate -> Repeat`) until your project meets a high-quality bar.
+**The Judge** is a verification and continuous improvement engine that transforms good code into great code. It doesn't just pass/fail — it actively drives multi-round improvements until your project reaches production-quality standards.
 
-Works with any AI coding assistant that reads `AGENTS.md`: Claude Code, Cursor, Windsurf, Codex, Antigravity.
+**Core loop**: `Build → Verify → Critique → Improve → Re-verify → Repeat`
+
+Works standalone or integrates with any AI coding assistant (Claude Code, Cursor, Windsurf, Aider, etc.) through the `AGENTS.md` protocol.
 
 ## What changes
 
@@ -199,12 +207,44 @@ The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses
 
 ## Documentation
 
-- [Installation Guide](INSTALL.md)
-- [Agent Integration Protocol](AGENTS.md)
-- [Architecture Specification](docs/architecture.md)
-- [Threat Model and Security Boundary](SECURITY.md)
-- [Contributing](CONTRIBUTING.md)
+### Getting Started
+- [Quick Start Guide](docs/QUICK_START.md) - Get started in 5 minutes
+- [Installation Guide](INSTALL.md) - Platform-specific setup
+- [Plugin Integration Guide](PLUGIN_GUIDE.md) - Integrate into any IDE or CLI
+
+### Reference
+- [Python API Reference](docs/API.md) - Complete API documentation
+- [Agent Integration Protocol](AGENTS.md) - AI assistant integration
+- [CLI Commands](docs/INDEX.md#cli-reference) - Command reference
+- [Integration Examples](examples/INTEGRATION_EXAMPLES.md) - Real-world usage
+
+### Advanced
+- [Architecture Specification](docs/architecture.md) - System design
+- [Development Guide](docs/DEVELOPMENT.md) - Contributing guide
+- [Security Model](SECURITY.md) - Security boundaries
+- [Threat Model](THREAT_MODEL.md) - Attack surface
+- [Full Documentation Index](docs/INDEX.md) - All documentation
+
+## Project Status
+
+[![License](https://img.shields.io/github/license/0khacha/the-judge?style=flat)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/the-judge?style=flat)](https://pypi.org/project/the-judge/)
+[![Python](https://img.shields.io/pypi/pyversions/the-judge?style=flat)](https://pypi.org/project/the-judge/)
+[![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![Type Checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](http://mypy-lang.org/)
+
+**Status**: Production/Stable (v1.0.0)
+
+## Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/0khacha/the-judge/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/0khacha/the-judge/discussions)
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ## License
 
-[MIT License](LICENSE) -- Copyright (c) 2026 **@0khacha**.
+[MIT License](LICENSE) -- Copyright (c) 2026 **@0khacha**

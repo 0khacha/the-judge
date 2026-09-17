@@ -10,6 +10,64 @@ from the_judge.core.evidence import capture_evidence
 from the_judge.core.score_engine import evaluate
 
 
+def critique(
+    workspace: str,
+    task_spec: Optional[Dict[str, Any]] = None,
+    previous_round: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """Run an independent adversarial critique of the workspace.
+
+    Unlike verify(), which confirms the Judge's hard gates, critique() asks:
+
+      - What is wrong with this work?
+      - What is weak or missing?
+      - What has not been demonstrated?
+      - What assumptions are being made?
+      - What could fail in practice?
+      - What would a skeptical expert challenge?
+      - What claims are unsupported?
+      - What evidence contradicts the agent?
+      - What should be tested next?
+      - What improvement would have the highest impact?
+
+    Every finding is classified by evidence level:
+
+      EVIDENCE_BACKED       — concrete evidence: test failure, log, benchmark
+      OBSERVED              — directly visible in the artefact, not formally tested
+      UNVERIFIED_ASSUMPTION — agent relies on something not demonstrated
+      AGENT_CLAIM           — agent asserts something with no independent backing
+      CONTRADICTED          — agent claims X, evidence shows not-X
+
+    Evidence level and severity are independent dimensions:
+      EVIDENCE_BACKED + LOW does NOT block the loop.
+      CONTRADICTED + CRITICAL ALWAYS blocks the loop.
+
+    The agent's explanation is NEVER treated as proof.
+
+    Args:
+        workspace: Path to directory or source file to critique.
+        task_spec: Optional task specification for contract-based critique.
+        previous_round: Optional previous round record for cross-round comparison.
+
+    Returns:
+        CritiqueResult containing classified findings, contradictions,
+        improvement priority, and evidence sufficiency assessment.
+    """
+    from the_judge.core.critique_engine import CritiqueEngine
+
+    workspace_path = os.path.abspath(workspace)
+    ground_truth = capture_evidence(workspace_path, task_spec=task_spec)
+    verification_result = verify(workspace=workspace, task_spec=task_spec)
+
+    engine = CritiqueEngine()
+    return engine.critique(
+        workspace=workspace_path,
+        verification_result=verification_result,
+        ground_truth=ground_truth,
+        previous_round=previous_round,
+    )
+
+
 def verify(
     workspace: str,
     task_spec: Optional[Dict[str, Any]] = None,
@@ -189,11 +247,27 @@ def improve(
     target_score: float = 90.0,
     task_spec: Optional[Dict[str, Any]] = None,
     quality_evaluator: Optional[Any] = None,
+    require_evidence_sufficiency: bool = True,
 ) -> Dict[str, Any]:
-    """Run the iterative improvement engine on target workspace.
+    """Run the adversarial improvement loop on the target workspace.
 
-    Follows the continuous improvement loop:
-    Build -> Evaluate -> Identify weaknesses -> Improve -> Re-evaluate -> Repeat
+    Philosophy
+    ----------
+    The agent that produces work cannot be trusted to judge its own work alone.
+    This loop independently criticises the work, demands evidence, challenges
+    assumptions, and drives improvements until the work is genuinely strong.
+
+    Stopping requires ALL of:
+      - quality score >= target_score
+      - no unresolved CRITICAL or HIGH evidence-backed findings
+      - no unresolved CONTRADICTED findings on material claims
+      - evidence sufficiency is not "insufficient" (unless overridden)
+      - judge decision is PASS
+
+    A high score alone is NOT sufficient to stop.
+
+    Loop: WORK -> EVIDENCE -> CRITIQUE -> IDENTIFY WEAKNESSES
+          -> IMPROVE -> RE-EVALUATE -> REPEAT
 
     Args:
         workspace: Path to workspace directory or file.
@@ -202,21 +276,25 @@ def improve(
         target_score: Target quality score (0.0 to 100.0, default: 90.0).
         task_spec: Task specification contract (optional).
         quality_evaluator: Custom quality evaluation function (optional).
+        require_evidence_sufficiency: If True (default), loop continues if evidence
+            is "insufficient" even when score target is met.
 
     Returns:
-        Dict containing multi-round improvement summary, score progression, and final verdict.
+        Dict containing multi-round history, audit trail, score progression,
+        critique findings per round, and final verdict.
     """
-    from the_judge.integrations.repair_loop import AgentImprovementLoop
+    from the_judge.integrations.repair_loop import AgentRepairLoop
     from the_judge.integrations.auto_improver import AutoImprover
 
     if repair_func is None:
         improver = AutoImprover(workspace)
         repair_func = lambda ws, feedback: improver.improve_workspace(feedback)
 
-    loop = AgentImprovementLoop(
+    loop = AgentRepairLoop(
         max_rounds=max_rounds,
         quality_threshold=target_score,
         quality_evaluator=quality_evaluator,
+        require_evidence_sufficiency=require_evidence_sufficiency,
     )
     return loop.run_repair_loop(
         workspace=workspace,

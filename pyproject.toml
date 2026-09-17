@@ -5,25 +5,127 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "the-judge"
 version = "1.0.0"
-description = "Evidence-based verification for AI-generated software"
+description = "Adversarial evidence-based verification & continuous improvement engine for AI coding agents"
 readme = "README.md"
 authors = [{ name = "@0khacha" }]
-license = "MIT"
+maintainers = [{ name = "@0khacha" }]
+license = { text = "MIT" }
 requires-python = ">=3.9"
+keywords = [
+    "ai-agents",
+    "verification",
+    "code-evaluation",
+    "code-quality",
+    "testing",
+    "continuous-improvement",
+    "ai-verification",
+    "quality-assurance",
+    "agent-tools"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
 dependencies = [
     "pytest>=7.0.0",
     "mypy>=1.0.0",
     "ruff>=0.1.0"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.20.0",
+    "types-setuptools",
+    "build>=0.10.0",
+    "twine>=4.0.0",
+]
+visual = [
+    "playwright>=1.30.0",
+    "pillow>=9.0.0"
+]
+all = [
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.20.0",
+    "types-setuptools",
+    "build>=0.10.0",
+    "twine>=4.0.0",
+    "playwright>=1.30.0",
+    "pillow>=9.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/0khacha/the-judge"
+Repository = "https://github.com/0khacha/the-judge"
+Issues = "https://github.com/0khacha/the-judge/issues"
+Documentation = "https://github.com/0khacha/the-judge#readme"
+
 [project.scripts]
 judge = "the_judge.integrations.cli:main"
 
+[tool.setuptools]
+zip-safe = false
+
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["the_judge*"]
+include = ["the_judge*", "judge*"]
+exclude = ["tests*", "benchmark*", "examples*", "docs*"]
+
+[tool.setuptools.package-data]
+the_judge = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-norecursedirs = ["benchmark", "starter_task", "examples", "demo"]
+norecursedirs = ["benchmark", "starter_task", "examples", "demo", "_judge_visual"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--tb=short -q"
 
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "B008",   # do not perform function calls in argument defaults
+    "SIM108", # use ternary operator (sometimes less readable)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["the_judge"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = false
+warn_unused_configs = true
+ignore_missing_imports = true
+check_untyped_defs = false

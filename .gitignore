@@ -1,39 +1,76 @@
-# Byte-compiled / optimized files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Testing & Coverage
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
-
-# Environments
-.venv/
+# Virtual Environments
+.env
+.venv
+env/
 venv/
 ENV/
-env/
+env.bak/
+venv.bak/
 
-# Build & Package Output
-build/
-dist/
-*.egg-info/
-*.egg
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+*.cover
+*.py,cover
+.hypothesis/
+.cache
 
-# Logs & Temporary Execution Artifacts
-*.log
-*.tmp
-scratch/
-test_ev*.json
-findings.json
-judge_evidence.json
-judge_history.json
-score_report.json
+# Type Checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
 
-# IDE Files
+# Linting
+.ruff_cache/
+
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+.DS_Store
+
+# Build artifacts
+*.log
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Project specific
+_judge_visual/
+.judge_report.json
+judge_output/
+
+# OS
+Thumbs.db
+Desktop.ini

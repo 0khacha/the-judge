@@ -12,7 +12,7 @@ def main(args_list=None) -> int:
     """Main CLI entrypoint for The Judge v1.0.0."""
     parser = argparse.ArgumentParser(
         prog="judge",
-        description="The Judge v1.0.0 — Independent Verification Layer for AI-Generated Software",
+        description="The Judge v1.0.0 — Adversarial Verification & Improvement Engine",
     )
     parser.add_argument("--version", action="version", version="The Judge v1.0.0")
     subparsers = parser.add_subparsers(dest="command", help="Available subcommands")
@@ -48,11 +48,27 @@ def main(args_list=None) -> int:
     init_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace")
 
     # improve command
-    improve_parser = subparsers.add_parser("improve", help="Run multi-round iterative improvement loop")
+    improve_parser = subparsers.add_parser(
+        "improve",
+        help="Run multi-round adversarial improvement loop (Build→Evidence→Critique→Improve→Repeat)",
+    )
     improve_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace directory or file")
     improve_parser.add_argument("--max-rounds", type=int, default=5, help="Maximum improvement rounds (default: 5)")
     improve_parser.add_argument("--target-score", type=float, default=90.0, help="Target quality score threshold (default: 90.0)")
     improve_parser.add_argument("--json", action="store_true", help="Output machine-readable JSON history")
+    improve_parser.add_argument(
+        "--no-report", action="store_true",
+        help="Skip generating the HTML progress report",
+    )
+
+    # critique command
+    critique_parser = subparsers.add_parser(
+        "critique",
+        help="Run independent adversarial critique — classify findings by evidence level",
+    )
+    critique_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace directory or file")
+    critique_parser.add_argument("--json", action="store_true", help="Output machine-readable JSON")
+    critique_parser.add_argument("--task-spec", type=str, default=None, help="Path to specification file")
 
     args = parser.parse_args(args_list)
 
@@ -71,6 +87,9 @@ def main(args_list=None) -> int:
 
     if args.command == "improve":
         return _run_improve_command(args)
+
+    if args.command == "critique":
+        return _run_critique_command(args)
 
     workspace_path = getattr(args, "workspace", ".")
     is_json = getattr(args, "json", False)
@@ -191,31 +210,35 @@ def _run_watch_command(args) -> int:
 
 
 def _run_improve_command(args) -> int:
-    """Handle the 'judge improve' subcommand for adaptive iterative refinement."""
+    """Handle the 'judge improve' subcommand — adversarial improvement loop."""
     from the_judge.api import improve
     from the_judge.core.visual_engine import VisualEngine
+    from the_judge.integrations.audit_trail import AuditTrail
+    from the_judge.integrations.progress_report import generate_progress_report
 
     workspace = getattr(args, "workspace", ".")
     max_rounds = getattr(args, "max_rounds", 5)
     target_score = getattr(args, "target_score", 90.0)
     is_json = getattr(args, "json", False)
+    no_report = getattr(args, "no_report", False)
 
     ve = VisualEngine(workspace)
     is_visual, target_file = ve.is_visual_workspace()
 
     if not is_json:
-        print("=" * 68)
-        print("THE JUDGE — Adaptive Iterative Improvement Engine")
+        print("=" * 70)
+        print("THE JUDGE — Adversarial Improvement Engine")
+        print("Loop: WORK → EVIDENCE → CRITIQUE → IDENTIFY WEAKNESSES → IMPROVE → REPEAT")
+        print("=" * 70)
+        domain_label = "[VISUAL]" if is_visual else "[NON-VISUAL]"
         if is_visual:
-            print("Loop: Build -> Run -> Screenshot -> Evaluate -> Improve -> Compare -> Repeat")
-            print(f"Classification   : [VISUAL PROJECT] (Target: {os.path.basename(target_file)})")
+            print(f"Classification   : {domain_label} — screenshots captured as visual evidence")
         else:
-            print("Loop: Build -> Test -> Evaluate -> Identify Weaknesses -> Improve -> Re-test -> Repeat")
-            print("Classification   : [NON-VISUAL PROJECT] (Code / Unit Tests / Behavioral Metrics)")
-        print("=" * 68)
+            print(f"Classification   : {domain_label} — tests, static analysis, behavioral checks")
         print(f"Target Workspace : {os.path.abspath(workspace)}")
         print(f"Max Rounds       : {max_rounds}")
         print(f"Quality Target   : {target_score} / 100.0")
+        print(f"Stop Requires    : score≥threshold AND no blockers AND sufficient evidence")
         print()
 
     old_argv = list(sys.argv)
@@ -237,53 +260,302 @@ def _run_improve_command(args) -> int:
 
     history = result.get("history", [])
     screenshots_collected = []
+    total = result.get("total_rounds", max_rounds)
 
     for round_item in history:
         round_num = round_item.get("round_number", 1)
         dec = round_item.get("decision", "UNKNOWN")
         score = round_item.get("numeric_score", 0.0)
         quality = round_item.get("quality", {})
-        weaknesses = quality.get("weaknesses", [])
         repair = round_item.get("repair", {})
         screenshot = round_item.get("screenshot")
+        critique = round_item.get("critique", {})
+        ev_suf = critique.get("evidence_sufficiency", {}).get("level", "unknown") if isinstance(critique.get("evidence_sufficiency"), dict) else critique.get("evidence_sufficiency", "unknown")
+        has_blockers = critique.get("has_blockers", False)
+        skeptic = critique.get("skeptic_summary", "")
+        contradictions = critique.get("contradictions", [])
+        findings = critique.get("findings", [])
 
         if screenshot:
             screenshots_collected.append(screenshot)
 
-        print(f"[Round {round_num}/{result.get('total_rounds', max_rounds)}] Evaluation & Refinement")
+        print(f"[Round {round_num}/{total}] Critique & Refinement")
         print(f"  Decision       : {dec}")
-        print(f"  Quality Score  : {score} / 100.0")
-        print(f"  Weaknesses     : {len(weaknesses)} issue(s) identified")
+        print(f"  Quality Score  : {score:.1f} / 100.0")
+        print(f"  Evidence       : {ev_suf.upper()}{'  ⚠ BLOCKERS PRESENT' if has_blockers else ''}")
+
+        if skeptic:
+            print(f"  Critique       : {skeptic[:120]}{'…' if len(skeptic) > 120 else ''}")
+
+        if contradictions:
+            print(f"  Contradictions : {len(contradictions)} detected")
+            for c in contradictions[:2]:
+                print(f"    ↳ {c.get('description', '')[:100]}")
+
+        # Show top evidence-classified findings
+        top_findings = [f for f in findings if f.get("is_blocker") or f.get("evidence_level") in ("evidence_backed", "contradicted")][:3]
+        if top_findings:
+            print(f"  Key Findings   :")
+            for f in top_findings:
+                ev = f.get("evidence_level", "").upper().replace("_", " ")
+                sev = f.get("severity", "").upper()
+                desc = f.get("description", "")[:90]
+                blocker = " [BLOCKER]" if f.get("is_blocker") else ""
+                print(f"    [{ev}][{sev}]{blocker} {desc}")
 
         if screenshot:
-            rel_snap = os.path.relpath(screenshot, os.path.abspath(workspace)) if os.path.isabs(screenshot) else screenshot
-            print(f"  Visual Evidence: {rel_snap}")
+            rel = os.path.relpath(screenshot, os.path.abspath(workspace)) if os.path.isabs(screenshot) else screenshot
+            print(f"  Screenshot     : {rel}")
 
         if repair and repair.get("summary"):
-            print(f"  Action Taken   : {repair.get('summary')}")
+            print(f"  Action Taken   : {repair.get('summary')[:120]}")
         print()
 
     outcome = result.get("outcome", "COMPLETED")
-    if outcome in ("PASS", "QUALITY_TARGET_MET"):
+
+    # Generate progress report
+    report_path = None
+    if not no_report:
+        try:
+            audit_data = result.get("audit_trail", {})
+            # Reconstruct a lightweight AuditTrail for the report
+            from the_judge.integrations.audit_trail import RoundRecord
+            trail = AuditTrail()
+            for r in audit_data.get("rounds", []):
+                rec = RoundRecord(
+                    round_number=r.get("round_number", 0),
+                    timestamp=r.get("timestamp", ""),
+                    workspace_hash=r.get("workspace_hash", ""),
+                    domain=r.get("domain", ""),
+                    previous_score=r.get("scores", {}).get("previous", 0.0),
+                    new_score=r.get("scores", {}).get("new", 0.0),
+                    decision=r.get("verification", {}).get("decision", ""),
+                    critique_findings=r.get("critique", {}).get("findings", []),
+                    contradictions=r.get("critique", {}).get("contradictions", []),
+                    skeptic_summary=r.get("critique", {}).get("skeptic_summary", ""),
+                    has_blockers=r.get("critique", {}).get("has_blockers", False),
+                    evidence_sufficiency=r.get("critique", {}).get("evidence_sufficiency", "unknown"),
+                    improvement_actions=r.get("changes", {}).get("improvement_actions", []),
+                    resolved_finding_ids=r.get("resolution", {}).get("resolved_finding_ids", []),
+                    remaining_findings=r.get("resolution", {}).get("remaining_findings", []),
+                    screenshot_path=r.get("visual", {}).get("screenshot_path"),
+                    loop_decision=r.get("loop", {}).get("decision", "continue"),
+                    stop_reason=r.get("loop", {}).get("stop_reason"),
+                )
+                trail.record_round(rec)
+
+            report_dir = (
+                os.path.join(os.path.abspath(workspace), "_judge_visual")
+                if is_visual
+                else os.path.join(os.path.abspath(workspace), "_judge_report")
+            )
+            report_path = generate_progress_report(
+                audit_trail=trail,
+                workspace=workspace,
+                outcome=outcome,
+                output_dir=report_dir,
+                is_visual=is_visual,
+            )
+            # Also save audit trail JSON
+            trail.save_to_disk(report_dir)
+        except Exception:
+            pass
+
+    print("=" * 70)
+    if outcome == "PASS":
         initial_score = history[0].get("numeric_score", 0.0) if history else 0.0
         final_score = result.get("quality", {}).get("score", 0.0)
         diff = round(final_score - initial_score, 1)
-        diff_str = f"+{diff}" if diff >= 0 else str(diff)
-        print("=" * 68)
-        print(f"SUCCESS: Quality target achieved in {result.get('total_rounds')} round(s)!")
-        print(f"Score Progression : {initial_score} -> {final_score} ({diff_str} points)")
+        diff_str = f"+{diff:.1f}" if diff >= 0 else f"{diff:.1f}"
+        print(f"SUCCESS: All stop conditions met in {result.get('total_rounds')} round(s).")
+        print(f"Score Progression : {initial_score:.1f} → {final_score:.1f} ({diff_str} points)")
+        print(f"Evidence          : sufficient, no blockers, no contradictions")
         if is_visual and screenshots_collected:
-            prog_str = " -> ".join([f"Round {i+1}" for i in range(len(screenshots_collected))])
-            print(f"Visual Progression: {prog_str} preserved in _judge_visual/")
-        print("=" * 68)
+            print(f"Visual Evidence   : {len(screenshots_collected)} screenshot(s) in _judge_visual/")
+        if report_path:
+            rel_rep = os.path.relpath(report_path, os.path.abspath(workspace))
+            print(f"Progress Report   : {rel_rep}")
+        print("=" * 70)
         return 0
     else:
-        print("=" * 68)
         print(f"OUTCOME: {outcome}")
         if result.get("reason"):
-            print(f"Reason: {result.get('reason')}")
-        print("=" * 68)
+            print(f"Reason  : {result.get('reason')}")
+        # Show remaining blockers if any
+        last = history[-1] if history else {}
+        last_critique = last.get("critique", {})
+        remaining = last_critique.get("findings", []) if isinstance(last_critique, dict) else []
+        blockers = [f for f in remaining if f.get("is_blocker")]
+        if blockers:
+            print(f"Blockers: {len(blockers)} unresolved")
+            for b in blockers[:3]:
+                ev = b.get("evidence_level", "").upper().replace("_", " ")
+                sev = b.get("severity", "").upper()
+                print(f"  [{ev}][{sev}] {b.get('description', '')[:100]}")
+        if report_path:
+            rel_rep = os.path.relpath(report_path, os.path.abspath(workspace))
+            print(f"Progress Report : {rel_rep}")
+        print("=" * 70)
         return 1
+
+
+def _run_critique_command(args) -> int:
+    """Handle the 'judge critique' subcommand — independent adversarial critique."""
+    from the_judge.api import verify, critique
+    from the_judge.core.evidence import capture_evidence
+
+    workspace = getattr(args, "workspace", ".")
+    is_json = getattr(args, "json", False)
+    task_spec_path = getattr(args, "task_spec", None)
+
+    task_spec_dict = None
+    if task_spec_path and os.path.exists(task_spec_path):
+        try:
+            with open(task_spec_path, encoding="utf-8") as f:
+                task_spec_dict = json.load(f)
+        except Exception:
+            pass
+
+    old_argv = list(sys.argv)
+    try:
+        sys.argv = [sys.argv[0]]
+        ground_truth = capture_evidence(os.path.abspath(workspace), task_spec=task_spec_dict)
+        verification_result = verify(workspace=workspace, task_spec=task_spec_dict)
+        critique_result = critique(workspace=workspace, task_spec=task_spec_dict)
+    except Exception as e:
+        if is_json:
+            print(json.dumps({"error": str(e), "outcome": "ERROR"}, indent=2))
+        else:
+            print(f"[CRITIQUE ERROR] {e}")
+        return 3
+    finally:
+        sys.argv = old_argv
+
+    if is_json:
+        print(json.dumps(critique_result.to_dict(), indent=2))
+        return 0
+
+    _print_critique_result(workspace, critique_result)
+    return 0 if not critique_result.has_blockers() else 1
+
+
+def _print_critique_result(workspace_path: str, result: Any) -> None:
+    """Print a human-readable adversarial critique report."""
+    sep = "=" * 70
+    print(sep)
+    print("THE JUDGE — Independent Adversarial Critique")
+    print(sep)
+    print(f"Workspace  : {os.path.abspath(workspace_path)}")
+    print(f"Domain     : {result.domain.replace('_', ' ').title()}")
+    print()
+
+    # Evidence sufficiency
+    es = result.evidence_sufficiency
+    suf_label = es.level.upper()
+    print("EVIDENCE SUFFICIENCY")
+    print("-" * 40)
+    print(f"  Status        : {suf_label}")
+    print(f"  Independent   : {es.independent_tests} test(s)")
+    print(f"  Agent-Authored: {es.agent_controlled_tests} test(s)")
+    print(f"  Contradictions: {'YES' if es.has_contradictions else 'none'}")
+    if es.reasons:
+        for r in es.reasons:
+            print(f"  Reason        : {r}")
+    print()
+
+    # Evidence-classified findings
+    print("FINDINGS (by evidence level and severity)")
+    print("-" * 40)
+    level_order = ["evidence_backed", "contradicted", "observed", "unverified_assumption", "agent_claim"]
+    by_level: Dict[str, list] = {lv: [] for lv in level_order}
+    for f in result.findings:
+        key = f.evidence_level.value if hasattr(f.evidence_level, "value") else str(f.evidence_level)
+        by_level.setdefault(key, []).append(f)
+
+    labels = {
+        "evidence_backed": "EVIDENCE BACKED",
+        "contradicted": "CONTRADICTED",
+        "observed": "OBSERVED",
+        "unverified_assumption": "UNVERIFIED ASSUMPTION",
+        "agent_claim": "AGENT CLAIM",
+    }
+
+    any_finding = False
+    for lv in level_order:
+        items = by_level.get(lv, [])
+        if not items:
+            continue
+        any_finding = True
+        print(f"  [{labels[lv]}]")
+        for f in items:
+            sev = (f.severity.value if hasattr(f.severity, "value") else str(f.severity)).upper()
+            desc = f.description[:100]
+            blocker = " ⚠ BLOCKER" if f.is_blocker() else ""
+            print(f"    [{sev}]{blocker} {desc}")
+            if f.suggested_action:
+                print(f"    → {f.suggested_action[:100]}")
+        print()
+    if not any_finding:
+        print("  No findings.")
+        print()
+
+    # Contradictions
+    if result.contradictions:
+        print("CONTRADICTIONS")
+        print("-" * 40)
+        for c in result.contradictions:
+            print(f"  Claim    : {c.get('claim', '')[:100]}")
+            print(f"  Evidence : {c.get('description', '')[:120]}")
+            print(f"  Action   : {c.get('suggested_action', '')[:100]}")
+            print()
+
+    # Unverified assumptions
+    if result.unverified_assumptions:
+        print("UNVERIFIED ASSUMPTIONS")
+        print("-" * 40)
+        for a in result.unverified_assumptions:
+            print(f"  • {a[:120]}")
+        print()
+
+    # Missing evidence
+    if result.missing_evidence:
+        print("MISSING EVIDENCE")
+        print("-" * 40)
+        for m in result.missing_evidence:
+            print(f"  • {m[:120]}")
+        print()
+
+    # Agent claims unchecked
+    if result.agent_claims_unchecked:
+        print("UNCHECKED AGENT CLAIMS")
+        print("-" * 40)
+        for c in result.agent_claims_unchecked:
+            print(f"  • {c[:120]}")
+        print()
+
+    # Improvement priority
+    print("IMPROVEMENT PRIORITY (most critical first)")
+    print("-" * 40)
+    if result.improvement_priority:
+        for i, f in enumerate(result.improvement_priority[:8], 1):
+            ev = (f.evidence_level.value if hasattr(f.evidence_level, "value") else str(f.evidence_level)).replace("_", " ").upper()
+            sev = (f.severity.value if hasattr(f.severity, "value") else str(f.severity)).upper()
+            blocker = " ⚠ BLOCKER" if f.is_blocker() else ""
+            print(f"  [{i}] [{ev}][{sev}]{blocker} {f.description[:90]}")
+    else:
+        print("  None — no open findings.")
+    print()
+
+    # Skeptic summary
+    print("SKEPTIC SUMMARY")
+    print("-" * 40)
+    print(f"  {result.skeptic_summary}")
+    print()
+
+    blockers = sum(1 for f in result.findings if f.is_blocker())
+    print(sep)
+    print(f"Blockers: {blockers} | Open Findings: {len(result.get_open_findings())} | Evidence: {result.evidence_sufficiency.level.upper()}")
+    print(sep)
 
 
 def _run_contract_command(workspace_path: str, is_json: bool, task_spec_path: str = None) -> None:

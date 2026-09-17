@@ -1,0 +1,26 @@
+{
+  "name": "simple-cache",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "description": "Cache should expire entries after TTL seconds elapse",
+      "category": "boundary",
+      "priority": "critical",
+      "properties": ["cache_expiration"]
+    },
+    {
+      "id": "REQ-002",
+      "description": "Cache should handle missing keys gracefully",
+      "category": "behavior",
+      "priority": "high",
+      "properties": ["missing_key_handling"]
+    },
+    {
+      "id": "REQ-003",
+      "description": "Cache should support clearing all entries",
+      "category": "behavior",
+      "priority": "medium",
+      "properties": ["clear_operation"]
+    }
+  ]
+}

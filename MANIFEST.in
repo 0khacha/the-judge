@@ -1,0 +1,33 @@
+# Include documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+include INSTALL.md
+include AGENTS.md
+include CONTRIBUTING.md
+include SECURITY.md
+include THREAT_MODEL.md
+
+# Include configuration files
+include pyproject.toml
+include .editorconfig
+
+# Include assets
+recursive-include assets *
+
+# Include examples and benchmarks
+recursive-include examples *.py *.json *.md
+recursive-include benchmark *.py *.json *.md
+
+# Exclude unnecessary files
+exclude .gitignore
+exclude .gitattributes
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store
+recursive-exclude .github *
+recursive-exclude .vscode *
+recursive-exclude .claude *
+recursive-exclude .git *
+recursive-exclude .mypy_cache *
+recursive-exclude .pytest_cache *
