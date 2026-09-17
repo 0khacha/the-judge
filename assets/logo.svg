@@ -1,31 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0F9E9A"/>
-      <stop offset="100%" style="stop-color:#0A6B68"/>
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
     </linearGradient>
   </defs>
 
-  <!-- Background circle -->
-  <circle cx="100" cy="100" r="95" fill="#f8f9fa" stroke="#0F9E9A" stroke-width="3"/>
+  <!-- Main circle - represents wholeness/completion -->
+  <circle cx="100" cy="100" r="80" fill="none" stroke="url(#tealGrad)" stroke-width="4"/>
 
-  <!-- Gavel head -->
-  <rect x="45" y="65" width="50" height="30" rx="5" fill="url(#grad)"/>
+  <!-- Checkmark/verification symbol - clean and centered -->
+  <path d="M 65 100 L 88 123 L 135 70"
+        fill="none"
+        stroke="url(#tealGrad)"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
 
-  <!-- Gavel handle -->
-  <rect x="95" y="95" width="70" height="12" rx="6" fill="url(#grad)" transform="rotate(45 130 101)"/>
+  <!-- Three ascending levels - represents continuous improvement -->
+  <g opacity="0.7">
+    <rect x="40" y="145" width="35" height="6" rx="3" fill="#0ea5e9"/>
+    <rect x="82" y="135" width="35" height="6" rx="3" fill="#0ea5e9"/>
+    <rect x="124" y="125" width="35" height="6" rx="3" fill="#0ea5e9"/>
+  </g>
 
-  <!-- Circular improvement arrows -->
-  <!-- Top right arrow -->
-  <path d="M 140 70 A 35 35 0 1 1 105 35" fill="none" stroke="#0F9E9A" stroke-width="6" stroke-linecap="round"/>
-  <polygon points="105,35 115,32 110,42" fill="#0F9E9A"/>
-
-  <!-- Bottom left arrow -->
-  <path d="M 60 130 A 35 35 0 1 1 95 165" fill="none" stroke="#0F9E9A" stroke-width="6" stroke-linecap="round"/>
-  <polygon points="95,165 85,168 90,158" fill="#0F9E9A"/>
-
-  <!-- Quality bars (increasing height) -->
-  <rect x="140" y="135" width="8" height="20" rx="2" fill="#0F9E9A" opacity="0.5"/>
-  <rect x="152" y="125" width="8" height="30" rx="2" fill="#0F9E9A" opacity="0.7"/>
-  <rect x="164" y="115" width="8" height="40" rx="2" fill="#0F9E9A"/>
+  <!-- Subtle circular arrow hint at top - continuous cycle -->
+  <path d="M 100 15 A 85 85 0 0 1 170 60"
+        fill="none"
+        stroke="#0ea5e9"
+        stroke-width="3"
+        stroke-linecap="round"
+        opacity="0.4"/>
+  <polygon points="172,58 175,65 166,63" fill="#0ea5e9" opacity="0.4"/>
 </svg>
