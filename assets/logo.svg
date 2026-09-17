@@ -1,27 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
-  <title id="title">The Judge - Verification & Improvement Engine</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0F9E9A;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0D7C79;stop-opacity:1" />
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0F9E9A"/>
+      <stop offset="100%" style="stop-color:#0A6B68"/>
     </linearGradient>
   </defs>
 
-  <!-- Gavel handle -->
-  <rect x="140" y="130" width="80" height="16" rx="8" fill="url(#grad1)" transform="rotate(45 180 138)"/>
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#f8f9fa" stroke="#0F9E9A" stroke-width="3"/>
 
   <!-- Gavel head -->
-  <rect x="60" y="60" width="60" height="36" rx="6" fill="url(#grad1)"/>
+  <rect x="45" y="65" width="50" height="30" rx="5" fill="url(#grad)"/>
 
-  <!-- Circular arrows for continuous improvement -->
-  <path d="M 180 90 A 50 50 0 1 1 130 40" fill="none" stroke="#0F9E9A" stroke-width="8" stroke-linecap="round"/>
-  <path d="M 130 40 L 140 35 L 135 45 Z" fill="#0F9E9A"/>
+  <!-- Gavel handle -->
+  <rect x="95" y="95" width="70" height="12" rx="6" fill="url(#grad)" transform="rotate(45 130 101)"/>
 
-  <path d="M 76 166 A 50 50 0 1 1 126 216" fill="none" stroke="#0F9E9A" stroke-width="8" stroke-linecap="round"/>
-  <path d="M 126 216 L 116 221 L 121 211 Z" fill="#0F9E9A"/>
+  <!-- Circular improvement arrows -->
+  <!-- Top right arrow -->
+  <path d="M 140 70 A 35 35 0 1 1 105 35" fill="none" stroke="#0F9E9A" stroke-width="6" stroke-linecap="round"/>
+  <polygon points="105,35 115,32 110,42" fill="#0F9E9A"/>
 
-  <!-- Quality bar indicators -->
-  <rect x="190" y="180" width="10" height="30" rx="2" fill="#0F9E9A" opacity="0.4"/>
-  <rect x="205" y="165" width="10" height="45" rx="2" fill="#0F9E9A" opacity="0.6"/>
-  <rect x="220" y="150" width="10" height="60" rx="2" fill="#0F9E9A" opacity="1"/>
+  <!-- Bottom left arrow -->
+  <path d="M 60 130 A 35 35 0 1 1 95 165" fill="none" stroke="#0F9E9A" stroke-width="6" stroke-linecap="round"/>
+  <polygon points="95,165 85,168 90,158" fill="#0F9E9A"/>
+
+  <!-- Quality bars (increasing height) -->
+  <rect x="140" y="135" width="8" height="20" rx="2" fill="#0F9E9A" opacity="0.5"/>
+  <rect x="152" y="125" width="8" height="30" rx="2" fill="#0F9E9A" opacity="0.7"/>
+  <rect x="164" y="115" width="8" height="40" rx="2" fill="#0F9E9A"/>
 </svg>
