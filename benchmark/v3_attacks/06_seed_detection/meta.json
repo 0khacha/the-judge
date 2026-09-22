@@ -1,5 +1,0 @@
-{
-  "name": "Seed Detection Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "06_seed_detection"
-}

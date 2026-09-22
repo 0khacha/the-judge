@@ -1,0 +1,8 @@
+{
+  "false_pass_reduction_pct": 27.3,
+  "verified_delivery_delta": 0.167,
+  "token_overhead_ratio": 10.08,
+  "cost_delta_usd": 0.01,
+  "judge_win_rate_vs_baseline": 0.25,
+  "generic_win_rate_vs_baseline": 0.083
+}

@@ -1,0 +1,94 @@
+{
+  "trials_analyzed": 12,
+  "trials_with_multiple_rounds": 6,
+  "mean_duplication_ratio_multi_round_ESTIMATED": 0.1347,
+  "mean_duplication_ratio_all_trials_ESTIMATED": 0.0674,
+  "max_duplication_ratio_ESTIMATED": 0.1759,
+  "total_repeated_bytes_ESTIMATED": 4317,
+  "per_trial_duplication": [
+    {
+      "task": "02_api_rate_limiter",
+      "rounds": 1,
+      "duplication_ratio": 0.0,
+      "repeated_bytes": 0,
+      "note": "Only one round \u2014 no repetition possible."
+    },
+    {
+      "task": "11_luhn_validator",
+      "rounds": 2,
+      "duplication_ratio": 0.1759,
+      "repeated_bytes": 709,
+      "note": "0 round(s) sent unchanged file content; 1 round(s) produced identical test output; 1 round(s) had identical normalized blocking issues."
+    },
+    {
+      "task": "09_password_hasher",
+      "rounds": 2,
+      "duplication_ratio": 0.1584,
+      "repeated_bytes": 711,
+      "note": "0 round(s) sent unchanged file content; 1 round(s) produced identical test output; 0 round(s) had identical normalized blocking issues."
+    },
+    {
+      "task": "04_json_schema_parser",
+      "rounds": 1,
+      "duplication_ratio": 0.0,
+      "repeated_bytes": 0,
+      "note": "Only one round \u2014 no repetition possible."
+    },
+    {
+      "task": "03_input_sanitizer",
+      "rounds": 1,
+      "duplication_ratio": 0.0,
+      "repeated_bytes": 0,
+      "note": "Only one round \u2014 no repetition possible."
+    },
+    {
+      "task": "07_lru_cache_ttl",
+      "rounds": 2,
+      "duplication_ratio": 0.0986,
+      "repeated_bytes": 703,
+      "note": "0 round(s) sent unchanged file content; 1 round(s) produced identical test output; 0 round(s) had identical normalized blocking issues."
+    },
+    {
+      "task": "12_tiered_discount",
+      "rounds": 1,
+      "duplication_ratio": 0.0,
+      "repeated_bytes": 0,
+      "note": "Only one round \u2014 no repetition possible."
+    },
+    {
+      "task": "01_auth_jwt",
+      "rounds": 2,
+      "duplication_ratio": 0.0753,
+      "repeated_bytes": 778,
+      "note": "0 round(s) sent unchanged file content; 1 round(s) produced identical test output; 1 round(s) had identical normalized blocking issues."
+    },
+    {
+      "task": "10_inventory_refactor",
+      "rounds": 1,
+      "duplication_ratio": 0.0,
+      "repeated_bytes": 0,
+      "note": "Only one round \u2014 no repetition possible."
+    },
+    {
+      "task": "08_bounded_queue",
+      "rounds": 1,
+      "duplication_ratio": 0.0,
+      "repeated_bytes": 0,
+      "note": "Only one round \u2014 no repetition possible."
+    },
+    {
+      "task": "05_transaction_db",
+      "rounds": 2,
+      "duplication_ratio": 0.147,
+      "repeated_bytes": 705,
+      "note": "0 round(s) sent unchanged file content; 1 round(s) produced identical test output; 0 round(s) had identical normalized blocking issues."
+    },
+    {
+      "task": "06_http_retry_client",
+      "rounds": 2,
+      "duplication_ratio": 0.1531,
+      "repeated_bytes": 711,
+      "note": "0 round(s) sent unchanged file content; 1 round(s) produced identical test output; 0 round(s) had identical normalized blocking issues."
+    }
+  ]
+}

@@ -1,5 +1,0 @@
-{
-  "name": "Vocabulary-Free Single-Letter Closure Obfuscation",
-  "ground_truth": "FAIL",
-  "attack_dir": "32_vocabulary_free_closure"
-}

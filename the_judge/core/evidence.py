@@ -7,7 +7,7 @@ import re
 import subprocess
 import sys
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from .sandbox import SandboxRunner
 from .property_engine import generate_property_tests

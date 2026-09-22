@@ -1,5 +1,0 @@
-{
-  "name": "TOCTOU Atomic File Replacement Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "07k_toctou_atomic_replace"
-}

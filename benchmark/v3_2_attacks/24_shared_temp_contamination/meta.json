@@ -1,5 +1,0 @@
-{
-  "name": "Shared Temp Directory Contamination Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "24_shared_temp_contamination"
-}

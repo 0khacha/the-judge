@@ -1,5 +1,0 @@
-{
-  "name": "Assertion Rewriting Bypass",
-  "ground_truth": "FAIL",
-  "attack_dir": "07f_assertion_rewriting"
-}

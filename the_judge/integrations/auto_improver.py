@@ -55,13 +55,12 @@ class AutoImprover:
         is_visual = feedback.get("is_visual", False)
         round_number = feedback.get("round_number", 1)
 
-        py_files = self._get_python_files()
-        web_files = self._get_web_files()
+        py_files, web_files, has_tests = self._scan_workspace()
 
         # ------------------------------------------------------------------
         # Priority 0: If ABSTAIN and no tests exist → synthesise tests first
         # ------------------------------------------------------------------
-        if decision == "ABSTAIN" and not self._has_tests():
+        if decision == "ABSTAIN" and not has_tests:
             created = self._synthesize_basic_test(py_files)
             if created:
                 changes_made.append(f"Synthesised initial test suite: {created}")
@@ -162,40 +161,41 @@ class AutoImprover:
     # File Discovery
     # -----------------------------------------------------------------------
 
-    def _get_python_files(self) -> List[str]:
-        files: List[str] = []
-        if os.path.isfile(self.workspace) and self.workspace.endswith(".py"):
-            return [self.workspace]
-        for root, _, filenames in os.walk(self.workspace):
-            if any(i in root for i in (".git", "__pycache__", ".venv", "venv", "node_modules")):
-                continue
+    def _scan_workspace(self) -> Tuple[List[str], List[str], bool]:
+        """Scan workspace in a single pass to discover Python, web, and test files."""
+        py_files: List[str] = []
+        web_files: List[str] = []
+        has_tests = False
+
+        if os.path.isfile(self.workspace):
+            if self.workspace.endswith(".py"):
+                py_files.append(self.workspace)
+            elif self.workspace.endswith((".html", ".css", ".js")):
+                web_files.append(self.workspace)
+            return py_files, web_files, has_tests
+
+        for root, dirs, filenames in os.walk(self.workspace):
+            # Prune ignored directories in-place for efficiency
+            dirs[:] = [d for d in dirs if d not in (".git", "__pycache__", ".venv", "venv", "node_modules")]
             for fn in filenames:
-                if fn.endswith(".py") and not fn.startswith("test_") and not fn.endswith("_test.py"):
-                    files.append(os.path.join(root, fn))
-        return sorted(files)
+                if fn.endswith(".py"):
+                    if fn.startswith("test_") or fn.endswith("_test.py") or fn == "conftest.py":
+                        has_tests = True
+                    else:
+                        py_files.append(os.path.join(root, fn))
+                elif fn.endswith((".html", ".css", ".js")):
+                    web_files.append(os.path.join(root, fn))
+
+        return sorted(py_files), sorted(web_files), has_tests
+
+    def _get_python_files(self) -> List[str]:
+        return self._scan_workspace()[0]
 
     def _get_web_files(self) -> List[str]:
-        files: List[str] = []
-        if os.path.isfile(self.workspace):
-            return [self.workspace] if self.workspace.endswith((".html", ".css", ".js")) else []
-        for root, _, filenames in os.walk(self.workspace):
-            if any(i in root for i in (".git", "node_modules")):
-                continue
-            for fn in filenames:
-                if fn.endswith((".html", ".css", ".js")):
-                    files.append(os.path.join(root, fn))
-        return sorted(files)
+        return self._scan_workspace()[1]
 
     def _has_tests(self) -> bool:
-        if os.path.isfile(self.workspace):
-            return False
-        for root, _, filenames in os.walk(self.workspace):
-            if any(i in root for i in (".git", "__pycache__", ".venv", "venv", "node_modules")):
-                continue
-            for fn in filenames:
-                if fn.startswith("test_") or fn.endswith("_test.py") or fn == "conftest.py":
-                    return True
-        return False
+        return self._scan_workspace()[2]
 
     # -----------------------------------------------------------------------
     # Critique-Priority Improvement Actions

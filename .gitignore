@@ -71,6 +71,10 @@ _judge_visual/
 .judge_report.json
 judge_output/
 
+# Local agent context (not committed; see CLAUDE.md)
+AGENT_CONTEXT.md
+AGENT_STATE.md
+
 # OS
 Thumbs.db
 Desktop.ini

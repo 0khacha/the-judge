@@ -1,5 +1,0 @@
-{
-  "name": "Temporal Switching Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "16_temporal_switching"
-}

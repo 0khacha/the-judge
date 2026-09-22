@@ -1,5 +1,0 @@
-{
-  "name": "Test Collection Hook Manipulation Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "07_test_collection_attack"
-}

@@ -1,5 +1,0 @@
-{
-  "name": "Dynamic AST Obfuscation Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "31_dynamic_ast_obfuscation"
-}

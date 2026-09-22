@@ -154,11 +154,14 @@ class AgentRepairLoop:
 
             # ----------------------------------------------------------
             # 2. Verify (Judge hard gates + score)
+            # Pass the pre-captured evidence so verify() reuses the
+            # sandbox result instead of running a second full execution.
             # ----------------------------------------------------------
             verification_result: VerificationResult = verify(
                 workspace=workspace,
                 task_spec=task_spec,
                 previous_evidence=previous_evidence,
+                _ground_truth=current_evidence,
             )
             verification_feedback = self.adapter.result_to_feedback(verification_result)
 
@@ -289,7 +292,7 @@ class AgentRepairLoop:
             # ----------------------------------------------------------
             # 9. Not stopping: build feedback and call repair
             # ----------------------------------------------------------
-            previous_evidence = copy.deepcopy(current_evidence)
+            previous_evidence = current_evidence
             previous_critique_findings = [f.to_dict() for f in critique_result.findings]
             previous_score = verification_result.numeric_score
 
@@ -309,7 +312,9 @@ class AgentRepairLoop:
                 audit_trail,
             )
 
-            repair_before_hash = self._compute_implementation_hash(workspace)
+            # Reuse the implementation_hash already computed at the start of this round —
+            # verify/critique/quality are read-only and cannot change the workspace.
+            repair_before_hash = implementation_hash
             repair_result = agent_repair_func(workspace, feedback)
             repaired, repair_summary = self._normalise_repair_result(repair_result)
 
@@ -516,7 +521,7 @@ class AgentRepairLoop:
         Includes both Judge verification feedback and CritiqueEngine findings,
         ordered by priority (most critical, evidence-backed issues first).
         """
-        feedback = copy.deepcopy(verification_feedback)
+        feedback = dict(verification_feedback)
         feedback["quality_evaluation"] = quality
 
         # If Judge says PASS but quality/critique still has issues, signal IMPROVE

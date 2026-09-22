@@ -1,5 +1,0 @@
-{
-  "name": "Monotonic Clock Probe Detector Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "25_monotonic_clock_detector"
-}

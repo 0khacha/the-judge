@@ -202,6 +202,16 @@ class CritiqueResult:
 # Critique Engine
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Module-level shared constants (referenced from CritiqueEngine and repair_loop)
+# ---------------------------------------------------------------------------
+
+_IGNORED_DIRS: frozenset = frozenset({
+    ".git", "__pycache__", ".venv", "venv", "node_modules",
+    ".mypy_cache", ".ruff_cache", ".pytest_cache", ".tox",
+})
+
+
 class CritiqueEngine:
     """Adversarial critique engine — the independent skeptical evaluator.
 
@@ -239,10 +249,8 @@ class CritiqueEngine:
         "What improvement would have the highest impact?",
     ]
 
-    _IGNORED_DIRS = frozenset({
-        ".git", "__pycache__", ".venv", "venv", "node_modules",
-        ".mypy_cache", ".ruff_cache", ".pytest_cache", ".tox",
-    })
+    # Reuse the module-level constant (avoids duplicating the frozenset)
+    _IGNORED_DIRS = _IGNORED_DIRS
 
     _CLAIM_PATTERN = re.compile(
         r"\b(always\s+returns?|never\s+raises?|guaranteed|ensures?|handles?\s+all"
@@ -357,6 +365,17 @@ class CritiqueEngine:
 
         findings: List[CritiqueFinding] = []
 
+        # Build a shared source-file cache so downstream passes don't re-read from disk.
+        # _scan_code_for_observed_issues and _identify_unverified_assumptions both need
+        # the same file contents — reading once reduces disk I/O by ~50%.
+        py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
+        source_cache: Dict[str, str] = {}
+        for fpath in py_files:
+            try:
+                source_cache[fpath] = open(fpath, encoding="utf-8", errors="ignore").read()
+            except Exception:
+                pass
+
         # --- Q1 / Q9: What is wrong? Evidence-backed test failures -----------
         findings.extend(self._findings_from_test_failures(ground_truth, next_id))
 
@@ -375,11 +394,11 @@ class CritiqueEngine:
             ))
 
         # --- Q3 / Q4 / Q6 / Q7: Observed issues in source code ---------------
-        observed = self._scan_code_for_observed_issues(workspace, domain)
+        observed = self._scan_code_for_observed_issues(workspace, domain, source_cache=source_cache)
         findings.extend(observed)
 
         # --- Q5: Unverified assumptions ---------------------------------------
-        assumptions = self._identify_unverified_assumptions(workspace, ground_truth, domain)
+        assumptions = self._identify_unverified_assumptions(workspace, ground_truth, domain, source_cache=source_cache)
 
         # --- Q3 / Q10: Missing evidence for this domain ----------------------
         missing_evidence = self._assess_missing_evidence(workspace, ground_truth, domain)
@@ -535,8 +554,14 @@ class CritiqueEngine:
         self,
         workspace: str,
         domain: ProjectDomain,
+        source_cache: Optional[Dict[str, str]] = None,
     ) -> List[CritiqueFinding]:
-        """Scan source files for directly observable weaknesses."""
+        """Scan source files for directly observable weaknesses.
+
+        Args:
+            source_cache: Optional pre-read {path: content} mapping. When provided,
+                files are not re-read from disk (avoids duplicate I/O with critique()).
+        """
         findings: List[CritiqueFinding] = []
         obs_idx = [500]
 
@@ -544,14 +569,20 @@ class CritiqueEngine:
             obs_idx[0] += 1
             return f"CRIT-{tag}-{obs_idx[0]:03d}"
 
-        py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
-        for fpath in py_files:
-            try:
-                content = open(fpath, encoding="utf-8", errors="ignore").read()
+        # Use cached contents if available; otherwise fall back to reading from disk.
+        if source_cache is not None:
+            for fpath, content in source_cache.items():
                 rel = os.path.relpath(fpath, workspace)
                 findings.extend(self._analyse_python_file(content, rel, obs_id, domain))
-            except Exception:
-                pass
+        else:
+            py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
+            for fpath in py_files:
+                try:
+                    content = open(fpath, encoding="utf-8", errors="ignore").read()
+                    rel = os.path.relpath(fpath, workspace)
+                    findings.extend(self._analyse_python_file(content, rel, obs_id, domain))
+                except Exception:
+                    pass
 
         if domain == ProjectDomain.WEB_APP_OR_UI:
             html_files = self._collect_source_files(workspace, (".html", ".htm"))
@@ -747,6 +778,7 @@ class CritiqueEngine:
         workspace: str,
         ground_truth: Dict[str, Any],
         domain: ProjectDomain,
+        source_cache: Optional[Dict[str, str]] = None,
     ) -> List[str]:
         """Find assumptions embedded in code that have not been tested."""
         assumptions: List[str] = []
@@ -769,10 +801,9 @@ class CritiqueEngine:
                 )
 
         # Assumption: no concurrent access issues
-        py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
-        for fpath in py_files:
-            try:
-                content = open(fpath, encoding="utf-8", errors="ignore").read(8192).lower()
+        if source_cache is not None:
+            for fpath, raw_content in source_cache.items():
+                content = raw_content[:8192].lower()
                 if "threading" in content or "asyncio" in content or "multiprocessing" in content:
                     concurrency_tests = [
                         t for t in passed
@@ -784,8 +815,24 @@ class CritiqueEngine:
                             "but no concurrent-access or thread-safety tests exist."
                         )
                     break
-            except Exception:
-                pass
+        else:
+            py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
+            for fpath in py_files:
+                try:
+                    content = open(fpath, encoding="utf-8", errors="ignore").read(8192).lower()
+                    if "threading" in content or "asyncio" in content or "multiprocessing" in content:
+                        concurrency_tests = [
+                            t for t in passed
+                            if any(k in t.lower() for k in ("thread", "concurrent", "async", "race", "lock"))
+                        ]
+                        if not concurrency_tests:
+                            assumptions.append(
+                                f"Concurrency code detected in {os.path.relpath(fpath, workspace)} "
+                                "but no concurrent-access or thread-safety tests exist."
+                            )
+                        break
+                except Exception:
+                    pass
 
         return assumptions[:8]
 
@@ -929,8 +976,6 @@ class CritiqueEngine:
         elif has_contradictions:
             level = "partial"
             reasons.append(f"{len(contradictions)} evidence contradiction(s) present.")
-            if independent >= 2 and not has_contradictions:
-                level = "sufficient"
         elif independent < 2:
             level = "partial"
             reasons.append("Only one independent test — marginal coverage.")
@@ -1001,11 +1046,24 @@ class CritiqueEngine:
         evidence_sufficiency: EvidenceSufficiency,
     ) -> str:
         """Generate a concise expert-skeptic assessment."""
-        open_f = [f for f in findings if f.resolution == FindingResolution.OPEN]
-        critical = [f for f in open_f if f.severity == FindingSeverity.CRITICAL]
-        high = [f for f in open_f if f.severity == FindingSeverity.HIGH]
-        contradicted = [f for f in open_f if f.evidence_level == EvidenceLevel.CONTRADICTED]
-        ev_backed = [f for f in open_f if f.evidence_level == EvidenceLevel.EVIDENCE_BACKED]
+        # Single pass over findings — previously 4 separate list comprehensions
+        open_f: List[CritiqueFinding] = []
+        critical: List[CritiqueFinding] = []
+        high: List[CritiqueFinding] = []
+        contradicted: List[CritiqueFinding] = []
+        ev_backed: List[CritiqueFinding] = []
+        for f in findings:
+            if f.resolution != FindingResolution.OPEN:
+                continue
+            open_f.append(f)
+            if f.severity == FindingSeverity.CRITICAL:
+                critical.append(f)
+            elif f.severity == FindingSeverity.HIGH:
+                high.append(f)
+            if f.evidence_level == EvidenceLevel.CONTRADICTED:
+                contradicted.append(f)
+            elif f.evidence_level == EvidenceLevel.EVIDENCE_BACKED:
+                ev_backed.append(f)
 
         parts: List[str] = []
         domain_label = domain.value.replace("_", " ").title()

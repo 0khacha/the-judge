@@ -56,8 +56,15 @@ def critique(
     from the_judge.core.critique_engine import CritiqueEngine
 
     workspace_path = os.path.abspath(workspace)
+    # Capture evidence once and reuse for both verify() and critique().
+    # Previously, capture_evidence() was called here AND inside verify(),
+    # causing two full sandbox executions per `judge critique` invocation.
     ground_truth = capture_evidence(workspace_path, task_spec=task_spec)
-    verification_result = verify(workspace=workspace, task_spec=task_spec)
+    verification_result = verify(
+        workspace=workspace,
+        task_spec=task_spec,
+        _ground_truth=ground_truth,  # pass pre-captured evidence
+    )
 
     engine = CritiqueEngine()
     return engine.critique(
@@ -72,6 +79,7 @@ def verify(
     workspace: str,
     task_spec: Optional[Dict[str, Any]] = None,
     previous_evidence: Optional[Dict[str, Any]] = None,
+    _ground_truth: Optional[Dict[str, Any]] = None,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
     and adversarial integrity gates.
@@ -80,6 +88,8 @@ def verify(
         workspace: Path to directory or python source file to evaluate.
         task_spec: Task specification contract dictionary (or loaded task contract).
         previous_evidence: Previous evidence snapshot from an earlier round (for regression tracking).
+        _ground_truth: Pre-captured evidence dict. When provided, skips capture_evidence()
+            (used by critique() to avoid running the sandbox twice).
 
     Returns:
         VerificationResult containing structured decision, findings, trust profile, and provenance.
@@ -88,7 +98,7 @@ def verify(
     workspace_path = os.path.abspath(workspace)
 
     # 1. Capture ground truth evidence (sandbox execution, challenge runner, dynamic property checks)
-    ground_truth = capture_evidence(workspace_path, task_spec=task_spec)
+    ground_truth = _ground_truth if _ground_truth is not None else capture_evidence(workspace_path, task_spec=task_spec)
 
     # 2. Build Agent Findings / Claims
     test_suite = ground_truth.get("test_suite", {})
@@ -166,18 +176,24 @@ def verify(
 
     # Map blocking issues (challenge missing, tampering, type errors)
     for idx, b_issue in enumerate(eval_output.get("blocking_issues", []), 1):
+        if b_issue.startswith("Test suite failure:") and failed_tests:
+            continue
         if "TAMPERING" in b_issue or "VERIFICATION DENIAL" in b_issue:
             cat = "security"
             sev = "blocking"
+            focus = "Ensure target code does not tamper with test collection or obscure verification."
         elif "Type checker" in b_issue:
             cat = "type_check"
             sev = "high"
+            focus = "Review type annotations and resolve static type checking errors."
         elif "REGRESSION" in b_issue:
             cat = "regression"
             sev = "blocking"
+            focus = "Fix regression: restore functionality that previously passed."
         else:
             cat = "behavior"
             sev = "high"
+            focus = "Resolve the blocking issue detected during evaluation."
 
         # Avoid duplicating failed test findings if already added
         if not any(f.description == b_issue for f in structured_findings):
@@ -187,7 +203,7 @@ def verify(
                     category=cat,
                     severity=sev,
                     description=b_issue,
-                    suggested_focus="Ensure target code does not tamper with test collection or obscure verification.",
+                    suggested_focus=focus,
                 )
             )
 
@@ -220,7 +236,7 @@ def verify(
 
     elapsed = time.time() - start_time
 
-    ev_cov = eval_output.get("evidence_coverage", {})
+    # ev_cov was already extracted above; mutate it in-place to add spec coverage.
     ev_cov["specification_coverage"] = contract_eval
 
     return VerificationResult(

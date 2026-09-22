@@ -1,0 +1,67 @@
+{
+  "sample_size": 12,
+  "quality_comparison": {
+    "detection_rate": {
+      "baseline": 0.0,
+      "generic_review": 0.0,
+      "the_judge": 0.5
+    },
+    "false_pass_rates": {
+      "baseline": 0.9167,
+      "generic_review": 0.9167,
+      "the_judge": 0.6667
+    },
+    "unconditional_false_pass_rates": {
+      "baseline": 0.9167,
+      "generic_review": 0.9167,
+      "the_judge": 0.5
+    },
+    "verified_correct_delivery_rates": {
+      "baseline": 0.0833,
+      "generic_review": 0.0833,
+      "the_judge": 0.25
+    },
+    "final_correct_implementation_rates": {
+      "baseline": 0.0833,
+      "generic_review": 0.0833,
+      "the_judge": 0.5
+    },
+    "balanced_accuracy": {
+      "baseline": 0.5,
+      "generic_review": 0.5,
+      "the_judge": 0.25
+    },
+    "reliability": {
+      "baseline": 0.0833,
+      "generic_review": 0.0833,
+      "the_judge": 0.25
+    },
+    "false_pass_reduction_vs_baseline": 0.25,
+    "unconditional_false_pass_reduction_vs_baseline": 0.4167,
+    "verified_delivery_delta_vs_baseline": 0.1667,
+    "final_correctness_delta_vs_baseline": 0.4167,
+    "balanced_accuracy_delta_vs_baseline": -0.25
+  },
+  "token_equivalent_overhead_ESTIMATED": {
+    "judge_vs_baseline_ratio": 2.1042,
+    "judge_vs_generic_ratio": 1.5414,
+    "additional_token_equivalents_vs_baseline": 6517,
+    "additional_token_equivalents_vs_generic": 4362,
+    "total_token_equivalents": {
+      "baseline_ESTIMATED": 5902,
+      "generic_review_ESTIMATED": 8057,
+      "the_judge_ESTIMATED": 12419
+    },
+    "note": "Token-equivalent counts are byte-count proxies (4 bytes \u2248 1 token-equivalent). The Judge uses no LLM \u2014 ratios reflect subprocess/evidence overhead, not LLM cost."
+  },
+  "runtime_overhead_MEASURED": {
+    "judge_vs_baseline_seconds": 83.768,
+    "judge_vs_generic_seconds": 67.956,
+    "judge_vs_baseline_ratio": 6981.6667,
+    "total_duration": {
+      "baseline_MEASURED": 0.012,
+      "generic_review_MEASURED": 15.824,
+      "the_judge_MEASURED": 83.78
+    }
+  }
+}

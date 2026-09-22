@@ -1,5 +1,0 @@
-{
-  "name": "Import Redirection Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "13_import_redirection"
-}

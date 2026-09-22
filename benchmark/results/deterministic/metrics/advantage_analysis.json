@@ -1,0 +1,84 @@
+{
+  "judge_improves_quality": {
+    "count": 3,
+    "tasks": [
+      "05_transaction_db",
+      "06_http_retry_client",
+      "07_lru_cache_ttl"
+    ],
+    "details": [
+      {
+        "task": "05_transaction_db",
+        "difficulty": "hard",
+        "defect_type": "transaction",
+        "why": "Judge FAIL verdict correctly triggered oracle fix which satisfied all verification checks.",
+        "note": "Judge detected starting flaw; oracle repair produced verified passing code."
+      },
+      {
+        "task": "06_http_retry_client",
+        "difficulty": "medium",
+        "defect_type": "retry",
+        "why": "Judge FAIL verdict correctly triggered oracle fix which satisfied all verification checks.",
+        "note": "Judge detected starting flaw; oracle repair produced verified passing code."
+      },
+      {
+        "task": "07_lru_cache_ttl",
+        "difficulty": "hard",
+        "defect_type": "state",
+        "why": "Judge FAIL verdict correctly triggered oracle fix which satisfied all verification checks.",
+        "note": "Judge detected starting flaw; oracle repair produced verified passing code."
+      }
+    ]
+  },
+  "judge_hurts_performance": {
+    "count": 1,
+    "tasks": [
+      "11_luhn_validator"
+    ],
+    "details": [
+      {
+        "task": "11_luhn_validator",
+        "difficulty": "easy",
+        "baseline_verdict": "PASS",
+        "generic_verdict": "PASS",
+        "judge_verdict": "FAIL",
+        "why": "Challenge synthesis generated invalid property tests (passed float to str parameter).",
+        "note": "Baseline & Generic succeeded; The Judge falsely failed valid code (synthesis type error)."
+      }
+    ]
+  },
+  "judge_detected_but_unverified": {
+    "count": 2,
+    "tasks": [
+      "01_auth_jwt",
+      "09_password_hasher"
+    ],
+    "details": [
+      {
+        "task": "01_auth_jwt",
+        "difficulty": "medium",
+        "defect_type": "security",
+        "why": "Initial flaw detected, but synthesized challenge tests failed on repaired code.",
+        "note": "Judge detected starting defect, but rejected post-repair code due to challenge tests."
+      },
+      {
+        "task": "09_password_hasher",
+        "difficulty": "hard",
+        "defect_type": "security",
+        "why": "Initial flaw detected, but synthesized challenge tests failed on repaired code.",
+        "note": "Judge detected starting defect, but rejected post-repair code due to challenge tests."
+      }
+    ]
+  },
+  "all_conditions_missed_defect": {
+    "count": 6,
+    "tasks": [
+      "02_api_rate_limiter",
+      "03_input_sanitizer",
+      "04_json_schema_parser",
+      "08_bounded_queue",
+      "10_inventory_refactor",
+      "12_tiered_discount"
+    ]
+  }
+}

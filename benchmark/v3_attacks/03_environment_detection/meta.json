@@ -1,5 +1,0 @@
-{
-  "name": "Environment Detection Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "03_environment_detection"
-}

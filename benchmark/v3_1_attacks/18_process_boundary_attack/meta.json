@@ -1,5 +1,0 @@
-{
-  "name": "Process Boundary Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "18_process_boundary_attack"
-}

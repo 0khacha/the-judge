@@ -1,0 +1,31 @@
+{
+  "condition": "generic_review",
+  "sample_size": 12,
+  "signal_counts": {
+    "TP": 1,
+    "FP": 11,
+    "TN": 0,
+    "FN": 0,
+    "ABSTAIN": 0
+  },
+  "initial_detection_rejection_rate": 0.0,
+  "false_pass_rate": 0.9166666666666666,
+  "unconditional_false_pass_rate": 0.9166666666666666,
+  "verified_correct_delivery_rate": 0.08333333333333333,
+  "final_correct_implementation_rate": 0.08333333333333333,
+  "precision": 0.08333333333333333,
+  "recall": 1.0,
+  "specificity": 0.0,
+  "balanced_accuracy": 0.5,
+  "reliability": 0.08333333333333333,
+  "mean_input_tokens": 1500.0,
+  "mean_output_tokens": 300.0,
+  "mean_cached_tokens": 500.0,
+  "mean_total_tokens": 1800.0,
+  "total_tokens_all": 21600,
+  "mean_cost_usd": 0.00765,
+  "total_cost_usd": 0.0918,
+  "mean_duration_seconds": 1.142,
+  "total_duration_seconds": 13.704,
+  "mean_turns": 2.0
+}

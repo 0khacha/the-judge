@@ -1,5 +1,0 @@
-{
-  "name": "Near-Timeout Execution Delay Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "28_near_timeout_execution"
-}

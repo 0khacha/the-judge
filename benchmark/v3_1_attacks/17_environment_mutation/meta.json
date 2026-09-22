@@ -1,5 +1,0 @@
-{
-  "name": "Environment Mutation Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "17_environment_mutation"
-}

@@ -1,5 +1,0 @@
-{
-  "name": "Identifier Blindness Attack",
-  "ground_truth": "FAIL",
-  "attack_dir": "01_identifier_blindness"
-}

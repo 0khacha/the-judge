@@ -236,8 +236,8 @@ def evaluate(
     else:
         verdict = "PASS"
 
-    total_tests = test_suite.get("total_tests", 0)
-    passed_tests_count = len(passed_test_names)
+    # Note: total_tests, passed_tests_count, and failed_tests_count were already
+    # computed above (lines ~144-146) and remain unchanged.
     test_score = (passed_tests_count / total_tests * 100.0) if total_tests > 0 else (100.0 if test_suite.get("exit_code", 0) == 0 else 0.0)
 
     reqs = findings.get("requirements", [])
