@@ -1,4 +1,4 @@
-from .api import verify, verify_workspace, improve, critique
+from .api import critique, improve, verify, verify_workspace
 from .core.decision import Finding, VerificationResult
 
 __all__ = [

@@ -1,7 +1,6 @@
-import os
 import re
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 
 @dataclass
@@ -22,21 +21,21 @@ class RequirementCoverage:
     category: str  # "functional", "boundary", "state", "error_handling", "security", etc.
     priority: str  # "critical", "important", "optional"
     status: str  # "VERIFIED", "PARTIALLY_VERIFIED", "UNVERIFIED", "CONFLICTING"
-    mapped_properties: List[PropertyMapping] = field(default_factory=list)
+    mapped_properties: list[PropertyMapping] = field(default_factory=list)
     unverified_reason: Optional[str] = None
 
 
 class ContractEngine:
     """Contract-Aware Verification & Specification Coverage Engine for The Judge v4.2."""
 
-    def __init__(self, task_spec: Optional[Dict[str, Any]] = None):
+    def __init__(self, task_spec: Optional[dict[str, Any]] = None):
         self.task_spec = task_spec or {}
 
     def evaluate_contract_coverage(
         self,
-        ground_truth: Dict[str, Any],
-        agent_findings: Dict[str, Any],
-    ) -> Dict[str, Any]:
+        ground_truth: dict[str, Any],
+        agent_findings: dict[str, Any],
+    ) -> dict[str, Any]:
         """Evaluates requirement specification coverage across explicit contract requirements.
 
         Returns:
@@ -52,7 +51,7 @@ class ContractEngine:
         failed_tests = set(test_suite.get("failed_tests", []))
         test_provenance = ground_truth.get("test_provenance", {})
 
-        requirement_coverages: List[RequirementCoverage] = []
+        requirement_coverages: list[RequirementCoverage] = []
 
         for idx, req_data in enumerate(requirements_input, 1):
             req_id = req_data.get("id", f"REQ-{idx:03d}")
@@ -64,7 +63,7 @@ class ContractEngine:
             matched_passed = [t for t in passed_tests if self._matches_test(req_data, t)]
             matched_failed = [t for t in failed_tests if self._matches_test(req_data, t)]
 
-            mapped_props: List[PropertyMapping] = []
+            mapped_props: list[PropertyMapping] = []
 
             # Map passed test properties
             for p_test in matched_passed:
@@ -74,7 +73,9 @@ class ContractEngine:
                         property_id=f"PROP-{p_test}",
                         requirement_id=req_id,
                         property_name=p_test,
-                        provenance="explicit_contract" if "task_spec" in self.task_spec else "contract_derived",
+                        provenance="explicit_contract"
+                        if "task_spec" in self.task_spec
+                        else "contract_derived",
                         confidence="HIGH" if prov == "judge_challenge_test" else "MEDIUM",
                         justification=f"Behavioral test '{p_test}' passed ground-truth execution.",
                         status="VERIFIED",
@@ -101,7 +102,8 @@ class ContractEngine:
                 unverified_reason = f"Ground-truth test failed for {req_id}."
             elif matched_passed:
                 has_challenge = any(
-                    test_provenance.get(t, {}).get("source") == "judge_challenge_test" for t in matched_passed
+                    test_provenance.get(t, {}).get("source") == "judge_challenge_test"
+                    for t in matched_passed
                 )
                 if has_challenge or len(matched_passed) >= 2:
                     status = "VERIFIED"
@@ -111,7 +113,9 @@ class ContractEngine:
                     unverified_reason = "Only public workspace tests recorded; independent property challenges unverified."
             else:
                 status = "UNVERIFIED"
-                unverified_reason = f"No independent behavioral challenge was generated or executed for {req_id}."
+                unverified_reason = (
+                    f"No independent behavioral challenge was generated or executed for {req_id}."
+                )
 
             requirement_coverages.append(
                 RequirementCoverage(
@@ -135,16 +139,22 @@ class ContractEngine:
         critical_reqs = [r for r in requirement_coverages if r.priority == "critical"]
         critical_total = len(critical_reqs)
         critical_verified = sum(1 for r in critical_reqs if r.status == "VERIFIED")
-        critical_coverage_pct = (critical_verified / critical_total * 100.0) if critical_total > 0 else 100.0
+        critical_coverage_pct = (
+            (critical_verified / critical_total * 100.0) if critical_total > 0 else 100.0
+        )
 
         important_reqs = [r for r in requirement_coverages if r.priority == "important"]
         important_total = len(important_reqs)
         important_verified = sum(1 for r in important_reqs if r.status == "VERIFIED")
-        important_coverage_pct = (important_verified / important_total * 100.0) if important_total > 0 else 100.0
+        important_coverage_pct = (
+            (important_verified / important_total * 100.0) if important_total > 0 else 100.0
+        )
 
         overall_coverage_pct = (verified_cnt / total_reqs * 100.0) if total_reqs > 0 else 0.0
 
-        unverified_critical_ids = [r.requirement_id for r in critical_reqs if r.status in ("UNVERIFIED", "CONFLICTING")]
+        unverified_critical_ids = [
+            r.requirement_id for r in critical_reqs if r.status in ("UNVERIFIED", "CONFLICTING")
+        ]
 
         # Calculate Specification Escape Rate (% of failed ground-truth items caused by unverified requirements)
         spec_escape_rate_pct = 0.0
@@ -169,34 +179,40 @@ class ContractEngine:
             "summary": summary,
         }
 
-    def _infer_default_requirements(self, ground_truth: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _infer_default_requirements(self, ground_truth: dict[str, Any]) -> list[dict[str, Any]]:
         test_suite = ground_truth.get("test_suite", {})
         all_tests = set(test_suite.get("passed_tests", []) + test_suite.get("failed_tests", []))
         reqs = []
         for idx, t in enumerate(sorted(all_tests), 1):
-            reqs.append({
-                "id": f"REQ-{idx:03d}",
-                "description": f"Behavioral verification of property {t}",
-                "category": "boundary" if "boundary" in t else ("security" if "security" in t or "xss" in t else "functional"),
-                "priority": "critical" if idx <= 2 else "important",
-            })
+            reqs.append(
+                {
+                    "id": f"REQ-{idx:03d}",
+                    "description": f"Behavioral verification of property {t}",
+                    "category": "boundary"
+                    if "boundary" in t
+                    else ("security" if "security" in t or "xss" in t else "functional"),
+                    "priority": "critical" if idx <= 2 else "important",
+                }
+            )
         if not reqs:
-            reqs.append({
-                "id": "REQ-001",
-                "description": "Functional contract implementation",
-                "category": "functional",
-                "priority": "critical",
-            })
+            reqs.append(
+                {
+                    "id": "REQ-001",
+                    "description": "Functional contract implementation",
+                    "category": "functional",
+                    "priority": "critical",
+                }
+            )
         return reqs
 
-    def _matches_test(self, req_data: Dict[str, Any], test_name: str) -> bool:
+    def _matches_test(self, req_data: dict[str, Any], test_name: str) -> bool:
         req_id = req_data.get("id", "")
         properties = req_data.get("properties", [])
         desc = req_data.get("description", "")
-        
+
         test_lower = test_name.lower()
         req_lower = req_id.lower().replace("-", "_") if req_id else ""
-        
+
         if req_lower and req_lower in test_lower:
             return True
 
@@ -210,11 +226,27 @@ class ContractEngine:
                     return True
             return False
 
-        desc_keywords = [w for w in re.findall(r"\w+", desc.lower()) if len(w) >= 4 and w not in ("should", "must", "returns", "system", "value", "level", "behavioral", "verification", "property")]
+        desc_keywords = [
+            w
+            for w in re.findall(r"\w+", desc.lower())
+            if len(w) >= 4
+            and w
+            not in (
+                "should",
+                "must",
+                "returns",
+                "system",
+                "value",
+                "level",
+                "behavioral",
+                "verification",
+                "property",
+            )
+        ]
         matched_kw = [kw for kw in desc_keywords if kw in test_lower]
         return len(matched_kw) >= 1
 
-    def _format_coverage_dict(self, req: RequirementCoverage) -> Dict[str, Any]:
+    def _format_coverage_dict(self, req: RequirementCoverage) -> dict[str, Any]:
         return {
             "id": req.requirement_id,
             "description": req.description,

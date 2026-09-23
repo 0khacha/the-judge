@@ -22,11 +22,11 @@ The loop passes the full critique result to the repair callback so the agent
 can prioritise the most consequential, evidence-backed weaknesses first.
 """
 
-import copy
 import hashlib
 import os
 import time
-from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple, Union
+from collections.abc import Mapping
+from typing import Any, Callable, Optional, Union
 
 from the_judge.api import verify
 from the_judge.core.decision import VerificationResult
@@ -34,8 +34,7 @@ from the_judge.core.evidence import capture_evidence
 from the_judge.integrations.agent_adapter import AgentAdapter
 from the_judge.integrations.audit_trail import AuditTrail, RoundRecord
 
-
-QualityEvaluator = Callable[[str, Dict[str, Any]], Dict[str, Any]]
+QualityEvaluator = Callable[[str, dict[str, Any]], dict[str, Any]]
 RepairCallbackResult = Union[bool, Mapping[str, Any]]
 
 
@@ -82,10 +81,20 @@ class AgentRepairLoop:
     }
     """
 
-    _IGNORED_DIRECTORIES = frozenset({
-        ".git", ".hg", ".svn", ".mypy_cache", ".pytest_cache",
-        ".ruff_cache", "__pycache__", "node_modules", ".venv", "venv",
-    })
+    _IGNORED_DIRECTORIES = frozenset(
+        {
+            ".git",
+            ".hg",
+            ".svn",
+            ".mypy_cache",
+            ".pytest_cache",
+            ".ruff_cache",
+            "__pycache__",
+            "node_modules",
+            ".venv",
+            "venv",
+        }
+    )
 
     def __init__(
         self,
@@ -105,14 +114,14 @@ class AgentRepairLoop:
         self.quality_threshold = float(quality_threshold)
         self.quality_evaluator = quality_evaluator
         self.require_evidence_sufficiency = require_evidence_sufficiency
-        self.rounds_history: List[Dict[str, Any]] = []
+        self.rounds_history: list[dict[str, Any]] = []
 
     def run_repair_loop(
         self,
         workspace: str,
-        agent_repair_func: Callable[[str, Dict[str, Any]], RepairCallbackResult],
-        task_spec: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        agent_repair_func: Callable[[str, dict[str, Any]], RepairCallbackResult],
+        task_spec: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """Run the adversarial improvement loop.
 
         Each round:
@@ -125,13 +134,13 @@ class AgentRepairLoop:
           7. Verify actual workspace changes were made.
           8. Record round in AuditTrail.
         """
-        from the_judge.core.visual_engine import VisualEngine
         from the_judge.core.critique_engine import CritiqueEngine
+        from the_judge.core.visual_engine import VisualEngine
 
         self.rounds_history.clear()
         audit_trail = AuditTrail()
-        previous_evidence: Optional[Dict[str, Any]] = None
-        previous_critique_findings: List[Dict[str, Any]] = []
+        previous_evidence: Optional[dict[str, Any]] = None
+        previous_critique_findings: list[dict[str, Any]] = []
         previous_score: float = 0.0
 
         critique_engine = CritiqueEngine()
@@ -176,7 +185,7 @@ class AgentRepairLoop:
             )
 
             # Resolve previous round's findings against current evidence
-            resolved_ids: List[str] = []
+            resolved_ids: list[str] = []
             if previous_critique_findings:
                 resolved_ids, _ = critique_engine.resolve_findings_from_previous_round(
                     previous_critique_findings, current_evidence
@@ -195,7 +204,7 @@ class AgentRepairLoop:
             # 5. Visual evidence (conditional — only for visual projects)
             # ----------------------------------------------------------
             current_screenshot: Optional[str] = None
-            visual_eval: Dict[str, Any] = {"is_visual": False}
+            visual_eval: dict[str, Any] = {"is_visual": False}
 
             if is_visual and target_visual_file:
                 current_screenshot = visual_engine.capture_screenshot(
@@ -210,19 +219,19 @@ class AgentRepairLoop:
                 for vis_w in visual_eval.get("weaknesses", []):
                     if not any(w.get("id") == vis_w.get("id") for w in quality["weaknesses"]):
                         quality["weaknesses"].append(vis_w)
-                        quality["score"] = min(quality["score"], visual_eval.get("score", quality["score"]))
+                        quality["score"] = min(
+                            quality["score"], visual_eval.get("score", quality["score"])
+                        )
 
             # ----------------------------------------------------------
             # 6. Check all stop conditions
             # ----------------------------------------------------------
-            can_stop, stop_reason = self._should_stop(
-                verification_result, quality, critique_result
-            )
+            can_stop, stop_reason = self._should_stop(verification_result, quality, critique_result)
 
             # ----------------------------------------------------------
             # 7. Build round record for audit trail
             # ----------------------------------------------------------
-            round_record: Dict[str, Any] = {
+            round_record: dict[str, Any] = {
                 "round_id": f"ROUND-{round_idx}",
                 "round_number": round_idx,
                 "workspace_hash": verification_result.provenance.get("workspace_hash", ""),
@@ -285,9 +294,7 @@ class AgentRepairLoop:
                 audit_record.stop_reason = stop_reason
                 audit_trail.record_round(audit_record)
                 round_record["audit_record"] = audit_record.to_dict()
-                return self._complete(
-                    "PASS", round_idx, verification_result, quality, audit_trail
-                )
+                return self._complete("PASS", round_idx, verification_result, quality, audit_trail)
 
             # ----------------------------------------------------------
             # 9. Not stopping: build feedback and call repair
@@ -379,22 +386,25 @@ class AgentRepairLoop:
     def _should_stop(
         self,
         verification_result: VerificationResult,
-        quality: Dict[str, Any],
+        quality: dict[str, Any],
         critique_result: Any,  # CritiqueResult
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """Determine whether all loop-stopping conditions are satisfied.
 
         A high score alone is NOT sufficient to stop. All conditions must hold.
         """
-        from the_judge.core.critique_engine import FindingSeverity, EvidenceLevel, FindingResolution
 
         # Condition 1: Quality threshold
         if quality["score"] < self.quality_threshold:
-            return False, f"quality_score {quality['score']:.1f} < threshold {self.quality_threshold}"
+            return (
+                False,
+                f"quality_score {quality['score']:.1f} < threshold {self.quality_threshold}",
+            )
 
         # Condition 2: No unresolved CRITICAL or HIGH judge findings
         judge_critical_high = [
-            f for f in verification_result.findings
+            f
+            for f in verification_result.findings
             if f.severity in ("critical", "high", "blocking")
             and getattr(f, "resolution", "open") == "open"
         ]
@@ -432,7 +442,7 @@ class AgentRepairLoop:
         workspace: str,
         verification_result: VerificationResult,
         critique_result: Any,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Merge Judge findings and critique findings into a single quality picture."""
         # Start from Judge findings
         judge_weaknesses = [
@@ -445,7 +455,7 @@ class AgentRepairLoop:
             }
             for f in verification_result.findings
         ]
-        evaluation: Dict[str, Any] = {
+        evaluation: dict[str, Any] = {
             "source": "the_judge+critique",
             "score": float(verification_result.numeric_score),
             "threshold": self.quality_threshold,
@@ -455,13 +465,15 @@ class AgentRepairLoop:
         # Merge critique blockers as quality weaknesses
         for cf in critique_result.get_open_findings():
             if cf.id not in {w.get("id") for w in evaluation["weaknesses"]}:
-                evaluation["weaknesses"].append({
-                    "id": cf.id,
-                    "severity": cf.severity.value,
-                    "description": cf.description,
-                    "suggested_focus": cf.suggested_action,
-                    "evidence_level": cf.evidence_level.value,
-                })
+                evaluation["weaknesses"].append(
+                    {
+                        "id": cf.id,
+                        "severity": cf.severity.value,
+                        "description": cf.description,
+                        "suggested_focus": cf.suggested_action,
+                        "evidence_level": cf.evidence_level.value,
+                    }
+                )
 
         # Run optional external quality evaluator
         if self.quality_evaluator is not None:
@@ -475,29 +487,34 @@ class AgentRepairLoop:
                 weaknesses = supplied.get("weaknesses", [])
                 if not isinstance(weaknesses, list):
                     raise TypeError("quality_evaluator weaknesses must be a list")
-                evaluation.update({
-                    "source": supplied.get("source", "quality_evaluator"),
-                    "score": float(score),
-                    "weaknesses": [self._normalise_weakness(w) for w in weaknesses],
-                    "passed": bool(supplied.get("passed", False)),
-                })
+                evaluation.update(
+                    {
+                        "source": supplied.get("source", "quality_evaluator"),
+                        "score": float(score),
+                        "weaknesses": [self._normalise_weakness(w) for w in weaknesses],
+                        "passed": bool(supplied.get("passed", False)),
+                    }
+                )
             except Exception as exc:
-                evaluation.update({
-                    "source": "quality_evaluator_error",
-                    "score": 0.0,
-                    "weaknesses": [{
-                        "id": "QUALITY-EVALUATOR-ERROR",
-                        "severity": "high",
-                        "description": str(exc),
-                    }],
-                    "passed": False,
-                })
+                evaluation.update(
+                    {
+                        "source": "quality_evaluator_error",
+                        "score": 0.0,
+                        "weaknesses": [
+                            {
+                                "id": "QUALITY-EVALUATOR-ERROR",
+                                "severity": "high",
+                                "description": str(exc),
+                            }
+                        ],
+                        "passed": False,
+                    }
+                )
 
         if "passed" not in evaluation:
             # Passed only if score ≥ threshold AND no critique blockers remain
             evaluation["passed"] = (
-                evaluation["score"] >= self.quality_threshold
-                and not critique_result.has_blockers()
+                evaluation["score"] >= self.quality_threshold and not critique_result.has_blockers()
             )
 
         return evaluation
@@ -508,14 +525,14 @@ class AgentRepairLoop:
 
     @staticmethod
     def _build_improvement_feedback(
-        verification_feedback: Dict[str, Any],
-        quality: Dict[str, Any],
+        verification_feedback: dict[str, Any],
+        quality: dict[str, Any],
         critique_result: Any,
         round_number: int,
         is_visual: bool,
-        visual_eval: Dict[str, Any],
+        visual_eval: dict[str, Any],
         audit_trail: AuditTrail,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Build the full feedback dict for the repair callback.
 
         Includes both Judge verification feedback and CritiqueEngine findings,
@@ -552,9 +569,9 @@ class AgentRepairLoop:
         outcome: str,
         round_idx: int,
         verification_result: VerificationResult,
-        quality: Dict[str, Any],
+        quality: dict[str, Any],
         audit_trail: AuditTrail,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         return {
             "outcome": outcome,
             "total_rounds": round_idx,
@@ -571,9 +588,9 @@ class AgentRepairLoop:
         reason: str,
         round_idx: int,
         verification_result: VerificationResult,
-        quality: Dict[str, Any],
+        quality: dict[str, Any],
         audit_trail: AuditTrail,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         result = self._complete(outcome, round_idx, verification_result, quality, audit_trail)
         result["reason"] = reason
         return result
@@ -583,7 +600,7 @@ class AgentRepairLoop:
     # -----------------------------------------------------------------------
 
     @staticmethod
-    def _normalise_weakness(weakness: Any) -> Dict[str, Any]:
+    def _normalise_weakness(weakness: Any) -> dict[str, Any]:
         if isinstance(weakness, str):
             return {"id": "QUALITY", "severity": "medium", "description": weakness}
         if isinstance(weakness, Mapping) and isinstance(weakness.get("description"), str):
@@ -596,7 +613,7 @@ class AgentRepairLoop:
         raise TypeError("each quality weakness must be a string or mapping with a description")
 
     @staticmethod
-    def _normalise_repair_result(result: RepairCallbackResult) -> Tuple[bool, Optional[str]]:
+    def _normalise_repair_result(result: RepairCallbackResult) -> tuple[bool, Optional[str]]:
         if isinstance(result, Mapping):
             summary = result.get("summary")
             return bool(result.get("improved", False)), str(summary) if summary else None
@@ -611,9 +628,7 @@ class AgentRepairLoop:
                 hasher.update(f.read())
         elif os.path.isdir(path):
             for root, dirs, files in os.walk(path):
-                dirs[:] = sorted(
-                    d for d in dirs if d not in self._IGNORED_DIRECTORIES
-                )
+                dirs[:] = sorted(d for d in dirs if d not in self._IGNORED_DIRECTORIES)
                 for fname in sorted(files):
                     fpath = os.path.join(root, fname)
                     rel = os.path.relpath(fpath, path)

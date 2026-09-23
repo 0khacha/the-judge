@@ -14,15 +14,14 @@ import json
 import os
 import tempfile
 import textwrap
-from typing import Any, Dict, List, Optional
-from unittest.mock import MagicMock, patch
+from typing import Any
+from unittest.mock import MagicMock
 
 import pytest
 
 from the_judge.core.critique_engine import (
     CritiqueEngine,
     CritiqueFinding,
-    CritiqueResult,
     EvidenceLevel,
     EvidenceSufficiency,
     FindingResolution,
@@ -31,19 +30,19 @@ from the_judge.core.critique_engine import (
 )
 from the_judge.integrations.audit_trail import AuditTrail, RoundRecord
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_ground_truth(
-    passed: List[str] = None,
-    failed: List[str] = None,
-    errors: Dict[str, str] = None,
+    passed: list[str] = None,
+    failed: list[str] = None,
+    errors: dict[str, str] = None,
     evidence_level: int = 0,
     challenge_tampered: bool = False,
-    missing_challenges: List[str] = None,
-) -> Dict[str, Any]:
+    missing_challenges: list[str] = None,
+) -> dict[str, Any]:
     passed = passed or []
     failed = failed or []
     return {
@@ -53,9 +52,7 @@ def _make_ground_truth(
             "failed_tests": failed,
             "errors": errors or {},
         },
-        "test_provenance": {
-            t: {"independence_level": "agent_controlled"} for t in passed
-        },
+        "test_provenance": {t: {"independence_level": "agent_controlled"} for t in passed},
         "challenge_manifest": {
             "file_tampered": challenge_tampered,
             "missing_challenges": missing_challenges or [],
@@ -106,7 +103,6 @@ def _make_workspace_with_html(content: str) -> str:
 
 
 class TestEvidenceLevelClassification:
-
     def test_evidence_backed_finding_from_test_failure(self):
         """A failed test produces an EVIDENCE_BACKED finding."""
         engine = CritiqueEngine()
@@ -117,10 +113,11 @@ class TestEvidenceLevelClassification:
         result = engine.critique(workspace, vr, gt)
 
         ev_backed = [
-            f for f in result.findings
-            if f.evidence_level == EvidenceLevel.EVIDENCE_BACKED
+            f for f in result.findings if f.evidence_level == EvidenceLevel.EVIDENCE_BACKED
         ]
-        assert len(ev_backed) >= 1, "Expected at least one EVIDENCE_BACKED finding from test failure"
+        assert len(ev_backed) >= 1, (
+            "Expected at least one EVIDENCE_BACKED finding from test failure"
+        )
         assert any("test_cache_expiration" in f.description for f in ev_backed)
 
     def test_observed_finding_from_code_scan(self):
@@ -128,24 +125,23 @@ class TestEvidenceLevelClassification:
         engine = CritiqueEngine()
         gt = _make_ground_truth(passed=["test_something"])
         vr = _make_verification_result(decision="PASS", score=80.0)
-        workspace = _make_workspace_with_py(textwrap.dedent("""\
+        workspace = _make_workspace_with_py(
+            textwrap.dedent("""\
             def process(x):
                 try:
                     return x / 0
                 except Exception:
                     pass
-        """))
+        """)
+        )
 
         result = engine.critique(workspace, vr, gt)
 
-        observed = [
-            f for f in result.findings
-            if f.evidence_level == EvidenceLevel.OBSERVED
-        ]
+        observed = [f for f in result.findings if f.evidence_level == EvidenceLevel.OBSERVED]
         # Should detect the silent broad exception
-        assert any("ilent" in f.description or "exception" in f.description.lower() for f in observed), (
-            f"Expected OBSERVED finding for silent except, got: {[f.description for f in observed]}"
-        )
+        assert any(
+            "ilent" in f.description or "exception" in f.description.lower() for f in observed
+        ), f"Expected OBSERVED finding for silent except, got: {[f.description for f in observed]}"
 
     def test_unverified_assumption_no_none_tests(self):
         """When no None/empty tests exist, assumption is reported."""
@@ -157,8 +153,7 @@ class TestEvidenceLevelClassification:
         result = engine.critique(workspace, vr, gt)
 
         assert any(
-            "None" in a or "null" in a or "empty" in a
-            for a in result.unverified_assumptions
+            "None" in a or "null" in a or "empty" in a for a in result.unverified_assumptions
         ), f"Expected None-input assumption, got: {result.unverified_assumptions}"
 
     def test_agent_claim_from_assertive_docstring(self):
@@ -166,18 +161,17 @@ class TestEvidenceLevelClassification:
         engine = CritiqueEngine()
         gt = _make_ground_truth(passed=["test_one"])
         vr = _make_verification_result(decision="PASS", score=80.0)
-        workspace = _make_workspace_with_py(textwrap.dedent('''\
+        workspace = _make_workspace_with_py(
+            textwrap.dedent('''\
             def authenticate(token):
                 """Always returns True for valid tokens. Handles all cases."""
                 return True
-        '''))
+        ''')
+        )
 
         result = engine.critique(workspace, vr, gt)
 
-        agent_claims = [
-            f for f in result.findings
-            if f.evidence_level == EvidenceLevel.AGENT_CLAIM
-        ]
+        agent_claims = [f for f in result.findings if f.evidence_level == EvidenceLevel.AGENT_CLAIM]
         assert len(agent_claims) >= 1, (
             f"Expected AGENT_CLAIM finding for assertive docstring, got: {[f.description for f in result.findings]}"
         )
@@ -192,8 +186,7 @@ class TestEvidenceLevelClassification:
         result = engine.critique(workspace, vr, gt)
 
         contradicted = [
-            f for f in result.findings
-            if f.evidence_level == EvidenceLevel.CONTRADICTED
+            f for f in result.findings if f.evidence_level == EvidenceLevel.CONTRADICTED
         ]
         assert len(contradicted) >= 1, "Expected CONTRADICTED finding from tampered test file"
 
@@ -207,8 +200,7 @@ class TestEvidenceLevelClassification:
         result = engine.critique(workspace, vr, gt)
 
         contradicted = [
-            f for f in result.findings
-            if f.evidence_level == EvidenceLevel.CONTRADICTED
+            f for f in result.findings if f.evidence_level == EvidenceLevel.CONTRADICTED
         ]
         assert any(
             "missing" in f.description.lower() or "challenge" in f.description.lower()
@@ -217,7 +209,6 @@ class TestEvidenceLevelClassification:
 
 
 class TestEvidenceVsSeverityAreIndependent:
-
     def test_evidence_backed_low_is_not_a_blocker(self):
         """EVIDENCE_BACKED + LOW severity must NOT be a blocker."""
         finding = CritiqueFinding(
@@ -227,9 +218,7 @@ class TestEvidenceVsSeverityAreIndependent:
             evidence_level=EvidenceLevel.EVIDENCE_BACKED,
             severity=FindingSeverity.LOW,
         )
-        assert not finding.is_blocker(), (
-            "EVIDENCE_BACKED + LOW should NOT be a blocker"
-        )
+        assert not finding.is_blocker(), "EVIDENCE_BACKED + LOW should NOT be a blocker"
 
     def test_contradicted_critical_is_always_blocker(self):
         """CONTRADICTED + CRITICAL must always be a blocker."""
@@ -298,11 +287,13 @@ class TestStopLogic:
 
     def _make_loop(self, **kwargs):
         from the_judge.integrations.repair_loop import AgentRepairLoop
+
         return AgentRepairLoop(max_rounds=3, quality_threshold=90.0, **kwargs)
 
     def test_high_score_does_not_stop_with_critical_contradiction(self):
         """Loop must continue if a CONTRADICTED + CRITICAL finding exists, even at score 94."""
         from the_judge.integrations.repair_loop import AgentRepairLoop
+
         loop = AgentRepairLoop(max_rounds=3, quality_threshold=90.0)
 
         vr = _make_verification_result(decision="PASS", score=94.0, evidence_level=3)
@@ -319,8 +310,12 @@ class TestStopLogic:
         critique_result.findings = [contradiction]
         critique_result.has_blockers.return_value = True
         critique_result.evidence_sufficiency = EvidenceSufficiency(
-            level="sufficient", independent_tests=2, agent_controlled_tests=5,
-            has_contradictions=True, reasons=[], summary="",
+            level="sufficient",
+            independent_tests=2,
+            agent_controlled_tests=5,
+            has_contradictions=True,
+            reasons=[],
+            summary="",
         )
 
         should_stop, reason = loop._should_stop(vr, quality, critique_result)
@@ -332,6 +327,7 @@ class TestStopLogic:
     def test_high_score_does_not_stop_with_critical_evidence_backed_finding(self):
         """Loop must continue if EVIDENCE_BACKED + CRITICAL finding exists."""
         from the_judge.integrations.repair_loop import AgentRepairLoop
+
         loop = AgentRepairLoop(max_rounds=3, quality_threshold=90.0)
 
         vr = _make_verification_result(decision="PASS", score=92.0, evidence_level=3)
@@ -348,8 +344,12 @@ class TestStopLogic:
         critique_result.findings = [critical_finding]
         critique_result.has_blockers.return_value = True
         critique_result.evidence_sufficiency = EvidenceSufficiency(
-            level="sufficient", independent_tests=2, agent_controlled_tests=3,
-            has_contradictions=False, reasons=[], summary="",
+            level="sufficient",
+            independent_tests=2,
+            agent_controlled_tests=3,
+            has_contradictions=False,
+            reasons=[],
+            summary="",
         )
 
         should_stop, reason = loop._should_stop(vr, quality, critique_result)
@@ -359,6 +359,7 @@ class TestStopLogic:
     def test_low_severity_evidence_does_not_automatically_block(self):
         """EVIDENCE_BACKED + LOW should not block the loop."""
         from the_judge.integrations.repair_loop import AgentRepairLoop
+
         loop = AgentRepairLoop(max_rounds=3, quality_threshold=90.0)
 
         vr = _make_verification_result(decision="PASS", score=91.0, evidence_level=3)
@@ -375,8 +376,12 @@ class TestStopLogic:
         critique_result.findings = [low_finding]
         critique_result.has_blockers.return_value = False
         critique_result.evidence_sufficiency = EvidenceSufficiency(
-            level="sufficient", independent_tests=2, agent_controlled_tests=2,
-            has_contradictions=False, reasons=[], summary="",
+            level="sufficient",
+            independent_tests=2,
+            agent_controlled_tests=2,
+            has_contradictions=False,
+            reasons=[],
+            summary="",
         )
 
         should_stop, reason = loop._should_stop(vr, quality, critique_result)
@@ -387,6 +392,7 @@ class TestStopLogic:
     def test_stop_when_threshold_reached_and_no_blockers(self):
         """Loop should stop when all conditions are met."""
         from the_judge.integrations.repair_loop import AgentRepairLoop
+
         loop = AgentRepairLoop(max_rounds=3, quality_threshold=90.0)
 
         vr = _make_verification_result(decision="PASS", score=91.0, evidence_level=3)
@@ -396,8 +402,12 @@ class TestStopLogic:
         critique_result.findings = []
         critique_result.has_blockers.return_value = False
         critique_result.evidence_sufficiency = EvidenceSufficiency(
-            level="sufficient", independent_tests=3, agent_controlled_tests=1,
-            has_contradictions=False, reasons=[], summary="",
+            level="sufficient",
+            independent_tests=3,
+            agent_controlled_tests=1,
+            has_contradictions=False,
+            reasons=[],
+            summary="",
         )
 
         should_stop, reason = loop._should_stop(vr, quality, critique_result)
@@ -411,7 +421,6 @@ class TestStopLogic:
 
 
 class TestEvidenceClassification:
-
     def test_agent_claim_is_not_treated_as_evidence(self):
         """Agent-controlled tests should be classified as agent_controlled, not independent."""
         engine = CritiqueEngine()
@@ -430,7 +439,7 @@ class TestEvidenceClassification:
             "challenge_manifest": {"file_tampered": False, "missing_challenges": []},
             "type_checker": {"exit_code": 0, "error_count": 0},
         }
-        vr = _make_verification_result(decision="PASS", score=80.0, evidence_level=0)
+        _make_verification_result(decision="PASS", score=80.0, evidence_level=0)
 
         result = engine._assess_evidence_sufficiency(gt, [])
         assert result.level == "insufficient", (
@@ -460,7 +469,9 @@ class TestEvidenceClassification:
 
         result = engine.critique(workspace, vr, gt)
 
-        ev_backed = [f for f in result.findings if f.evidence_level == EvidenceLevel.EVIDENCE_BACKED]
+        ev_backed = [
+            f for f in result.findings if f.evidence_level == EvidenceLevel.EVIDENCE_BACKED
+        ]
         for f in ev_backed:
             assert f.evidence_refs, (
                 f"EVIDENCE_BACKED finding '{f.id}' has no evidence_refs: {f.description}"
@@ -473,15 +484,14 @@ class TestEvidenceClassification:
 
 
 class TestAuditTrail:
-
     def _make_record(
         self,
         round_number: int,
         previous_score: float,
         new_score: float,
         decision: str = "FAIL",
-        resolved_ids: List[str] = None,
-        remaining_findings: List[Dict] = None,
+        resolved_ids: list[str] = None,
+        remaining_findings: list[dict] = None,
     ) -> RoundRecord:
         return RoundRecord(
             round_number=round_number,
@@ -521,11 +531,15 @@ class TestAuditTrail:
         """Improvement actions are stored per round."""
         trail = AuditTrail()
         r = self._make_record(1, 0.0, 60.0)
-        r.improvement_actions = ["Fixed failing test_cache_expiration", "Added None-guard to process()"]
+        r.improvement_actions = [
+            "Fixed failing test_cache_expiration",
+            "Added None-guard to process()",
+        ]
         trail.record_round(r)
 
         assert trail.get_history()[0].improvement_actions == [
-            "Fixed failing test_cache_expiration", "Added None-guard to process()"
+            "Fixed failing test_cache_expiration",
+            "Added None-guard to process()",
         ]
 
     def test_resolved_findings_are_recorded(self):
@@ -546,10 +560,15 @@ class TestAuditTrail:
     def test_remaining_findings_are_recorded(self):
         """Remaining open findings from the last round are accessible."""
         trail = AuditTrail()
-        r = self._make_record(1, 0.0, 60.0, remaining_findings=[
-            {"id": "CRIT-OBS-001", "description": "Missing boundary tests"},
-            {"id": "CRIT-MISS-002", "description": "No error path tests"},
-        ])
+        r = self._make_record(
+            1,
+            0.0,
+            60.0,
+            remaining_findings=[
+                {"id": "CRIT-OBS-001", "description": "Missing boundary tests"},
+                {"id": "CRIT-MISS-002", "description": "No error path tests"},
+            ],
+        )
         trail.record_round(r)
 
         remaining = trail.get_unresolved_findings()
@@ -616,7 +635,6 @@ class TestAuditTrail:
 
 
 class TestVisualEvidence:
-
     def test_visual_domain_classification_for_html(self):
         """HTML workspace is classified as web_app_or_ui."""
         engine = CritiqueEngine()
@@ -645,9 +663,12 @@ class TestVisualEvidence:
         result = engine.critique(workspace, vr, gt)
 
         html_findings = [
-            f for f in result.findings
-            if "alt" in f.description.lower() or "viewport" in f.description.lower()
-            or "password" in f.description.lower() and "type='text'" in f.description.lower()
+            f
+            for f in result.findings
+            if "alt" in f.description.lower()
+            or "viewport" in f.description.lower()
+            or "password" in f.description.lower()
+            and "type='text'" in f.description.lower()
         ]
         assert len(html_findings) == 0, (
             f"Non-visual project should not have HTML-specific findings: {[f.description for f in html_findings]}"
@@ -676,13 +697,12 @@ class TestVisualEvidence:
 
 
 class TestRegression:
-
     def test_improvement_cannot_hide_regression(self):
         """A test that passed in round N but fails in round N+1 → CONTRADICTED finding."""
         engine = CritiqueEngine()
 
         # Round 1 ground truth: test_auth passed
-        gt_round1 = _make_ground_truth(passed=["test_auth", "test_login"])
+        _make_ground_truth(passed=["test_auth", "test_login"])
 
         # Round 2 ground truth: test_auth now fails (regression)
         gt_round2 = _make_ground_truth(passed=["test_login"], failed=["test_auth"])
@@ -697,13 +717,16 @@ class TestRegression:
         result = engine.critique(workspace, vr, gt_round2)
 
         # The REGRESSION blocking_issue should produce a CONTRADICTED finding
-        contradicted = [f for f in result.findings if f.evidence_level == EvidenceLevel.CONTRADICTED]
-        assert any(
-            "regression" in f.description.lower() or "regression" in f.suggested_action.lower()
-            for f in contradicted
-        ) or len(contradicted) >= 1, (
-            "Regression from score_engine blocking_issues should produce CONTRADICTED findings"
-        )
+        contradicted = [
+            f for f in result.findings if f.evidence_level == EvidenceLevel.CONTRADICTED
+        ]
+        assert (
+            any(
+                "regression" in f.description.lower() or "regression" in f.suggested_action.lower()
+                for f in contradicted
+            )
+            or len(contradicted) >= 1
+        ), "Regression from score_engine blocking_issues should produce CONTRADICTED findings"
 
     def test_previous_failure_remains_tracked_until_resolved(self):
         """Findings from previous round that still fail remain in still_open."""
@@ -770,7 +793,6 @@ class TestRegression:
 
 
 class TestDomainClassification:
-
     def test_classifies_python_library(self):
         engine = CritiqueEngine()
         workspace = _make_workspace_with_py(
@@ -806,21 +828,29 @@ class TestDomainClassification:
 
 
 class TestImprovementPriority:
-
     def test_critical_findings_ranked_first(self):
         """CRITICAL findings must appear before MEDIUM and LOW in priority list."""
         findings = [
             CritiqueFinding(
-                id="F1", question="Q", description="Low priority",
-                evidence_level=EvidenceLevel.OBSERVED, severity=FindingSeverity.LOW,
+                id="F1",
+                question="Q",
+                description="Low priority",
+                evidence_level=EvidenceLevel.OBSERVED,
+                severity=FindingSeverity.LOW,
             ),
             CritiqueFinding(
-                id="F2", question="Q", description="Critical failure",
-                evidence_level=EvidenceLevel.EVIDENCE_BACKED, severity=FindingSeverity.CRITICAL,
+                id="F2",
+                question="Q",
+                description="Critical failure",
+                evidence_level=EvidenceLevel.EVIDENCE_BACKED,
+                severity=FindingSeverity.CRITICAL,
             ),
             CritiqueFinding(
-                id="F3", question="Q", description="Medium issue",
-                evidence_level=EvidenceLevel.OBSERVED, severity=FindingSeverity.MEDIUM,
+                id="F3",
+                question="Q",
+                description="Medium issue",
+                evidence_level=EvidenceLevel.OBSERVED,
+                severity=FindingSeverity.MEDIUM,
             ),
         ]
         engine = CritiqueEngine()
@@ -832,12 +862,18 @@ class TestImprovementPriority:
         """CONTRADICTED findings ranked before OBSERVED at same severity level."""
         findings = [
             CritiqueFinding(
-                id="OBS", question="Q", description="Observed issue",
-                evidence_level=EvidenceLevel.OBSERVED, severity=FindingSeverity.HIGH,
+                id="OBS",
+                question="Q",
+                description="Observed issue",
+                evidence_level=EvidenceLevel.OBSERVED,
+                severity=FindingSeverity.HIGH,
             ),
             CritiqueFinding(
-                id="CONTRA", question="Q", description="Contradicted claim",
-                evidence_level=EvidenceLevel.CONTRADICTED, severity=FindingSeverity.HIGH,
+                id="CONTRA",
+                question="Q",
+                description="Contradicted claim",
+                evidence_level=EvidenceLevel.CONTRADICTED,
+                severity=FindingSeverity.HIGH,
             ),
         ]
         engine = CritiqueEngine()
@@ -850,13 +886,19 @@ class TestImprovementPriority:
         """RESOLVED findings should not appear in the improvement priority list."""
         findings = [
             CritiqueFinding(
-                id="F1", question="Q", description="Already fixed",
-                evidence_level=EvidenceLevel.EVIDENCE_BACKED, severity=FindingSeverity.HIGH,
+                id="F1",
+                question="Q",
+                description="Already fixed",
+                evidence_level=EvidenceLevel.EVIDENCE_BACKED,
+                severity=FindingSeverity.HIGH,
                 resolution=FindingResolution.RESOLVED,
             ),
             CritiqueFinding(
-                id="F2", question="Q", description="Still open",
-                evidence_level=EvidenceLevel.OBSERVED, severity=FindingSeverity.MEDIUM,
+                id="F2",
+                question="Q",
+                description="Still open",
+                evidence_level=EvidenceLevel.OBSERVED,
+                severity=FindingSeverity.MEDIUM,
             ),
         ]
         engine = CritiqueEngine()
@@ -872,7 +914,6 @@ class TestImprovementPriority:
 
 
 class TestCritiqueResultStructure:
-
     def test_critique_result_to_dict_has_required_fields(self):
         """CritiqueResult.to_dict() must contain all required fields."""
         engine = CritiqueEngine()
@@ -884,10 +925,18 @@ class TestCritiqueResultStructure:
         d = result.to_dict()
 
         required = [
-            "domain", "findings", "unverified_assumptions", "contradictions",
-            "missing_evidence", "agent_claims_unchecked", "evidence_sufficiency",
-            "skeptic_summary", "improvement_priority", "has_blockers",
-            "open_findings_count", "blocker_count",
+            "domain",
+            "findings",
+            "unverified_assumptions",
+            "contradictions",
+            "missing_evidence",
+            "agent_claims_unchecked",
+            "evidence_sufficiency",
+            "skeptic_summary",
+            "improvement_priority",
+            "has_blockers",
+            "open_findings_count",
+            "blocker_count",
         ]
         for key in required:
             assert key in d, f"Missing required field in CritiqueResult.to_dict(): '{key}'"
@@ -906,7 +955,9 @@ class TestCritiqueResultStructure:
     def test_finding_to_dict_has_is_blocker_field(self):
         """CritiqueFinding.to_dict() must include 'is_blocker'."""
         f = CritiqueFinding(
-            id="X", question="Q", description="Test",
+            id="X",
+            question="Q",
+            description="Test",
             evidence_level=EvidenceLevel.EVIDENCE_BACKED,
             severity=FindingSeverity.HIGH,
         )

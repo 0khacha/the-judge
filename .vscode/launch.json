@@ -1,0 +1,49 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Judge: Verify Workspace",
+      "type": "python",
+      "request": "launch",
+      "module": "the_judge.integrations.cli",
+      "args": ["verify", ".", "--json"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Judge: Improve Workspace",
+      "type": "python",
+      "request": "launch",
+      "module": "the_judge.integrations.cli",
+      "args": ["improve", "."],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Judge: Run Demo",
+      "type": "python",
+      "request": "launch",
+      "module": "the_judge.integrations.cli",
+      "args": ["demo"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Debug Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Pytest: Run All Tests",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests", "-v"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

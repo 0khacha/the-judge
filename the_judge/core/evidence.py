@@ -1,28 +1,25 @@
 """Ground Truth Evidence Extractor for The Judge v4.0."""
 
-import argparse
 import json
 import os
 import re
 import subprocess
-import sys
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
-from .sandbox import SandboxRunner
-from .property_engine import generate_property_tests
 from .behavior_engine import BehaviorEngine
+from .property_engine import generate_property_tests
+from .sandbox import SandboxRunner
 
 
-def run_command(cmd: List[str], cwd: str, env: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
+def run_command(cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None) -> dict[str, Any]:
     """Execute a subprocess command and return exit code, stdout, stderr."""
     try:
         proc = subprocess.run(
             cmd,
             cwd=cwd,
             env=env,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             text=True,
             timeout=60,
         )
@@ -41,10 +38,10 @@ def run_command(cmd: List[str], cwd: str, env: Optional[Dict[str, str]] = None) 
         }
 
 
-def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> Dict[str, Any]:
+def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> dict[str, Any]:
     """Parse pytest output to extract passed and failed test names."""
-    passed_tests: List[str] = []
-    failed_tests: List[str] = []
+    passed_tests: list[str] = []
+    failed_tests: list[str] = []
 
     combined = stdout + "\n" + stderr
 
@@ -76,8 +73,8 @@ def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> Dict[str, A
 def capture_evidence(
     workspace_dir: str,
     output_file: Optional[str] = None,
-    task_spec: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
+    task_spec: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
     """Capture ground truth evidence from workspace_dir."""
     abs_dir = os.path.abspath(workspace_dir)
 
@@ -86,10 +83,10 @@ def capture_evidence(
     beh_engine = BehaviorEngine(seed=98765)
     probes = beh_engine.generate_behavioral_probes(abs_dir)
 
-    test_scripts: List[Tuple[str, str]] = []
+    test_scripts: list[tuple[str, str]] = []
 
     # Map expected challenge function names
-    expected_challenges: List[str] = []
+    expected_challenges: list[str] = []
 
     for idx, cand in enumerate(candidates):
         filename = f"_synthesized_property_tests_{idx}.py"
@@ -110,7 +107,7 @@ def capture_evidence(
     # Also capture visible workspace test scripts if present
     visible_tests = [f for f in os.listdir(abs_dir) if f.startswith("test_") and f.endswith(".py")]
     for vt in visible_tests:
-        with open(os.path.join(abs_dir, vt), "r", encoding="utf-8") as f:
+        with open(os.path.join(abs_dir, vt), encoding="utf-8") as f:
             test_scripts.append((vt, f.read()))
 
     # 2. Run isolated anonymous sandbox
@@ -138,7 +135,9 @@ def capture_evidence(
     }
 
     # 3. Type checker check
-    type_res = run_command(["mypy", "--ignore-missing-imports", "--follow-imports=skip", "."], cwd=abs_dir)
+    type_res = run_command(
+        ["mypy", "--ignore-missing-imports", "--follow-imports=skip", "."], cwd=abs_dir
+    )
     err_cnt = 0
     if type_res["exit_code"] != 0 and type_res["exit_code"] != -1:
         err_cnt = len(re.findall(r": error:", type_res["stdout"]))
@@ -162,10 +161,14 @@ def capture_evidence(
                 fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 candidate_conf[fn_name] = cand.confidence
 
-    test_provenance: Dict[str, Dict[str, Any]] = {}
+    test_provenance: dict[str, dict[str, Any]] = {}
     for t in passed_tests + failed_tests:
         if "prop_" in t or "behavior_" in t or "req_" in t:
-            family_key = "prop_boundary" if "boundary" in t else ("prop_idempotency" if "idempotency" in t else "prop_isolation")
+            family_key = (
+                "prop_boundary"
+                if "boundary" in t
+                else ("prop_idempotency" if "idempotency" in t else "prop_isolation")
+            )
             test_provenance[t] = {
                 "source": "judge_challenge_test",
                 "independence_level": "externally_verified",
@@ -174,8 +177,12 @@ def capture_evidence(
             }
         else:
             test_provenance[t] = {
-                "source": "public_visible_test" if not t.startswith("test_agent_") else "agent_authored_test",
-                "independence_level": "externally_verified" if not t.startswith("test_agent_") else "agent_controlled",
+                "source": "public_visible_test"
+                if not t.startswith("test_agent_")
+                else "agent_authored_test",
+                "independence_level": "externally_verified"
+                if not t.startswith("test_agent_")
+                else "agent_controlled",
                 "property_family": "public_workspace_tests",
                 "confidence": "MEDIUM",
             }
@@ -191,7 +198,7 @@ def capture_evidence(
             "expected_challenges": expected_challenges,
             "missing_challenges": missing_challenges,
             "file_tampered": sandbox_res["file_tampered"],
-        }
+        },
     }
 
     if output_file:

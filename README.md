@@ -81,7 +81,7 @@ Action: fix and re-verify.
 <tr>
 <td width="50%">
 
-#### Without The Judge (Baseline Round 1)
+#### Without The Judge (Baseline — Round 1)
 
 Baseline Website - Round 1
 
@@ -98,7 +98,7 @@ Weaknesses    : 3 issue(s) identified
 </td>
 <td width="50%">
 
-#### With The Judge (Plugin-Improved Round 4)
+#### With The Judge (After Round 4)
 
 Plugin-Improved Website - Round 4
 
@@ -109,7 +109,8 @@ Action Taken  : Glassmorphism, Google Fonts,
                 CSS Grid, stat metrics & hover effects.
 ```
 
-*Autonomous multi-round refinement engine transforms initial code into a polished, high-quality product.*
+*Example run. Results vary by project. Reproduce with:*
+`judge improve examples/sample_web_app/`
 
 </td>
 </tr>
@@ -177,7 +178,7 @@ print(result.decision, result.numeric_score, result.findings)
 ### Iterative improvement API
 
 ```python
-from the_judge.integrations import AgentImprovementLoop
+from the_judge.integrations import AgentRepairLoop
 
 def review_quality(workspace, verification):
     # Supply evidence from a UX, accessibility, visual, or maintainability review.
@@ -187,7 +188,12 @@ def review_quality(workspace, verification):
         "weaknesses": ["Keyboard focus is not visible on the primary action."],
     }
 
-loop = AgentImprovementLoop(quality_threshold=90, quality_evaluator=review_quality)
+def improve_from_feedback(workspace, feedback):
+    # Your agent's repair logic: read feedback["findings"] and feedback["critique"],
+    # edit the workspace files, then return True when a change was made.
+    return False  # stub — replace with real improvement logic
+
+loop = AgentRepairLoop(quality_threshold=90, quality_evaluator=review_quality)
 result = loop.run_repair_loop(".", agent_repair_func=improve_from_feedback)
 ```
 
@@ -203,7 +209,7 @@ Your code -> The Judge -> Sandbox execution -> Behavioral checks -> Decision
                 +--- ABSTAIN: insufficient evidence -> provide tests
 ```
 
-The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses findings, makes a concrete repair, and re-verifies. The optional `AgentRepairLoop` can also accept a quality evaluator for UX, visual quality, accessibility, or maintainability, so a passing implementation continues through meaningful improvement rounds until it reaches the configured quality bar. Maximum 5 rounds by default. No human intervention needed.
+The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses findings, makes a concrete repair, and re-verifies. The optional `AgentRepairLoop` can also accept a quality evaluator for UX, visual quality, accessibility, or maintainability, so a passing implementation continues through meaningful improvement rounds until it reaches the configured quality bar. Maximum 5 rounds by default.
 
 ## Documentation
 
@@ -227,13 +233,7 @@ The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses
 
 ## Project Status
 
-[![License](https://img.shields.io/github/license/0khacha/the-judge?style=flat)](LICENSE)
-[![PyPI](https://img.shields.io/pypi/v/the-judge?style=flat)](https://pypi.org/project/the-judge/)
-[![Python](https://img.shields.io/pypi/pyversions/the-judge?style=flat)](https://pypi.org/project/the-judge/)
-[![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![Type Checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](http://mypy-lang.org/)
-
-**Status**: Production/Stable (v1.0.0)
+**Status**: v1.0.0 · MIT License · Python 3.9+
 
 ## Contributing
 

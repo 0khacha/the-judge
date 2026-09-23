@@ -1,4 +1,5 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
 from the_judge.api import verify
 from the_judge.core.decision import VerificationResult
 
@@ -17,9 +18,9 @@ class AgentAdapter:
     def verify_workspace(
         self,
         workspace: str,
-        task_spec: Optional[Dict[str, Any]] = None,
-        previous_evidence: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        task_spec: Optional[dict[str, Any]] = None,
+        previous_evidence: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """Run verification on target workspace and return structured agent findings.
 
         Args:
@@ -38,7 +39,7 @@ class AgentAdapter:
 
         return self.result_to_feedback(result)
 
-    def result_to_feedback(self, result: VerificationResult) -> Dict[str, Any]:
+    def result_to_feedback(self, result: VerificationResult) -> dict[str, Any]:
         """Convert an existing result to safe agent-facing feedback.
 
         Repair loops reuse this result so one evaluation round produces one
@@ -58,7 +59,7 @@ class AgentAdapter:
             },
         }
 
-    def format_agent_prompt_feedback(self, adapter_result: Dict[str, Any]) -> str:
+    def format_agent_prompt_feedback(self, adapter_result: dict[str, Any]) -> str:
         """Format verification result into a clean text prompt feedback for the agent repair loop."""
         decision = adapter_result.get("decision", "UNKNOWN")
         lines = [
@@ -67,7 +68,9 @@ class AgentAdapter:
         ]
 
         if decision == "PASS":
-            lines.append("Verification succeeded. All behavioral properties and hard gates satisfied.")
+            lines.append(
+                "Verification succeeded. All behavioral properties and hard gates satisfied."
+            )
             return "\n".join(lines)
 
         if decision == "IMPROVE":
@@ -79,13 +82,17 @@ class AgentAdapter:
             )
             for weakness in quality.get("weaknesses", []):
                 lines.append(f"  - {weakness.get('description', 'Unspecified quality weakness')}")
-            lines.append("\nMake a concrete improvement, preserve verified behavior, and submit it for re-evaluation.")
+            lines.append(
+                "\nMake a concrete improvement, preserve verified behavior, and submit it for re-evaluation."
+            )
             return "\n".join(lines)
 
         if decision == "FAIL":
             lines.append("\nThe Judge detected failures in your implementation:")
             for idx, finding in enumerate(adapter_result.get("findings", []), 1):
-                lines.append(f"\nFinding #{idx} [{finding.get('id', 'F')}] ({finding.get('severity', 'high').upper()}):")
+                lines.append(
+                    f"\nFinding #{idx} [{finding.get('id', 'F')}] ({finding.get('severity', 'high').upper()}):"
+                )
                 lines.append(f"  Description    : {finding.get('description')}")
                 if finding.get("property"):
                     lines.append(f"  Property       : {finding.get('property')}")
@@ -102,10 +109,16 @@ class AgentAdapter:
                     lines.append(f"  - {issue}")
 
         elif decision == "ABSTAIN":
-            lines.append("\nThe Judge refused to grant PASS due to insufficient or unverified evidence:")
+            lines.append(
+                "\nThe Judge refused to grant PASS due to insufficient or unverified evidence:"
+            )
             for note in adapter_result.get("insufficient_notes", []):
                 lines.append(f"  - {note}")
-            lines.append("\nPlease provide independent unit tests or implementation code that allows verification.")
+            lines.append(
+                "\nPlease provide independent unit tests or implementation code that allows verification."
+            )
 
-        lines.append("\nPlease repair your implementation addressing the above issues and submit again.")
+        lines.append(
+            "\nPlease repair your implementation addressing the above issues and submit again."
+        )
         return "\n".join(lines)

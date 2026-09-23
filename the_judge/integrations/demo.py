@@ -2,11 +2,8 @@ import os
 import shutil
 import tempfile
 import time
-from typing import Any, Dict
 
-from the_judge.api import verify
 from the_judge.integrations.agent_adapter import AgentAdapter
-from the_judge.integrations.repair_loop import AgentRepairLoop
 
 BUGGY_CACHE_CODE = '''"""LRU Cache with TTL - Initial AI Agent Implementation (Buggy Boundary Condition)."""
 import time
@@ -120,20 +117,20 @@ def run_demo() -> None:
                     "description": "Evict expired keys after TTL seconds",
                     "category": "boundary",
                     "priority": "critical",
-                    "properties": ["cache_expiration"]
+                    "properties": ["cache_expiration"],
                 },
                 {
                     "id": "REQ-002",
                     "description": "Evict oldest key when capacity is exceeded",
                     "category": "state",
                     "priority": "critical",
-                    "properties": ["cache_capacity"]
-                }
-            ]
+                    "properties": ["cache_capacity"],
+                },
+            ],
         }
 
         print("AI AGENT CLAIM:")
-        print("  \"Implementation of LRUCacheTTL complete. Ready for deployment.\"")
+        print('  "Implementation of LRUCacheTTL complete. Ready for deployment."')
         print()
         print("RUNNING THE JUDGE VERIFICATION (ROUND 1)...")
         time.sleep(0.5)
@@ -144,11 +141,11 @@ def run_demo() -> None:
         print("\n" + "-" * 68)
         print("THE JUDGE SUMMARY — ROUND 1")
         print("-" * 68)
-        print(f"[1/5] Environment isolation     : PASS")
-        print(f"[2/5] Challenge integrity       : PASS")
-        print(f"[3/5] Behavioral verification  : FAIL")
-        print(f"[4/5] Evidence independence    : PASS")
-        print(f"[5/5] Adversarial checks        : PASS")
+        print("[1/5] Environment isolation     : PASS")
+        print("[2/5] Challenge integrity       : PASS")
+        print("[3/5] Behavioral verification  : FAIL")
+        print("[4/5] Evidence independence    : PASS")
+        print("[5/5] Adversarial checks        : PASS")
         print()
         print(f"DECISION: {res_r1['decision']}")
         print()
@@ -178,11 +175,11 @@ def run_demo() -> None:
         print("\n" + "-" * 68)
         print("THE JUDGE SUMMARY — ROUND 2")
         print("-" * 68)
-        print(f"[1/5] Environment isolation     : PASS")
-        print(f"[2/5] Challenge integrity       : PASS")
-        print(f"[3/5] Behavioral verification  : PASS")
-        print(f"[4/5] Requirement coverage     : VERIFIED (2/2 Critical Reqs)")
-        print(f"[5/5] Evidence independence    : PASS")
+        print("[1/5] Environment isolation     : PASS")
+        print("[2/5] Challenge integrity       : PASS")
+        print("[3/5] Behavioral verification  : PASS")
+        print("[4/5] Requirement coverage     : VERIFIED (2/2 Critical Reqs)")
+        print("[5/5] Evidence independence    : PASS")
         print()
         print(f"DECISION: {res_r2['decision']}")
         print(f"Numeric Score: {res_r2['numeric_score']} / 100.0")

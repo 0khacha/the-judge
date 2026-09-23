@@ -5,57 +5,74 @@ Establishes a strict trust boundary between:
   UNTRUSTED: Target implementation, Target tests, Target imports, Target subprocesses
 """
 
-import json
+import contextlib
 import os
-import re
 import shutil
 import subprocess
 import sys
 import tempfile
 import uuid
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 
 class SandboxRunner:
     """Isolated subprocess runner for executing untrusted target code and tests."""
 
     @staticmethod
-    def sanitize_environment(extra_env: Optional[Dict[str, str]] = None) -> Dict[str, str]:
+    def sanitize_environment(extra_env: Optional[dict[str, str]] = None) -> dict[str, str]:
         """Construct a clean, sanitized environment dictionary without Judge indicators."""
-        clean_env: Dict[str, str] = {}
-        
+        clean_env: dict[str, str] = {}
+
         safe_keys = {
-            "PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "USERPROFILE",
-            "HOME", "LANG", "LC_ALL", "COMSPEC", "PATHEXT", "PYTHONPATH"
+            "PATH",
+            "SYSTEMROOT",
+            "WINDIR",
+            "TEMP",
+            "TMP",
+            "USERPROFILE",
+            "HOME",
+            "LANG",
+            "LC_ALL",
+            "COMSPEC",
+            "PATHEXT",
+            "PYTHONPATH",
         }
-        
+
         for k, v in os.environ.items():
             if k.upper() in safe_keys:
                 clean_env[k] = v
 
         forbidden_env_keys = [
-            "PYTEST_CURRENT_TEST", "JUDGE_EVALUATION", "BENCHMARK_SUITE",
-            "JUDGE_SEED", "EVALUATION_MODE", "TEST_HARNESS_SECRET"
+            "PYTEST_CURRENT_TEST",
+            "JUDGE_EVALUATION",
+            "BENCHMARK_SUITE",
+            "JUDGE_SEED",
+            "EVALUATION_MODE",
+            "TEST_HARNESS_SECRET",
         ]
         for key in list(clean_env.keys()):
-            if key in forbidden_env_keys or key.startswith("JUDGE_") or key.startswith("BENCHMARK_"):
+            if (
+                key in forbidden_env_keys
+                or key.startswith("JUDGE_")
+                or key.startswith("BENCHMARK_")
+            ):
                 clean_env.pop(key, None)
 
         if extra_env:
             for k, v in extra_env.items():
-                if k not in forbidden_env_keys and not k.startswith("JUDGE_") and not k.startswith("BENCHMARK_"):
+                if (
+                    k not in forbidden_env_keys
+                    and not k.startswith("JUDGE_")
+                    and not k.startswith("BENCHMARK_")
+                ):
                     clean_env[k] = v
 
         return clean_env
 
     @classmethod
     def run_cmd(
-        cls,
-        cmd: List[str],
-        cwd: str,
-        env: Optional[Dict[str, str]] = None,
-        timeout: int = 30
-    ) -> Dict[str, Any]:
+        cls, cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None, timeout: int = 30
+    ) -> dict[str, Any]:
         """Run command in subprocess with environment sanitization."""
         clean_env = cls.sanitize_environment(env)
         try:
@@ -63,8 +80,7 @@ class SandboxRunner:
                 cmd,
                 cwd=cwd,
                 env=clean_env,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                capture_output=True,
                 text=True,
                 timeout=timeout,
             )
@@ -96,13 +112,13 @@ class SandboxRunner:
     def execute_in_anonymous_sandbox(
         cls,
         task_dir: str,
-        test_scripts: List[Tuple[str, str]],
-        pytest_args: Optional[List[str]] = None,
-        timeout: int = 30
-    ) -> Dict[str, Any]:
+        test_scripts: list[tuple[str, str]],
+        pytest_args: Optional[list[str]] = None,
+        timeout: int = 30,
+    ) -> dict[str, Any]:
         """Execute test scripts in an anonymous, randomized temporary directory."""
         abs_task_dir = os.path.abspath(task_dir)
-        
+
         anon_dir_name = f"t_{uuid.uuid4().hex[:12]}"
         temp_dir = os.path.join(abs_task_dir, anon_dir_name)
         os.makedirs(temp_dir, exist_ok=True)
@@ -136,7 +152,7 @@ class SandboxRunner:
 
             import hashlib
 
-            initial_hashes: Dict[str, str] = {}
+            initial_hashes: dict[str, str] = {}
             created_files = []
             for name, code in test_scripts:
                 safe_name = name if name.startswith("test_") else f"test_{name}"
@@ -147,7 +163,7 @@ class SandboxRunner:
                 initial_hashes[safe_name] = hashlib.sha256(code.encode("utf-8")).hexdigest()
 
             env = {"PYTHONPATH": abs_task_dir + os.pathsep + os.environ.get("PYTHONPATH", "")}
-            
+
             cmd = [sys.executable, "-m", "pytest", "-vv"]
             if pytest_args:
                 cmd.extend(pytest_args)
@@ -161,7 +177,7 @@ class SandboxRunner:
                 if not os.path.exists(filepath):
                     file_tampered = True
                 else:
-                    with open(filepath, "r", encoding="utf-8") as f:
+                    with open(filepath, encoding="utf-8") as f:
                         curr_code = f.read()
                     curr_hash = hashlib.sha256(curr_code.encode("utf-8")).hexdigest()
                     if curr_hash != init_hash:
@@ -197,15 +213,14 @@ class SandboxRunner:
 
     @classmethod
     def execute_fresh_process_probe(
-        cls,
-        task_dir: str,
-        probe_code: str,
-        timeout: int = 10
-    ) -> Dict[str, Any]:
+        cls, task_dir: str, probe_code: str, timeout: int = 10
+    ) -> dict[str, Any]:
         """Execute a single probe script in a completely fresh isolated Python process instance."""
         abs_task_dir = os.path.abspath(task_dir)
-        
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False, dir=abs_task_dir) as f:
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False, dir=abs_task_dir
+        ) as f:
             f.write(probe_code)
             temp_path = f.name
 
@@ -216,7 +231,5 @@ class SandboxRunner:
             return res
         finally:
             if os.path.exists(temp_path):
-                try:
+                with contextlib.suppress(Exception):
                     os.remove(temp_path)
-                except Exception:
-                    pass

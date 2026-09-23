@@ -1,7 +1,7 @@
 import os
 import shutil
 import tempfile
-import pytest
+
 from the_judge.api import improve
 from the_judge.integrations.auto_improver import AutoImprover
 

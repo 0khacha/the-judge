@@ -100,7 +100,7 @@ def install_hook(workspace: str, hook_type: str = "pre-commit") -> str:
 
     # Check for existing non-Judge hook
     if os.path.exists(hook_path):
-        with open(hook_path, "r", encoding="utf-8") as f:
+        with open(hook_path, encoding="utf-8") as f:
             content = f.read()
         if HOOK_MARKER not in content:
             raise FileExistsError(
@@ -139,7 +139,7 @@ def uninstall_hook(workspace: str, hook_type: str = "pre-commit") -> Optional[st
     if not os.path.exists(hook_path):
         return None
 
-    with open(hook_path, "r", encoding="utf-8") as f:
+    with open(hook_path, encoding="utf-8") as f:
         content = f.read()
 
     if HOOK_MARKER not in content:

@@ -19,19 +19,21 @@ The agent's explanation is NEVER treated as proof.
 """
 
 import ast
+import contextlib
 import os
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any, Optional
 
 # ---------------------------------------------------------------------------
 # Evidence & Finding Types
 # ---------------------------------------------------------------------------
 
+
 class EvidenceLevel(str, Enum):
     """How strongly a finding is supported by external, independent evidence."""
+
     EVIDENCE_BACKED = "evidence_backed"
     """Concrete evidence exists: test failure, log output, benchmark regression."""
 
@@ -50,6 +52,7 @@ class EvidenceLevel(str, Enum):
 
 class FindingSeverity(str, Enum):
     """Impact severity — independent of how the finding was discovered."""
+
     CRITICAL = "critical"
     HIGH = "high"
     MEDIUM = "medium"
@@ -59,9 +62,10 @@ class FindingSeverity(str, Enum):
 
 class FindingResolution(str, Enum):
     """Current resolution state of a finding."""
+
     OPEN = "open"
     RESOLVED = "resolved"
-    ACCEPTED = "accepted"       # Known, won't fix (deliberate decision)
+    ACCEPTED = "accepted"  # Known, won't fix (deliberate decision)
     INVALIDATED = "invalidated"  # Finding was incorrect
 
 
@@ -79,6 +83,7 @@ class ProjectDomain(str, Enum):
 # Data Structures
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class CritiqueFinding:
     """A single finding from the adversarial critique.
@@ -87,13 +92,14 @@ class CritiqueFinding:
       - EVIDENCE_BACKED + LOW does NOT automatically block the loop.
       - CONTRADICTED + CRITICAL always blocks the loop.
     """
+
     id: str
-    question: str           # Which of the 11 skeptical questions this answers
+    question: str  # Which of the 11 skeptical questions this answers
     description: str
     evidence_level: EvidenceLevel
     severity: FindingSeverity
     resolution: FindingResolution = FindingResolution.OPEN
-    evidence_refs: List[str] = field(default_factory=list)
+    evidence_refs: list[str] = field(default_factory=list)
     suggested_action: str = ""
     agent_claim: Optional[str] = None  # The claim being contradicted (CONTRADICTED only)
 
@@ -117,7 +123,7 @@ class CritiqueFinding:
             return self.severity in (FindingSeverity.CRITICAL, FindingSeverity.HIGH)
         return False
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "id": self.id,
             "question": self.question,
@@ -134,14 +140,14 @@ class CritiqueFinding:
 
 @dataclass
 class EvidenceSufficiency:
-    level: str              # "sufficient" | "partial" | "insufficient"
+    level: str  # "sufficient" | "partial" | "insufficient"
     independent_tests: int
     agent_controlled_tests: int
     has_contradictions: bool
-    reasons: List[str]
+    reasons: list[str]
     summary: str
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "level": self.level,
             "independent_tests": self.independent_tests,
@@ -155,31 +161,33 @@ class EvidenceSufficiency:
 @dataclass
 class CritiqueResult:
     """Complete output of one adversarial critique round."""
+
     domain: str
-    findings: List[CritiqueFinding]
-    unverified_assumptions: List[str]
-    contradictions: List[Dict[str, Any]]
-    missing_evidence: List[str]
-    agent_claims_unchecked: List[str]
+    findings: list[CritiqueFinding]
+    unverified_assumptions: list[str]
+    contradictions: list[dict[str, Any]]
+    missing_evidence: list[str]
+    agent_claims_unchecked: list[str]
     evidence_sufficiency: EvidenceSufficiency
     skeptic_summary: str
-    improvement_priority: List[CritiqueFinding]  # Open findings, most critical first
+    improvement_priority: list[CritiqueFinding]  # Open findings, most critical first
 
     # ---- Convenience ---------------------------------------------------
 
     def has_blockers(self) -> bool:
         return any(f.is_blocker() for f in self.findings)
 
-    def get_open_findings(self) -> List[CritiqueFinding]:
+    def get_open_findings(self) -> list[CritiqueFinding]:
         return [f for f in self.findings if f.resolution == FindingResolution.OPEN]
 
-    def get_open_by_severity(self, severity: FindingSeverity) -> List[CritiqueFinding]:
+    def get_open_by_severity(self, severity: FindingSeverity) -> list[CritiqueFinding]:
         return [
-            f for f in self.findings
+            f
+            for f in self.findings
             if f.resolution == FindingResolution.OPEN and f.severity == severity
         ]
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         open_count = len(self.get_open_findings())
         blocker_count = sum(1 for f in self.findings if f.is_blocker())
         return {
@@ -206,10 +214,19 @@ class CritiqueResult:
 # Module-level shared constants (referenced from CritiqueEngine and repair_loop)
 # ---------------------------------------------------------------------------
 
-_IGNORED_DIRS: frozenset = frozenset({
-    ".git", "__pycache__", ".venv", "venv", "node_modules",
-    ".mypy_cache", ".ruff_cache", ".pytest_cache", ".tox",
-})
+_IGNORED_DIRS: frozenset = frozenset(
+    {
+        ".git",
+        "__pycache__",
+        ".venv",
+        "venv",
+        "node_modules",
+        ".mypy_cache",
+        ".ruff_cache",
+        ".pytest_cache",
+        ".tox",
+    }
+)
 
 
 class CritiqueEngine:
@@ -235,7 +252,7 @@ class CritiqueEngine:
     CONTRADICTED + CRITICAL always blocks the loop. See CritiqueFinding.is_blocker().
     """
 
-    SKEPTICAL_QUESTIONS: List[str] = [
+    SKEPTICAL_QUESTIONS: list[str] = [
         "What is wrong with this work?",
         "What is weak?",
         "What is missing?",
@@ -290,9 +307,22 @@ class CritiqueEngine:
                         content = open(fpath, encoding="utf-8", errors="ignore").read(4096).lower()
                         if any(kw in content for kw in ("argparse", "click", "typer", "__main__")):
                             has_cli = True
-                        if any(kw in content for kw in ("pandas", "numpy", "sklearn", "torch", "tensorflow", "keras")):
+                        if any(
+                            kw in content
+                            for kw in ("pandas", "numpy", "sklearn", "torch", "tensorflow", "keras")
+                        ):
                             has_data_science = True
-                        if any(kw in content for kw in ("flask", "fastapi", "django", "streamlit", "gradio", "aiohttp")):
+                        if any(
+                            kw in content
+                            for kw in (
+                                "flask",
+                                "fastapi",
+                                "django",
+                                "streamlit",
+                                "gradio",
+                                "aiohttp",
+                            )
+                        ):
                             has_web_framework = True
                     except Exception:
                         pass
@@ -340,8 +370,8 @@ class CritiqueEngine:
         self,
         workspace: str,
         verification_result: Any,
-        ground_truth: Dict[str, Any],
-        previous_round: Optional[Dict[str, Any]] = None,
+        ground_truth: dict[str, Any],
+        previous_round: Optional[dict[str, Any]] = None,
     ) -> CritiqueResult:
         """Run a full independent adversarial critique of the workspace.
 
@@ -363,18 +393,16 @@ class CritiqueEngine:
             id_counter[0] += 1
             return f"CRIT-{prefix}-{id_counter[0]:03d}"
 
-        findings: List[CritiqueFinding] = []
+        findings: list[CritiqueFinding] = []
 
         # Build a shared source-file cache so downstream passes don't re-read from disk.
         # _scan_code_for_observed_issues and _identify_unverified_assumptions both need
         # the same file contents — reading once reduces disk I/O by ~50%.
         py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
-        source_cache: Dict[str, str] = {}
+        source_cache: dict[str, str] = {}
         for fpath in py_files:
-            try:
+            with contextlib.suppress(Exception):
                 source_cache[fpath] = open(fpath, encoding="utf-8", errors="ignore").read()
-            except Exception:
-                pass
 
         # --- Q1 / Q9: What is wrong? Evidence-backed test failures -----------
         findings.extend(self._findings_from_test_failures(ground_truth, next_id))
@@ -382,35 +410,45 @@ class CritiqueEngine:
         # --- Q9: Contradictions — agent claims vs evidence -------------------
         contradictions = self._detect_contradictions(ground_truth, verification_result)
         for contra in contradictions:
-            findings.append(CritiqueFinding(
-                id=next_id("CONTRA"),
-                question="What evidence contradicts the agent?",
-                description=contra["description"],
-                evidence_level=EvidenceLevel.CONTRADICTED,
-                severity=FindingSeverity.CRITICAL if contra.get("material", False) else FindingSeverity.HIGH,
-                evidence_refs=contra.get("evidence_refs", []),
-                suggested_action=contra.get("suggested_action", "Resolve the contradiction between claim and evidence."),
-                agent_claim=contra.get("claim"),
-            ))
+            findings.append(
+                CritiqueFinding(
+                    id=next_id("CONTRA"),
+                    question="What evidence contradicts the agent?",
+                    description=contra["description"],
+                    evidence_level=EvidenceLevel.CONTRADICTED,
+                    severity=FindingSeverity.CRITICAL
+                    if contra.get("material", False)
+                    else FindingSeverity.HIGH,
+                    evidence_refs=contra.get("evidence_refs", []),
+                    suggested_action=contra.get(
+                        "suggested_action", "Resolve the contradiction between claim and evidence."
+                    ),
+                    agent_claim=contra.get("claim"),
+                )
+            )
 
         # --- Q3 / Q4 / Q6 / Q7: Observed issues in source code ---------------
         observed = self._scan_code_for_observed_issues(workspace, domain, source_cache=source_cache)
         findings.extend(observed)
 
         # --- Q5: Unverified assumptions ---------------------------------------
-        assumptions = self._identify_unverified_assumptions(workspace, ground_truth, domain, source_cache=source_cache)
+        assumptions = self._identify_unverified_assumptions(
+            workspace, ground_truth, domain, source_cache=source_cache
+        )
 
         # --- Q3 / Q10: Missing evidence for this domain ----------------------
         missing_evidence = self._assess_missing_evidence(workspace, ground_truth, domain)
         for missing in missing_evidence:
-            findings.append(CritiqueFinding(
-                id=next_id("MISS"),
-                question="What is missing?",
-                description=missing,
-                evidence_level=EvidenceLevel.OBSERVED,
-                severity=FindingSeverity.MEDIUM,
-                suggested_action=f"Provide the missing coverage: {missing}",
-            ))
+            findings.append(
+                CritiqueFinding(
+                    id=next_id("MISS"),
+                    question="What is missing?",
+                    description=missing,
+                    evidence_level=EvidenceLevel.OBSERVED,
+                    severity=FindingSeverity.MEDIUM,
+                    suggested_action=f"Provide the missing coverage: {missing}",
+                )
+            )
 
         # --- Q8: Agent claims with no independent backing --------------------
         unchecked_claims = self._find_unchecked_agent_claims(ground_truth, verification_result)
@@ -423,7 +461,11 @@ class CritiqueEngine:
 
         # Skeptic summary
         skeptic_summary = self._generate_skeptic_summary(
-            domain, findings, contradictions, missing_evidence, evidence_sufficiency,
+            domain,
+            findings,
+            contradictions,
+            missing_evidence,
+            evidence_sufficiency,
         )
 
         return CritiqueResult(
@@ -444,29 +486,31 @@ class CritiqueEngine:
 
     def _findings_from_test_failures(
         self,
-        ground_truth: Dict[str, Any],
+        ground_truth: dict[str, Any],
         next_id,
-    ) -> List[CritiqueFinding]:
+    ) -> list[CritiqueFinding]:
         findings = []
         test_suite = ground_truth.get("test_suite", {})
         failed = test_suite.get("failed_tests", [])
-        errors: Dict[str, Any] = test_suite.get("errors", {})
+        errors: dict[str, Any] = test_suite.get("errors", {})
 
         for ft in failed:
             err = errors.get(ft, "")
             err_snippet = (str(err)[:200] + "…") if len(str(err)) > 200 else str(err)
-            findings.append(CritiqueFinding(
-                id=next_id("FAIL"),
-                question="What is wrong with this work?",
-                description=f"Test '{ft}' failed in ground-truth sandbox execution.",
-                evidence_level=EvidenceLevel.EVIDENCE_BACKED,
-                severity=FindingSeverity.HIGH,
-                evidence_refs=[ft],
-                suggested_action=(
-                    f"Fix the failing test '{ft}'."
-                    + (f" Error: {err_snippet}" if err_snippet else "")
-                ),
-            ))
+            findings.append(
+                CritiqueFinding(
+                    id=next_id("FAIL"),
+                    question="What is wrong with this work?",
+                    description=f"Test '{ft}' failed in ground-truth sandbox execution.",
+                    evidence_level=EvidenceLevel.EVIDENCE_BACKED,
+                    severity=FindingSeverity.HIGH,
+                    evidence_refs=[ft],
+                    suggested_action=(
+                        f"Fix the failing test '{ft}'."
+                        + (f" Error: {err_snippet}" if err_snippet else "")
+                    ),
+                )
+            )
         return findings
 
     # -----------------------------------------------------------------------
@@ -475,42 +519,46 @@ class CritiqueEngine:
 
     def _detect_contradictions(
         self,
-        ground_truth: Dict[str, Any],
+        ground_truth: dict[str, Any],
         verification_result: Any,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Find places where agent/code claims conflict with ground-truth evidence."""
         contradictions = []
         test_suite = ground_truth.get("test_suite", {})
-        passed = set(test_suite.get("passed_tests", []))
-        failed = set(test_suite.get("failed_tests", []))
+        set(test_suite.get("passed_tests", []))
+        set(test_suite.get("failed_tests", []))
 
         # 1. Tampered challenge file
         manifest = ground_truth.get("challenge_manifest", {})
         if manifest.get("file_tampered", False):
-            contradictions.append({
-                "claim": "Challenge test file integrity",
-                "description": (
-                    "Challenge test file hash mismatch — file was modified during execution. "
-                    "This directly contradicts the expectation of unmodified test integrity."
-                ),
-                "evidence_refs": ["challenge_manifest.file_tampered"],
-                "material": True,
-                "suggested_action": "Do not modify Judge-synthesised challenge test files during execution.",
-            })
+            contradictions.append(
+                {
+                    "claim": "Challenge test file integrity",
+                    "description": (
+                        "Challenge test file hash mismatch — file was modified during execution. "
+                        "This directly contradicts the expectation of unmodified test integrity."
+                    ),
+                    "evidence_refs": ["challenge_manifest.file_tampered"],
+                    "material": True,
+                    "suggested_action": "Do not modify Judge-synthesised challenge test files during execution.",
+                }
+            )
 
         # 2. Missing expected challenges
         missing_challenges = manifest.get("missing_challenges", [])
         if missing_challenges:
-            contradictions.append({
-                "claim": "All expected challenge tests were executed",
-                "description": (
-                    f"{len(missing_challenges)} expected challenge test(s) were not executed: "
-                    + ", ".join(missing_challenges[:5])
-                ),
-                "evidence_refs": ["challenge_manifest.missing_challenges"],
-                "material": True,
-                "suggested_action": "Ensure synthesised challenge tests are collected and executed without interference.",
-            })
+            contradictions.append(
+                {
+                    "claim": "All expected challenge tests were executed",
+                    "description": (
+                        f"{len(missing_challenges)} expected challenge test(s) were not executed: "
+                        + ", ".join(missing_challenges[:5])
+                    ),
+                    "evidence_refs": ["challenge_manifest.missing_challenges"],
+                    "material": True,
+                    "suggested_action": "Ensure synthesised challenge tests are collected and executed without interference.",
+                }
+            )
 
         # 3. Score vs evidence level mismatch
         trust_profile = getattr(verification_result, "trust_profile", {}) or {}
@@ -519,30 +567,34 @@ class CritiqueEngine:
         decision = getattr(verification_result, "decision", "") or ""
 
         if numeric_score > 80.0 and evidence_level < 2 and decision != "PASS":
-            contradictions.append({
-                "claim": f"High quality score implies verified quality ({numeric_score}/100)",
-                "description": (
-                    f"Score is {numeric_score}/100 but evidence level is {evidence_level}/3. "
-                    "A high score without sufficient independent evidence does not indicate quality."
-                ),
-                "evidence_refs": [f"evidence_level={evidence_level}", f"score={numeric_score}"],
-                "material": True,
-                "suggested_action": (
-                    "Provide independent tests so the score reflects verified, not assumed, quality."
-                ),
-            })
+            contradictions.append(
+                {
+                    "claim": f"High quality score implies verified quality ({numeric_score}/100)",
+                    "description": (
+                        f"Score is {numeric_score}/100 but evidence level is {evidence_level}/3. "
+                        "A high score without sufficient independent evidence does not indicate quality."
+                    ),
+                    "evidence_refs": [f"evidence_level={evidence_level}", f"score={numeric_score}"],
+                    "material": True,
+                    "suggested_action": (
+                        "Provide independent tests so the score reflects verified, not assumed, quality."
+                    ),
+                }
+            )
 
         # 4. Regression: previously passing test now fails
         if hasattr(verification_result, "blocking_issues"):
-            for issue in (verification_result.blocking_issues or []):
+            for issue in verification_result.blocking_issues or []:
                 if "REGRESSION DETECTED" in issue:
-                    contradictions.append({
-                        "claim": "No regressions introduced",
-                        "description": issue,
-                        "evidence_refs": ["score_engine.regression"],
-                        "material": True,
-                        "suggested_action": "Fix the regression — a test that previously passed now fails.",
-                    })
+                    contradictions.append(
+                        {
+                            "claim": "No regressions introduced",
+                            "description": issue,
+                            "evidence_refs": ["score_engine.regression"],
+                            "material": True,
+                            "suggested_action": "Fix the regression — a test that previously passed now fails.",
+                        }
+                    )
 
         return contradictions
 
@@ -554,15 +606,15 @@ class CritiqueEngine:
         self,
         workspace: str,
         domain: ProjectDomain,
-        source_cache: Optional[Dict[str, str]] = None,
-    ) -> List[CritiqueFinding]:
+        source_cache: Optional[dict[str, str]] = None,
+    ) -> list[CritiqueFinding]:
         """Scan source files for directly observable weaknesses.
 
         Args:
             source_cache: Optional pre-read {path: content} mapping. When provided,
                 files are not re-read from disk (avoids duplicate I/O with critique()).
         """
-        findings: List[CritiqueFinding] = []
+        findings: list[CritiqueFinding] = []
         obs_idx = [500]
 
         def obs_id(tag: str = "OBS") -> str:
@@ -602,22 +654,24 @@ class CritiqueEngine:
         rel_path: str,
         next_id,
         domain: ProjectDomain,
-    ) -> List[CritiqueFinding]:
-        findings: List[CritiqueFinding] = []
+    ) -> list[CritiqueFinding]:
+        findings: list[CritiqueFinding] = []
 
         # Parse AST — syntax errors are EVIDENCE_BACKED CRITICAL
         try:
             tree = ast.parse(content)
         except SyntaxError as exc:
-            findings.append(CritiqueFinding(
-                id=next_id("SYN"),
-                question="What is wrong with this work?",
-                description=f"Syntax error in {rel_path}: {exc}",
-                evidence_level=EvidenceLevel.EVIDENCE_BACKED,
-                severity=FindingSeverity.CRITICAL,
-                evidence_refs=[rel_path],
-                suggested_action=f"Fix the syntax error at line {exc.lineno} of {rel_path}.",
-            ))
+            findings.append(
+                CritiqueFinding(
+                    id=next_id("SYN"),
+                    question="What is wrong with this work?",
+                    description=f"Syntax error in {rel_path}: {exc}",
+                    evidence_level=EvidenceLevel.EVIDENCE_BACKED,
+                    severity=FindingSeverity.CRITICAL,
+                    evidence_refs=[rel_path],
+                    suggested_action=f"Fix the syntax error at line {exc.lineno} of {rel_path}.",
+                )
+            )
             return findings
 
         # Silent broad exception handlers
@@ -628,21 +682,23 @@ class CritiqueEngine:
                 )
                 is_silent = len(node.body) == 1 and isinstance(node.body[0], ast.Pass)
                 if is_broad and is_silent:
-                    findings.append(CritiqueFinding(
-                        id=next_id(),
-                        question="What could fail in practice?",
-                        description=(
-                            f"Silent broad exception handler in {rel_path} (line {node.lineno}) "
-                            "— errors are swallowed silently."
-                        ),
-                        evidence_level=EvidenceLevel.OBSERVED,
-                        severity=FindingSeverity.MEDIUM,
-                        evidence_refs=[f"{rel_path}:L{node.lineno}"],
-                        suggested_action=(
-                            "Replace the silent `except` with specific exception types "
-                            "or at minimum log the error before suppressing it."
-                        ),
-                    ))
+                    findings.append(
+                        CritiqueFinding(
+                            id=next_id(),
+                            question="What could fail in practice?",
+                            description=(
+                                f"Silent broad exception handler in {rel_path} (line {node.lineno}) "
+                                "— errors are swallowed silently."
+                            ),
+                            evidence_level=EvidenceLevel.OBSERVED,
+                            severity=FindingSeverity.MEDIUM,
+                            evidence_refs=[f"{rel_path}:L{node.lineno}"],
+                            suggested_action=(
+                                "Replace the silent `except` with specific exception types "
+                                "or at minimum log the error before suppressing it."
+                            ),
+                        )
+                    )
 
         # TODO / FIXME markers
         seen_todos: set = set()
@@ -653,17 +709,17 @@ class CritiqueEngine:
                 key = f"{rel_path}:{i}"
                 if key not in seen_todos:
                     seen_todos.add(key)
-                    findings.append(CritiqueFinding(
-                        id=next_id(),
-                        question="What is missing?",
-                        description=(
-                            f"{tag} in {rel_path}:{i} — {line.strip()[:120]}"
-                        ),
-                        evidence_level=EvidenceLevel.OBSERVED,
-                        severity=FindingSeverity.LOW,
-                        evidence_refs=[f"{rel_path}:L{i}"],
-                        suggested_action=f"Address the {tag} or document it as a known accepted limitation.",
-                    ))
+                    findings.append(
+                        CritiqueFinding(
+                            id=next_id(),
+                            question="What is missing?",
+                            description=(f"{tag} in {rel_path}:{i} — {line.strip()[:120]}"),
+                            evidence_level=EvidenceLevel.OBSERVED,
+                            severity=FindingSeverity.LOW,
+                            evidence_refs=[f"{rel_path}:L{i}"],
+                            suggested_action=f"Address the {tag} or document it as a known accepted limitation.",
+                        )
+                    )
 
         # Assertive claims in docstrings (AGENT_CLAIM)
         for node in ast.walk(tree):
@@ -672,100 +728,107 @@ class CritiqueEngine:
                 if doc:
                     m = self._CLAIM_PATTERN.search(doc)
                     if m:
-                        findings.append(CritiqueFinding(
-                            id=next_id(),
-                            question="What claims are unsupported?",
-                            description=(
-                                f"Assertive claim in docstring of '{node.name}' ({rel_path}): "
-                                f"'...{m.group(0)}...' — is this verified by independent tests?"
-                            ),
-                            evidence_level=EvidenceLevel.AGENT_CLAIM,
-                            severity=FindingSeverity.LOW,
-                            evidence_refs=[f"{rel_path}:{node.name}"],
-                            suggested_action=(
-                                f"Add a test that specifically verifies the claim "
-                                f"'{m.group(0)}' in '{node.name}'."
-                            ),
-                        ))
+                        findings.append(
+                            CritiqueFinding(
+                                id=next_id(),
+                                question="What claims are unsupported?",
+                                description=(
+                                    f"Assertive claim in docstring of '{node.name}' ({rel_path}): "
+                                    f"'...{m.group(0)}...' — is this verified by independent tests?"
+                                ),
+                                evidence_level=EvidenceLevel.AGENT_CLAIM,
+                                severity=FindingSeverity.LOW,
+                                evidence_refs=[f"{rel_path}:{node.name}"],
+                                suggested_action=(
+                                    f"Add a test that specifically verifies the claim "
+                                    f"'{m.group(0)}' in '{node.name}'."
+                                ),
+                            )
+                        )
 
         # Missing type annotations on public APIs
-        unannotated: List[str] = []
+        unannotated: list[str] = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if node.name.startswith("_"):
                     continue
                 missing_params = [
-                    a.arg for a in node.args.args
-                    if a.annotation is None and a.arg != "self"
+                    a.arg for a in node.args.args if a.annotation is None and a.arg != "self"
                 ]
                 if missing_params or node.returns is None:
                     unannotated.append(node.name)
 
         if len(unannotated) > 2:
-            findings.append(CritiqueFinding(
-                id=next_id(),
-                question="What assumptions are being made?",
-                description=(
-                    f"{len(unannotated)} public function(s) in {rel_path} lack type annotations: "
-                    + ", ".join(unannotated[:5])
-                    + ("…" if len(unannotated) > 5 else "")
-                ),
-                evidence_level=EvidenceLevel.OBSERVED,
-                severity=FindingSeverity.LOW,
-                evidence_refs=[rel_path],
-                suggested_action=(
-                    "Add type annotations to clarify expected inputs and return types, "
-                    "reducing implicit assumptions."
-                ),
-            ))
+            findings.append(
+                CritiqueFinding(
+                    id=next_id(),
+                    question="What assumptions are being made?",
+                    description=(
+                        f"{len(unannotated)} public function(s) in {rel_path} lack type annotations: "
+                        + ", ".join(unannotated[:5])
+                        + ("…" if len(unannotated) > 5 else "")
+                    ),
+                    evidence_level=EvidenceLevel.OBSERVED,
+                    severity=FindingSeverity.LOW,
+                    evidence_refs=[rel_path],
+                    suggested_action=(
+                        "Add type annotations to clarify expected inputs and return types, "
+                        "reducing implicit assumptions."
+                    ),
+                )
+            )
 
         return findings
 
-    def _analyse_html_file(
-        self, content: str, rel_path: str, next_id
-    ) -> List[CritiqueFinding]:
-        findings: List[CritiqueFinding] = []
+    def _analyse_html_file(self, content: str, rel_path: str, next_id) -> list[CritiqueFinding]:
+        findings: list[CritiqueFinding] = []
         cl = content.lower()
 
         # Images without alt text
         img_count = cl.count("<img")
         alt_count = cl.count("alt=")
         if img_count > 0 and alt_count < img_count:
-            findings.append(CritiqueFinding(
-                id=next_id("A11Y"),
-                question="What would a skeptical expert challenge?",
-                description=(
-                    f"{img_count - alt_count} image(s) in {rel_path} appear to lack alt attributes — accessibility failure."
-                ),
-                evidence_level=EvidenceLevel.OBSERVED,
-                severity=FindingSeverity.MEDIUM,
-                evidence_refs=[rel_path],
-                suggested_action="Add descriptive alt attributes to all <img> elements.",
-            ))
+            findings.append(
+                CritiqueFinding(
+                    id=next_id("A11Y"),
+                    question="What would a skeptical expert challenge?",
+                    description=(
+                        f"{img_count - alt_count} image(s) in {rel_path} appear to lack alt attributes — accessibility failure."
+                    ),
+                    evidence_level=EvidenceLevel.OBSERVED,
+                    severity=FindingSeverity.MEDIUM,
+                    evidence_refs=[rel_path],
+                    suggested_action="Add descriptive alt attributes to all <img> elements.",
+                )
+            )
 
         # Password in text field
         if "password" in cl and 'type="text"' in cl:
-            findings.append(CritiqueFinding(
-                id=next_id("SEC"),
-                question="What could fail in practice?",
-                description=f"Possible password field using type='text' in {rel_path} — credentials exposed.",
-                evidence_level=EvidenceLevel.OBSERVED,
-                severity=FindingSeverity.HIGH,
-                evidence_refs=[rel_path],
-                suggested_action="Use type='password' for all password input fields.",
-            ))
+            findings.append(
+                CritiqueFinding(
+                    id=next_id("SEC"),
+                    question="What could fail in practice?",
+                    description=f"Possible password field using type='text' in {rel_path} — credentials exposed.",
+                    evidence_level=EvidenceLevel.OBSERVED,
+                    severity=FindingSeverity.HIGH,
+                    evidence_refs=[rel_path],
+                    suggested_action="Use type='password' for all password input fields.",
+                )
+            )
 
         # Missing viewport meta
         if "<html" in cl and "viewport" not in cl:
-            findings.append(CritiqueFinding(
-                id=next_id("RESP"),
-                question="What is missing?",
-                description=f"No viewport meta tag in {rel_path} — page will not respond correctly on mobile.",
-                evidence_level=EvidenceLevel.OBSERVED,
-                severity=FindingSeverity.LOW,
-                evidence_refs=[rel_path],
-                suggested_action='Add <meta name="viewport" content="width=device-width, initial-scale=1.0">.',
-            ))
+            findings.append(
+                CritiqueFinding(
+                    id=next_id("RESP"),
+                    question="What is missing?",
+                    description=f"No viewport meta tag in {rel_path} — page will not respond correctly on mobile.",
+                    evidence_level=EvidenceLevel.OBSERVED,
+                    severity=FindingSeverity.LOW,
+                    evidence_refs=[rel_path],
+                    suggested_action='Add <meta name="viewport" content="width=device-width, initial-scale=1.0">.',
+                )
+            )
 
         return findings
 
@@ -776,24 +839,33 @@ class CritiqueEngine:
     def _identify_unverified_assumptions(
         self,
         workspace: str,
-        ground_truth: Dict[str, Any],
+        ground_truth: dict[str, Any],
         domain: ProjectDomain,
-        source_cache: Optional[Dict[str, str]] = None,
-    ) -> List[str]:
+        source_cache: Optional[dict[str, str]] = None,
+    ) -> list[str]:
         """Find assumptions embedded in code that have not been tested."""
-        assumptions: List[str] = []
+        assumptions: list[str] = []
         passed = set(ground_truth.get("test_suite", {}).get("passed_tests", []))
 
         # Assumption: valid inputs only (no None/empty/edge case tests)
         if domain in (ProjectDomain.SOFTWARE_LIBRARY, ProjectDomain.CLI_SCRIPT):
-            none_tests = [t for t in passed if any(k in t.lower() for k in ("none", "null", "empty", "nil"))]
+            none_tests = [
+                t for t in passed if any(k in t.lower() for k in ("none", "null", "empty", "nil"))
+            ]
             if not none_tests and passed:
                 assumptions.append(
                     "No tests verify behaviour with None, empty, or null inputs — "
                     "the implementation silently assumes all inputs are valid."
                 )
 
-            error_tests = [t for t in passed if any(k in t.lower() for k in ("error", "exception", "raise", "invalid", "bad", "wrong"))]
+            error_tests = [
+                t
+                for t in passed
+                if any(
+                    k in t.lower()
+                    for k in ("error", "exception", "raise", "invalid", "bad", "wrong")
+                )
+            ]
             if not error_tests and passed:
                 assumptions.append(
                     "No tests verify error-path behaviour — "
@@ -806,8 +878,12 @@ class CritiqueEngine:
                 content = raw_content[:8192].lower()
                 if "threading" in content or "asyncio" in content or "multiprocessing" in content:
                     concurrency_tests = [
-                        t for t in passed
-                        if any(k in t.lower() for k in ("thread", "concurrent", "async", "race", "lock"))
+                        t
+                        for t in passed
+                        if any(
+                            k in t.lower()
+                            for k in ("thread", "concurrent", "async", "race", "lock")
+                        )
                     ]
                     if not concurrency_tests:
                         assumptions.append(
@@ -820,10 +896,18 @@ class CritiqueEngine:
             for fpath in py_files:
                 try:
                     content = open(fpath, encoding="utf-8", errors="ignore").read(8192).lower()
-                    if "threading" in content or "asyncio" in content or "multiprocessing" in content:
+                    if (
+                        "threading" in content
+                        or "asyncio" in content
+                        or "multiprocessing" in content
+                    ):
                         concurrency_tests = [
-                            t for t in passed
-                            if any(k in t.lower() for k in ("thread", "concurrent", "async", "race", "lock"))
+                            t
+                            for t in passed
+                            if any(
+                                k in t.lower()
+                                for k in ("thread", "concurrent", "async", "race", "lock")
+                            )
                         ]
                         if not concurrency_tests:
                             assumptions.append(
@@ -843,11 +927,11 @@ class CritiqueEngine:
     def _assess_missing_evidence(
         self,
         workspace: str,
-        ground_truth: Dict[str, Any],
+        ground_truth: dict[str, Any],
         domain: ProjectDomain,
-    ) -> List[str]:
+    ) -> list[str]:
         """Identify what evidence is absent but appropriate for this domain."""
-        missing: List[str] = []
+        missing: list[str] = []
         test_suite = ground_truth.get("test_suite", {})
         total_tests = test_suite.get("total_tests", 0)
         passed = set(test_suite.get("passed_tests", []))
@@ -866,8 +950,21 @@ class CritiqueEngine:
         # Software / CLI
         if domain in (ProjectDomain.SOFTWARE_LIBRARY, ProjectDomain.CLI_SCRIPT):
             boundary_tests = [
-                t for t in passed
-                if any(k in t.lower() for k in ("boundary", "edge", "limit", "max", "min", "zero", "empty", "overflow"))
+                t
+                for t in passed
+                if any(
+                    k in t.lower()
+                    for k in (
+                        "boundary",
+                        "edge",
+                        "limit",
+                        "max",
+                        "min",
+                        "zero",
+                        "empty",
+                        "overflow",
+                    )
+                )
             ]
             if not boundary_tests:
                 missing.append(
@@ -883,8 +980,20 @@ class CritiqueEngine:
         # Data science
         if domain == ProjectDomain.DATA_SCIENCE:
             ds_tests = [
-                t for t in passed
-                if any(k in t.lower() for k in ("validation", "leakage", "baseline", "accuracy", "precision", "recall", "split"))
+                t
+                for t in passed
+                if any(
+                    k in t.lower()
+                    for k in (
+                        "validation",
+                        "leakage",
+                        "baseline",
+                        "accuracy",
+                        "precision",
+                        "recall",
+                        "split",
+                    )
+                )
             ]
             if not ds_tests:
                 missing.append(
@@ -896,12 +1005,17 @@ class CritiqueEngine:
         if domain == ProjectDomain.WEB_APP_OR_UI:
             try:
                 from the_judge.core.visual_engine import VisualEngine
+
                 ve = VisualEngine(workspace)
                 is_visual, _ = ve.is_visual_workspace()
                 if is_visual:
                     a11y_tests = [
-                        t for t in passed
-                        if any(k in t.lower() for k in ("aria", "accessibility", "a11y", "alt", "label", "contrast"))
+                        t
+                        for t in passed
+                        if any(
+                            k in t.lower()
+                            for k in ("aria", "accessibility", "a11y", "alt", "label", "contrast")
+                        )
                     ]
                     if not a11y_tests:
                         missing.append(
@@ -918,16 +1032,17 @@ class CritiqueEngine:
 
     def _find_unchecked_agent_claims(
         self,
-        ground_truth: Dict[str, Any],
+        ground_truth: dict[str, Any],
         verification_result: Any,
-    ) -> List[str]:
+    ) -> list[str]:
         """Find agent-authored assertions that have no independent evidence backing."""
-        unchecked: List[str] = []
+        unchecked: list[str] = []
         test_provenance = ground_truth.get("test_provenance", {})
         passed = ground_truth.get("test_suite", {}).get("passed_tests", [])
 
         agent_tests = [
-            t for t in passed
+            t
+            for t in passed
             if test_provenance.get(t, {}).get("independence_level") == "agent_controlled"
         ]
         if agent_tests:
@@ -950,8 +1065,8 @@ class CritiqueEngine:
 
     def _assess_evidence_sufficiency(
         self,
-        ground_truth: Dict[str, Any],
-        contradictions: List[Dict[str, Any]],
+        ground_truth: dict[str, Any],
+        contradictions: list[dict[str, Any]],
     ) -> EvidenceSufficiency:
         test_suite = ground_truth.get("test_suite", {})
         total = test_suite.get("total_tests", 0)
@@ -960,13 +1075,14 @@ class CritiqueEngine:
         test_provenance = ground_truth.get("test_provenance", {})
 
         independent = sum(
-            1 for t in passed_names
+            1
+            for t in passed_names
             if test_provenance.get(t, {}).get("independence_level") == "externally_verified"
         )
         agent_controlled = passed_count - independent
         has_contradictions = len(contradictions) > 0
 
-        reasons: List[str] = []
+        reasons: list[str] = []
         if total == 0:
             level = "insufficient"
             reasons.append("No tests executed.")
@@ -1005,9 +1121,7 @@ class CritiqueEngine:
     # Priority & Summary
     # -----------------------------------------------------------------------
 
-    def _prioritize_findings(
-        self, findings: List[CritiqueFinding]
-    ) -> List[CritiqueFinding]:
+    def _prioritize_findings(self, findings: list[CritiqueFinding]) -> list[CritiqueFinding]:
         """Order open findings: most critical and best evidenced first.
 
         Priority: CRITICAL > CONTRADICTED > HIGH > MEDIUM > LOW > INFO
@@ -1040,18 +1154,18 @@ class CritiqueEngine:
     def _generate_skeptic_summary(
         self,
         domain: ProjectDomain,
-        findings: List[CritiqueFinding],
-        contradictions: List[Dict[str, Any]],
-        missing_evidence: List[str],
+        findings: list[CritiqueFinding],
+        contradictions: list[dict[str, Any]],
+        missing_evidence: list[str],
         evidence_sufficiency: EvidenceSufficiency,
     ) -> str:
         """Generate a concise expert-skeptic assessment."""
         # Single pass over findings — previously 4 separate list comprehensions
-        open_f: List[CritiqueFinding] = []
-        critical: List[CritiqueFinding] = []
-        high: List[CritiqueFinding] = []
-        contradicted: List[CritiqueFinding] = []
-        ev_backed: List[CritiqueFinding] = []
+        open_f: list[CritiqueFinding] = []
+        critical: list[CritiqueFinding] = []
+        high: list[CritiqueFinding] = []
+        contradicted: list[CritiqueFinding] = []
+        ev_backed: list[CritiqueFinding] = []
         for f in findings:
             if f.resolution != FindingResolution.OPEN:
                 continue
@@ -1065,7 +1179,7 @@ class CritiqueEngine:
             elif f.evidence_level == EvidenceLevel.EVIDENCE_BACKED:
                 ev_backed.append(f)
 
-        parts: List[str] = []
+        parts: list[str] = []
         domain_label = domain.value.replace("_", " ").title()
         parts.append(f"[{domain_label}]")
 
@@ -1077,9 +1191,7 @@ class CritiqueEngine:
         if critical:
             parts.append(f"{len(critical)} CRITICAL finding(s) unresolved.")
         if ev_backed:
-            parts.append(
-                f"{len(ev_backed)} evidence-backed finding(s) requiring attention."
-            )
+            parts.append(f"{len(ev_backed)} evidence-backed finding(s) requiring attention.")
 
         if evidence_sufficiency.level == "insufficient":
             parts.append(
@@ -1112,9 +1224,9 @@ class CritiqueEngine:
 
     def resolve_findings_from_previous_round(
         self,
-        previous_findings: List[Dict[str, Any]],
-        current_ground_truth: Dict[str, Any],
-    ) -> Tuple[List[str], List[Dict[str, Any]]]:
+        previous_findings: list[dict[str, Any]],
+        current_ground_truth: dict[str, Any],
+    ) -> tuple[list[str], list[dict[str, Any]]]:
         """Compare previous findings against current evidence to determine resolutions.
 
         Returns:
@@ -1123,15 +1235,19 @@ class CritiqueEngine:
         current_passed = set(current_ground_truth.get("test_suite", {}).get("passed_tests", []))
         current_failed = set(current_ground_truth.get("test_suite", {}).get("failed_tests", []))
 
-        resolved_ids: List[str] = []
-        still_open: List[Dict[str, Any]] = []
+        resolved_ids: list[str] = []
+        still_open: list[dict[str, Any]] = []
 
         for f in previous_findings:
             fid = f.get("id", "")
             refs = f.get("evidence_refs", [])
             res = f.get("resolution", FindingResolution.OPEN.value)
 
-            if res in (FindingResolution.RESOLVED.value, FindingResolution.ACCEPTED.value, FindingResolution.INVALIDATED.value):
+            if res in (
+                FindingResolution.RESOLVED.value,
+                FindingResolution.ACCEPTED.value,
+                FindingResolution.INVALIDATED.value,
+            ):
                 resolved_ids.append(fid)
                 continue
 
@@ -1158,14 +1274,14 @@ class CritiqueEngine:
     def _collect_source_files(
         self,
         workspace: str,
-        extensions: Tuple[str, ...],
+        extensions: tuple[str, ...],
         exclude_tests: bool = False,
-    ) -> List[str]:
+    ) -> list[str]:
         if os.path.isfile(workspace):
             ext = os.path.splitext(workspace)[1].lower()
             return [workspace] if ext in extensions else []
 
-        files: List[str] = []
+        files: list[str] = []
         for root, dirs, filenames in os.walk(workspace):
             dirs[:] = sorted(d for d in dirs if d not in self._IGNORED_DIRS)
             for fname in filenames:

@@ -1,12 +1,8 @@
-import json
 import os
-import shutil
 import tempfile
-import pytest
 
-from the_judge import verify, verify_workspace, VerificationResult
+from the_judge import VerificationResult, verify
 from the_judge.integrations import AgentAdapter, AgentRepairLoop
-
 
 CODE_ROUND1 = '''"""Round 1: Buggy implementation of bounded queue."""
 class BoundedQueue:
@@ -132,7 +128,9 @@ def test_repair_loop_continues_after_judge_pass_until_quality_threshold_is_met()
             f.write(TEST_BOUNDED_QUEUE)
 
         def quality_evaluator(workspace_path: str, _result: dict) -> dict:
-            with open(os.path.join(workspace_path, "queue_impl.py"), encoding="utf-8") as source_file:
+            with open(
+                os.path.join(workspace_path, "queue_impl.py"), encoding="utf-8"
+            ) as source_file:
                 polished = "polished" in source_file.read()
             return {
                 "source": "ux-review",
@@ -144,7 +142,9 @@ def test_repair_loop_continues_after_judge_pass_until_quality_threshold_is_met()
         def improve_quality(workspace_path: str, feedback: dict) -> dict:
             assert feedback["decision"] == "IMPROVE"
             assert feedback["quality_evaluation"]["score"] == 72
-            with open(os.path.join(workspace_path, "queue_impl.py"), "a", encoding="utf-8") as source_file:
+            with open(
+                os.path.join(workspace_path, "queue_impl.py"), "a", encoding="utf-8"
+            ) as source_file:
                 source_file.write("\n# polished: clear API usage note\n")
             return {"improved": True, "summary": "Added API usage guidance."}
 

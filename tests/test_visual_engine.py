@@ -1,7 +1,7 @@
 import os
 import shutil
 import tempfile
-import pytest
+
 from the_judge.core.visual_engine import VisualEngine
 
 
@@ -32,7 +32,9 @@ def test_visual_screenshot_and_evaluation():
     try:
         html_file = os.path.join(temp_dir, "index.html")
         with open(html_file, "w", encoding="utf-8") as f:
-            f.write("<!DOCTYPE html><html><head><title>App</title></head><body><h1>Hello</h1></body></html>")
+            f.write(
+                "<!DOCTYPE html><html><head><title>App</title></head><body><h1>Hello</h1></body></html>"
+            )
 
         ve = VisualEngine(temp_dir)
         output_dir = os.path.join(temp_dir, "_judge_visual")

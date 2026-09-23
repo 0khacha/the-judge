@@ -18,9 +18,8 @@ But rather:
 
 import json
 import os
-import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 @dataclass
@@ -42,40 +41,40 @@ class RoundRecord:
 
     # --- Verification (Judge) ----------------------------------------------
     decision: str
-    judge_findings: List[Dict[str, Any]] = field(default_factory=list)
-    blocking_issues: List[str] = field(default_factory=list)
+    judge_findings: list[dict[str, Any]] = field(default_factory=list)
+    blocking_issues: list[str] = field(default_factory=list)
 
     # --- Critique (independent) -------------------------------------------
-    critique_findings: List[Dict[str, Any]] = field(default_factory=list)
-    unverified_assumptions: List[str] = field(default_factory=list)
-    contradictions: List[Dict[str, Any]] = field(default_factory=list)
-    agent_claims_unchecked: List[str] = field(default_factory=list)
-    missing_evidence: List[str] = field(default_factory=list)
-    evidence_sufficiency: str = "unknown"        # "sufficient" | "partial" | "insufficient"
+    critique_findings: list[dict[str, Any]] = field(default_factory=list)
+    unverified_assumptions: list[str] = field(default_factory=list)
+    contradictions: list[dict[str, Any]] = field(default_factory=list)
+    agent_claims_unchecked: list[str] = field(default_factory=list)
+    missing_evidence: list[str] = field(default_factory=list)
+    evidence_sufficiency: str = "unknown"  # "sufficient" | "partial" | "insufficient"
     has_blockers: bool = False
     skeptic_summary: str = ""
 
     # --- Evidence collected -----------------------------------------------
-    evidence_summary: Dict[str, Any] = field(default_factory=dict)
+    evidence_summary: dict[str, Any] = field(default_factory=dict)
 
     # --- Changes made this round ------------------------------------------
-    improvement_actions: List[str] = field(default_factory=list)
+    improvement_actions: list[str] = field(default_factory=list)
     changes_summary: str = ""
 
     # --- Resolution tracking ---------------------------------------------
-    resolved_finding_ids: List[str] = field(default_factory=list)
-    new_finding_ids: List[str] = field(default_factory=list)
-    remaining_findings: List[Dict[str, Any]] = field(default_factory=list)
+    resolved_finding_ids: list[str] = field(default_factory=list)
+    new_finding_ids: list[str] = field(default_factory=list)
+    remaining_findings: list[dict[str, Any]] = field(default_factory=list)
 
     # --- Loop decision ----------------------------------------------------
-    loop_decision: str = "continue"   # "continue" | "stop" | "abort"
+    loop_decision: str = "continue"  # "continue" | "stop" | "abort"
     stop_reason: Optional[str] = None
 
     # --- Visual evidence (conditional) -----------------------------------
     screenshot_path: Optional[str] = None
     visual_score: Optional[float] = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "round_number": self.round_number,
             "timestamp": self.timestamp,
@@ -131,7 +130,7 @@ class AuditTrail:
     """
 
     def __init__(self) -> None:
-        self._rounds: List[RoundRecord] = []
+        self._rounds: list[RoundRecord] = []
 
     # -----------------------------------------------------------------------
     # Recording
@@ -145,19 +144,19 @@ class AuditTrail:
     # Accessors
     # -----------------------------------------------------------------------
 
-    def get_history(self) -> List[RoundRecord]:
+    def get_history(self) -> list[RoundRecord]:
         return list(self._rounds)
 
-    def get_score_progression(self) -> List[float]:
+    def get_score_progression(self) -> list[float]:
         return [r.new_score for r in self._rounds]
 
-    def get_all_resolved_ids(self) -> List[str]:
-        ids: List[str] = []
+    def get_all_resolved_ids(self) -> list[str]:
+        ids: list[str] = []
         for r in self._rounds:
             ids.extend(r.resolved_finding_ids)
         return ids
 
-    def get_unresolved_findings(self) -> List[Dict[str, Any]]:
+    def get_unresolved_findings(self) -> list[dict[str, Any]]:
         """Return findings still open as of the last round."""
         if not self._rounds:
             return []
@@ -172,14 +171,14 @@ class AuditTrail:
     def total_score_delta(self) -> float:
         return round(self.final_score() - self.initial_score(), 2)
 
-    def screenshots(self) -> List[str]:
+    def screenshots(self) -> list[str]:
         return [r.screenshot_path for r in self._rounds if r.screenshot_path]
 
     # -----------------------------------------------------------------------
     # Serialisation
     # -----------------------------------------------------------------------
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "total_rounds": len(self._rounds),
             "initial_score": self.initial_score(),
@@ -210,7 +209,7 @@ class AuditTrail:
     # -----------------------------------------------------------------------
 
     def generate_text_summary(self) -> str:
-        lines: List[str] = []
+        lines: list[str] = []
         sep = "=" * 70
         lines.append(sep)
         lines.append("THE JUDGE — Improvement Audit Trail")
@@ -253,8 +252,10 @@ class AuditTrail:
                 rel = os.path.basename(r.screenshot_path)
                 lines.append(f"  Screenshot     : {rel}")
 
-            lines.append(f"  Loop Decision  : {r.loop_decision.upper()}"
-                         + (f" — {r.stop_reason}" if r.stop_reason else ""))
+            lines.append(
+                f"  Loop Decision  : {r.loop_decision.upper()}"
+                + (f" — {r.stop_reason}" if r.stop_reason else "")
+            )
             lines.append("")
 
         lines.append(sep)

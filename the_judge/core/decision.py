@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from dataclasses import dataclass
+from typing import Any, Optional
 
 
 @dataclass
@@ -13,7 +13,7 @@ class Finding:
     expected: Optional[str] = None
     suggested_focus: Optional[str] = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "id": self.id,
             "category": self.category,
@@ -30,14 +30,14 @@ class Finding:
 class VerificationResult:
     decision: str  # "PASS", "FAIL", "ABSTAIN"
     numeric_score: float
-    trust_profile: Dict[str, Any]
-    findings: List[Finding]
-    provenance: Dict[str, Any]
-    blocking_issues: List[str]
-    insufficient_notes: List[str]
+    trust_profile: dict[str, Any]
+    findings: list[Finding]
+    provenance: dict[str, Any]
+    blocking_issues: list[str]
+    insufficient_notes: list[str]
     runtime_seconds: float = 0.0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "decision": self.decision,
             "numeric_score": self.numeric_score,
@@ -48,6 +48,6 @@ class VerificationResult:
             "insufficient_notes": self.insufficient_notes,
             "runtime": {
                 "duration_seconds": round(self.runtime_seconds, 3),
-                "judge_version": "v1.0.0"
-            }
+                "judge_version": "v1.0.0",
+            },
         }

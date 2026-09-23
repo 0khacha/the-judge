@@ -6,6 +6,7 @@ from the_judge import (
     verify,
     verify_workspace,
     improve,
+    critique,
     VerificationResult,
     Finding,
 )
@@ -16,6 +17,7 @@ __all__ = [
     "verify",
     "verify_workspace",
     "improve",
+    "critique",
     "VerificationResult",
     "Finding",
 ]

@@ -1,9 +1,8 @@
 import hashlib
-import json
 import os
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from the_judge.core.decision import Finding, VerificationResult
 from the_judge.core.evidence import capture_evidence
@@ -12,8 +11,8 @@ from the_judge.core.score_engine import evaluate
 
 def critique(
     workspace: str,
-    task_spec: Optional[Dict[str, Any]] = None,
-    previous_round: Optional[Dict[str, Any]] = None,
+    task_spec: Optional[dict[str, Any]] = None,
+    previous_round: Optional[dict[str, Any]] = None,
 ) -> Any:
     """Run an independent adversarial critique of the workspace.
 
@@ -77,9 +76,9 @@ def critique(
 
 def verify(
     workspace: str,
-    task_spec: Optional[Dict[str, Any]] = None,
-    previous_evidence: Optional[Dict[str, Any]] = None,
-    _ground_truth: Optional[Dict[str, Any]] = None,
+    task_spec: Optional[dict[str, Any]] = None,
+    previous_evidence: Optional[dict[str, Any]] = None,
+    _ground_truth: Optional[dict[str, Any]] = None,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
     and adversarial integrity gates.
@@ -98,14 +97,18 @@ def verify(
     workspace_path = os.path.abspath(workspace)
 
     # 1. Capture ground truth evidence (sandbox execution, challenge runner, dynamic property checks)
-    ground_truth = _ground_truth if _ground_truth is not None else capture_evidence(workspace_path, task_spec=task_spec)
+    ground_truth = (
+        _ground_truth
+        if _ground_truth is not None
+        else capture_evidence(workspace_path, task_spec=task_spec)
+    )
 
     # 2. Build Agent Findings / Claims
     test_suite = ground_truth.get("test_suite", {})
     passed_tests = test_suite.get("passed_tests", [])
     failed_tests = test_suite.get("failed_tests", [])
 
-    req_list: List[Dict[str, Any]] = []
+    req_list: list[dict[str, Any]] = []
 
     if task_spec and "requirements" in task_spec:
         for idx, req in enumerate(task_spec.get("requirements", []), 1):
@@ -114,32 +117,40 @@ def verify(
             # Check if any failed test corresponds to this requirement
             has_fail = any(req_id.lower() in t.lower() or "fail" in t.lower() for t in failed_tests)
             req_status = "fail" if has_fail else ("pass" if len(passed_tests) > 0 else "unknown")
-            ev_ref = f"test_{req_id.lower()}" if has_fail else (passed_tests[0] if passed_tests else "")
-            req_list.append({
-                "id": req_id,
-                "description": req_desc,
-                "status": req_status,
-                "evidence": ev_ref,
-            })
+            ev_ref = (
+                f"test_{req_id.lower()}" if has_fail else (passed_tests[0] if passed_tests else "")
+            )
+            req_list.append(
+                {
+                    "id": req_id,
+                    "description": req_desc,
+                    "status": req_status,
+                    "evidence": ev_ref,
+                }
+            )
     else:
         # Default implicit requirement mapping based on observed test suite
         if passed_tests or failed_tests:
             for t in passed_tests:
-                req_list.append({
-                    "id": f"REQ-{t}",
-                    "description": f"Verified behavior in {t}",
-                    "status": "pass",
-                    "evidence": t,
-                })
+                req_list.append(
+                    {
+                        "id": f"REQ-{t}",
+                        "description": f"Verified behavior in {t}",
+                        "status": "pass",
+                        "evidence": t,
+                    }
+                )
             for t in failed_tests:
-                req_list.append({
-                    "id": f"REQ-{t}",
-                    "description": f"Failed behavior in {t}",
-                    "status": "fail",
-                    "evidence": t,
-                })
+                req_list.append(
+                    {
+                        "id": f"REQ-{t}",
+                        "description": f"Failed behavior in {t}",
+                        "status": "fail",
+                        "evidence": t,
+                    }
+                )
 
-    findings_dict: Dict[str, Any] = {
+    findings_dict: dict[str, Any] = {
         "requirements": req_list,
         "edge_cases": [],
         "security_notes": [],
@@ -148,6 +159,7 @@ def verify(
 
     # 3. Evaluate specification contract coverage via ContractEngine
     from the_judge.core.contract_engine import ContractEngine
+
     contract_engine = ContractEngine(task_spec=task_spec)
     contract_eval = contract_engine.evaluate_contract_coverage(ground_truth, findings_dict)
     ground_truth["contract_data"] = contract_eval
@@ -156,7 +168,7 @@ def verify(
     eval_output = evaluate(findings_dict, ground_truth, previous_evidence=previous_evidence)
 
     # 4. Construct structured Findings for AI Agent consumption
-    structured_findings: List[Finding] = []
+    structured_findings: list[Finding] = []
 
     # Map failed tests to structured findings
     for idx, f_test in enumerate(failed_tests, 1):
@@ -181,7 +193,9 @@ def verify(
         if "TAMPERING" in b_issue or "VERIFICATION DENIAL" in b_issue:
             cat = "security"
             sev = "blocking"
-            focus = "Ensure target code does not tamper with test collection or obscure verification."
+            focus = (
+                "Ensure target code does not tamper with test collection or obscure verification."
+            )
         elif "Type checker" in b_issue:
             cat = "type_check"
             sev = "high"
@@ -261,10 +275,10 @@ def improve(
     repair_func: Optional[Any] = None,
     max_rounds: int = 5,
     target_score: float = 90.0,
-    task_spec: Optional[Dict[str, Any]] = None,
+    task_spec: Optional[dict[str, Any]] = None,
     quality_evaluator: Optional[Any] = None,
     require_evidence_sufficiency: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run the adversarial improvement loop on the target workspace.
 
     Philosophy
@@ -299,12 +313,14 @@ def improve(
         Dict containing multi-round history, audit trail, score progression,
         critique findings per round, and final verdict.
     """
-    from the_judge.integrations.repair_loop import AgentRepairLoop
     from the_judge.integrations.auto_improver import AutoImprover
+    from the_judge.integrations.repair_loop import AgentRepairLoop
 
     if repair_func is None:
         improver = AutoImprover(workspace)
-        repair_func = lambda ws, feedback: improver.improve_workspace(feedback)
+
+        def repair_func(ws, feedback):
+            return improver.improve_workspace(feedback)
 
     loop = AgentRepairLoop(
         max_rounds=max_rounds,

@@ -1,8 +1,9 @@
 import argparse
+import contextlib
 import json
 import os
 import sys
-from typing import Any, Dict
+from typing import Any, Optional
 
 from the_judge.api import verify
 from the_judge.integrations.demo import run_demo
@@ -19,15 +20,31 @@ def main(args_list=None) -> int:
 
     # verify command
     verify_parser = subparsers.add_parser("verify", help="Verify workspace code")
-    verify_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace directory or python file")
-    verify_parser.add_argument("--json", action="store_true", help="Output machine-readable JSON matching result.schema.json")
-    verify_parser.add_argument("--task-spec", type=str, default=None, help="Path to specification file (JSON or YAML)")
+    verify_parser.add_argument(
+        "workspace", nargs="?", default=".", help="Path to workspace directory or python file"
+    )
+    verify_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output machine-readable JSON matching result.schema.json",
+    )
+    verify_parser.add_argument(
+        "--task-spec", type=str, default=None, help="Path to specification file (JSON or YAML)"
+    )
 
     # contract command
-    contract_parser = subparsers.add_parser("contract", help="Inspect requirement specification contract")
-    contract_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace directory or python file")
-    contract_parser.add_argument("--json", action="store_true", help="Output specification contract in JSON format")
-    contract_parser.add_argument("--task-spec", type=str, default=None, help="Path to specification file (JSON or YAML)")
+    contract_parser = subparsers.add_parser(
+        "contract", help="Inspect requirement specification contract"
+    )
+    contract_parser.add_argument(
+        "workspace", nargs="?", default=".", help="Path to workspace directory or python file"
+    )
+    contract_parser.add_argument(
+        "--json", action="store_true", help="Output specification contract in JSON format"
+    )
+    contract_parser.add_argument(
+        "--task-spec", type=str, default=None, help="Path to specification file (JSON or YAML)"
+    )
 
     # demo command
     subparsers.add_parser("demo", help="Run 60-second interactive verification demo")
@@ -36,10 +53,14 @@ def main(args_list=None) -> int:
     hook_parser = subparsers.add_parser("hook", help="Manage git verification hooks")
     hook_sub = hook_parser.add_subparsers(dest="hook_action", help="Hook actions")
     hook_install = hook_sub.add_parser("install", help="Install a git hook")
-    hook_install.add_argument("--pre-push", action="store_true", help="Install pre-push hook instead of pre-commit")
+    hook_install.add_argument(
+        "--pre-push", action="store_true", help="Install pre-push hook instead of pre-commit"
+    )
     hook_install.add_argument("workspace", nargs="?", default=".", help="Path to workspace")
     hook_uninstall = hook_sub.add_parser("uninstall", help="Uninstall a git hook")
-    hook_uninstall.add_argument("--pre-push", action="store_true", help="Uninstall pre-push hook instead of pre-commit")
+    hook_uninstall.add_argument(
+        "--pre-push", action="store_true", help="Uninstall pre-push hook instead of pre-commit"
+    )
     hook_uninstall.add_argument("workspace", nargs="?", default=".", help="Path to workspace")
 
     # init command
@@ -52,12 +73,24 @@ def main(args_list=None) -> int:
         "improve",
         help="Run multi-round adversarial improvement loop (Build→Evidence→Critique→Improve→Repeat)",
     )
-    improve_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace directory or file")
-    improve_parser.add_argument("--max-rounds", type=int, default=5, help="Maximum improvement rounds (default: 5)")
-    improve_parser.add_argument("--target-score", type=float, default=90.0, help="Target quality score threshold (default: 90.0)")
-    improve_parser.add_argument("--json", action="store_true", help="Output machine-readable JSON history")
     improve_parser.add_argument(
-        "--no-report", action="store_true",
+        "workspace", nargs="?", default=".", help="Path to workspace directory or file"
+    )
+    improve_parser.add_argument(
+        "--max-rounds", type=int, default=5, help="Maximum improvement rounds (default: 5)"
+    )
+    improve_parser.add_argument(
+        "--target-score",
+        type=float,
+        default=90.0,
+        help="Target quality score threshold (default: 90.0)",
+    )
+    improve_parser.add_argument(
+        "--json", action="store_true", help="Output machine-readable JSON history"
+    )
+    improve_parser.add_argument(
+        "--no-report",
+        action="store_true",
         help="Skip generating the HTML progress report",
     )
 
@@ -66,9 +99,28 @@ def main(args_list=None) -> int:
         "critique",
         help="Run independent adversarial critique — classify findings by evidence level",
     )
-    critique_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace directory or file")
+    critique_parser.add_argument(
+        "workspace", nargs="?", default=".", help="Path to workspace directory or file"
+    )
     critique_parser.add_argument("--json", action="store_true", help="Output machine-readable JSON")
-    critique_parser.add_argument("--task-spec", type=str, default=None, help="Path to specification file")
+    critique_parser.add_argument(
+        "--task-spec", type=str, default=None, help="Path to specification file"
+    )
+
+    # watch command
+    watch_parser = subparsers.add_parser(
+        "watch",
+        help="Watch workspace and re-verify on every .py file save",
+    )
+    watch_parser.add_argument(
+        "workspace", nargs="?", default=".", help="Path to workspace directory"
+    )
+    watch_parser.add_argument(
+        "--debounce",
+        type=float,
+        default=2.0,
+        help="Debounce delay in seconds between re-verifications (default: 2.0)",
+    )
 
     args = parser.parse_args(args_list)
 
@@ -110,11 +162,12 @@ def main(args_list=None) -> int:
     task_spec_dict = None
     if task_spec_path and os.path.exists(task_spec_path):
         try:
-            with open(task_spec_path, "r", encoding="utf-8") as f:
+            with open(task_spec_path, encoding="utf-8") as f:
                 if task_spec_path.endswith((".yaml", ".yml")):
                     # Simple inline YAML parser fallback if PyYAML not installed
                     try:
                         import yaml
+
                         task_spec_dict = yaml.safe_load(f)
                     except ImportError:
                         task_spec_dict = json.load(f)
@@ -164,9 +217,9 @@ def _run_hook_command(args) -> int:
             return 1
 
     elif args.hook_action == "uninstall":
-        path = uninstall_hook(workspace, hook_type)
-        if path:
-            print(f"Removed {hook_type} hook from {path}")
+        removed: Optional[str] = uninstall_hook(workspace, hook_type)
+        if removed:
+            print(f"Removed {hook_type} hook from {removed}")
         else:
             print(f"No Judge-installed {hook_type} hook found.")
         return 0
@@ -182,10 +235,13 @@ def _run_init_command(args) -> int:
 
     if args.target == "vscode":
         from the_judge.integrations.ide import generate_vscode_tasks
+
         try:
             path = generate_vscode_tasks(workspace)
             print(f"Generated VS Code tasks at {path}")
-            print("Open Command Palette (Ctrl+Shift+P) -> 'Tasks: Run Task' -> 'Judge: Verify Workspace'")
+            print(
+                "Open Command Palette (Ctrl+Shift+P) -> 'Tasks: Run Task' -> 'Judge: Verify Workspace'"
+            )
             return 0
         except FileExistsError as e:
             print(f"Error: {e}")
@@ -201,10 +257,8 @@ def _run_watch_command(args) -> int:
     workspace = getattr(args, "workspace", ".")
     debounce = getattr(args, "debounce", 2.0)
 
-    try:
+    with contextlib.suppress(KeyboardInterrupt):
         watch_workspace(workspace, debounce_seconds=debounce)
-    except KeyboardInterrupt:
-        pass
 
     return 0
 
@@ -238,7 +292,7 @@ def _run_improve_command(args) -> int:
         print(f"Target Workspace : {os.path.abspath(workspace)}")
         print(f"Max Rounds       : {max_rounds}")
         print(f"Quality Target   : {target_score} / 100.0")
-        print(f"Stop Requires    : score≥threshold AND no blockers AND sufficient evidence")
+        print("Stop Requires    : score≥threshold AND no blockers AND sufficient evidence")
         print()
 
     old_argv = list(sys.argv)
@@ -266,11 +320,15 @@ def _run_improve_command(args) -> int:
         round_num = round_item.get("round_number", 1)
         dec = round_item.get("decision", "UNKNOWN")
         score = round_item.get("numeric_score", 0.0)
-        quality = round_item.get("quality", {})
+        round_item.get("quality", {})
         repair = round_item.get("repair", {})
         screenshot = round_item.get("screenshot")
         critique = round_item.get("critique", {})
-        ev_suf = critique.get("evidence_sufficiency", {}).get("level", "unknown") if isinstance(critique.get("evidence_sufficiency"), dict) else critique.get("evidence_sufficiency", "unknown")
+        ev_suf = (
+            critique.get("evidence_sufficiency", {}).get("level", "unknown")
+            if isinstance(critique.get("evidence_sufficiency"), dict)
+            else critique.get("evidence_sufficiency", "unknown")
+        )
         has_blockers = critique.get("has_blockers", False)
         skeptic = critique.get("skeptic_summary", "")
         contradictions = critique.get("contradictions", [])
@@ -282,7 +340,9 @@ def _run_improve_command(args) -> int:
         print(f"[Round {round_num}/{total}] Critique & Refinement")
         print(f"  Decision       : {dec}")
         print(f"  Quality Score  : {score:.1f} / 100.0")
-        print(f"  Evidence       : {ev_suf.upper()}{'  ⚠ BLOCKERS PRESENT' if has_blockers else ''}")
+        print(
+            f"  Evidence       : {ev_suf.upper()}{'  ⚠ BLOCKERS PRESENT' if has_blockers else ''}"
+        )
 
         if skeptic:
             print(f"  Critique       : {skeptic[:120]}{'…' if len(skeptic) > 120 else ''}")
@@ -293,9 +353,13 @@ def _run_improve_command(args) -> int:
                 print(f"    ↳ {c.get('description', '')[:100]}")
 
         # Show top evidence-classified findings
-        top_findings = [f for f in findings if f.get("is_blocker") or f.get("evidence_level") in ("evidence_backed", "contradicted")][:3]
+        top_findings = [
+            f
+            for f in findings
+            if f.get("is_blocker") or f.get("evidence_level") in ("evidence_backed", "contradicted")
+        ][:3]
         if top_findings:
-            print(f"  Key Findings   :")
+            print("  Key Findings   :")
             for f in top_findings:
                 ev = f.get("evidence_level", "").upper().replace("_", " ")
                 sev = f.get("severity", "").upper()
@@ -304,7 +368,11 @@ def _run_improve_command(args) -> int:
                 print(f"    [{ev}][{sev}]{blocker} {desc}")
 
         if screenshot:
-            rel = os.path.relpath(screenshot, os.path.abspath(workspace)) if os.path.isabs(screenshot) else screenshot
+            rel = (
+                os.path.relpath(screenshot, os.path.abspath(workspace))
+                if os.path.isabs(screenshot)
+                else screenshot
+            )
             print(f"  Screenshot     : {rel}")
 
         if repair and repair.get("summary"):
@@ -320,6 +388,7 @@ def _run_improve_command(args) -> int:
             audit_data = result.get("audit_trail", {})
             # Reconstruct a lightweight AuditTrail for the report
             from the_judge.integrations.audit_trail import RoundRecord
+
             trail = AuditTrail()
             for r in audit_data.get("rounds", []):
                 rec = RoundRecord(
@@ -334,7 +403,9 @@ def _run_improve_command(args) -> int:
                     contradictions=r.get("critique", {}).get("contradictions", []),
                     skeptic_summary=r.get("critique", {}).get("skeptic_summary", ""),
                     has_blockers=r.get("critique", {}).get("has_blockers", False),
-                    evidence_sufficiency=r.get("critique", {}).get("evidence_sufficiency", "unknown"),
+                    evidence_sufficiency=r.get("critique", {}).get(
+                        "evidence_sufficiency", "unknown"
+                    ),
                     improvement_actions=r.get("changes", {}).get("improvement_actions", []),
                     resolved_finding_ids=r.get("resolution", {}).get("resolved_finding_ids", []),
                     remaining_findings=r.get("resolution", {}).get("remaining_findings", []),
@@ -369,9 +440,11 @@ def _run_improve_command(args) -> int:
         diff_str = f"+{diff:.1f}" if diff >= 0 else f"{diff:.1f}"
         print(f"SUCCESS: All stop conditions met in {result.get('total_rounds')} round(s).")
         print(f"Score Progression : {initial_score:.1f} → {final_score:.1f} ({diff_str} points)")
-        print(f"Evidence          : sufficient, no blockers, no contradictions")
+        print("Evidence          : sufficient, no blockers, no contradictions")
         if is_visual and screenshots_collected:
-            print(f"Visual Evidence   : {len(screenshots_collected)} screenshot(s) in _judge_visual/")
+            print(
+                f"Visual Evidence   : {len(screenshots_collected)} screenshot(s) in _judge_visual/"
+            )
         if report_path:
             rel_rep = os.path.relpath(report_path, os.path.abspath(workspace))
             print(f"Progress Report   : {rel_rep}")
@@ -401,7 +474,7 @@ def _run_improve_command(args) -> int:
 
 def _run_critique_command(args) -> int:
     """Handle the 'judge critique' subcommand — independent adversarial critique."""
-    from the_judge.api import verify, critique
+    from the_judge.api import critique, verify
     from the_judge.core.evidence import capture_evidence
 
     workspace = getattr(args, "workspace", ".")
@@ -419,8 +492,8 @@ def _run_critique_command(args) -> int:
     old_argv = list(sys.argv)
     try:
         sys.argv = [sys.argv[0]]
-        ground_truth = capture_evidence(os.path.abspath(workspace), task_spec=task_spec_dict)
-        verification_result = verify(workspace=workspace, task_spec=task_spec_dict)
+        capture_evidence(os.path.abspath(workspace), task_spec=task_spec_dict)
+        verify(workspace=workspace, task_spec=task_spec_dict)
         critique_result = critique(workspace=workspace, task_spec=task_spec_dict)
     except Exception as e:
         if is_json:
@@ -466,10 +539,18 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
     # Evidence-classified findings
     print("FINDINGS (by evidence level and severity)")
     print("-" * 40)
-    level_order = ["evidence_backed", "contradicted", "observed", "unverified_assumption", "agent_claim"]
-    by_level: Dict[str, list] = {lv: [] for lv in level_order}
+    level_order = [
+        "evidence_backed",
+        "contradicted",
+        "observed",
+        "unverified_assumption",
+        "agent_claim",
+    ]
+    by_level: dict[str, list] = {lv: [] for lv in level_order}
     for f in result.findings:
-        key = f.evidence_level.value if hasattr(f.evidence_level, "value") else str(f.evidence_level)
+        key = (
+            f.evidence_level.value if hasattr(f.evidence_level, "value") else str(f.evidence_level)
+        )
         by_level.setdefault(key, []).append(f)
 
     labels = {
@@ -538,7 +619,15 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
     print("-" * 40)
     if result.improvement_priority:
         for i, f in enumerate(result.improvement_priority[:8], 1):
-            ev = (f.evidence_level.value if hasattr(f.evidence_level, "value") else str(f.evidence_level)).replace("_", " ").upper()
+            ev = (
+                (
+                    f.evidence_level.value
+                    if hasattr(f.evidence_level, "value")
+                    else str(f.evidence_level)
+                )
+                .replace("_", " ")
+                .upper()
+            )
             sev = (f.severity.value if hasattr(f.severity, "value") else str(f.severity)).upper()
             blocker = " ⚠ BLOCKER" if f.is_blocker() else ""
             print(f"  [{i}] [{ev}][{sev}]{blocker} {f.description[:90]}")
@@ -554,14 +643,18 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
 
     blockers = sum(1 for f in result.findings if f.is_blocker())
     print(sep)
-    print(f"Blockers: {blockers} | Open Findings: {len(result.get_open_findings())} | Evidence: {result.evidence_sufficiency.level.upper()}")
+    print(
+        f"Blockers: {blockers} | Open Findings: {len(result.get_open_findings())} | Evidence: {result.evidence_sufficiency.level.upper()}"
+    )
     print(sep)
 
 
-def _run_contract_command(workspace_path: str, is_json: bool, task_spec_path: str = None) -> None:
+def _run_contract_command(
+    workspace_path: str, is_json: bool, task_spec_path: Optional[str] = None
+) -> None:
     task_spec_dict = None
     if task_spec_path and os.path.exists(task_spec_path):
-        with open(task_spec_path, "r", encoding="utf-8") as f:
+        with open(task_spec_path, encoding="utf-8") as f:
             task_spec_dict = json.load(f)
 
     verif_result = verify(workspace=workspace_path, task_spec=task_spec_dict)
@@ -586,20 +679,26 @@ def _run_contract_command(workspace_path: str, is_json: bool, task_spec_path: st
         print(f"Conflicting / Failed          : {summary.get('conflicting_count', 0)}")
         print(f"Critical Requirement Coverage : {summary.get('critical_coverage_pct', 0.0)}%")
         print(f"Overall Requirement Coverage  : {summary.get('overall_coverage_pct', 0.0)}%")
-        print(f"Specification Escape Rate     : {summary.get('specification_escape_rate_pct', 0.0)}%")
+        print(
+            f"Specification Escape Rate     : {summary.get('specification_escape_rate_pct', 0.0)}%"
+        )
         print()
 
         print("REQUIREMENT DETAILS")
         print("-------------------")
         for req in spec_cov.get("requirements", []):
             st = req.get("status", "UNVERIFIED")
-            symbol = "OK" if st == "VERIFIED" else ("PARTIAL" if st == "PARTIALLY_VERIFIED" else "FAIL")
+            symbol = (
+                "OK" if st == "VERIFIED" else ("PARTIAL" if st == "PARTIALLY_VERIFIED" else "FAIL")
+            )
             print(f"[{symbol}] [{st}] {req.get('id')}: {req.get('description')}")
             print(f"    Category: {req.get('category')} | Priority: {req.get('priority')}")
             if req.get("unverified_reason"):
                 print(f"    Reason:   {req.get('unverified_reason')}")
             for p in req.get("mapped_properties", []):
-                print(f"    |-- Property: {p.get('property_name')} (Provenance: {p.get('provenance')}, Confidence: {p.get('confidence')})")
+                print(
+                    f"    |-- Property: {p.get('property_name')} (Provenance: {p.get('provenance')}, Confidence: {p.get('confidence')})"
+                )
             print()
         print("=" * 68)
 
@@ -614,15 +713,26 @@ def _print_human_readable_result(workspace_path: str, result: Any) -> None:
     tp = result.trust_profile
     ev_level = tp.get("evidence_level", 0)
 
-    env_ok = tp.get("environment_isolation_subdimensions", {}).get("process_isolation") == "VERIFIED"
-    chal_ok = tp.get("evidence_integrity_subdimensions", {}).get("challenge_integrity") == "VERIFIED"
+    env_ok = (
+        tp.get("environment_isolation_subdimensions", {}).get("process_isolation") == "VERIFIED"
+    )
+    chal_ok = (
+        tp.get("evidence_integrity_subdimensions", {}).get("challenge_integrity") == "VERIFIED"
+    )
     beh_ok = result.decision != "FAIL" and ev_level >= 2
-    indep_ok = tp.get("evidence_integrity_subdimensions", {}).get("evidence_independence") in ("VERIFIED", "PARTIAL")
-    adv_ok = tp.get("adversarial_robustness_subdimensions", {}).get("evasion_resistance") == "VERIFIED"
+    indep_ok = tp.get("evidence_integrity_subdimensions", {}).get("evidence_independence") in (
+        "VERIFIED",
+        "PARTIAL",
+    )
+    adv_ok = (
+        tp.get("adversarial_robustness_subdimensions", {}).get("evasion_resistance") == "VERIFIED"
+    )
 
     print(f"[1/5] Environment isolation       {'PASS' if env_ok else 'FAIL'}")
     print(f"[2/5] Challenge integrity         {'PASS' if chal_ok else 'FAIL'}")
-    print(f"[3/5] Behavioral verification    {'PASS' if beh_ok else ('ABSTAIN' if result.decision == 'ABSTAIN' else 'FAIL')}")
+    print(
+        f"[3/5] Behavioral verification    {'PASS' if beh_ok else ('ABSTAIN' if result.decision == 'ABSTAIN' else 'FAIL')}"
+    )
     print(f"[4/5] Evidence independence      {'PASS' if indep_ok else 'FAIL'}")
     print(f"[5/5] Adversarial checks          {'PASS' if adv_ok else 'FAIL'}")
     print()
@@ -633,7 +743,9 @@ def _print_human_readable_result(workspace_path: str, result: Any) -> None:
         print("----------------------")
         print(f"Critical Coverage : {spec_cov.get('critical_coverage_pct', 0.0)}%")
         print(f"Overall Coverage  : {spec_cov.get('overall_coverage_pct', 0.0)}%")
-        print(f"Verified / Total  : {spec_cov.get('verified_count', 0)} / {spec_cov.get('total_requirements', 0)}")
+        print(
+            f"Verified / Total  : {spec_cov.get('verified_count', 0)} / {spec_cov.get('total_requirements', 0)}"
+        )
         print()
 
     print(f"DECISION: {result.decision}")

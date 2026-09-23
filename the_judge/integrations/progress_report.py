@@ -9,10 +9,9 @@ For visual projects: includes screenshots per round.
 For non-visual projects: shows the appropriate evidence instead.
 """
 
-import json
 import os
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from the_judge.integrations.audit_trail import AuditTrail, RoundRecord
 
@@ -285,7 +284,7 @@ def generate_progress_report(
     <div class="label">Final Score</div>
   </div>
   <div class="stat-card">
-    <div class="value" style="color: {'#10b981' if delta >= 0 else '#ef4444'}">{delta_str}</div>
+    <div class="value" style="color: {"#10b981" if delta >= 0 else "#ef4444"}">{delta_str}</div>
     <div class="label">Score Delta</div>
   </div>
   <div class="stat-card">
@@ -298,7 +297,7 @@ def generate_progress_report(
 
 <section>
   <h2>Round-by-Round Journey</h2>
-  {''.join(round_blocks)}
+  {"".join(round_blocks)}
 </section>
 
 {unresolved_html}
@@ -320,9 +319,10 @@ def generate_progress_report(
 # Internal Rendering Helpers
 # ---------------------------------------------------------------------------
 
+
 def _render_round(r: RoundRecord, is_visual: bool, output_dir: str) -> str:
     score_pct = min(100.0, max(0.0, r.new_score))
-    delta_str = (f"+{r.score_delta:.1f}" if r.score_delta >= 0 else f"{r.score_delta:.1f}")
+    delta_str = f"+{r.score_delta:.1f}" if r.score_delta >= 0 else f"{r.score_delta:.1f}"
     delta_colour = "#10b981" if r.score_delta >= 0 else "#ef4444"
 
     # Findings table
@@ -333,7 +333,9 @@ def _render_round(r: RoundRecord, is_visual: bool, output_dir: str) -> str:
             ev = f.get("evidence_level", "")
             sev = f.get("severity", "")
             desc = f.get("description", "")[:120]
-            blocker = " <span class='badge badge-blocker'>BLOCKER</span>" if f.get("is_blocker") else ""
+            blocker = (
+                " <span class='badge badge-blocker'>BLOCKER</span>" if f.get("is_blocker") else ""
+            )
             ev_badge = f"<span class='badge badge-{ev.replace('_', '-')}'>{ev.replace('_', ' ').upper()}</span>"
             sev_badge = f"<span class='badge badge-{sev}'>{sev.upper()}</span>"
             rows.append(
@@ -392,13 +394,13 @@ def _render_round(r: RoundRecord, is_visual: bool, output_dir: str) -> str:
 <div class="round-card">
   <h3>
     <span class="round-badge">Round {r.round_number}</span>
-    Decision: <strong style="color: {'#10b981' if r.decision=='PASS' else '#f87171'}">{r.decision}</strong>
+    Decision: <strong style="color: {"#10b981" if r.decision == "PASS" else "#f87171"}">{r.decision}</strong>
     &nbsp;&nbsp;
     Score: <strong>{r.previous_score:.1f} → {r.new_score:.1f}</strong>
     <span style="color:{delta_colour};font-size:0.9rem">({delta_str})</span>
     &nbsp;
-    Evidence: <strong style="color:{'#10b981' if r.evidence_sufficiency=='sufficient' else '#f59e0b'}">{r.evidence_sufficiency}</strong>
-    {('<span class="badge badge-blocker">BLOCKERS</span>' if r.has_blockers else '')}
+    Evidence: <strong style="color:{"#10b981" if r.evidence_sufficiency == "sufficient" else "#f59e0b"}">{r.evidence_sufficiency}</strong>
+    {('<span class="badge badge-blocker">BLOCKERS</span>' if r.has_blockers else "")}
   </h3>
   <div class="score-bar-wrap">
     <div class="score-bar" style="width:{score_pct:.1f}%"></div>
@@ -411,12 +413,12 @@ def _render_round(r: RoundRecord, is_visual: bool, output_dir: str) -> str:
   {screenshot_html}
   <div style="font-size:0.75rem;color:#475569;margin-top:8px">
     {r.timestamp} &nbsp;|&nbsp; Loop: {r.loop_decision.upper()}
-    {('&nbsp;— ' + _esc(r.stop_reason)) if r.stop_reason else ''}
+    {("&nbsp;— " + _esc(r.stop_reason)) if r.stop_reason else ""}
   </div>
 </div>"""
 
 
-def _render_screenshot_strip(shots: List[str], output_dir: str) -> str:
+def _render_screenshot_strip(shots: list[str], output_dir: str) -> str:
     if not shots:
         return ""
     frames = []
@@ -425,10 +427,7 @@ def _render_screenshot_strip(shots: List[str], output_dir: str) -> str:
             continue
         rel = os.path.relpath(path, output_dir)
         frames.append(
-            f"<div class='screenshot-frame'>"
-            f"<img src='{rel}' alt='Round {i}'>"
-            f"<p>Round {i}</p>"
-            f"</div>"
+            f"<div class='screenshot-frame'><img src='{rel}' alt='Round {i}'><p>Round {i}</p></div>"
         )
     if not frames:
         return ""
@@ -438,7 +437,7 @@ def _render_screenshot_strip(shots: List[str], output_dir: str) -> str:
     )
 
 
-def _render_unresolved(unresolved: List[Dict[str, Any]]) -> str:
+def _render_unresolved(unresolved: list[dict[str, Any]]) -> str:
     if not unresolved:
         return (
             "<section><h2>Remaining Findings</h2>"
@@ -456,11 +455,7 @@ def _render_unresolved(unresolved: List[Dict[str, Any]]) -> str:
             f"<div class='unresolved-item'>{ev_b}{sev_b}"
             f"<span class='finding-desc'>{desc}{blocker}</span></div>"
         )
-    return (
-        "<section><h2>Remaining Findings</h2>"
-        + "".join(rows)
-        + "</section>"
-    )
+    return "<section><h2>Remaining Findings</h2>" + "".join(rows) + "</section>"
 
 
 def _esc(text: str) -> str:

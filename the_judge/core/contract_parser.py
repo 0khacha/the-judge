@@ -1,5 +1,5 @@
 import re
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 AMBIGUOUS_KEYWORDS = ["fast", "robust", "secure", "efficient", "optimal", "scalable", "clean"]
 
@@ -7,7 +7,7 @@ AMBIGUOUS_KEYWORDS = ["fast", "robust", "secure", "efficient", "optimal", "scala
 class ContractParser:
     """Natural Language Contract Parser & Requirement Extractor for The Judge v4.2."""
 
-    def parse_natural_language_spec(self, spec_text: str) -> Dict[str, Any]:
+    def parse_natural_language_spec(self, spec_text: str) -> dict[str, Any]:
         """Parses natural language task specifications into explicit and inferred requirement candidates.
 
         Args:
@@ -16,10 +16,10 @@ class ContractParser:
         Returns:
             Dictionary containing extracted requirements, ambiguity warnings, and contradiction flags.
         """
-        lines = [line.strip() for line in spec_text.splitlines() if line.strip()]
-        requirements: List[Dict[str, Any]] = []
-        ambiguities: List[str] = []
-        contradictions: List[str] = []
+        [line.strip() for line in spec_text.splitlines() if line.strip()]
+        requirements: list[dict[str, Any]] = []
+        ambiguities: list[str] = []
+        contradictions: list[str] = []
 
         # 1. Parse sentences into requirement items
         sentences = re.split(r"(?<=[.!?])\s+", spec_text)
@@ -31,30 +31,51 @@ class ContractParser:
                 continue
 
             # Check for ambiguity
-            matched_ambig = [kw for kw in AMBIGUOUS_KEYWORDS if re.search(r"\b" + kw + r"\b", sentence_clean, re.I)]
+            matched_ambig = [
+                kw
+                for kw in AMBIGUOUS_KEYWORDS
+                if re.search(r"\b" + kw + r"\b", sentence_clean, re.I)
+            ]
             is_ambiguous = len(matched_ambig) > 0
             if is_ambiguous:
-                ambiguities.append(f"Ambiguous requirement term '{matched_ambig[0]}' in sentence: '{sentence_clean}'")
+                ambiguities.append(
+                    f"Ambiguous requirement term '{matched_ambig[0]}' in sentence: '{sentence_clean}'"
+                )
 
             category = self._infer_category(sentence_clean)
-            priority = "critical" if any(w in sentence_clean.lower() for w in ("must", "shall", "always", "required", "never")) else "important"
+            priority = (
+                "critical"
+                if any(
+                    w in sentence_clean.lower()
+                    for w in ("must", "shall", "always", "required", "never")
+                )
+                else "important"
+            )
 
-            requirements.append({
-                "id": f"REQ-{req_idx:03d}",
-                "description": sentence_clean,
-                "category": category,
-                "priority": priority,
-                "provenance_type": "EXPLICIT_REQUIREMENT" if "must" in sentence_clean.lower() or "shall" in sentence_clean.lower() else "INFERRED_CANDIDATE",
-                "ambiguous": is_ambiguous,
-            })
+            requirements.append(
+                {
+                    "id": f"REQ-{req_idx:03d}",
+                    "description": sentence_clean,
+                    "category": category,
+                    "priority": priority,
+                    "provenance_type": "EXPLICIT_REQUIREMENT"
+                    if "must" in sentence_clean.lower() or "shall" in sentence_clean.lower()
+                    else "INFERRED_CANDIDATE",
+                    "ambiguous": is_ambiguous,
+                }
+            )
             req_idx += 1
 
         # 2. Check for contradictions
         text_lower = spec_text.lower()
         if "retry all" in text_lower and "never retry" in text_lower:
-            contradictions.append("CONTRADICTION DETECTED: Specification requests both 'retry all' and 'never retry'.")
+            contradictions.append(
+                "CONTRADICTION DETECTED: Specification requests both 'retry all' and 'never retry'."
+            )
         if "idempotent" in text_lower and "increment counter" in text_lower:
-            contradictions.append("CONTRADICTION DETECTED: Specification requests idempotency alongside non-idempotent state increments.")
+            contradictions.append(
+                "CONTRADICTION DETECTED: Specification requests idempotency alongside non-idempotent state increments."
+            )
 
         return {
             "parsed_requirements": requirements,
@@ -69,7 +90,10 @@ class ContractParser:
             return "boundary"
         elif any(w in text_lower for w in ("ttl", "expire", "session", "state", "cache", "store")):
             return "state"
-        elif any(w in text_lower for w in ("sanitize", "xss", "salt", "secret", "hash", "traversal", "security")):
+        elif any(
+            w in text_lower
+            for w in ("sanitize", "xss", "salt", "secret", "hash", "traversal", "security")
+        ):
             return "security"
         elif any(w in text_lower for w in ("raise", "error", "exception", "invalid", "reject")):
             return "error_handling"

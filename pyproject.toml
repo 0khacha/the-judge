@@ -23,7 +23,7 @@ keywords = [
     "agent-tools"
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -38,16 +38,15 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
-dependencies = [
-    "pytest>=7.0.0",
-    "mypy>=1.0.0",
-    "ruff>=0.1.0"
-]
+dependencies = []
 
 [project.optional-dependencies]
 dev = [
+    "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "pytest-asyncio>=0.20.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
     "types-setuptools",
     "build>=0.10.0",
     "twine>=4.0.0",
@@ -57,8 +56,11 @@ visual = [
     "pillow>=9.0.0"
 ]
 all = [
+    "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "pytest-asyncio>=0.20.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
     "types-setuptools",
     "build>=0.10.0",
     "twine>=4.0.0",
@@ -124,7 +126,7 @@ indent-style = "space"
 line-ending = "auto"
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 warn_return_any = false
 warn_unused_configs = true
 ignore_missing_imports = true

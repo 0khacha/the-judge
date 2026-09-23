@@ -24,7 +24,7 @@ This means:
 import ast
 import os
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 
 class AutoImprover:
@@ -41,19 +41,19 @@ class AutoImprover:
     def __init__(self, workspace: str):
         self.workspace = os.path.abspath(workspace)
 
-    def improve_workspace(self, feedback: Dict[str, Any]) -> Dict[str, Any]:
+    def improve_workspace(self, feedback: dict[str, Any]) -> dict[str, Any]:
         """Apply a round of targeted improvements driven by critique priority.
 
         Returns:
             Dict with 'improved': bool, 'summary': str, 'changes': list.
         """
-        changes_made: List[str] = []
+        changes_made: list[str] = []
 
         critique = feedback.get("critique", {})
         priority_findings = critique.get("improvement_priority", [])
         decision = feedback.get("decision", "")
         is_visual = feedback.get("is_visual", False)
-        round_number = feedback.get("round_number", 1)
+        feedback.get("round_number", 1)
 
         py_files, web_files, has_tests = self._scan_workspace()
 
@@ -72,7 +72,7 @@ class AutoImprover:
         addressed_ids: set = set()
         for finding in priority_findings[:5]:
             ev_level = finding.get("evidence_level", "")
-            severity = finding.get("severity", "")
+            finding.get("severity", "")
             fid = finding.get("id", "")
 
             if fid in addressed_ids:
@@ -137,9 +137,7 @@ class AutoImprover:
             for web_file in web_files:
                 modified = self._enhance_web_file(web_file, priority_findings, is_visual)
                 if modified:
-                    changes_made.append(
-                        f"Improved web asset quality: {os.path.basename(web_file)}"
-                    )
+                    changes_made.append(f"Improved web asset quality: {os.path.basename(web_file)}")
 
         # ------------------------------------------------------------------
         # Fallback: create judge.json spec if nothing else could be done
@@ -161,10 +159,10 @@ class AutoImprover:
     # File Discovery
     # -----------------------------------------------------------------------
 
-    def _scan_workspace(self) -> Tuple[List[str], List[str], bool]:
+    def _scan_workspace(self) -> tuple[list[str], list[str], bool]:
         """Scan workspace in a single pass to discover Python, web, and test files."""
-        py_files: List[str] = []
-        web_files: List[str] = []
+        py_files: list[str] = []
+        web_files: list[str] = []
         has_tests = False
 
         if os.path.isfile(self.workspace):
@@ -176,7 +174,9 @@ class AutoImprover:
 
         for root, dirs, filenames in os.walk(self.workspace):
             # Prune ignored directories in-place for efficiency
-            dirs[:] = [d for d in dirs if d not in (".git", "__pycache__", ".venv", "venv", "node_modules")]
+            dirs[:] = [
+                d for d in dirs if d not in (".git", "__pycache__", ".venv", "venv", "node_modules")
+            ]
             for fn in filenames:
                 if fn.endswith(".py"):
                     if fn.startswith("test_") or fn.endswith("_test.py") or fn == "conftest.py":
@@ -188,10 +188,10 @@ class AutoImprover:
 
         return sorted(py_files), sorted(web_files), has_tests
 
-    def _get_python_files(self) -> List[str]:
+    def _get_python_files(self) -> list[str]:
         return self._scan_workspace()[0]
 
-    def _get_web_files(self) -> List[str]:
+    def _get_web_files(self) -> list[str]:
         return self._scan_workspace()[1]
 
     def _has_tests(self) -> bool:
@@ -201,9 +201,7 @@ class AutoImprover:
     # Critique-Priority Improvement Actions
     # -----------------------------------------------------------------------
 
-    def _attempt_syntax_fix(
-        self, py_files: List[str], finding: Dict[str, Any]
-    ) -> Optional[str]:
+    def _attempt_syntax_fix(self, py_files: list[str], finding: dict[str, Any]) -> Optional[str]:
         """Try to identify and fix syntax errors from finding description."""
         desc = finding.get("description", "")
         # Find which file the error is in
@@ -217,16 +215,19 @@ class AutoImprover:
                 except SyntaxError as e:
                     # Add error comment at top of file — agent must fix manually
                     with open(fpath, "w", encoding="utf-8") as f:
-                        f.write(f"# SYNTAX ERROR on line {e.lineno}: {e.msg} — REQUIRES MANUAL FIX\n" + content)
+                        f.write(
+                            f"# SYNTAX ERROR on line {e.lineno}: {e.msg} — REQUIRES MANUAL FIX\n"
+                            + content
+                        )
                     return f"Marked syntax error for fix in {os.path.basename(fpath)}:L{e.lineno}"
         return None
 
     def _improve_python_for_test_failure(
-        self, py_files: List[str], finding: Dict[str, Any], feedback: Dict[str, Any]
+        self, py_files: list[str], finding: dict[str, Any], feedback: dict[str, Any]
     ) -> Optional[str]:
         """Attempt to address a failing test by improving the implementation."""
         desc = finding.get("description", "")
-        suggested = finding.get("suggested_action", "")
+        finding.get("suggested_action", "")
         refs = finding.get("evidence_refs", [])
 
         # For the fallback AutoImprover (no LLM), we can only do structural
@@ -241,8 +242,16 @@ class AutoImprover:
                 for node in ast.walk(tree):
                     if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                         # Add basic None-guard if function has no guard and finding mentions None
-                        if ("none" in desc.lower() or "empty" in desc.lower() or "null" in desc.lower()):
-                            if not any("None" in ast.dump(child) for child in ast.walk(node) if isinstance(child, ast.Compare)):
+                        if (
+                            "none" in desc.lower()
+                            or "empty" in desc.lower()
+                            or "null" in desc.lower()
+                        ):
+                            if not any(
+                                "None" in ast.dump(child)
+                                for child in ast.walk(node)
+                                if isinstance(child, ast.Compare)
+                            ):
                                 content = self._insert_none_guard(content, node)
                                 modified = True
                                 break
@@ -278,7 +287,7 @@ class AutoImprover:
         return "".join(lines)
 
     def _add_evidence_for_claim(
-        self, py_files: List[str], finding: Dict[str, Any]
+        self, py_files: list[str], finding: dict[str, Any]
     ) -> Optional[str]:
         """For a CONTRADICTED finding, add a test that provides evidence for the claim."""
         claim = finding.get("agent_claim", "") or ""
@@ -291,7 +300,9 @@ class AutoImprover:
             return None
 
         module_names = [os.path.splitext(os.path.basename(f))[0] for f in py_files[:2]]
-        imports = "\n".join(f"try:\n    import {m}\nexcept ImportError:\n    {m} = None" for m in module_names)
+        imports = "\n".join(
+            f"try:\n    import {m}\nexcept ImportError:\n    {m} = None" for m in module_names
+        )
 
         test_content = f'''"""Evidence test generated to address contradicted claim.
 Claim: {claim[:200]}
@@ -315,12 +326,10 @@ def test_claim_verification():
         except Exception:
             return None
 
-    def _add_missing_test(
-        self, py_files: List[str], finding: Dict[str, Any]
-    ) -> Optional[str]:
+    def _add_missing_test(self, py_files: list[str], finding: dict[str, Any]) -> Optional[str]:
         """Add a targeted test for an identified coverage gap."""
         desc = finding.get("description", "")
-        action = finding.get("suggested_action", "")
+        finding.get("suggested_action", "")
 
         if not py_files:
             return None
@@ -407,11 +416,9 @@ def test_{module_name}_boundary_values():
         except Exception:
             return None
 
-    def _fix_silent_exception(
-        self, py_files: List[str], finding: Dict[str, Any]
-    ) -> Optional[str]:
+    def _fix_silent_exception(self, py_files: list[str], finding: dict[str, Any]) -> Optional[str]:
         """Convert silent except: pass blocks to logging handlers."""
-        desc = finding.get("description", "")
+        finding.get("description", "")
         refs = finding.get("evidence_refs", [])
 
         for fpath in py_files:
@@ -438,7 +445,7 @@ def test_{module_name}_boundary_values():
     # Python Code Quality Improvements
     # -----------------------------------------------------------------------
 
-    def _enhance_python_file(self, filepath: str, feedback: Dict[str, Any]) -> bool:
+    def _enhance_python_file(self, filepath: str, feedback: dict[str, Any]) -> bool:
         """Add missing module docstrings and ensure trailing newlines."""
         try:
             with open(filepath, encoding="utf-8") as f:
@@ -470,7 +477,7 @@ def test_{module_name}_boundary_values():
     def _enhance_web_file(
         self,
         filepath: str,
-        priority_findings: List[Dict[str, Any]],
+        priority_findings: list[dict[str, Any]],
         is_visual: bool,
     ) -> bool:
         """Improve HTML/CSS files based on observed critique findings."""
@@ -486,11 +493,11 @@ def test_{module_name}_boundary_values():
             # Add missing DOCTYPE + structure
             if "<!DOCTYPE html>" not in content and "<html" not in content:
                 content = (
-                    "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n"
-                    "  <meta charset=\"UTF-8\">\n"
-                    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                    '<!DOCTYPE html>\n<html lang="en">\n<head>\n'
+                    '  <meta charset="UTF-8">\n'
+                    '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
                     "  <title>Application</title>\n"
-                    "  <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n"
+                    '  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">\n'
                     "  <style>\n"
                     "    body { font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 24px; "
                     "background: #0f172a; color: #f1f5f9; line-height: 1.6; }\n"
@@ -498,7 +505,7 @@ def test_{module_name}_boundary_values():
                     "    .card { background: #1e293b; border-radius: 12px; padding: 24px; "
                     "box-shadow: 0 4px 24px rgba(0,0,0,.4); border: 1px solid #334155; }\n"
                     "  </style>\n"
-                    "</head>\n<body>\n<div class=\"container\">\n"
+                    '</head>\n<body>\n<div class="container">\n'
                     + content
                     + "\n</div>\n</body>\n</html>"
                 )
@@ -506,9 +513,9 @@ def test_{module_name}_boundary_values():
 
             else:
                 # Address specific observed critique findings
-                for f in priority_findings:
-                    ev = f.get("evidence_level", "")
-                    desc = f.get("description", "").lower()
+                for finding in priority_findings:
+                    finding.get("evidence_level", "")
+                    desc = finding.get("description", "").lower()
 
                     # Add viewport meta if missing
                     if "viewport" in desc and "viewport" not in content.lower():
@@ -530,11 +537,15 @@ def test_{module_name}_boundary_values():
                             modified = True
 
                     # Fix password field type
-                    if "password" in desc and 'type="text"' in content and "password" in content.lower():
+                    if (
+                        "password" in desc
+                        and 'type="text"' in content
+                        and "password" in content.lower()
+                    ):
                         # Only replace text-type inputs near the word "password"
                         content = re.sub(
                             r'((?:password|Password)[^"]*type=")text(")',
-                            r'\1password\2',
+                            r"\1password\2",
                             content,
                         )
                         modified = True
@@ -552,7 +563,7 @@ def test_{module_name}_boundary_values():
     # Test Synthesis
     # -----------------------------------------------------------------------
 
-    def _synthesize_basic_test(self, target_files: List[str]) -> Optional[str]:
+    def _synthesize_basic_test(self, target_files: list[str]) -> Optional[str]:
         """Synthesise an executable pytest suite for unverified workspace modules."""
         if not target_files:
             test_path = (
@@ -561,7 +572,9 @@ def test_{module_name}_boundary_values():
                 else os.path.join(os.path.dirname(self.workspace), "test_workspace.py")
             )
             with open(test_path, "w", encoding="utf-8") as f:
-                f.write('"""Synthesised verification test suite."""\n\ndef test_workspace_load():\n    assert True\n')
+                f.write(
+                    '"""Synthesised verification test suite."""\n\ndef test_workspace_load():\n    assert True\n'
+                )
             return os.path.basename(test_path)
 
         first = target_files[0]
@@ -572,7 +585,8 @@ def test_{module_name}_boundary_values():
             content = open(first, encoding="utf-8").read()
             tree = ast.parse(content)
             functions = [
-                n.name for n in ast.walk(tree)
+                n.name
+                for n in ast.walk(tree)
                 if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
                 and not n.name.startswith("_")
             ]
@@ -611,6 +625,7 @@ def test_{module_name}_boundary_values():
 
     def _create_default_task_spec(self, spec_path: str) -> None:
         import json
+
         spec = {
             "name": os.path.basename(self.workspace),
             "version": "1.0.0",

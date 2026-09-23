@@ -1,15 +1,11 @@
-import argparse
-import json
-import os
-import sys
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 def evaluate(
-    findings: Dict[str, Any],
-    evidence: Dict[str, Any],
-    previous_evidence: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
+    findings: dict[str, Any],
+    evidence: dict[str, Any],
+    previous_evidence: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
     """Evaluate agent findings against ground truth evidence using strict hard gates.
 
     Conceptual Decision Space:
@@ -17,10 +13,10 @@ def evaluate(
     - FAIL: Sufficient evidence violating requirements (hard gate failures, test failures, discrepancies).
     - ABSTAIN: Insufficient evidence to confidently PASS or FAIL (unverified claims, missing test coverage).
     """
-    blocking_issues: List[str] = []
-    discrepancies: List[str] = []
-    regressions: List[str] = []
-    insufficient_evidence_notes: List[str] = []
+    blocking_issues: list[str] = []
+    discrepancies: list[str] = []
+    regressions: list[str] = []
+    insufficient_evidence_notes: list[str] = []
 
     test_suite = evidence.get("test_suite", {})
     type_checker = evidence.get("type_checker", {})
@@ -35,19 +31,25 @@ def evaluate(
         blocking_issues.append(f"Test suite failure: {failed_str}")
 
     # --- Hard Gate 2: Type-check errors ---
-    if type_checker.get("strict_type_check", False) and (type_checker.get("exit_code", 0) != 0 or type_checker.get("error_count", 0) > 0):
+    if type_checker.get("strict_type_check", False) and (
+        type_checker.get("exit_code", 0) != 0 or type_checker.get("error_count", 0) > 0
+    ):
         err_cnt = type_checker.get("error_count", 1)
         blocking_issues.append(f"Type checker failed with {err_cnt} error(s)")
 
     # --- Hard Gate 3: Security notes with severity 'blocking' ---
     for sec in findings.get("security_notes", []):
         if sec.get("severity") == "blocking":
-            blocking_issues.append(f"Blocking security note ({sec.get('id', 'S')}): {sec.get('description')}")
+            blocking_issues.append(
+                f"Blocking security note ({sec.get('id', 'S')}): {sec.get('description')}"
+            )
 
     # --- Hard Gate 4: Requirements marked 'fail' by agent ---
     for req in findings.get("requirements", []):
         if req.get("status") == "fail":
-            blocking_issues.append(f"Requirement failed ({req.get('id', 'R')}): {req.get('description')}")
+            blocking_issues.append(
+                f"Requirement failed ({req.get('id', 'R')}): {req.get('description')}"
+            )
 
     # --- Hard Gate 5: Discrepancy Check (Agent claim contradicts ground truth) ---
     for req in findings.get("requirements", []):
@@ -85,26 +87,35 @@ def evaluate(
     file_tampered = challenge_manifest.get("file_tampered", False)
 
     if file_tampered:
-        blocking_issues.append("COLLECTION TAMPERING DETECTED: Challenge test file hash mismatch (modified by target during execution).")
+        blocking_issues.append(
+            "COLLECTION TAMPERING DETECTED: Challenge test file hash mismatch (modified by target during execution)."
+        )
 
     if len(missing_challenges) > 0:
         missing_str = ", ".join(sorted(missing_challenges))
-        blocking_issues.append(f"COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: {missing_str}")
+        blocking_issues.append(
+            f"COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: {missing_str}"
+        )
 
     all_executed_tests = passed_test_names.union(failed_test_names)
     unexecuted_expected = [t for t in expected_challenges if t not in all_executed_tests]
     if unexecuted_expected and not missing_challenges:
         unexec_str = ", ".join(sorted(unexecuted_expected))
-        blocking_issues.append(f"COLLECTION TAMPERING DETECTED: Expected challenge test(s) were deselect or bypassed during collection: {unexec_str}")
+        blocking_issues.append(
+            f"COLLECTION TAMPERING DETECTED: Expected challenge test(s) were deselect or bypassed during collection: {unexec_str}"
+        )
 
     # --- Hard Gate 8: Verification Denial / ABSTAIN Manipulation Gate ---
     security_notes = findings.get("security_notes", [])
     verification_denial = any(
-        "Verification Denial" in s.get("description", "") or "Obfuscation" in s.get("description", "")
+        "Verification Denial" in s.get("description", "")
+        or "Obfuscation" in s.get("description", "")
         for s in security_notes
     )
     if verification_denial:
-        blocking_issues.append("VERIFICATION DENIAL DETECTED: Target code deliberately attempted to force ABSTAIN or obscure verification.")
+        blocking_issues.append(
+            "VERIFICATION DENIAL DETECTED: Target code deliberately attempted to force ABSTAIN or obscure verification."
+        )
 
     # --- Hard Gate 9: Coverage-Aware PASS Gate ---
     contract_data = evidence.get("contract_data", {})
@@ -117,18 +128,27 @@ def evaluate(
         )
 
     test_provenance = evidence.get("test_provenance", {})
-    independent_passed_tests: List[str] = []
-    agent_controlled_passed_tests: List[str] = []
-    judge_challenge_passed_tests: List[str] = []
+    independent_passed_tests: list[str] = []
+    agent_controlled_passed_tests: list[str] = []
+    judge_challenge_passed_tests: list[str] = []
 
-    evidence_families: Dict[str, List[str]] = {}
+    evidence_families: dict[str, list[str]] = {}
 
     for t in passed_test_names:
         prov = test_provenance.get(t, {})
-        source = prov.get("source", "public_visible_test" if not t.startswith("test_agent_") else "agent_authored_test")
-        indep = prov.get("independence_level", "externally_verified" if source != "agent_authored_test" else "agent_controlled")
+        source = prov.get(
+            "source",
+            "public_visible_test" if not t.startswith("test_agent_") else "agent_authored_test",
+        )
+        indep = prov.get(
+            "independence_level",
+            "externally_verified" if source != "agent_authored_test" else "agent_controlled",
+        )
 
-        family_key = prov.get("property_family", "public_workspace_tests" if source == "public_visible_test" else "agent_self_proofs")
+        family_key = prov.get(
+            "property_family",
+            "public_workspace_tests" if source == "public_visible_test" else "agent_self_proofs",
+        )
         if family_key not in evidence_families:
             evidence_families[family_key] = []
         evidence_families[family_key].append(t)
@@ -136,7 +156,10 @@ def evaluate(
         if source == "judge_challenge_test":
             judge_challenge_passed_tests.append(t)
 
-        if source in ("agent_claim", "agent_authored_test", "agent_test") or indep == "agent_controlled":
+        if (
+            source in ("agent_claim", "agent_authored_test", "agent_test")
+            or indep == "agent_controlled"
+        ):
             agent_controlled_passed_tests.append(t)
         else:
             independent_passed_tests.append(t)
@@ -148,16 +171,24 @@ def evaluate(
     has_challenge_evidence = len(judge_challenge_passed_tests) > 0
 
     if total_tests == 0:
-        insufficient_evidence_notes.append("ABSTAIN Level 0: No executable unit tests were run to verify implementation.")
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 0: No executable unit tests were run to verify implementation."
+        )
         evidence_level = 0
     elif passed_tests_count == 0:
-        insufficient_evidence_notes.append("ABSTAIN Level 1: Executable tests were run but zero tests passed.")
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 1: Executable tests were run but zero tests passed."
+        )
         evidence_level = 1
     elif len(independent_passed_tests) == 0:
-        insufficient_evidence_notes.append("ABSTAIN Level 1: Cannot PASS based on agent_controlled evidence alone. Independent verification (judge_generated or externally_verified) is required.")
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 1: Cannot PASS based on agent_controlled evidence alone. Independent verification (judge_generated or externally_verified) is required."
+        )
         evidence_level = 1
     elif not has_challenge_evidence:
-        insufficient_evidence_notes.append("ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification.")
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification."
+        )
         evidence_level = 1
     elif failed_tests_count > 0 or test_suite.get("exit_code", 0) != 0:
         evidence_level = 1
@@ -166,7 +197,7 @@ def evaluate(
     else:
         evidence_level = 2
 
-    req_coverage: List[Dict[str, Any]] = []
+    req_coverage: list[dict[str, Any]] = []
     reqs = findings.get("requirements", [])
     for req in reqs:
         req_id = req.get("id", "R")
@@ -179,55 +210,79 @@ def evaluate(
 
         if req_status == "pass":
             if not req_ev:
-                insufficient_evidence_notes.append(f"ABSTAIN Level 1: Requirement {req_id} ('{req_desc}') has no evidence reference.")
-                req_coverage.append({
-                    "id": req_id,
-                    "description": req_desc,
-                    "status": "pass",
-                    "evidence_ref": req_ev,
-                    "evidence_source": "agent_claim",
-                    "independence_level": "agent_controlled",
-                    "evidence_strength": "none",
-                    "verification": "unverified",
-                })
+                insufficient_evidence_notes.append(
+                    f"ABSTAIN Level 1: Requirement {req_id} ('{req_desc}') has no evidence reference."
+                )
+                req_coverage.append(
+                    {
+                        "id": req_id,
+                        "description": req_desc,
+                        "status": "pass",
+                        "evidence_ref": req_ev,
+                        "evidence_source": "agent_claim",
+                        "independence_level": "agent_controlled",
+                        "evidence_strength": "none",
+                        "verification": "unverified",
+                    }
+                )
             elif len(independent_passed_tests) > 0:
                 matched_indep = [t for t in independent_passed_tests if t in req_ev or req_ev in t]
-                src = req_source or (test_provenance.get(matched_indep[0], {}).get("source", "public_visible_test") if matched_indep else "agent_claim")
-                indep_lvl = req_indep or (test_provenance.get(matched_indep[0], {}).get("independence_level", "externally_verified") if matched_indep else "agent_controlled")
+                src = req_source or (
+                    test_provenance.get(matched_indep[0], {}).get("source", "public_visible_test")
+                    if matched_indep
+                    else "agent_claim"
+                )
+                indep_lvl = req_indep or (
+                    test_provenance.get(matched_indep[0], {}).get(
+                        "independence_level", "externally_verified"
+                    )
+                    if matched_indep
+                    else "agent_controlled"
+                )
 
-                req_coverage.append({
-                    "id": req_id,
-                    "description": req_desc,
-                    "status": "pass",
-                    "evidence_ref": req_ev,
-                    "evidence_source": src,
-                    "independence_level": indep_lvl,
-                    "evidence_strength": f"level_{evidence_level}",
-                    "verification": "sufficient" if indep_lvl != "agent_controlled" else "partially_verified",
-                })
+                req_coverage.append(
+                    {
+                        "id": req_id,
+                        "description": req_desc,
+                        "status": "pass",
+                        "evidence_ref": req_ev,
+                        "evidence_source": src,
+                        "independence_level": indep_lvl,
+                        "evidence_strength": f"level_{evidence_level}",
+                        "verification": "sufficient"
+                        if indep_lvl != "agent_controlled"
+                        else "partially_verified",
+                    }
+                )
             else:
-                insufficient_evidence_notes.append(f"ABSTAIN Level 1: Requirement {req_id} referenced '{req_ev}' but no independent passed tests were recorded.")
-                req_coverage.append({
+                insufficient_evidence_notes.append(
+                    f"ABSTAIN Level 1: Requirement {req_id} referenced '{req_ev}' but no independent passed tests were recorded."
+                )
+                req_coverage.append(
+                    {
+                        "id": req_id,
+                        "description": req_desc,
+                        "status": "pass",
+                        "evidence_ref": req_ev,
+                        "evidence_source": req_source or "agent_authored_test",
+                        "independence_level": req_indep or "agent_controlled",
+                        "evidence_strength": "weak",
+                        "verification": "insufficient",
+                    }
+                )
+        else:
+            req_coverage.append(
+                {
                     "id": req_id,
                     "description": req_desc,
-                    "status": "pass",
+                    "status": req_status,
                     "evidence_ref": req_ev,
-                    "evidence_source": req_source or "agent_authored_test",
+                    "evidence_source": req_source or "agent_claim",
                     "independence_level": req_indep or "agent_controlled",
-                    "evidence_strength": "weak",
-                    "verification": "insufficient",
-                })
-        else:
-            req_coverage.append({
-                "id": req_id,
-                "description": req_desc,
-                "status": req_status,
-                "evidence_ref": req_ev,
-                "evidence_source": req_source or "agent_claim",
-                "independence_level": req_indep or "agent_controlled",
-                "evidence_strength": "fail",
-                "verification": "failed",
-            })
+                    "evidence_strength": "fail",
+                    "verification": "failed",
+                }
+            )
 
     if len(blocking_issues) > 0:
         verdict = "FAIL"
@@ -238,14 +293,20 @@ def evaluate(
 
     # Note: total_tests, passed_tests_count, and failed_tests_count were already
     # computed above (lines ~144-146) and remain unchanged.
-    test_score = (passed_tests_count / total_tests * 100.0) if total_tests > 0 else (100.0 if test_suite.get("exit_code", 0) == 0 else 0.0)
+    test_score = (
+        (passed_tests_count / total_tests * 100.0)
+        if total_tests > 0
+        else (100.0 if test_suite.get("exit_code", 0) == 0 else 0.0)
+    )
 
     reqs = findings.get("requirements", [])
     req_passed = sum(1 for r in reqs if r.get("status") == "pass")
     req_score = (req_passed / len(reqs) * 100.0) if reqs else 100.0
 
     linter_errs = linter.get("error_count", 0)
-    linter_score = 100.0 if linter.get("exit_code", 0) == 0 else max(0.0, 100.0 - linter_errs * 10.0)
+    linter_score = (
+        100.0 if linter.get("exit_code", 0) == 0 else max(0.0, 100.0 - linter_errs * 10.0)
+    )
 
     type_score = 100.0 if type_checker.get("exit_code", 0) == 0 else 0.0
 
@@ -279,19 +340,23 @@ def evaluate(
         + 0.10 * edge_score
         + 0.05 * sec_score
         + 0.05 * cq_score,
-        2
+        2,
     )
 
     cm = evidence.get("challenge_manifest", {})
     challenge_integ = "FAILED" if cm.get("file_tampered") else "VERIFIED"
-    
+
     coll_tampered = bool(cm.get("missing_challenges")) or bool(unexecuted_expected)
     collection_integ = "FAILED" if coll_tampered else "VERIFIED"
-    
+
     execution_integ = "FAILED" if test_suite.get("exit_code", 0) != 0 else "VERIFIED"
-    
-    result_integ = "FAILED" if (failed_tests_count > 0 or len(discrepancies) > 0 or len(regressions) > 0) else "VERIFIED"
-    
+
+    result_integ = (
+        "FAILED"
+        if (failed_tests_count > 0 or len(discrepancies) > 0 or len(regressions) > 0)
+        else "VERIFIED"
+    )
+
     if len(judge_challenge_passed_tests) > 0 and len(independent_passed_tests) > 0:
         independence_integ = "VERIFIED"
     elif len(independent_passed_tests) > 0:
@@ -362,7 +427,7 @@ def evaluate(
     }
 
 
-def explain_verdict(report: Dict[str, Any]) -> str:
+def explain_verdict(report: dict[str, Any]) -> str:
     """Generate human-readable audit explanation chain for a score engine evaluation report."""
     lines = []
     lines.append("======================================================================")
@@ -412,19 +477,29 @@ def explain_verdict(report: Dict[str, Any]) -> str:
 
     adv_sub = ev_cov.get("adversarial_robustness_subdimensions", {})
     lines.append("[PASS] Adversarial Robustness")
-    lines.append(f"├── Known Attack Resistance: {adv_sub.get('known_attack_resistance', 'VERIFIED')}")
-    lines.append(f"├── Adaptive Attack Resist : {adv_sub.get('adaptive_attack_resistance', 'VERIFIED')}")
-    lines.append(f"├── Temporal Attack Resist : {adv_sub.get('temporal_attack_resistance', 'VERIFIED')}")
+    lines.append(
+        f"├── Known Attack Resistance: {adv_sub.get('known_attack_resistance', 'VERIFIED')}"
+    )
+    lines.append(
+        f"├── Adaptive Attack Resist : {adv_sub.get('adaptive_attack_resistance', 'VERIFIED')}"
+    )
+    lines.append(
+        f"├── Temporal Attack Resist : {adv_sub.get('temporal_attack_resistance', 'VERIFIED')}"
+    )
     lines.append(f"└── Evasion Resistance     : {adv_sub.get('evasion_resistance', 'VERIFIED')}")
     lines.append("")
 
     abs_sub = ev_cov.get("abstention_correctness_subdimensions", {})
-    lines.append(f"[{'PASS' if abs_sub.get('verification_denial') == 'VERIFIED' else 'FAIL'}] Abstention Correctness")
+    lines.append(
+        f"[{'PASS' if abs_sub.get('verification_denial') == 'VERIFIED' else 'FAIL'}] Abstention Correctness"
+    )
     lines.append(f"├── Insufficient Evidence  : {abs_sub.get('insufficient_evidence', 'VERIFIED')}")
     lines.append(f"├── Conflicting Evidence   : {abs_sub.get('conflicting_evidence', 'VERIFIED')}")
     lines.append(f"├── Synthesis Failure      : {abs_sub.get('synthesis_failure', 'VERIFIED')}")
     lines.append(f"└── Verification Denial    : {abs_sub.get('verification_denial', 'VERIFIED')}")
-    lines.append(f"[{'PASS' if report['verdict'] != 'PASS' or ev_level >= 2 else 'ABSTAIN'}] Abstention Correctness : Gated (Synthesis evasion policy enforced)")
+    lines.append(
+        f"[{'PASS' if report['verdict'] != 'PASS' or ev_level >= 2 else 'ABSTAIN'}] Abstention Correctness : Gated (Synthesis evasion policy enforced)"
+    )
 
     lines.append("")
     lines.append("WHY")

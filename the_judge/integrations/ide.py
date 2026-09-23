@@ -6,8 +6,6 @@ verification directly from the command palette.
 
 import json
 import os
-from typing import Optional
-
 
 VSCODE_TASKS = {
     "version": "2.0.0",
@@ -96,7 +94,7 @@ def generate_vscode_tasks(workspace_path: str) -> str:
     tasks_path = os.path.join(vscode_dir, "tasks.json")
 
     if os.path.exists(tasks_path):
-        with open(tasks_path, "r", encoding="utf-8") as f:
+        with open(tasks_path, encoding="utf-8") as f:
             try:
                 existing = json.load(f)
                 existing_labels = {t.get("label", "") for t in existing.get("tasks", [])}

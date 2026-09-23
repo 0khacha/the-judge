@@ -54,7 +54,6 @@ dmypy.json
 .ruff_cache/
 
 # IDEs
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -70,6 +69,8 @@ pip-delete-this-directory.txt
 _judge_visual/
 .judge_report.json
 judge_output/
+_judge_sandbox*/
+*.judge.tmp
 
 # Local agent context (not committed; see CLAUDE.md)
 AGENT_CONTEXT.md

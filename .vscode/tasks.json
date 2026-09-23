@@ -1,0 +1,126 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Judge: Verify Workspace",
+      "type": "shell",
+      "command": "judge verify .",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Judge: Verify Workspace (JSON)",
+      "type": "shell",
+      "command": "judge verify . --json",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Judge: Improve Workspace",
+      "type": "shell",
+      "command": "judge improve .",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Judge: Contract Coverage",
+      "type": "shell",
+      "command": "judge contract .",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Judge: Watch Mode",
+      "type": "shell",
+      "command": "judge watch .",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Judge: Run Demo",
+      "type": "shell",
+      "command": "judge demo",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: Run All Tests",
+      "type": "shell",
+      "command": "pytest tests/ -v",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: Run Tests with Coverage",
+      "type": "shell",
+      "command": "pytest tests/ --cov=the_judge --cov-report=html --cov-report=term",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Lint: Check Code",
+      "type": "shell",
+      "command": "ruff check the_judge/ tests/",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Lint: Format Code",
+      "type": "shell",
+      "command": "ruff format the_judge/ tests/",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build: Clean and Build",
+      "type": "shell",
+      "command": "make clean && make build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

@@ -4,19 +4,20 @@ Polls for .py file changes and re-runs verification automatically.
 Zero external dependencies -- uses os.stat polling.
 """
 
+import contextlib
 import os
-import sys
 import time
-from typing import Callable, Dict, Optional, Set
+from typing import Callable, Optional
 
 
-def _collect_py_files(directory: str) -> Dict[str, float]:
+def _collect_py_files(directory: str) -> dict[str, float]:
     """Collect all .py files and their modification times."""
     files = {}
     for root, dirs, filenames in os.walk(directory):
         # Skip hidden directories, __pycache__, .git, venv
         dirs[:] = [
-            d for d in dirs
+            d
+            for d in dirs
             if not d.startswith(".")
             and d != "__pycache__"
             and d not in ("venv", ".venv", "env", "node_modules")
@@ -24,16 +25,12 @@ def _collect_py_files(directory: str) -> Dict[str, float]:
         for fname in filenames:
             if fname.endswith(".py"):
                 fpath = os.path.join(root, fname)
-                try:
+                with contextlib.suppress(OSError):
                     files[fpath] = os.stat(fpath).st_mtime
-                except OSError:
-                    pass
     return files
 
 
-def _detect_changes(
-    old_state: Dict[str, float], new_state: Dict[str, float]
-) -> Set[str]:
+def _detect_changes(old_state: dict[str, float], new_state: dict[str, float]) -> set[str]:
     """Return set of file paths that were added, modified, or deleted."""
     changed = set()
 
@@ -51,7 +48,7 @@ def _detect_changes(
 def watch_workspace(
     workspace: str,
     debounce_seconds: float = 2.0,
-    on_change: Optional[Callable[[Set[str]], None]] = None,
+    on_change: Optional[Callable[[set[str]], None]] = None,
 ) -> None:
     """Watch a workspace directory and re-verify on .py file changes.
 
@@ -68,7 +65,7 @@ def watch_workspace(
 
     print(f"The Judge: watching {workspace}")
     print(f"           debounce: {debounce_seconds}s")
-    print(f"           press Ctrl+C to stop")
+    print("           press Ctrl+C to stop")
     print()
 
     # Initial scan
@@ -104,7 +101,7 @@ def watch_workspace(
         print("\nThe Judge: watch stopped.")
 
 
-def _default_verify_callback(changed_files: Set[str]) -> None:
+def _default_verify_callback(changed_files: set[str]) -> None:
     """Default callback: runs judge verify and prints the result."""
     try:
         from the_judge.api import verify
