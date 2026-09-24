@@ -13,7 +13,7 @@ def main(args_list=None) -> int:
     """Main CLI entrypoint for The Judge v1.0.0."""
     parser = argparse.ArgumentParser(
         prog="judge",
-        description="The Judge v1.0.0 — Adversarial Verification & Improvement Engine",
+        description="The Judge v1.0.0 -- Adversarial Verification & Improvement Engine",
     )
     parser.add_argument("--version", action="version", version="The Judge v1.0.0")
     subparsers = parser.add_subparsers(dest="command", help="Available subcommands")
@@ -71,7 +71,7 @@ def main(args_list=None) -> int:
     # improve command
     improve_parser = subparsers.add_parser(
         "improve",
-        help="Run multi-round adversarial improvement loop (Build→Evidence→Critique→Improve→Repeat)",
+        help="Run multi-round adversarial improvement loop (Build->Evidence->Critique->Improve->Repeat)",
     )
     improve_parser.add_argument(
         "workspace", nargs="?", default=".", help="Path to workspace directory or file"
@@ -97,7 +97,7 @@ def main(args_list=None) -> int:
     # critique command
     critique_parser = subparsers.add_parser(
         "critique",
-        help="Run independent adversarial critique — classify findings by evidence level",
+        help="Run independent adversarial critique -- classify findings by evidence level",
     )
     critique_parser.add_argument(
         "workspace", nargs="?", default=".", help="Path to workspace directory or file"
@@ -264,7 +264,7 @@ def _run_watch_command(args) -> int:
 
 
 def _run_improve_command(args) -> int:
-    """Handle the 'judge improve' subcommand — adversarial improvement loop."""
+    """Handle the 'judge improve' subcommand -- adversarial improvement loop."""
     from the_judge.api import improve
     from the_judge.core.visual_engine import VisualEngine
     from the_judge.integrations.audit_trail import AuditTrail
@@ -281,14 +281,14 @@ def _run_improve_command(args) -> int:
 
     if not is_json:
         print("=" * 70)
-        print("THE JUDGE — Adversarial Improvement Engine")
-        print("Loop: WORK → EVIDENCE → CRITIQUE → IDENTIFY WEAKNESSES → IMPROVE → REPEAT")
+        print("THE JUDGE -- Adversarial Improvement Engine")
+        print("Loop: WORK -> EVIDENCE -> CRITIQUE -> IDENTIFY WEAKNESSES -> IMPROVE -> REPEAT")
         print("=" * 70)
         domain_label = "[VISUAL]" if is_visual else "[NON-VISUAL]"
         if is_visual:
-            print(f"Classification   : {domain_label} — screenshots captured as visual evidence")
+            print(f"Classification   : {domain_label} -- screenshots captured as visual evidence")
         else:
-            print(f"Classification   : {domain_label} — tests, static analysis, behavioral checks")
+            print(f"Classification   : {domain_label} -- tests, static analysis, behavioral checks")
         print(f"Target Workspace : {os.path.abspath(workspace)}")
         print(f"Max Rounds       : {max_rounds}")
         print(f"Quality Target   : {target_score} / 100.0")
@@ -345,7 +345,7 @@ def _run_improve_command(args) -> int:
         )
 
         if skeptic:
-            print(f"  Critique       : {skeptic[:120]}{'…' if len(skeptic) > 120 else ''}")
+            print(f"  Critique       : {skeptic[:120]}{'...' if len(skeptic) > 120 else ''}")
 
         if contradictions:
             print(f"  Contradictions : {len(contradictions)} detected")
@@ -439,7 +439,7 @@ def _run_improve_command(args) -> int:
         diff = round(final_score - initial_score, 1)
         diff_str = f"+{diff:.1f}" if diff >= 0 else f"{diff:.1f}"
         print(f"SUCCESS: All stop conditions met in {result.get('total_rounds')} round(s).")
-        print(f"Score Progression : {initial_score:.1f} → {final_score:.1f} ({diff_str} points)")
+        print(f"Score Progression : {initial_score:.1f} -> {final_score:.1f} ({diff_str} points)")
         print("Evidence          : sufficient, no blockers, no contradictions")
         if is_visual and screenshots_collected:
             print(
@@ -473,7 +473,7 @@ def _run_improve_command(args) -> int:
 
 
 def _run_critique_command(args) -> int:
-    """Handle the 'judge critique' subcommand — independent adversarial critique."""
+    """Handle the 'judge critique' subcommand -- independent adversarial critique."""
     from the_judge.api import critique, verify
     from the_judge.core.evidence import capture_evidence
 
@@ -516,7 +516,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
     """Print a human-readable adversarial critique report."""
     sep = "=" * 70
     print(sep)
-    print("THE JUDGE — Independent Adversarial Critique")
+    print("THE JUDGE -- Independent Adversarial Critique")
     print(sep)
     print(f"Workspace  : {os.path.abspath(workspace_path)}")
     print(f"Domain     : {result.domain.replace('_', ' ').title()}")
@@ -574,7 +574,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
             blocker = " ⚠ BLOCKER" if f.is_blocker() else ""
             print(f"    [{sev}]{blocker} {desc}")
             if f.suggested_action:
-                print(f"    → {f.suggested_action[:100]}")
+                print(f"    -> {f.suggested_action[:100]}")
         print()
     if not any_finding:
         print("  No findings.")
@@ -632,7 +632,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
             blocker = " ⚠ BLOCKER" if f.is_blocker() else ""
             print(f"  [{i}] [{ev}][{sev}]{blocker} {f.description[:90]}")
     else:
-        print("  None — no open findings.")
+        print("  None -- no open findings.")
     print()
 
     # Skeptic summary
@@ -664,7 +664,7 @@ def _run_contract_command(
         print(json.dumps(spec_cov, indent=2))
     else:
         print("=" * 68)
-        print("THE JUDGE v1.0.0 — Requirement Specification Contract Report")
+        print("THE JUDGE v1.0.0 -- Requirement Specification Contract Report")
         print("=" * 68)
         print(f"Workspace: {os.path.abspath(workspace_path)}")
         print()
@@ -705,7 +705,7 @@ def _run_contract_command(
 
 def _print_human_readable_result(workspace_path: str, result: Any) -> None:
     print("=" * 68)
-    print("THE JUDGE v1.0.0 — Verification Report")
+    print("THE JUDGE v1.0.0 -- Verification Report")
     print("=" * 68)
     print(f"Workspace: {os.path.abspath(workspace_path)}")
     print()
@@ -775,4 +775,6 @@ def _print_human_readable_result(workspace_path: str, result: Any) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    sys.exit(main())
