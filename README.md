@@ -84,36 +84,34 @@ Action: fix and re-verify.
 <tr>
 <td width="50%">
 
-#### Without The Judge (Baseline — Round 1)
+#### Without The Judge (Baseline)
 
-Baseline Website - Round 1
+![Before - plain dark portfolio page with no nav, no stats, no tech tags](assets/demo_before.png)
 
 ```text
 Quality Score : 52.0 / 100.0
-Weaknesses    : 3 issue(s) identified
-                - Browser default font
-                - Basic inline CSS
-                - Flat 1-column layout
+Weaknesses    : No navigation, flat hierarchy,
+                no stats, no tech tags, no CTA
+                differentiation, missing footer.
 ```
-
-*Basic functional implementation without visual polish, design tokens, or responsive structure.*
 
 </td>
 <td width="50%">
 
-#### With The Judge (After Round 4)
+#### With The Judge (After 4 Rounds)
 
-Plugin-Improved Website - Round 4
+![After - polished portfolio with sticky nav, hero stats, tech tags and contact card](assets/demo_after.png)
 
 ```text
 Quality Score : 96.5 / 100.0 (+44.5 pts)
-Weaknesses    : 0 issue(s) identified
-Action Taken  : Glassmorphism, Google Fonts,
-                CSS Grid, stat metrics & hover effects.
+Added         : Sticky nav + availability badge,
+                hero stats bar, dual CTA buttons,
+                tech tags on project cards,
+                Let's Connect contact card, footer.
 ```
 
-*Example run. Results vary by project. Reproduce with:*
-`judge improve examples/sample_web_app/`
+*Example run on `examples/alex_morgan_portfolio/`. Results vary by project.*
+*Reproduce: `judge improve examples/alex_morgan_portfolio/`*
 
 </td>
 </tr>
