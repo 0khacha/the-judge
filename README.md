@@ -18,10 +18,13 @@
 
 ## Install
 
-Copy/paste into your CLI prompt:
+Copy/paste into your AI assistant prompt:
 
 ```text
-Install the-judge verification plugin from https://github.com/0khacha/the-judge, refer to the repo's AGENTS.md for the verification-repair loop protocol.
+Run `pip install the-judge` to install the verification tool, then read
+AGENTS.md at https://raw.githubusercontent.com/0khacha/the-judge/main/AGENTS.md
+for the verification-repair loop protocol. After every critical code change,
+run `judge verify . --json` and act on the findings.
 ```
 
 Or install directly:

@@ -38,7 +38,10 @@ pip uninstall the-judge
 Copy/paste into your Claude Code prompt:
 
 ```text
-Install the-judge verification plugin from https://github.com/0khacha/the-judge. Read the AGENTS.md for the verification-repair loop protocol. After every critical code change, run `judge verify . --json` and act on the findings.
+Run `pip install the-judge` to install the verification tool, then read
+AGENTS.md at https://raw.githubusercontent.com/0khacha/the-judge/main/AGENTS.md
+for the verification-repair loop protocol. After every critical code change,
+run `judge verify . --json` and act on the findings.
 ```
 
 Or add the `AGENTS.md` to your project root:
