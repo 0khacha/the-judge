@@ -80,42 +80,14 @@ Action: fix and re-verify.
 
 ### 2. Visual Projects (Iterative Quality Engine)
 
-<table>
-<tr>
-<td width="50%">
+| | Score | Notes |
+|---|---|---|
+| **Without The Judge** (baseline) | 52.0 / 100.0 | No nav, flat hierarchy, no stats, no tech tags |
+| **With The Judge** (4 rounds) | 96.5 / 100.0 (+44.5 pts) | Sticky nav, stats bar, tech tags, contact card |
 
-#### Without The Judge (Baseline)
+📸 **Before / after screenshots:** [`examples/alex_morgan_portfolio/_judge_visual/`](examples/alex_morgan_portfolio/_judge_visual/)
 
-![Before - plain dark portfolio page with no nav, no stats, no tech tags](assets/demo_before.png)
-
-```text
-Quality Score : 52.0 / 100.0
-Weaknesses    : No navigation, flat hierarchy,
-                no stats, no tech tags, no CTA
-                differentiation, missing footer.
-```
-
-</td>
-<td width="50%">
-
-#### With The Judge (After 4 Rounds)
-
-![After - polished portfolio with sticky nav, hero stats, tech tags and contact card](assets/demo_after.png)
-
-```text
-Quality Score : 96.5 / 100.0 (+44.5 pts)
-Added         : Sticky nav + availability badge,
-                hero stats bar, dual CTA buttons,
-                tech tags on project cards,
-                Let's Connect contact card, footer.
-```
-
-*Example run on `examples/alex_morgan_portfolio/`. Results vary by project.*
 *Reproduce: `judge improve examples/alex_morgan_portfolio/`*
-
-</td>
-</tr>
-</table>
 
 ## The rules
 
