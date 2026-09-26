@@ -292,7 +292,7 @@ def _run_improve_command(args) -> int:
         print(f"Target Workspace : {os.path.abspath(workspace)}")
         print(f"Max Rounds       : {max_rounds}")
         print(f"Quality Target   : {target_score} / 100.0")
-        print("Stop Requires    : score≥threshold AND no blockers AND sufficient evidence")
+        print("Stop Requires    : score>=threshold AND no blockers AND sufficient evidence")
         print()
 
     old_argv = list(sys.argv)
@@ -341,7 +341,7 @@ def _run_improve_command(args) -> int:
         print(f"  Decision       : {dec}")
         print(f"  Quality Score  : {score:.1f} / 100.0")
         print(
-            f"  Evidence       : {ev_suf.upper()}{'  ⚠ BLOCKERS PRESENT' if has_blockers else ''}"
+            f"  Evidence       : {ev_suf.upper()}{'  [!] BLOCKERS PRESENT' if has_blockers else ''}"
         )
 
         if skeptic:
@@ -350,7 +350,7 @@ def _run_improve_command(args) -> int:
         if contradictions:
             print(f"  Contradictions : {len(contradictions)} detected")
             for c in contradictions[:2]:
-                print(f"    ↳ {c.get('description', '')[:100]}")
+                print(f"    ? {c.get('description', '')[:100]}")
 
         # Show top evidence-classified findings
         top_findings = [
@@ -571,7 +571,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
         for f in items:
             sev = (f.severity.value if hasattr(f.severity, "value") else str(f.severity)).upper()
             desc = f.description[:100]
-            blocker = " ⚠ BLOCKER" if f.is_blocker() else ""
+            blocker = " [!] BLOCKER" if f.is_blocker() else ""
             print(f"    [{sev}]{blocker} {desc}")
             if f.suggested_action:
                 print(f"    -> {f.suggested_action[:100]}")
@@ -595,7 +595,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
         print("UNVERIFIED ASSUMPTIONS")
         print("-" * 40)
         for a in result.unverified_assumptions:
-            print(f"  • {a[:120]}")
+            print(f"  ? {a[:120]}")
         print()
 
     # Missing evidence
@@ -603,7 +603,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
         print("MISSING EVIDENCE")
         print("-" * 40)
         for m in result.missing_evidence:
-            print(f"  • {m[:120]}")
+            print(f"  ? {m[:120]}")
         print()
 
     # Agent claims unchecked
@@ -611,7 +611,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
         print("UNCHECKED AGENT CLAIMS")
         print("-" * 40)
         for c in result.agent_claims_unchecked:
-            print(f"  • {c[:120]}")
+            print(f"  ? {c[:120]}")
         print()
 
     # Improvement priority
@@ -629,7 +629,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
                 .upper()
             )
             sev = (f.severity.value if hasattr(f.severity, "value") else str(f.severity)).upper()
-            blocker = " ⚠ BLOCKER" if f.is_blocker() else ""
+            blocker = " [!] BLOCKER" if f.is_blocker() else ""
             print(f"  [{i}] [{ev}][{sev}]{blocker} {f.description[:90]}")
     else:
         print("  None -- no open findings.")
