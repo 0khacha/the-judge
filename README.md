@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" width="180" alt="The Judge">
+  <img src="logo.svg" width="180" alt="The Judge">
 </p>
 
 <h1 align="center">The Judge</h1>
@@ -85,7 +85,16 @@ Action: fix and re-verify.
 | **Without The Judge** (baseline) | 52.0 / 100.0 | No nav, flat hierarchy, no stats, no tech tags |
 | **With The Judge** (4 rounds) | 96.5 / 100.0 (+44.5 pts) | Sticky nav, stats bar, tech tags, contact card |
 
-📸 **Before / after screenshots:** [`examples/alex_morgan_portfolio/_judge_visual/`](examples/alex_morgan_portfolio/_judge_visual/)
+<table>
+<tr>
+<td width="50%" align="center"><strong>Before</strong></td>
+<td width="50%" align="center"><strong>After (4 rounds)</strong></td>
+</tr>
+<tr>
+<td><img src="examples/alex_morgan_portfolio/before.png" alt="Before The Judge" width="100%"></td>
+<td><img src="examples/alex_morgan_portfolio/after.png" alt="After The Judge" width="100%"></td>
+</tr>
+</table>
 
 *Reproduce: `judge improve examples/alex_morgan_portfolio/`*
 

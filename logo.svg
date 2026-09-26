@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Glowing neon gradient -->
+    <linearGradient id="gavelNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5eead4"/>
+      <stop offset="40%" stop-color="#2dd4bf"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+
+    <!-- Outer ambient neon glow filter -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="blur1"/>
+      <feGaussianBlur stdDeviation="7" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#neonGlow)">
+    <!-- 1. Code Curly Bracket '{' (Left side) -->
+    <path d="M 85 46 
+             C 72 46, 66 56, 66 72 
+             C 66 84, 60 88, 52 88 
+             C 60 88, 66 92, 66 104 
+             C 66 120, 72 130, 85 130" 
+          fill="none" 
+          stroke="url(#gavelNeon)" 
+          stroke-width="6.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+
+    <!-- 2. Gavel Handle (45-degree angle with pointed tip) -->
+    <!-- Handle shaft -->
+    <line x1="68" y1="117" x2="114" y2="71" 
+          stroke="url(#gavelNeon)" 
+          stroke-width="7" 
+          stroke-linecap="round"/>
+    
+    <!-- Handle pointed base -->
+    <path d="M 52 133 L 64 121 L 72 129 L 60 141 Z" 
+          fill="url(#gavelNeon)"/>
+
+    <!-- 3. Gavel Head (Group rotated 45 degrees around center 124, 61) -->
+    <g transform="rotate(45, 124, 61)">
+      <!-- Main Cylinder Barrel -->
+      <rect x="104" y="46" width="40" height="30" rx="5" 
+            fill="#06b6d4" fill-opacity="0.15" 
+            stroke="url(#gavelNeon)" stroke-width="5"/>
+      
+      <!-- Top / Front End Cap -->
+      <rect x="96" y="42" width="11" height="38" rx="4" 
+            fill="#06b6d4" fill-opacity="0.3" 
+            stroke="url(#gavelNeon)" stroke-width="4.5"/>
+      
+      <!-- Bottom / Back End Cap -->
+      <rect x="141" y="42" width="11" height="38" rx="4" 
+            fill="#06b6d4" fill-opacity="0.3" 
+            stroke="url(#gavelNeon)" stroke-width="4.5"/>
+      
+      <!-- Highlight reflection stripe -->
+      <line x1="110" y1="52" x2="138" y2="52" 
+            stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+    </g>
+
+    <!-- 4. Terminal Sound Block (Striking platform) -->
+    <!-- Platform base plate with stepped shoulders -->
+    <path d="M 108 136 
+             L 112 124 
+             L 120 124 
+             L 122 118 
+             L 164 118 
+             L 166 124 
+             L 174 124 
+             L 178 136 Z" 
+          fill="#06b6d4" fill-opacity="0.15" 
+          stroke="url(#gavelNeon)" 
+          stroke-width="4.5" 
+          stroke-linejoin="round" 
+          stroke-linecap="round"/>
+
+    <!-- Terminal Prompt: '>' -->
+    <path d="M 129 123 L 136 127.5 L 129 132" 
+          fill="none" 
+          stroke="#ffffff" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+
+    <!-- Terminal Cursor: '_' -->
+    <line x1="142" y1="132" x2="153" y2="132" 
+          stroke="#ffffff" 
+          stroke-width="3" 
+          stroke-linecap="round"/>
+  </g>
+</svg>
