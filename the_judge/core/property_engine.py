@@ -403,7 +403,8 @@ def test_prop_capacity_limit_{mod_name}_{cls.name}():
             res = p_fn(**call_kwargs)
             if i == 2 and res is False:
                 pass
-        except Exception:
+        except TypeError:
+            # Wrong arity for this probe call — skip this iteration.
             pass
 """,
                     )
@@ -479,13 +480,15 @@ def test_prop_idempotency_{mod_name}_{fn.name}():
     for raw in probe_inputs:
         try:
             y = fn(raw)
-            if isinstance(y, str):
-                z = fn(y)
-                assert z == y, f"Repeated application of transformation function on '{{raw}}' must be idempotent (fn(fn(x)) == fn(x))."
-                if "<script" in raw.lower():
-                    assert "<script>" not in y and "</script>" not in y, f"Sanitization function failed to sanitize script tag in input '{{raw}}'."
-        except Exception:
-            pass
+        except TypeError:
+            # Probe not applicable for this input type — skip.
+            continue
+        # Any other exception propagates as a failure (target code is broken).
+        if isinstance(y, str):
+            z = fn(y)
+            assert z == y, f"Repeated application of transformation function on '{{raw}}' must be idempotent (fn(fn(x)) == fn(x))."
+            if "<script" in raw.lower():
+                assert "<script>" not in y and "</script>" not in y, f"Sanitization function failed to sanitize script tag in input '{{raw}}'."
 """,
                     )
                 )
@@ -523,35 +526,12 @@ def generate_property_tests(
         mod_candidates = engine.analyze_module_ast(fpath, mod_name)
         candidates.extend(mod_candidates)
 
-        if task_spec and "requirements" in task_spec:
-            for req in task_spec.get("requirements", []):
-                req_id = req.get("id", "REQ-001")
-                props = req.get("properties", [req_id])
-                desc = req.get("description", "")
-                for prop in props:
-                    prop_clean = str(prop).lower().replace("-", "_")
-                    fn_name = f"test_req_{req_id.lower().replace('-', '_')}_{prop_clean}"
-                    seed = random.randint(10000, 99999)
-                    code = f"""import pytest, sys, os, inspect
-import {mod_name}
-
-def {fn_name}():
-    mod = {mod_name}
-    public_objs = [getattr(mod, a) for a in dir(mod) if not a.startswith('_')]
-    assert len(public_objs) > 0, "Module {mod_name} must export at least one symbol for requirement {req_id}"
-"""
-                    candidates.append(
-                        PropertyCandidate(
-                            kind=prop_clean,
-                            confidence="MEDIUM",
-                            numeric_confidence=0.60,
-                            rationale=f"Contract property candidate for {req_id}: {desc}",
-                            source_module=mod_name,
-                            source_symbol=req_id,
-                            ast_nodes=[req_id],
-                            seed=seed,
-                            challenge_code=code,
-                        )
-                    )
+        # NOTE: We deliberately do NOT generate trivially-passing existence tests for
+        # contract requirements here.  A test that merely checks "the module exports a
+        # symbol" provides zero evidence that the described behaviour is actually
+        # implemented.  Requirements that have no structural AST evidence (boundary
+        # comparisons, rollback patterns, etc.) correctly remain UNVERIFIED, which
+        # causes Hard Gate 9 to issue an ABSTAIN — the correct outcome when there is
+        # no evidence for a critical requirement.
 
     return candidates

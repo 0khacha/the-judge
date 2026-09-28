@@ -108,7 +108,20 @@ def capture_evidence(
     visible_tests = [f for f in os.listdir(abs_dir) if f.startswith("test_") and f.endswith(".py")]
     for vt in visible_tests:
         with open(os.path.join(abs_dir, vt), encoding="utf-8") as f:
-            test_scripts.append((vt, f.read()))
+            content = f.read()
+        test_scripts.append((vt, content))
+        # P3 fix: extract test function names from visible test files and add them to
+        # expected_challenges so that collection tampering (conftest hijack, etc.) is
+        # detectable even when no judge.json contract is present.
+        import ast as _ast
+        try:
+            tree = _ast.parse(content, filename=vt)
+            for node in _ast.walk(tree):
+                if isinstance(node, _ast.FunctionDef) and node.name.startswith("test_"):
+                    if node.name not in expected_challenges:
+                        expected_challenges.append(node.name)
+        except Exception:
+            pass  # Unparseable file — skip manifest tracking for it
 
     # 2. Run isolated anonymous sandbox
     sandbox_res = SandboxRunner.execute_in_anonymous_sandbox(

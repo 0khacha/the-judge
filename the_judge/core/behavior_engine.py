@@ -183,11 +183,14 @@ def test_behavior_idempotency_{mod_name}_{func_name}():
     val = {repr(test_vals[1] if len(test_vals) > 1 else "test")}
     try:
         res1 = fn(val)
-        if isinstance(res1, str):
-            res2 = fn(res1)
-            assert res2 == res1, "Transformation must be idempotent (fn(fn(x)) == fn(x))."
-    except Exception:
-        pass
+    except TypeError:
+        # Probe not applicable: function signature does not accept this value type.
+        return
+    # Any other exception (RuntimeError, ValueError, etc.) propagates as a test failure —
+    # a target that raises on every call has a defect, not a type mismatch.
+    if isinstance(res1, str):
+        res2 = fn(res1)
+        assert res2 == res1, "Transformation must be idempotent (fn(fn(x)) == fn(x))."
 """
                 probes.append(
                     BehavioralProbe(
@@ -219,9 +222,12 @@ def test_behavior_state_isolation_{mod_name}_{cls_name}():
     try:
         inst1 = cls()
         inst2 = cls()
-        assert inst1 is not inst2, "Independent class instantiations must yield distinct objects."
-    except Exception:
-        pass
+    except TypeError:
+        # Probe not applicable: constructor requires arguments.
+        return
+    # Any other exception (ValueError, RuntimeError, etc.) propagates as a failure —
+    # a constructor that always raises has a defect, not a signature mismatch.
+    assert inst1 is not inst2, "Independent class instantiations must yield distinct objects."
 """
                 probes.append(
                     BehavioralProbe(

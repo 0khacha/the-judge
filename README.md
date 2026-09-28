@@ -213,6 +213,32 @@ The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses
 - [Threat Model](THREAT_MODEL.md) - Attack surface
 - [Full Documentation Index](docs/INDEX.md) - All documentation
 
+## Known Limitations of Auto-Generated Probes
+
+When no explicit test file exists, The Judge auto-generates **vocabulary-free behavioral probes** based on AST structure and type signatures. These probes catch a specific, limited set of defects. Understanding what they cover — and what they don't — prevents over-trusting ad-hoc verification.
+
+### What auto-generated probes **do** catch
+
+| Probe type | Trigger condition | Example defect caught |
+|---|---|---|
+| **Idempotency** | Single-arg string-transforming function (`sanitize`, `normalize`, `clean`, etc.) | `fn(fn(x)) != fn(x)` — applying twice changes the output |
+| **State isolation** | Class with a zero-arg constructor | Two instances share mutable state |
+| **Boundary perturbation** | Numeric `>` / `<` comparison in AST | Function behaves unexpectedly just above/below a threshold |
+| **Rollback isolation** | Class with `begin`/`rollback`-style methods | Uncommitted writes survive a rollback |
+| **Expiration** | Class with `ttl`/`expire` constructor param + get/put methods | Expired entries remain observable |
+| **Capacity** | Class with `capacity`/`max_size` constructor param + push/add method | Items accepted past the capacity bound |
+| **Uniqueness** | Function with `salt`/`hash`/`token` vocabulary + secret-like arg name | Repeated calls return identical outputs (fake entropy) |
+| **Always-raises** | Any function or class where **every** call throws a non-TypeError exception | Function is completely broken and crashes on every input |
+
+### What auto-generated probes **do not** catch
+
+- **Semantic correctness of numeric functions**: `add(a, b)` returning `0` instead of `a + b` generates no assertion. A function that accepts the right types but always returns a wrong value is invisible to ad-hoc verification.
+- **Multi-argument business logic**: Probes only exercise the first parameter with generated values. Functions requiring coordinated multi-argument inputs (e.g. `charge_card(amount, token)` where `amount < 0` should raise) are not exercised unless a real test or a matching boundary pattern exists in the AST.
+- **Critical requirements without structural evidence**: A `judge.json` requirement marked `"priority": "critical"` is reported as `UNVERIFIED` (triggering `ABSTAIN`) when no matching structural pattern or real test exercises the described behaviour. A real test file is required to reach `PASS` for such requirements.
+- **Collection-integrity without tests**: Collection-tampering detection works by comparing statically discovered test function names against what pytest actually ran. If the workspace has no `test_*.py` files and no synthesized probes fire, there is nothing to manifest-check.
+
+**Recommendation**: For any function containing real business logic (especially numeric, financial, or security-relevant functions), write explicit tests. The Judge is most effective when explicit tests exist — it then independently validates them for tampering, regression, and evidence independence.
+
 ## Project Status
 
 **Status**: v1.0.0 · MIT License · Python 3.9+
