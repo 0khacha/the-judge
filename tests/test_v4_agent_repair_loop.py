@@ -5,10 +5,11 @@ from the_judge import VerificationResult, verify
 from the_judge.integrations import AgentAdapter, AgentRepairLoop
 
 CODE_ROUND1 = '''"""Round 1: Buggy implementation of bounded queue."""
+from typing import Optional, List
 class BoundedQueue:
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.items = []
+        self.items: List[int] = []
 
     def push(self, item: int) -> bool:
         if len(self.items) >= self.capacity:
@@ -16,7 +17,7 @@ class BoundedQueue:
         self.items.append(item)
         return True
 
-    def pop(self) -> int:
+    def pop(self) -> Optional[int]:
         if not self.items:
             return None
         # BUG: pop from end instead of FIFO front
@@ -24,10 +25,11 @@ class BoundedQueue:
 '''
 
 CODE_ROUND2_REPAIRED = '''"""Round 2: Repaired FIFO implementation of bounded queue."""
+from typing import Optional, List
 class BoundedQueue:
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.items = []
+        self.items: List[int] = []
 
     def push(self, item: int) -> bool:
         if len(self.items) >= self.capacity:
@@ -35,11 +37,12 @@ class BoundedQueue:
         self.items.append(item)
         return True
 
-    def pop(self) -> int:
+    def pop(self) -> Optional[int]:
         if not self.items:
             return None
         return self.items.pop(0)
 '''
+
 
 TEST_BOUNDED_QUEUE = '''"""Tests for BoundedQueue."""
 from queue_impl import BoundedQueue

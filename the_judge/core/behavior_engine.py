@@ -39,29 +39,31 @@ class ValueGenerator:
 
     def generate_for_type(self, param_type: Any, param_name: str = "") -> list[Any]:
         """Generate bounded probe values based on type annotation or name hint."""
-        if param_type is int or param_name.endswith("_int") or "count" in param_name:
+        t_str = str(param_type).lower() if param_type is not inspect.Parameter.empty and param_type is not None else ""
+
+        if param_type is int or t_str == "int" or param_name.endswith("_int") or "count" in param_name:
             return [0, 1, -1, 2, 10, 100, 999999]
         elif (
-            param_type is float
+            param_type is float or t_str == "float"
             or param_name.endswith("_float")
             or "price" in param_name
             or "amount" in param_name
         ):
             return [0.0, 1.0, -1.0, 99.99, 100.0, 100.01, 0.001]
         elif (
-            param_type is str
+            param_type is str or t_str == "str"
             or param_name.endswith("_str")
             or "text" in param_name
             or "key" in param_name
         ):
             return ["", "test", "TestInput123!", "<script>alert(1)</script>", "a" * 500]
-        elif param_type is bytes:
+        elif param_type is bytes or t_str == "bytes":
             return [b"", b"test_bytes", b"\x00" * 32]
-        elif param_type is bool:
+        elif param_type is bool or t_str == "bool":
             return [True, False]
-        elif param_type is list:
+        elif param_type is list or t_str == "list":
             return [[], [1], [1, 2, 3], ["a", "b"]]
-        elif param_type is dict:
+        elif param_type is dict or t_str == "dict":
             return [{}, {"k": "v"}, {"key": 100}]
         else:
             return [0, 1.0, "test_value", True, None]
@@ -96,59 +98,59 @@ class BehaviorEngine:
 
         discovered: list[dict[str, Any]] = []
 
-        sys_path_added = False
-        if abs_target not in sys.path:
-            sys.path.insert(0, abs_target)
-            sys_path_added = True
+        import ast
 
-        try:
-            for fname in py_files:
-                mod_name = fname[:-3]
-                try:
-                    mod = importlib.import_module(mod_name)
-                except Exception:
-                    continue
+        class DummyParam:
+            def __init__(self, name: str, annotation: Any):
+                self.name = name
+                self.annotation = annotation
 
-                for attr_name in dir(mod):
-                    if attr_name.startswith("_"):
-                        continue
-                    obj = getattr(mod, attr_name)
+        for fname in py_files:
+            mod_name = fname[:-3]
+            fpath = os.path.join(abs_target, fname)
+            try:
+                with open(fpath, "r", encoding="utf-8") as f:
+                    source = f.read()
+                tree = ast.parse(source)
+            except Exception:
+                continue
 
-                    if inspect.isfunction(obj) and obj.__module__ == mod_name:
-                        sig = inspect.signature(obj)
-                        discovered.append(
-                            {
-                                "type": "function",
-                                "module": mod_name,
-                                "name": attr_name,
-                                "callable": obj,
-                                "signature": sig,
-                                "parameters": list(sig.parameters.values()),
-                                "return_annotation": sig.return_annotation,
-                            }
-                        )
-                    elif inspect.isclass(obj) and obj.__module__ == mod_name:
-                        init_sig = (
-                            inspect.signature(obj.__init__) if hasattr(obj, "__init__") else None
-                        )
-                        methods = [
-                            m
-                            for m in dir(obj)
-                            if not m.startswith("_") and callable(getattr(obj, m, None))
-                        ]
-                        discovered.append(
-                            {
-                                "type": "class",
-                                "module": mod_name,
-                                "name": attr_name,
-                                "class": obj,
-                                "init_signature": init_sig,
-                                "methods": methods,
-                            }
-                        )
-        finally:
-            if sys_path_added and abs_target in sys.path:
-                sys.path.remove(abs_target)
+            for node in tree.body:
+                if isinstance(node, ast.FunctionDef) and not node.name.startswith("_"):
+                    params = []
+                    for arg in node.args.args:
+                        ann_str = ast.unparse(arg.annotation) if arg.annotation else inspect.Parameter.empty
+                        params.append(DummyParam(arg.arg, ann_str))
+                    
+                    ret_ann = ast.unparse(node.returns) if node.returns else inspect.Parameter.empty
+
+                    discovered.append(
+                        {
+                            "type": "function",
+                            "module": mod_name,
+                            "name": node.name,
+                            "callable": None,
+                            "signature": None,
+                            "parameters": params,
+                            "return_annotation": ret_ann,
+                        }
+                    )
+                elif isinstance(node, ast.ClassDef) and not node.name.startswith("_"):
+                    methods = []
+                    for item in node.body:
+                        if isinstance(item, ast.FunctionDef) and not item.name.startswith("_"):
+                            methods.append(item.name)
+                    
+                    discovered.append(
+                        {
+                            "type": "class",
+                            "module": mod_name,
+                            "name": node.name,
+                            "class": None,
+                            "init_signature": None,
+                            "methods": methods,
+                        }
+                    )
 
         return discovered
 

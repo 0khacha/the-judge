@@ -39,10 +39,17 @@ The Judge operates with the following security boundaries:
 
 ### Isolation Mechanisms
 
-1. **Sandbox Execution**: Tests run in subprocess isolation
-2. **Tampering Detection**: Monitors for conftest hijacking, sys.modules manipulation
-3. **Anonymous Execution**: Strips process markers
+1. **Sandbox Execution**: Tests run in subprocess isolation, in a temporary directory **outside** the workspace
+2. **Tampering Detection**: Monitors for conftest hijacking (temp dir placement prevents workspace conftest auto-loading), SHA-256 hash verification of synthesized test files
+3. **Anonymous Execution**: Sanitized `sys.argv`, scrubbed environment variables (no `inspect.stack` frame rewriting — removed as fragile)
 4. **TOCTOU Protection**: Detects time-of-check-time-of-use symlink attacks
+
+### Isolation Limitations
+
+1. **Filesystem**: Workspace is accessible via PYTHONPATH (PARTIAL isolation)
+2. **Import**: PYTHONPATH includes the workspace for import resolution (PARTIAL isolation)
+3. **Stack Detection**: Target code can detect pytest in `inspect.stack()` frames
+4. **Target Self-Modification**: Source code changes during execution are not detected (RESIDUAL RISK)
 
 ### What The Judge Does NOT Protect Against
 

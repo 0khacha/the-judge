@@ -45,18 +45,45 @@ def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> dict[str, A
 
     combined = stdout + "\n" + stderr
 
-    for line in combined.splitlines():
-        line = line.strip()
-        if " PASSED" in line or line.endswith(" PASSED"):
-            raw_name = line.split(" PASSED")[0].split()[-1]
-            test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-            if test_name and test_name not in passed_tests:
-                passed_tests.append(test_name)
-        elif " FAILED" in line or line.endswith(" FAILED"):
-            raw_name = line.split(" FAILED")[0].split()[-1]
-            test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-            if test_name and test_name not in failed_tests:
-                failed_tests.append(test_name)
+    if "<?xml version=" in stdout or "<?xml version=" in stderr:
+        try:
+            import xml.etree.ElementTree as ET
+            # find xml content
+            xml_str = ""
+            in_xml = False
+            for line in combined.splitlines():
+                if line.startswith("<?xml"):
+                    in_xml = True
+                if in_xml:
+                    xml_str += line + "\n"
+                if in_xml and line.strip() == "</testsuites>":
+                    break
+            
+            tree = ET.fromstring(xml_str)
+            for testcase in tree.findall('.//testcase'):
+                name = testcase.get('name')
+                if testcase.find('failure') is not None or testcase.find('error') is not None:
+                    if name not in failed_tests:
+                        failed_tests.append(name)
+                else:
+                    if name not in passed_tests:
+                        passed_tests.append(name)
+        except Exception:
+            pass
+            
+    if not passed_tests and not failed_tests:
+        for line in combined.splitlines():
+            line = line.strip()
+            if " PASSED" in line or line.endswith(" PASSED"):
+                raw_name = line.split(" PASSED")[0].split()[-1]
+                test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
+                if test_name and test_name not in passed_tests:
+                    passed_tests.append(test_name)
+            elif " FAILED" in line or line.endswith(" FAILED"):
+                raw_name = line.split(" FAILED")[0].split()[-1]
+                test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
+                if test_name and test_name not in failed_tests:
+                    failed_tests.append(test_name)
 
     total_tests = len(passed_tests) + len(failed_tests)
 
@@ -161,25 +188,49 @@ def capture_evidence(
         "exit_code": type_res["exit_code"],
         "error_count": err_cnt,
         "raw_output": type_res["stdout"][:2048],
+        "available": type_res["exit_code"] != -1,
     }
 
     # 4. Linter check
-    linter_data = {"exit_code": 0, "error_count": 0, "raw_output": ""}
+    linter_res = run_command(["ruff", "check", ".", "--output-format=text"], cwd=abs_dir)
+    if linter_res["exit_code"] == -1:
+        linter_res = run_command(["flake8", "."], cwd=abs_dir)
+        
+    if linter_res["exit_code"] == -1:
+        linter_data = {"exit_code": -1, "error_count": 0, "raw_output": "", "available": False}
+    else:
+        # Simple error count heuristic
+        linter_err_cnt = len([line for line in linter_res["stdout"].splitlines() if ":" in line])
+        if linter_err_cnt == 0 and linter_res["exit_code"] != 0:
+            linter_err_cnt = 1
+        linter_data = {
+            "exit_code": linter_res["exit_code"],
+            "error_count": linter_err_cnt,
+            "raw_output": linter_res["stdout"][:2048],
+            "available": True,
+        }
 
     # 5. Build test provenance mapping
     candidate_conf = {}
+    judge_authored_tests = set()
     for cand in candidates:
         for line in cand.challenge_code.splitlines():
             if line.strip().startswith("def test_"):
                 fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 candidate_conf[fn_name] = cand.confidence
+                judge_authored_tests.add(fn_name)
+    for probe in probes:
+        for line in probe.executable_code.splitlines():
+            if line.strip().startswith("def test_"):
+                fn_name = line.strip().split("(")[0].replace("def ", "").strip()
+                judge_authored_tests.add(fn_name)
 
     test_provenance: dict[str, dict[str, Any]] = {}
     for t in passed_tests + failed_tests:
-        if "prop_" in t or "behavior_" in t or "req_" in t:
+        if t in judge_authored_tests:
+            # Structurally verified: this test was written by the Judge
             family_key = (
-                "prop_boundary"
-                if "boundary" in t
+                "prop_boundary" if "boundary" in t
                 else ("prop_idempotency" if "idempotency" in t else "prop_isolation")
             )
             test_provenance[t] = {
@@ -190,12 +241,8 @@ def capture_evidence(
             }
         else:
             test_provenance[t] = {
-                "source": "public_visible_test"
-                if not t.startswith("test_agent_")
-                else "agent_authored_test",
-                "independence_level": "externally_verified"
-                if not t.startswith("test_agent_")
-                else "agent_controlled",
+                "source": "public_visible_test" if not t.startswith("test_agent_") else "agent_authored_test",
+                "independence_level": "externally_verified" if not t.startswith("test_agent_") else "agent_controlled",
                 "property_family": "public_workspace_tests",
                 "confidence": "MEDIUM",
             }

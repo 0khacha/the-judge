@@ -21,7 +21,7 @@ The threat model of The Judge v1.0 evaluates possible attack vectors an untruste
 
 | Threat Vector | Attack Description | Verifier Defense / Mitigation | Status |
 |---|---|---|---|
-| **Identifier Detection** | Target inspects `sys.argv` or stack frames to detect test runner names (e.g. `_synthesized_tests`). | `SandboxRunner` runs with sanitized `sys.argv` and anonymous temporary files. | **VERIFIED** |
+| **Identifier Detection** | Target inspects `sys.argv` or stack frames to detect test runner names (e.g. `_synthesized_tests`). | `SandboxRunner` runs with sanitized `sys.argv`, anonymous temporary files created outside the workspace, and scrubbed environment variables. **Limitation**: `inspect.stack()` frame filenames are not rewritten (previous rewriting was fragile and removed). Target code could theoretically detect pytest in the call stack. | **PARTIAL** |
 | **Test Collection Manipulation** | Target modifies pytest test collection or monkeypatches `pytest_collect_file`, or uses a conftest.py hook to silently drop specific tests. | `Hard Gate 7 (Challenge Tampering)` verifies SHA-256 hashes & expected test manifest. Manifest now includes both synthesized probe tests **and** statically-discovered test functions from visible `test_*.py` files, so collection tampering is detected in both contract mode and no-contract (ad-hoc) mode. | **VERIFIED** |
 | **Call Counter Fake Uniqueness** | Target uses internal call counters to simulate randomness without actual entropy. | `PropertyEngine` executes fresh subprocess state checks to detect call-counter state. | **VERIFIED** |
 | **Synthesis Evasion** | Target writes implementation that satisfies visible tests but fails hidden properties. | `Synthesis Evasion Policy` forces `ABSTAIN` if 0 independent challenge tests pass. | **VERIFIED** |
@@ -29,6 +29,7 @@ The threat model of The Judge v1.0 evaluates possible attack vectors an untruste
 | **Trivial Requirement Coverage** | A critical requirement is falsely marked VERIFIED by a trivially-passing existence test that only asserts the module exports a symbol. | Trivial existence tests are no longer generated for contract requirements. Requirements with no structural AST evidence remain `UNVERIFIED`, triggering Hard Gate 9 → `ABSTAIN`. | **VERIFIED** |
 | **Verification Denial** | Target deliberately crashes pytest or raises `SystemExit` to force `ABSTAIN`. | `Hard Gate 8 (Verification Denial)` detects forced abstention attempts and returns `FAIL`. | **VERIFIED** |
 | **Multi-Round Silent Regression** | Target fixes feature B in Round 2 while silently breaking feature A. | `Hard Gate 6 (Multi-Round Regression Protection)` compares evidence snapshots across rounds. | **VERIFIED** |
+| **Target Self-Modification** | Target modifies its own source files during test execution to hide defects. | Integrity hashing covers Judge-synthesized test files. **Residual risk**: target source code changes during execution are not currently detected. Mitigated partially by workspace hash comparison in provenance. | **RESIDUAL RISK** |
 
 ---
 

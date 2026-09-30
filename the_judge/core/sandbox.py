@@ -119,35 +119,20 @@ class SandboxRunner:
         """Execute test scripts in an anonymous, randomized temporary directory."""
         abs_task_dir = os.path.abspath(task_dir)
 
-        anon_dir_name = f"t_{uuid.uuid4().hex[:12]}"
-        temp_dir = os.path.join(abs_task_dir, anon_dir_name)
-        os.makedirs(temp_dir, exist_ok=True)
+        temp_dir = tempfile.mkdtemp(prefix=f't_{uuid.uuid4().hex[:8]}_')
 
         try:
             conftest_path = os.path.join(temp_dir, "conftest.py")
             with open(conftest_path, "w", encoding="utf-8") as f:
                 f.write(
-                    "import os, sys, inspect, pytest\n"
+                    "import os, sys, pytest\n"
                     "sys.argv = ['pytest']\n"
-                    "_orig_stack = inspect.stack\n"
-                    "def _clean_stack(*args, **kwargs):\n"
-                    "    frames = _orig_stack(*args, **kwargs)\n"
-                    "    cleaned = []\n"
-                    "    for fr in frames:\n"
-                    "        fn = fr.filename.replace('the-judge', 'app').replace('the_judge', 'app').replace('judge', 'app')\n"
-                    "        cleaned.append(inspect.FrameInfo(fr.frame, fn, fr.lineno, fr.function, fr.code_context, fr.index))\n"
-                    "    return cleaned\n"
-                    "inspect.stack = _clean_stack\n"
                     "@pytest.hookimpl(tryfirst=True)\n"
                     "def pytest_pyfunc_call(pyfuncitem):\n"
                     "    os.environ.pop('PYTEST_CURRENT_TEST', None)\n"
                     "    for k in list(os.environ.keys()):\n"
                     "        if k.startswith('JUDGE_') or k.startswith('BENCHMARK_'):\n"
                     "            os.environ.pop(k, None)\n"
-                    "@pytest.hookimpl(hookwrapper=True)\n"
-                    "def pytest_runtest_call(item):\n"
-                    "    yield\n"
-                    "    os.environ['PYTEST_CURRENT_TEST'] = 'teardown'\n"
                 )
 
             import hashlib
@@ -164,12 +149,13 @@ class SandboxRunner:
 
             env = {"PYTHONPATH": abs_task_dir + os.pathsep + os.environ.get("PYTHONPATH", "")}
 
-            cmd = [sys.executable, "-m", "pytest", "-vv"]
+            junitxml_path = os.path.join(temp_dir, "junit.xml")
+            cmd = [sys.executable, "-m", "pytest", "-vv", f"--junitxml={junitxml_path}"]
             if pytest_args:
                 cmd.extend(pytest_args)
             cmd.append(temp_dir)
 
-            res = cls.run_cmd(cmd, cwd=abs_task_dir, env=env, timeout=timeout)
+            res = cls.run_cmd(cmd, cwd=temp_dir, env=env, timeout=timeout)
 
             file_tampered = False
             for safe_name, init_hash in initial_hashes.items():
@@ -185,19 +171,34 @@ class SandboxRunner:
 
             passed_tests = []
             failed_tests = []
-            combined = res["stdout"] + "\n" + res["stderr"]
-
-            for line in combined.splitlines():
-                if " PASSED" in line:
-                    raw_name = line.split(" PASSED")[0].split()[-1]
-                    test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-                    if test_name and test_name not in passed_tests:
-                        passed_tests.append(test_name)
-                elif " FAILED" in line:
-                    raw_name = line.split(" FAILED")[0].split()[-1]
-                    test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-                    if test_name and test_name not in failed_tests:
-                        failed_tests.append(test_name)
+            
+            if os.path.exists(junitxml_path):
+                try:
+                    import xml.etree.ElementTree as ET
+                    tree = ET.parse(junitxml_path)
+                    for testcase in tree.findall('.//testcase'):
+                        name = testcase.get('name')
+                        if testcase.find('failure') is not None or testcase.find('error') is not None:
+                            failed_tests.append(name)
+                        else:
+                            passed_tests.append(name)
+                except Exception:
+                    # Fallback to stdout parsing if XML is corrupted
+                    pass
+            
+            if not passed_tests and not failed_tests:
+                combined = res["stdout"] + "\n" + res["stderr"]
+                for line in combined.splitlines():
+                    if " PASSED" in line:
+                        raw_name = line.split(" PASSED")[0].split()[-1]
+                        test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
+                        if test_name and test_name not in passed_tests:
+                            passed_tests.append(test_name)
+                    elif " FAILED" in line:
+                        raw_name = line.split(" FAILED")[0].split()[-1]
+                        test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
+                        if test_name and test_name not in failed_tests:
+                            failed_tests.append(test_name)
 
             return {
                 "exit_code": res["exit_code"],

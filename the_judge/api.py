@@ -78,6 +78,7 @@ def verify(
     workspace: str,
     task_spec: Optional[dict[str, Any]] = None,
     previous_evidence: Optional[dict[str, Any]] = None,
+    agent_claims: Optional[dict[str, Any]] = None,
     _ground_truth: Optional[dict[str, Any]] = None,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
@@ -87,6 +88,10 @@ def verify(
         workspace: Path to directory or python source file to evaluate.
         task_spec: Task specification contract dictionary (or loaded task contract).
         previous_evidence: Previous evidence snapshot from an earlier round (for regression tracking).
+        agent_claims: External agent claims dict for discrepancy detection. When provided,
+            Hard Gate 5 cross-checks these claims against ground-truth evidence.
+            When None (default), discrepancy detection is skipped to avoid circular
+            self-verification.
         _ground_truth: Pre-captured evidence dict. When provided, skips capture_evidence()
             (used by critique() to avoid running the sandbox twice).
 
@@ -110,16 +115,34 @@ def verify(
 
     req_list: list[dict[str, Any]] = []
 
+    def _matches_requirement(req, test_name):
+        t_lower = test_name.lower()
+        r_id = req.get("id", "").lower().replace("-", "_")
+        if r_id and r_id in t_lower:
+            return True
+        for prop in req.get("properties", []):
+            if prop.lower() in t_lower:
+                return True
+        return False
+
     if task_spec and "requirements" in task_spec:
         for idx, req in enumerate(task_spec.get("requirements", []), 1):
             req_id = req.get("id", f"REQ-{idx:03d}")
             req_desc = req.get("description", "")
-            # Check if any failed test corresponds to this requirement
-            has_fail = any(req_id.lower() in t.lower() or "fail" in t.lower() for t in failed_tests)
-            req_status = "fail" if has_fail else ("pass" if len(passed_tests) > 0 else "unknown")
-            ev_ref = (
-                f"test_{req_id.lower()}" if has_fail else (passed_tests[0] if passed_tests else "")
-            )
+            
+            matched_failed = [t for t in failed_tests if _matches_requirement(req, t)]
+            matched_passed = [t for t in passed_tests if _matches_requirement(req, t)]
+            
+            if matched_failed:
+                req_status = "fail"
+                ev_ref = matched_failed[0]
+            elif matched_passed:
+                req_status = "pass"
+                ev_ref = matched_passed[0]
+            else:
+                req_status = "unverified"
+                ev_ref = ""
+                
             req_list.append(
                 {
                     "id": req_id,
@@ -150,12 +173,15 @@ def verify(
                     }
                 )
 
-    findings_dict: dict[str, Any] = {
-        "requirements": req_list,
-        "edge_cases": [],
-        "security_notes": [],
-        "code_quality_notes": [],
-    }
+    if agent_claims is not None:
+        findings_dict = agent_claims
+    else:
+        findings_dict = {
+            "requirements": req_list,
+            "edge_cases": [],
+            "security_notes": [],
+            "code_quality_notes": [],
+        }
 
     # 3. Evaluate specification contract coverage via ContractEngine
     from the_judge.core.contract_engine import ContractEngine
@@ -165,7 +191,12 @@ def verify(
     ground_truth["contract_data"] = contract_eval
 
     # 4. Evaluate using score engine hard gates and trust profile engine
-    eval_output = evaluate(findings_dict, ground_truth, previous_evidence=previous_evidence)
+    eval_output = evaluate(
+        findings_dict,
+        ground_truth,
+        previous_evidence=previous_evidence,
+        agent_claims_provided=(agent_claims is not None),
+    )
 
     # 4. Construct structured Findings for AI Agent consumption
     structured_findings: list[Finding] = []

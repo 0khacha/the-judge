@@ -5,6 +5,7 @@ def evaluate(
     findings: dict[str, Any],
     evidence: dict[str, Any],
     previous_evidence: Optional[dict[str, Any]] = None,
+    agent_claims_provided: bool = False,
 ) -> dict[str, Any]:
     """Evaluate agent findings against ground truth evidence using strict hard gates.
 
@@ -31,9 +32,9 @@ def evaluate(
         blocking_issues.append(f"Test suite failure: {failed_str}")
 
     # --- Hard Gate 2: Type-check errors ---
-    if type_checker.get("strict_type_check", False) and (
-        type_checker.get("exit_code", 0) != 0 or type_checker.get("error_count", 0) > 0
-    ):
+    if not type_checker.get("available", True):
+        insufficient_evidence_notes.append("ABSTAIN Level 1 (Tooling Gate): Type checker unavailable.")
+    elif type_checker.get("exit_code", 0) != 0 or type_checker.get("error_count", 0) > 0:
         err_cnt = type_checker.get("error_count", 1)
         blocking_issues.append(f"Type checker failed with {err_cnt} error(s)")
 
@@ -52,23 +53,24 @@ def evaluate(
             )
 
     # --- Hard Gate 5: Discrepancy Check (Agent claim contradicts ground truth) ---
-    for req in findings.get("requirements", []):
-        if req.get("status") == "pass":
-            ev_str = str(req.get("evidence", "")).strip()
-            matched_failed = [t for t in failed_test_names if t in ev_str]
-            if matched_failed:
-                disc_msg = f"DISCREPANCY: Requirement {req.get('id')} claimed PASS via '{ev_str}', but test '{matched_failed[0]}' FAILED in evidence ground truth."
-                discrepancies.append(disc_msg)
-                blocking_issues.append(disc_msg)
+    if agent_claims_provided:
+        for req in findings.get("requirements", []):
+            if req.get("status") == "pass":
+                ev_str = str(req.get("evidence", "")).strip()
+                matched_failed = [t for t in failed_test_names if t in ev_str]
+                if matched_failed:
+                    disc_msg = f"DISCREPANCY: Requirement {req.get('id')} claimed PASS via '{ev_str}', but test '{matched_failed[0]}' FAILED in evidence ground truth."
+                    discrepancies.append(disc_msg)
+                    blocking_issues.append(disc_msg)
 
-    for edge in findings.get("edge_cases", []):
-        if edge.get("status") == "pass":
-            ev_str = str(edge.get("evidence", "")).strip()
-            matched_failed = [t for t in failed_test_names if t in ev_str]
-            if matched_failed:
-                disc_msg = f"DISCREPANCY: Edge Case {edge.get('id')} claimed PASS via '{ev_str}', but test '{matched_failed[0]}' FAILED in evidence ground truth."
-                discrepancies.append(disc_msg)
-                blocking_issues.append(disc_msg)
+        for edge in findings.get("edge_cases", []):
+            if edge.get("status") == "pass":
+                ev_str = str(edge.get("evidence", "")).strip()
+                matched_failed = [t for t in failed_test_names if t in ev_str]
+                if matched_failed:
+                    disc_msg = f"DISCREPANCY: Edge Case {edge.get('id')} claimed PASS via '{ev_str}', but test '{matched_failed[0]}' FAILED in evidence ground truth."
+                    discrepancies.append(disc_msg)
+                    blocking_issues.append(disc_msg)
 
     # --- Hard Gate 6: Regression Detection ---
     if previous_evidence:
@@ -304,9 +306,13 @@ def evaluate(
     req_score = (req_passed / len(reqs) * 100.0) if reqs else 100.0
 
     linter_errs = linter.get("error_count", 0)
-    linter_score = (
-        100.0 if linter.get("exit_code", 0) == 0 else max(0.0, 100.0 - linter_errs * 10.0)
-    )
+    if not linter.get("available", True):
+        linter_score = 100.0
+        insufficient_evidence_notes.append("Linter unavailable, scoring 100% with a warning.")
+    else:
+        linter_score = (
+            100.0 if linter.get("exit_code", 0) == 0 else max(0.0, 100.0 - linter_errs * 10.0)
+        )
 
     type_score = 100.0 if type_checker.get("exit_code", 0) == 0 else 0.0
 
@@ -395,9 +401,9 @@ def evaluate(
             },
             "environment_isolation_subdimensions": {
                 "process_isolation": "VERIFIED",
-                "filesystem_isolation": "VERIFIED",
+                "filesystem_isolation": "PARTIAL",
                 "environment_isolation": "VERIFIED",
-                "import_isolation": "VERIFIED",
+                "import_isolation": "PARTIAL",
                 "cross_run_isolation": "VERIFIED",
             },
             "behavioral_coverage_subdimensions": {

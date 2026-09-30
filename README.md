@@ -102,7 +102,7 @@ Action: fix and re-verify.
 
 10 rules enforced by The Judge:
 
-1. **Never trust self-claims.** Demand independent behavioral evidence.
+1. **Never trust self-claims.** Demand independent behavioral evidence. Discrepancy detection between agent claims and ground-truth evidence requires the caller to provide external `agent_claims` via the `verify()` API.
 2. **Execute in anonymous sandboxes.** Strip process markers and inspection flags.
 3. **Synthesize challenge probes.** Prevent static test collection bypasses.
 4. **Enforce requirement contracts.** Unverified critical requirements trigger ABSTAIN.
@@ -155,6 +155,12 @@ from the_judge import verify
 
 result = verify(".", task_spec=None)
 print(result.decision, result.numeric_score, result.findings)
+
+# To enable discrepancy detection against agent claims:
+result = verify(".", task_spec=None, agent_claims={
+    "requirements": [{"id": "REQ-001", "status": "pass", "evidence": "test_cache"}],
+    "edge_cases": [], "security_notes": [],
+})
 ```
 
 ### Iterative improvement API
