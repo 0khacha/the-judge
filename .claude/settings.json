@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "py -m judge.hook"
+            "command": "python -m the_judge.hook"
           }
         ]
       }

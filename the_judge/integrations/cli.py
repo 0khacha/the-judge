@@ -62,6 +62,7 @@ def main(args_list=None) -> int:
         "--pre-push", action="store_true", help="Uninstall pre-push hook instead of pre-commit"
     )
     hook_uninstall.add_argument("workspace", nargs="?", default=".", help="Path to workspace")
+    hook_sub.add_parser("run", help="Run PostToolUse hook (reads JSON from stdin)")
 
     # init command
     init_parser = subparsers.add_parser("init", help="Generate IDE integration files")
@@ -224,8 +225,13 @@ def _run_hook_command(args) -> int:
             print(f"No Judge-installed {hook_type} hook found.")
         return 0
 
+    elif args.hook_action == "run":
+        from the_judge.hook import run_hook
+
+        return run_hook()
+
     else:
-        print("Usage: judge hook {install|uninstall} [--pre-push] [workspace]")
+        print("Usage: judge hook {install|uninstall|run} [--pre-push] [workspace]")
         return 1
 
 
