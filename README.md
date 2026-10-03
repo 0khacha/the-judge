@@ -64,7 +64,7 @@ Works standalone or integrates with any AI coding assistant (Claude Code, Cursor
 
 ```text
 DECISION: FAIL
-Score: 0.0 / 100.0
+Score: 40.0 / 100.0
 
 [1] [HIGH] Behavioral test failed:
     test_cache_expiration
@@ -85,6 +85,10 @@ Action: fix and re-verify.
 | **Without The Judge** (baseline) | 52.0 / 100.0 | No nav, flat hierarchy, no stats, no tech tags |
 | **With The Judge** (4 rounds) | 96.5 / 100.0 (+44.5 pts) | Sticky nav, stats bar, tech tags, contact card |
 
+> **Note**: Visual project scores are evaluated by screenshot analysis and require a browser
+> (e.g., Playwright or Chrome). Without a browser available, visual projects produce `ABSTAIN`.
+> The 52→96.5 improvement was captured in an environment with screenshot support.
+
 <table>
 <tr>
 <td width="50%" align="center"><strong>Before</strong></td>
@@ -96,7 +100,7 @@ Action: fix and re-verify.
 </tr>
 </table>
 
-*Reproduce: `judge improve examples/alex_morgan_portfolio/`*
+*Reproduce (requires browser): `judge improve examples/alex_morgan_portfolio/`*
 
 ## The rules
 
@@ -127,6 +131,7 @@ judge demo                    # 60-second interactive demo
 ```bash
 judge hook install            # Pre-commit verification hook
 judge hook install --pre-push # Pre-push verification hook
+judge hook run                # PostToolUse hook (reads JSON from stdin; used by Claude Code)
 judge init vscode             # Generate VS Code tasks
 judge watch .                 # Re-verify on every file save
 ```
@@ -228,6 +233,7 @@ When no explicit test file exists, The Judge auto-generates **vocabulary-free be
 | Probe type | Trigger condition | Example defect caught |
 |---|---|---|
 | **Idempotency** | Single-arg string-transforming function (`sanitize`, `normalize`, `clean`, etc.) | `fn(fn(x)) != fn(x)` — applying twice changes the output |
+| **Multi-input variance** | Any function with parameters | Constant/hardcoded returns: `add(a,b)` returning `5` for all inputs |
 | **State isolation** | Class with a zero-arg constructor | Two instances share mutable state |
 | **Boundary perturbation** | Numeric `>` / `<` comparison in AST | Function behaves unexpectedly just above/below a threshold |
 | **Rollback isolation** | Class with `begin`/`rollback`-style methods | Uncommitted writes survive a rollback |
@@ -238,12 +244,16 @@ When no explicit test file exists, The Judge auto-generates **vocabulary-free be
 
 ### What auto-generated probes **do not** catch
 
-- **Semantic correctness of numeric functions**: `add(a, b)` returning `0` instead of `a + b` generates no assertion. A function that accepts the right types but always returns a wrong value is invisible to ad-hoc verification.
-- **Multi-argument business logic**: Probes only exercise the first parameter with generated values. Functions requiring coordinated multi-argument inputs (e.g. `charge_card(amount, token)` where `amount < 0` should raise) are not exercised unless a real test or a matching boundary pattern exists in the AST.
+- **Semantic correctness of multi-argument numeric functions beyond constant detection**: The multi-input variance probe detects constant returns (e.g., `add(a, b)` always returning `5`), but cannot detect plausible-but-wrong implementations like `return a - b` instead of `return a + b` — the outputs vary across inputs, so the probe sees no anomaly. A real test asserting `add(2, 3) == 5` is required.
 - **Critical requirements without structural evidence**: A `judge.json` requirement marked `"priority": "critical"` is reported as `UNVERIFIED` (triggering `ABSTAIN`) when no matching structural pattern or real test exercises the described behaviour. A real test file is required to reach `PASS` for such requirements.
 - **Collection-integrity without tests**: Collection-tampering detection works by comparing statically discovered test function names against what pytest actually ran. If the workspace has no `test_*.py` files and no synthesized probes fire, there is nothing to manifest-check.
 
 **Recommendation**: For any function containing real business logic (especially numeric, financial, or security-relevant functions), write explicit tests. The Judge is most effective when explicit tests exist — it then independently validates them for tampering, regression, and evidence independence.
+
+> **Important**: The Judge requires at least one non-vacuous workspace test to reach PASS.
+> Probes alone (which test meta-properties like idempotency) are insufficient evidence of
+> correctness. Tests must contain meaningful assertions and reference the target module.
+
 
 ## Project Status
 
