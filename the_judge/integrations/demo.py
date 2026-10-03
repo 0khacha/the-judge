@@ -40,27 +40,28 @@ class LRUCacheTTL:
 
 FIXED_CACHE_CODE = '''"""LRU Cache with TTL - Repaired Implementation (Correct Boundary Check)."""
 import time
+from typing import Optional
 
 class LRUCacheTTL:
-    def __init__(self, capacity: int, ttl_seconds: float):
+    def __init__(self, capacity: int, ttl_seconds: float) -> None:
         self.capacity = capacity
         self.ttl = ttl_seconds
-        self.cache = {}
-        self.timestamps = {}
+        self.cache: dict[str, str] = {}
+        self.timestamps: dict[str, float] = {}
 
     def set(self, key: str, value: str) -> None:
         if len(self.cache) >= self.capacity and key not in self.cache:
-            oldest_key = min(self.timestamps, key=self.timestamps.get)
+            oldest_key = min(self.timestamps, key=lambda k: self.timestamps[k])
             del self.cache[oldest_key]
             del self.timestamps[oldest_key]
         self.cache[key] = value
         self.timestamps[key] = time.time()
 
-    def get(self, key: str) -> str:
+    def get(self, key: str) -> Optional[str]:
         if key not in self.cache:
             return None
         now = time.time()
-        stored_time = self.timestamps.get(key, 0)
+        stored_time = self.timestamps.get(key, 0.0)
         if now - stored_time >= self.ttl:
             del self.cache[key]
             del self.timestamps[key]
@@ -184,7 +185,13 @@ def run_demo() -> None:
         print(f"DECISION: {res_r2['decision']}")
         print(f"Numeric Score: {res_r2['numeric_score']} / 100.0")
         print("-" * 68)
-        print("\nVERIFICATION COMPLETE: Target code successfully repaired and verified!")
+
+        if res_r2["decision"] == "PASS":
+            print("\nVERIFICATION COMPLETE: Target code successfully repaired and verified!")
+        elif res_r2["decision"] == "FAIL":
+            print("\nVERIFICATION COMPLETE: Target code still has behavioral failures after repair.")
+        else:
+            print(f"\nVERIFICATION COMPLETE: Decision is {res_r2['decision']}. Further evidence needed.")
         print("=" * 68)
 
     finally:
