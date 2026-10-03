@@ -26,6 +26,10 @@ def evaluate(
     passed_test_names = set(test_suite.get("passed_tests", []))
     failed_test_names = set(test_suite.get("failed_tests", []))
 
+    # Filter out vacuous tests (assert True, no assertions, no target reference)
+    vacuous_test_set = set(evidence.get("vacuous_tests", []))
+    passed_test_names -= vacuous_test_set
+
     # --- Hard Gate 1: Test failures in evidence ---
     if test_suite.get("exit_code", 0) != 0 or len(failed_test_names) > 0:
         failed_str = ", ".join(failed_test_names) if failed_test_names else "non-zero exit code"
@@ -166,11 +170,17 @@ def evaluate(
         else:
             independent_passed_tests.append(t)
 
-    total_tests = test_suite.get("total_tests", 0)
+    total_tests = len(passed_test_names) + len(failed_test_names)
     passed_tests_count = len(passed_test_names)
     failed_tests_count = len(failed_test_names)
 
     has_challenge_evidence = len(judge_challenge_passed_tests) > 0
+
+    # Workspace tests: non-synthesized tests that come from the workspace itself
+    workspace_passed_tests = [
+        t for t in passed_test_names
+        if test_provenance.get(t, {}).get("source") != "judge_challenge_test"
+    ]
 
     if total_tests == 0:
         insufficient_evidence_notes.append(
@@ -190,6 +200,16 @@ def evaluate(
     elif not has_challenge_evidence:
         insufficient_evidence_notes.append(
             "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification."
+        )
+        evidence_level = 1
+    elif len(workspace_passed_tests) == 0:
+        # Judge probes alone test meta-properties (idempotency, state isolation).
+        # They do NOT verify that the implementation is correct — at least one
+        # workspace-authored test exercising the target module is required.
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 1 (Workspace Test Gate): No non-synthesized workspace tests passed. "
+            "Judge probes test meta-properties only; at least one workspace test exercising "
+            "the target module is required."
         )
         evidence_level = 1
     elif failed_tests_count > 0 or test_suite.get("exit_code", 0) != 0:
@@ -348,6 +368,15 @@ def evaluate(
         + 0.05 * cq_score,
         2,
     )
+
+    # Decision-based score cap: numeric score must not exceed the ceiling
+    # implied by the verdict.  A FAIL with mostly-passing tests should still
+    # report a low number so downstream tooling doesn't interpret 76.5 as
+    # "nearly perfect."
+    if verdict == "FAIL":
+        weighted_numeric_score = min(weighted_numeric_score, 40.0)
+    elif verdict == "ABSTAIN":
+        weighted_numeric_score = min(weighted_numeric_score, 65.0)
 
     cm = evidence.get("challenge_manifest", {})
     challenge_integ = "FAILED" if cm.get("file_tampered") else "VERIFIED"

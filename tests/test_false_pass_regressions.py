@@ -391,12 +391,14 @@ class TestP3CollectionTamperingNoContract:
 class TestP4ProbeScope:
     """Document and assert the known limitations of auto-generated probes."""
 
-    def test_numeric_function_wrong_return_generates_no_assertion(self):
+    def test_numeric_function_wrong_return_gets_variance_probe(self):
         """
-        A purely numeric function (int→int) with a completely wrong return value
-        produces no probe assertion that would catch the defect — this is a known
-        limitation documented in README.md.  This test asserts the *current* scope
-        so the limitation is tracked, not silently regressed away.
+        Bug 1 fix: A purely numeric function (int→int) with a completely wrong
+        return value now gets a multi-input variance probe that catches the defect.
+
+        Previously (known limitation): 2-param functions got no meaningful probe.
+        Now: the multi-input variance probe calls with varied inputs and asserts
+        outputs are not all identical, catching hardcoded/constant returns.
         """
         workspace = _write_workspace(
             {
@@ -411,13 +413,15 @@ class TestP4ProbeScope:
         engine = BehaviorEngine()
         probes = engine.generate_behavioral_probes(workspace)
 
-        # The adder function takes 2 params; current engine skips multi-param functions
-        # (only the first param is used for the probe value). This assertion documents
-        # that add() with 2 args generates NO idempotency probe (correct current behaviour).
         add_probes = [p for p in probes if p.target_symbol == "add"]
-        # Either no probes (expected for 2-param function) or probes that don't test
-        # the semantic correctness of the return value.
-        for p in add_probes:
-            assert "assert" not in p.executable_code or "idempotent" in p.executable_code, (
-                "Unexpected assertion added to add() probe — review P4 documentation."
+        # With the Bug 1 fix, add() should get at least a variance probe
+        variance_probes = [p for p in add_probes if "multi_input" in p.property_kind]
+        assert len(variance_probes) > 0, (
+            "Bug 1 fix: add(a, b) should now get a multi-input variance probe."
+        )
+        # The variance probe should have an assertion that checks output diversity
+        for vp in variance_probes:
+            assert "unique_count" in vp.executable_code or "unique" in vp.executable_code, (
+                "Variance probe should check for output uniqueness across inputs."
             )
+

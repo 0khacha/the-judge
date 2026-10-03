@@ -187,10 +187,9 @@ def test_behavior_idempotency_{mod_name}_{func_name}():
         res1 = fn(val)
     except TypeError:
         # Probe not applicable: function signature does not accept this value type.
-        return
-    # Any other exception (RuntimeError, ValueError, etc.) propagates as a test failure —
-    # a target that raises on every call has a defect, not a type mismatch.
-    if isinstance(res1, str):
+        pytest.skip("Probe not applicable: function signature mismatch")
+    # Any other exception (RuntimeError, ValueError, etc.) propagates as a test failure.
+    if type(res1) == type(val):
         res2 = fn(res1)
         assert res2 == res1, "Transformation must be idempotent (fn(fn(x)) == fn(x))."
 """
@@ -204,6 +203,66 @@ def test_behavior_idempotency_{mod_name}_{func_name}():
                         expected_invariant="fn(fn(x)) == fn(x)",
                         rationale=f"Black-box probe: transformer '{func_name}' idempotency check",
                         executable_code=code,
+                    )
+                )
+
+                # Multi-input variance probe: call function with multiple different
+                # input combinations and verify outputs are not all identical
+                # (catches hardcoded returns like `return 5`).
+                param_value_lists = []
+                for p in params:
+                    pt = (
+                        p.annotation
+                        if p.annotation != inspect.Parameter.empty
+                        else str
+                    )
+                    param_value_lists.append(
+                        self.generator.generate_for_type(pt, p.name)
+                    )
+
+                n_rounds = min(5, max(len(v) for v in param_value_lists))
+                input_sets = []
+                for i in range(n_rounds):
+                    args = tuple(
+                        vals[i % len(vals)] for vals in param_value_lists
+                    )
+                    input_sets.append(args)
+
+                inputs_repr = repr(input_sets)
+                seed2 = random.randint(10000, 99999)
+                variance_code = (
+                    f"import pytest, sys, os\n"
+                    f"import {mod_name}\n"
+                    f"\n"
+                    f"def test_behavior_multi_input_{mod_name}_{func_name}():\n"
+                    f"    fn = getattr({mod_name}, '{func_name}')\n"
+                    f"    test_inputs = {inputs_repr}\n"
+                    f"    results = []\n"
+                    f"    for args in test_inputs:\n"
+                    f"        try:\n"
+                    f"            r = fn(*args)\n"
+                    f"            results.append(repr(r))\n"
+                    f"        except TypeError:\n"
+                    f"            pytest.skip('Probe not applicable: function signature mismatch')\n"
+                    f"        except Exception as e:\n"
+                    f"            results.append('__ERR:' + type(e).__name__)\n"
+                    f"    if len(results) >= 3:\n"
+                    f"        unique_count = len(set(results))\n"
+                    f"        assert unique_count > 1, (\n"
+                    f"            'Suspicious: function returned identical value for all '\n"
+                    f"            + str(len(results)) + ' varied inputs: ' + results[0]\n"
+                    f"        )\n"
+                )
+                probes.append(
+                    BehavioralProbe(
+                        property_kind="multi_input_variance",
+                        target_symbol=func_name,
+                        seed=seed2,
+                        inputs=tuple(input_sets),
+                        kwargs={},
+                        expected_invariant="outputs vary across different inputs",
+                        rationale=f"Black-box probe: '{func_name}' multi-input variance check (detects hardcoded returns)",
+                        executable_code=variance_code,
                     )
                 )
 
@@ -226,7 +285,7 @@ def test_behavior_state_isolation_{mod_name}_{cls_name}():
         inst2 = cls()
     except TypeError:
         # Probe not applicable: constructor requires arguments.
-        return
+        pytest.skip("Probe not applicable: constructor requires arguments")
     # Any other exception (ValueError, RuntimeError, etc.) propagates as a failure —
     # a constructor that always raises has a defect, not a signature mismatch.
     assert inst1 is not inst2, "Independent class instantiations must yield distinct objects."

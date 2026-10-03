@@ -1,5 +1,6 @@
 """Ground Truth Evidence Extractor for The Judge v4.0."""
 
+import ast as _ast_module
 import json
 import os
 import re
@@ -10,6 +11,83 @@ from typing import Any, Optional
 from .behavior_engine import BehaviorEngine
 from .property_engine import generate_property_tests
 from .sandbox import SandboxRunner
+
+
+def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[str]:
+    """Detect test functions that provide no meaningful behavioral evidence.
+
+    A test is vacuous if it:
+      - Has no assert statements at all
+      - Only has trivial assertions (assert True, assert 1)
+      - Never references any workspace module (doesn't exercise target code)
+
+    Args:
+        source_code: Python source code of the test file.
+        workspace_modules: Set of module names (stems) from the workspace.
+
+    Returns:
+        Set of vacuous test function names.
+    """
+    try:
+        tree = _ast_module.parse(source_code)
+    except SyntaxError:
+        return set()
+
+    # Collect top-level imports to know which names map to workspace modules
+    imported_names: set[str] = set()
+    for node in _ast_module.walk(tree):
+        if isinstance(node, _ast_module.Import):
+            for alias in node.names:
+                if alias.name in workspace_modules:
+                    imported_names.add(alias.asname or alias.name)
+        elif isinstance(node, _ast_module.ImportFrom):
+            if node.module and any(
+                node.module == m or node.module.startswith(m + ".")
+                for m in workspace_modules
+            ):
+                for alias in node.names:
+                    imported_names.add(alias.asname or alias.name)
+
+    # All names that could reference target code
+    target_names = workspace_modules | imported_names
+
+    vacuous: set[str] = set()
+    for node in _ast_module.iter_child_nodes(tree):
+        if not isinstance(node, _ast_module.FunctionDef):
+            continue
+        if not node.name.startswith("test_"):
+            continue
+
+        has_meaningful_assert = False
+        references_target = False
+
+        for child in _ast_module.walk(node):
+            # Check for meaningful assert statements
+            if isinstance(child, _ast_module.Assert):
+                # assert True / assert 1 are trivial
+                if isinstance(child.test, _ast_module.Constant) and child.test.value in (True, 1):
+                    continue
+                has_meaningful_assert = True
+            # Check for pytest.raises usage
+            if (
+                isinstance(child, _ast_module.Attribute)
+                and child.attr == "raises"
+                and isinstance(child.value, _ast_module.Name)
+                and child.value.id == "pytest"
+            ):
+                has_meaningful_assert = True
+
+            # Check if any name references a workspace module or imported symbol
+            if isinstance(child, _ast_module.Name) and child.id in target_names:
+                references_target = True
+            if isinstance(child, _ast_module.Attribute):
+                if isinstance(child.value, _ast_module.Name) and child.value.id in target_names:
+                    references_target = True
+
+        if not has_meaningful_assert or not references_target:
+            vacuous.add(node.name)
+
+    return vacuous
 
 
 def run_command(cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None) -> dict[str, Any]:
@@ -247,6 +325,18 @@ def capture_evidence(
                 "confidence": "MEDIUM",
             }
 
+    # 6. Detect vacuous tests in workspace test files
+    workspace_modules = set()
+    for f in os.listdir(abs_dir):
+        if f.endswith(".py") and not f.startswith("test_") and not f.startswith("_"):
+            workspace_modules.add(f[:-3])  # stem
+
+    vacuous_tests: list[str] = []
+    for vt in visible_tests:
+        with open(os.path.join(abs_dir, vt), encoding="utf-8") as f:
+            content = f.read()
+        vacuous_tests.extend(_detect_vacuous_tests(content, workspace_modules))
+
     evidence_data = {
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "workspace_dir": abs_dir,
@@ -254,6 +344,7 @@ def capture_evidence(
         "type_checker": type_checker_data,
         "linter": linter_data,
         "test_provenance": test_provenance,
+        "vacuous_tests": vacuous_tests,
         "challenge_manifest": {
             "expected_challenges": expected_challenges,
             "missing_challenges": missing_challenges,
