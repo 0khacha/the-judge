@@ -39,17 +39,36 @@ The Judge operates with the following security boundaries:
 
 ### Isolation Mechanisms
 
-1. **Sandbox Execution**: Tests run in subprocess isolation, in a temporary directory **outside** the workspace
-2. **Tampering Detection**: Monitors for conftest hijacking (temp dir placement prevents workspace conftest auto-loading), SHA-256 hash verification of synthesized test files
-3. **Anonymous Execution**: Sanitized `sys.argv`, scrubbed environment variables (no `inspect.stack` frame rewriting — removed as fragile)
-4. **TOCTOU Protection**: Detects time-of-check-time-of-use symlink attacks
+**The sandbox is not a security boundary.** It exists to keep the verdict honest
+against careless or lazy code, not to contain hostile code. Only run code you would
+be willing to run on your own machine.
+
+1. **Separate process**: tests run in a `python -m pytest` subprocess with stdin closed
+   and a timeout.
+2. **Collection outside the workspace**: test files (the workspace's and the judge's
+   probes) are copied into a temporary directory with a randomized name and collected
+   there, so a workspace `conftest.py` at the root cannot silently rewrite collection
+   of the judge's probes. The subprocess runs with the workspace as its working
+   directory, like a normal `pytest` run, so relative paths in tests work and the
+   working directory does not reveal the sandbox.
+3. **Tampering detection**: SHA-256 check of the copied test files after the run; a
+   manifest of expected test names (missing or deselected tests are a FAIL); and, in a
+   git repository, a comparison of the tests against `HEAD` or `--baseline REF`
+   (deleted tests, removed assertions, added skips are a FAIL).
+4. **Environment scrubbing**: `JUDGE_*`, `BENCHMARK_*` and `PYTEST_CURRENT_TEST`
+   variables are removed; only a small allow-list of variables is passed through.
 
 ### Isolation Limitations
 
-1. **Filesystem**: Workspace is accessible via PYTHONPATH (PARTIAL isolation)
-2. **Import**: PYTHONPATH includes the workspace for import resolution (PARTIAL isolation)
-3. **Stack Detection**: Target code can detect pytest in `inspect.stack()` frames
-4. **Target Self-Modification**: Source code changes during execution are not detected (RESIDUAL RISK)
+1. **Detectable**: code can still tell it is under test (pytest is imported, the test
+   files live in a temporary directory, the environment is reduced). Randomized names
+   only remove the cheapest hint (the former fixed `t_` directory prefix).
+2. **Filesystem**: the workspace is the working directory and is on `PYTHONPATH`;
+   tests can read and write it, and anything else the user can.
+3. **Network and resources**: no network isolation, no memory/CPU limits beyond the
+   timeout.
+4. **Target self-modification**: source changes made by the code during the run are
+   not detected.
 
 ### What The Judge Does NOT Protect Against
 

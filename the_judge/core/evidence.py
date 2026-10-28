@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import tempfile
 import time
+import uuid
 from typing import Any, Optional
 
 from .baseline import compare_tests_to_baseline
@@ -21,8 +22,6 @@ from .test_discovery import (
     workspace_module_names,
 )
 
-# Sandbox sub-directory that receives the workspace's own tests.
-_WORKSPACE_SUITE_DIR = "suite"
 
 
 def _is_tautology(test: "_ast_module.expr") -> bool:
@@ -322,14 +321,17 @@ def capture_evidence(
     # copied under a sub-directory of the sandbox with their relative layout, plus
     # the conftest.py files and sibling helpers they import.
     visible_tests = discover_workspace_tests(abs_dir)
+    # Sandbox sub-directory for the workspace's tests; randomized per run so tests
+    # cannot recognise the sandbox from a fixed directory name.
+    suite_dir = uuid.uuid4().hex[:10]
     support: list[tuple[str, str]] = []
     for rel in support_files(abs_dir, visible_tests):
         with open(os.path.join(abs_dir, rel), encoding="utf-8") as f:
-            support.append((os.path.join(_WORKSPACE_SUITE_DIR, rel), f.read()))
+            support.append((os.path.join(suite_dir, rel), f.read()))
     for vt in visible_tests:
         with open(os.path.join(abs_dir, vt), encoding="utf-8") as f:
             content = f.read()
-        test_scripts.append((os.path.join(_WORKSPACE_SUITE_DIR, vt), content))
+        test_scripts.append((os.path.join(suite_dir, vt), content))
         # P3 fix: extract test function names from visible test files and add them to
         # expected_challenges so that collection tampering (conftest hijack, etc.) is
         # detectable even when no judge.json contract is present.

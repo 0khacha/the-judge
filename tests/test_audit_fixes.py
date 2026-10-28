@@ -319,13 +319,25 @@ class TestSandboxIsolation:
     def test_sandbox_temp_dir_is_outside_workspace(self, tmp_path):
         import os
         workspace = str(tmp_path)
-        test_code = f"import os\ndef test_temp_dir():\n    assert not os.getcwd().startswith({repr(workspace)})\n"
+        # P2-8: the subprocess cwd is the workspace (neutral, like a normal pytest
+        # run); what must be outside the workspace is where tests are collected.
+        test_code = (
+            "import os\ndef test_temp_dir():\n"
+            f"    assert not os.path.abspath(__file__).startswith({repr(workspace)})\n"
+        )
         res = SandboxRunner.execute_in_anonymous_sandbox(workspace, [("test_dir.py", test_code)])
         assert "test_temp_dir" in res["passed"]
 
     def test_generated_conftest_no_inspect_spoofing(self, tmp_path):
         workspace = str(tmp_path)
-        test_code = "def test_inspect_stack():\n    import inspect\n    with open('conftest.py') as f:\n        content = f.read()\n    assert 'inspect.stack' not in content\n"
+        test_code = (
+            "import os\n"
+            "def test_inspect_stack():\n"
+            "    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'conftest.py')\n"
+            "    with open(path) as f:\n"
+            "        content = f.read()\n"
+            "    assert 'inspect.stack' not in content\n"
+        )
         res = SandboxRunner.execute_in_anonymous_sandbox(workspace, [("test_inspect.py", test_code)])
         assert "test_inspect_stack" in res["passed"]
 

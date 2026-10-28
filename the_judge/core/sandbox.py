@@ -133,7 +133,10 @@ class SandboxRunner:
         """
         abs_task_dir = os.path.abspath(task_dir)
 
-        temp_dir = tempfile.mkdtemp(prefix=f't_{uuid.uuid4().hex[:8]}_')
+        # Neutral, randomized name with no fixed prefix: code under test must not be
+        # able to recognise the sandbox from a path pattern. This removes a cheap
+        # detection hint only; it is NOT a security boundary against hostile code.
+        temp_dir = tempfile.mkdtemp(prefix=uuid.uuid4().hex[:12])
 
         try:
             conftest_path = os.path.join(temp_dir, "conftest.py")
@@ -185,7 +188,11 @@ class SandboxRunner:
                 cmd.extend(pytest_args)
             cmd.append(temp_dir)
 
-            res = cls.run_cmd(cmd, cwd=temp_dir, env=env, timeout=timeout)
+            # Run from the workspace, as a developer running pytest would: the cwd is
+            # then indistinguishable from a normal run and relative fixture paths in
+            # tests resolve. Collection still happens only in temp_dir.
+            run_cwd = abs_task_dir if os.path.isdir(abs_task_dir) else temp_dir
+            res = cls.run_cmd(cmd, cwd=run_cwd, env=env, timeout=timeout)
 
             file_tampered = False
             for safe_name, init_hash in initial_hashes.items():
