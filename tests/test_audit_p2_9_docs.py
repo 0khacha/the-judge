@@ -91,3 +91,13 @@ def test_readme_documents_optional_tools_and_limitations():
     for rel in ("INSTALL.md", "docs/QUICK_START.md"):
         text = _read(rel)
         assert "optional" in text.lower() and "mypy" in text, rel
+
+
+def test_distribution_name_does_not_collide_with_the_pypi_project():
+    # 'the-judge' on PyPI belongs to another author. The distribution is published as
+    # 'the-judge-verify'; the import package stays `the_judge` and the CLI `judge`.
+    pyproject = _read("pyproject.toml")
+    assert re.search(r'^name = "the-judge-verify"$', pyproject, re.M)
+    readme = _read("README.md")
+    assert "the-judge-verify" in readme and "import the_judge" in readme
+    assert "pip uninstall the-judge-verify" in _read("INSTALL.md")
