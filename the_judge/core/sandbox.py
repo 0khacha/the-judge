@@ -259,11 +259,24 @@ class SandboxRunner:
                                 bucket.append(test_name)
                             break
 
+            # pytest that never got as far as writing its report did not run any
+            # test: an infrastructure problem (e.g. pytest not installed for this
+            # interpreter), not a test failure and not evidence of tampering.
+            runner_error = None
+            if (not os.path.exists(junitxml_path) and not res["timed_out"]
+                    and not (passed_tests or failed_tests or skipped_tests)):
+                detail = (res["stderr"] or res["stdout"] or "no output").strip().splitlines()
+                runner_error = (
+                    f"{sys.executable} -m pytest did not run: "
+                    + (detail[-1][:300] if detail else "no output")
+                )
+
             return {
                 "exit_code": res["exit_code"],
                 "passed": passed_tests,
                 "failed": failed_tests,
                 "skipped": skipped_tests,
+                "runner_error": runner_error,
                 "file_tampered": file_tampered,
                 "stdout": res["stdout"],
                 "stderr": res["stderr"],

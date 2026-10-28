@@ -30,8 +30,19 @@ def evaluate(
     vacuous_test_set = set(evidence.get("vacuous_tests", []))
     passed_test_names -= vacuous_test_set
 
+    # --- Gate 0: the test runner itself could not start (infrastructure) ---
+    runner_error = test_suite.get("runner_error")
+    if runner_error:
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 0 (Test Runner): no test could run because pytest could not be "
+            f"started ({runner_error}). Install it with `pip install pytest` in the "
+            "environment that runs The Judge."
+        )
+
     # --- Hard Gate 1: Test failures in evidence ---
-    if test_suite.get("exit_code", 0) != 0 or len(failed_test_names) > 0:
+    if runner_error:
+        pass  # nothing ran; reported above, not a test failure
+    elif test_suite.get("exit_code", 0) != 0 or len(failed_test_names) > 0:
         failed_str = ", ".join(failed_test_names) if failed_test_names else "non-zero exit code"
         blocking_issues.append(f"Test suite failure: {failed_str}")
 
@@ -120,7 +131,7 @@ def evaluate(
         test_suite.get("skipped_tests", []), test_suite.get("skipped_probes", [])
     )
     unexecuted_expected = [t for t in expected_challenges if t not in all_executed_tests]
-    if unexecuted_expected and not missing_challenges:
+    if unexecuted_expected and not missing_challenges and not runner_error:
         unexec_str = ", ".join(sorted(unexecuted_expected))
         blocking_issues.append(
             f"COLLECTION TAMPERING DETECTED: Expected challenge test(s) were deselect or bypassed during collection: {unexec_str}"

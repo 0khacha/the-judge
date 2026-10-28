@@ -38,7 +38,10 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
-dependencies = []
+dependencies = [
+    # Workspace tests and judge probes are executed with `python -m pytest`.
+    "pytest>=7.0",
+]
 
 [project.optional-dependencies]
 dev = [

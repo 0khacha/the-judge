@@ -362,10 +362,15 @@ def capture_evidence(
     skipped_tests = sandbox_res.get("skipped", [])
     # A skipped test was collected and run (it is not missing), but proves nothing.
     all_executed = set(passed_tests).union(failed_tests).union(skipped_tests)
-    missing_challenges = [ch for ch in expected_challenges if ch not in all_executed]
+    runner_error = sandbox_res.get("runner_error")
+    # Nothing ran at all when the runner failed to start: nothing is "missing".
+    missing_challenges = [] if runner_error else [
+        ch for ch in expected_challenges if ch not in all_executed
+    ]
 
     test_suite_data = {
         "exit_code": sandbox_res["exit_code"],
+        "runner_error": runner_error,
         "total_tests": len(passed_tests) + len(failed_tests),
         "passed_tests": passed_tests,
         "failed_tests": failed_tests,
