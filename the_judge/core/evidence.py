@@ -10,6 +10,7 @@ import tempfile
 import time
 from typing import Any, Optional
 
+from .baseline import compare_tests_to_baseline
 from .behavior_engine import BehaviorEngine
 from .property_engine import generate_property_tests
 from .sandbox import SandboxRunner
@@ -24,20 +25,57 @@ from .test_discovery import (
 _WORKSPACE_SUITE_DIR = "suite"
 
 
+def _is_tautology(test: "_ast_module.expr") -> bool:
+    """An assertion condition that holds whatever the code under test does."""
+    if isinstance(test, _ast_module.Constant):
+        return bool(test.value)
+    if isinstance(test, _ast_module.Compare) and len(test.ops) == 1:
+        op, right = test.ops[0], test.comparators[0]
+        # x == x, x is x, x <= x ...
+        same_sides = _ast_module.dump(test.left) == _ast_module.dump(right)
+        if same_sides and isinstance(op, (_ast_module.Eq, _ast_module.Is, _ast_module.LtE, _ast_module.GtE)):
+            return True
+        # x in (True, False): passes for any predicate result, right or wrong
+        if isinstance(op, _ast_module.In) and isinstance(right, (_ast_module.Tuple, _ast_module.List, _ast_module.Set)):
+            values = {e.value for e in right.elts if isinstance(e, _ast_module.Constant)}
+            if len(values) == len(right.elts) and {True, False} <= values:
+                return True
+    # x is None or x is not None
+    if isinstance(test, _ast_module.BoolOp) and isinstance(test.op, _ast_module.Or):
+        dumps = []
+        for val in test.values:
+            if (isinstance(val, _ast_module.Compare) and len(val.ops) == 1
+                    and isinstance(val.ops[0], (_ast_module.Is, _ast_module.IsNot))
+                    and isinstance(val.comparators[0], _ast_module.Constant)
+                    and val.comparators[0].value is None):
+                dumps.append((_ast_module.dump(val.left), type(val.ops[0])))
+        lefts = {d for d, _ in dumps}
+        if any((d, _ast_module.Is) in dumps and (d, _ast_module.IsNot) in dumps for d in lefts):
+            return True
+    return False
+
+
+def _is_existence_only(test: "_ast_module.expr") -> bool:
+    """`x is not None`: on its own it does not check behaviour."""
+    return (
+        isinstance(test, _ast_module.Compare) and len(test.ops) == 1
+        and isinstance(test.ops[0], _ast_module.IsNot)
+        and isinstance(test.comparators[0], _ast_module.Constant)
+        and test.comparators[0].value is None
+    )
+
+
 def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[str]:
     """Detect test functions that provide no meaningful behavioral evidence.
 
     A test is vacuous if it:
-      - Has no assert statements at all
-      - Only has trivial assertions (assert True, assert 1)
-      - Never references any workspace module (doesn't exercise target code)
+      - has no assertion (assert statement or pytest.raises), or
+      - only has tautological assertions (assert True, x == x,
+        `(...) in (True, False)`, `x is None or x is not None`), or
+      - only asserts `x is not None`, or
+      - never references any workspace module (doesn't exercise target code).
 
-    Args:
-        source_code: Python source code of the test file.
-        workspace_modules: Set of module names (stems) from the workspace.
-
-    Returns:
-        Set of vacuous test function names.
+    Test methods of Test* classes are included and reported by method name.
     """
     try:
         tree = _ast_module.parse(source_code)
@@ -49,8 +87,8 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
     for node in _ast_module.walk(tree):
         if isinstance(node, _ast_module.Import):
             for alias in node.names:
-                if alias.name in workspace_modules:
-                    imported_names.add(alias.asname or alias.name)
+                if alias.name.split(".")[0] in workspace_modules:
+                    imported_names.add(alias.asname or alias.name.split(".")[0])
         elif isinstance(node, _ast_module.ImportFrom):
             if node.module and any(
                 node.module == m or node.module.startswith(m + ".")
@@ -62,10 +100,15 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
     # All names that could reference target code
     target_names = workspace_modules | imported_names
 
+    functions = []
+    for node in tree.body:
+        if isinstance(node, _ast_module.FunctionDef):
+            functions.append(node)
+        elif isinstance(node, _ast_module.ClassDef) and node.name.startswith("Test"):
+            functions.extend(n for n in node.body if isinstance(n, _ast_module.FunctionDef))
+
     vacuous: set[str] = set()
-    for node in _ast_module.iter_child_nodes(tree):
-        if not isinstance(node, _ast_module.FunctionDef):
-            continue
+    for node in functions:
         if not node.name.startswith("test_"):
             continue
 
@@ -73,13 +116,11 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
         references_target = False
 
         for child in _ast_module.walk(node):
-            # Check for meaningful assert statements
             if isinstance(child, _ast_module.Assert):
-                # assert True / assert 1 are trivial
-                if isinstance(child.test, _ast_module.Constant) and child.test.value in (True, 1):
+                if _is_tautology(child.test) or _is_existence_only(child.test):
                     continue
                 has_meaningful_assert = True
-            # Check for pytest.raises usage
+            # pytest.raises(...) asserts that the code under test raises
             if (
                 isinstance(child, _ast_module.Attribute)
                 and child.attr == "raises"
@@ -239,9 +280,16 @@ def capture_evidence(
     workspace_dir: str,
     output_file: Optional[str] = None,
     task_spec: Optional[dict[str, Any]] = None,
+    baseline: Optional[str] = None,
 ) -> dict[str, Any]:
-    """Capture ground truth evidence from workspace_dir."""
+    """Capture ground truth evidence from workspace_dir.
+
+    baseline: git ref the workspace tests are compared against for tampering
+        (default HEAD when the workspace is a git repository).
+    """
     abs_dir = os.path.abspath(workspace_dir)
+    # Resolve the baseline first so an unusable explicit --baseline fails fast.
+    test_tampering = compare_tests_to_baseline(abs_dir, baseline)
 
     # 1. Synthesize property tests & black-box probes
     candidates = generate_property_tests(abs_dir, task_spec=task_spec)
@@ -309,7 +357,9 @@ def capture_evidence(
     failed_tests = sandbox_res["failed"]
 
     # Compare executed challenges against expected manifest
-    all_executed = set(passed_tests).union(failed_tests)
+    skipped_tests = sandbox_res.get("skipped", [])
+    # A skipped test was collected and run (it is not missing), but proves nothing.
+    all_executed = set(passed_tests).union(failed_tests).union(skipped_tests)
     missing_challenges = [ch for ch in expected_challenges if ch not in all_executed]
 
     test_suite_data = {
@@ -366,6 +416,11 @@ def capture_evidence(
                 "confidence": "MEDIUM",
             }
 
+    # Skipped workspace tests are reported (they hide behaviour); skipped judge probes
+    # simply did not apply to this code and are recorded as "not run".
+    test_suite_data["skipped_tests"] = [t for t in skipped_tests if t not in judge_authored_tests]
+    test_suite_data["skipped_probes"] = [t for t in skipped_tests if t in judge_authored_tests]
+
     # 6. Detect vacuous tests in workspace test files
     workspace_modules = workspace_module_names(abs_dir)
 
@@ -383,6 +438,7 @@ def capture_evidence(
         "linter": linter_data,
         "test_provenance": test_provenance,
         "vacuous_tests": vacuous_tests,
+        "test_tampering": test_tampering,
         "challenge_manifest": {
             "expected_challenges": expected_challenges,
             "missing_challenges": missing_challenges,

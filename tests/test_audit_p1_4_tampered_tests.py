@@ -137,6 +137,7 @@ def test_deleted_test_file_is_tampering(tmp_path):
 def test_baseline_ref_option(tmp_path):
     ws = _git_project(tmp_path)
     base = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ws, capture_output=True,
+                          stdin=subprocess.DEVNULL,
                           text=True, check=True).stdout.strip()
     write(ws, {"test_calc.py": "from calc import add\ndef test_add():\n    assert add(1, 2) == 3\n"})
     git(ws, "commit", "-q", "-am", "weaken tests")

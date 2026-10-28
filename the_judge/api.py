@@ -80,6 +80,7 @@ def verify(
     previous_evidence: Optional[dict[str, Any]] = None,
     agent_claims: Optional[dict[str, Any]] = None,
     _ground_truth: Optional[dict[str, Any]] = None,
+    baseline: Optional[str] = None,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
     and adversarial integrity gates.
@@ -94,6 +95,9 @@ def verify(
             self-verification.
         _ground_truth: Pre-captured evidence dict. When provided, skips capture_evidence()
             (used by critique() to avoid running the sandbox twice).
+        baseline: git ref to compare the workspace tests against for tampering
+            (deleted tests, removed assertions, added skips). Defaults to HEAD when
+            the workspace is a git repository.
 
     Returns:
         VerificationResult containing structured decision, findings, trust profile, and provenance.
@@ -105,7 +109,7 @@ def verify(
     ground_truth = (
         _ground_truth
         if _ground_truth is not None
-        else capture_evidence(workspace_path, task_spec=task_spec)
+        else capture_evidence(workspace_path, task_spec=task_spec, baseline=baseline)
     )
 
     # 2. Build Agent Findings / Claims
@@ -221,6 +225,8 @@ def verify(
     for idx, b_issue in enumerate(eval_output.get("blocking_issues", []), 1):
         if b_issue.startswith("Test suite failure:") and failed_tests:
             continue
+        if b_issue.startswith("TEST TAMPERING DETECTED"):
+            continue  # reported below as one 'tampering' finding per issue
         if "TAMPERING" in b_issue or "VERIFICATION DENIAL" in b_issue:
             cat = "security"
             sev = "blocking"
@@ -251,6 +257,47 @@ def verify(
                     suggested_focus=focus,
                 )
             )
+
+    # Test tampering relative to the git baseline (blocking).
+    tampering = ground_truth.get("test_tampering", {})
+    for idx, issue in enumerate(tampering.get("issues", []), 1):
+        structured_findings.append(
+            Finding(
+                id=f"TAMPER-{idx:03d}",
+                category="tampering",
+                severity="blocking",
+                description=f"Test weakened since {tampering.get('ref', 'HEAD')}: {issue['detail']}",
+                property_name=issue.get("test") or issue.get("file"),
+                expected="Tests at least as strong as at the baseline.",
+                suggested_focus="Restore the removed test/assertion or skip and fix the code "
+                "instead. If the test change is intended, commit it or pass --baseline <ref>.",
+            )
+        )
+
+    # Tests that ran but are not evidence: skipped/xfail and vacuous assertions.
+    skipped = test_suite.get("skipped_tests", [])
+    if skipped:
+        structured_findings.append(
+            Finding(
+                id="EVID-SKIP",
+                category="evidence",
+                severity="medium",
+                description="Skipped/xfail test(s) not counted as evidence: " + ", ".join(sorted(skipped)),
+                suggested_focus="Remove the skip/xfail and make the test pass.",
+            )
+        )
+    vacuous = sorted(set(ground_truth.get("vacuous_tests", [])))
+    if vacuous:
+        structured_findings.append(
+            Finding(
+                id="EVID-VACUOUS",
+                category="evidence",
+                severity="medium",
+                description="Vacuous test(s) not counted as evidence (no real assertion, "
+                "tautology, or only `is not None`): " + ", ".join(vacuous),
+                suggested_focus="Assert the actual expected value of the code under test.",
+            )
+        )
 
     # Optional tools that were not run: always reported, never decisive.
     for tool_key, label, install in (

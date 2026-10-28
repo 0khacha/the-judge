@@ -199,41 +199,45 @@ class SandboxRunner:
                     if curr_hash != init_hash:
                         file_tampered = True
 
-            passed_tests = []
-            failed_tests = []
-            
+            passed_tests: list[str] = []
+            failed_tests: list[str] = []
+            # Skipped and xfail tests (junit <skipped>) did not demonstrate anything:
+            # they are reported separately and never counted as passed.
+            skipped_tests: list[str] = []
+
             if os.path.exists(junitxml_path):
                 try:
                     import xml.etree.ElementTree as ET
                     tree = ET.parse(junitxml_path)
                     for testcase in tree.findall('.//testcase'):
-                        name = testcase.get('name')
+                        name = testcase.get('name') or ""
                         if testcase.find('failure') is not None or testcase.find('error') is not None:
                             failed_tests.append(name)
+                        elif testcase.find('skipped') is not None:
+                            skipped_tests.append(name)
                         else:
                             passed_tests.append(name)
                 except Exception:
                     # Fallback to stdout parsing if XML is corrupted
                     pass
-            
-            if not passed_tests and not failed_tests:
+
+            if not passed_tests and not failed_tests and not skipped_tests:
                 combined = res["stdout"] + "\n" + res["stderr"]
                 for line in combined.splitlines():
-                    if " PASSED" in line:
-                        raw_name = line.split(" PASSED")[0].split()[-1]
-                        test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-                        if test_name and test_name not in passed_tests:
-                            passed_tests.append(test_name)
-                    elif " FAILED" in line:
-                        raw_name = line.split(" FAILED")[0].split()[-1]
-                        test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-                        if test_name and test_name not in failed_tests:
-                            failed_tests.append(test_name)
+                    for marker, bucket in ((" PASSED", passed_tests), (" FAILED", failed_tests),
+                                           (" SKIPPED", skipped_tests), (" XFAIL", skipped_tests)):
+                        if marker in line:
+                            raw_name = line.split(marker)[0].split()[-1] if line.split(marker)[0].split() else ""
+                            test_name = raw_name.split("::")[-1]
+                            if test_name and test_name not in bucket:
+                                bucket.append(test_name)
+                            break
 
             return {
                 "exit_code": res["exit_code"],
                 "passed": passed_tests,
                 "failed": failed_tests,
+                "skipped": skipped_tests,
                 "file_tampered": file_tampered,
                 "stdout": res["stdout"],
                 "stderr": res["stderr"],

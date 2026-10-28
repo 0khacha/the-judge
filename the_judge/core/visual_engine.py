@@ -250,7 +250,7 @@ class VisualEngine:
                         "--window-size=1280,900",
                         file_url,
                     ]
-                    subprocess.run(cmd, capture_output=True, timeout=4)
+                    subprocess.run(cmd, capture_output=True, timeout=4, stdin=subprocess.DEVNULL)
                     if os.path.exists(output_png) and os.path.getsize(output_png) > 1000:
                         return True
                 except Exception:

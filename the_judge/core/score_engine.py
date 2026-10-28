@@ -113,12 +113,32 @@ def evaluate(
             f"COLLECTION TAMPERING DETECTED: Expected challenge test(s) missing from collection: {missing_str}"
         )
 
-    all_executed_tests = passed_test_names.union(failed_test_names)
+    # Skipped tests (workspace skips and probes that did not apply) were collected and
+    # run, so they are not "bypassed"; they simply do not count as passing evidence.
+    # Vacuous tests ran too: use the raw pass list, not the evidence-filtered one.
+    all_executed_tests = set(test_suite.get("passed_tests", [])).union(failed_test_names).union(
+        test_suite.get("skipped_tests", []), test_suite.get("skipped_probes", [])
+    )
     unexecuted_expected = [t for t in expected_challenges if t not in all_executed_tests]
     if unexecuted_expected and not missing_challenges:
         unexec_str = ", ".join(sorted(unexecuted_expected))
         blocking_issues.append(
             f"COLLECTION TAMPERING DETECTED: Expected challenge test(s) were deselect or bypassed during collection: {unexec_str}"
+        )
+
+    # --- Hard Gate 7b: Test tampering relative to the git baseline ---
+    tampering = evidence.get("test_tampering", {})
+    for issue in tampering.get("issues", []):
+        blocking_issues.append(
+            f"TEST TAMPERING DETECTED (vs {tampering.get('ref', 'HEAD')}): {issue['detail']}"
+        )
+
+    # --- Gate 7c: Skipped / xfail workspace tests prove nothing ---
+    skipped_workspace = test_suite.get("skipped_tests", [])
+    if skipped_workspace:
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 1 (Skipped Tests): workspace test(s) skipped or xfail, so their "
+            f"behaviour is unverified: {', '.join(sorted(skipped_workspace))}"
         )
 
     # --- Hard Gate 8: Verification Denial / ABSTAIN Manipulation Gate ---

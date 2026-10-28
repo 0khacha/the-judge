@@ -31,6 +31,12 @@ def main(args_list=None) -> int:
     verify_parser.add_argument(
         "--task-spec", type=str, default=None, help="Path to specification file (JSON or YAML)"
     )
+    verify_parser.add_argument(
+        "--baseline",
+        type=str,
+        default=None,
+        help="Git ref to compare tests against for tampering (default: HEAD if in a git repo)",
+    )
 
     # contract command
     contract_parser = subparsers.add_parser(
@@ -180,7 +186,11 @@ def main(args_list=None) -> int:
     old_argv = list(sys.argv)
     try:
         sys.argv = [sys.argv[0]]
-        verif_result = verify(workspace=workspace_path, task_spec=task_spec_dict)
+        verif_result = verify(
+            workspace=workspace_path,
+            task_spec=task_spec_dict,
+            baseline=getattr(args, "baseline", None),
+        )
     except Exception as e:
         if is_json:
             print(json.dumps({"error": str(e), "decision": "ERROR"}, indent=2))
