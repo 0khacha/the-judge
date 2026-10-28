@@ -1,7 +1,8 @@
 # How to install
 
 > **Install from GitHub.** The PyPI project named `the-judge` is an **unrelated
-> package** by another author. Use:
+> package** by another author. This project's distribution name is
+> `the-judge-verify` (not yet on PyPI). Until it is published, install from git:
 > `pip install git+https://github.com/0khacha/the-judge.git`
 
 mypy and ruff are **optional**. If they are on `PATH`, The Judge also runs them; if not,
@@ -33,7 +34,7 @@ pip install --upgrade the-judge
 ### Uninstall
 
 ```bash
-pip uninstall the-judge
+pip uninstall the-judge-verify
 ```
 
 </details>

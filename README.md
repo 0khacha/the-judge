@@ -18,7 +18,8 @@
 ## Install
 
 > **Install from GitHub.** The PyPI project named `the-judge` is an **unrelated
-> package** by another author. Use:
+> package** by another author. This project's distribution name is
+> `the-judge-verify` (not yet on PyPI). Until it is published, install from git:
 > `pip install git+https://github.com/0khacha/the-judge.git`
 
 Copy/paste into your AI assistant prompt:
@@ -39,6 +40,9 @@ pip install git+https://github.com/0khacha/the-judge.git
 mypy and ruff are **optional**. If they are on `PATH`, The Judge also runs them; if not,
 those checks are skipped and reported as a `tooling` finding with reduced confidence,
 and the decision is unaffected. To enable them: `pip install mypy ruff`.
+
+Names: the distribution is `the-judge-verify`, the Python package is still
+`import the_judge`, and the command is `judge`.
 
 Check the [installation instructions](INSTALL.md) for Claude Code, Cursor, Windsurf, Codex, Git hooks, VS Code, and CI/CD.
 
