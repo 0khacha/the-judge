@@ -49,9 +49,10 @@ class ContractEngine:
 
         test_suite = ground_truth.get("test_suite", {})
         # Vacuous tests passed but prove nothing, so they verify no requirement.
-        passed_tests = set(test_suite.get("passed_tests", [])) - set(
-            ground_truth.get("vacuous_tests", [])
-        )
+        vacuous = set(ground_truth.get("vacuous_tests", []))
+        passed_tests = {
+            t for t in test_suite.get("passed_tests", []) if t.split("[", 1)[0] not in vacuous
+        }
         failed_tests = set(test_suite.get("failed_tests", []))
         test_provenance = ground_truth.get("test_provenance", {})
 

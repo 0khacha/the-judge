@@ -28,7 +28,7 @@ def evaluate(
 
     # Filter out vacuous tests (assert True, no assertions, no target reference)
     vacuous_test_set = set(evidence.get("vacuous_tests", []))
-    passed_test_names -= vacuous_test_set
+    passed_test_names = {t for t in passed_test_names if t.split("[", 1)[0] not in vacuous_test_set}
 
     # --- Gate 0: the test runner itself could not start (infrastructure) ---
     runner_error = test_suite.get("runner_error")
@@ -127,9 +127,12 @@ def evaluate(
     # Skipped tests (workspace skips and probes that did not apply) were collected and
     # run, so they are not "bypassed"; they simply do not count as passing evidence.
     # Vacuous tests ran too: use the raw pass list, not the evidence-filtered one.
-    all_executed_tests = set(test_suite.get("passed_tests", [])).union(failed_test_names).union(
-        test_suite.get("skipped_tests", []), test_suite.get("skipped_probes", [])
-    )
+    all_executed_tests = {
+        t.split("[", 1)[0]  # parametrized cases count for their function
+        for t in set(test_suite.get("passed_tests", [])).union(failed_test_names).union(
+            test_suite.get("skipped_tests", []), test_suite.get("skipped_probes", [])
+        )
+    }
     unexecuted_expected = [t for t in expected_challenges if t not in all_executed_tests]
     if unexecuted_expected and not missing_challenges and not runner_error:
         unexec_str = ", ".join(sorted(unexecuted_expected))

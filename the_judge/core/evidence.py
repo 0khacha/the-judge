@@ -24,6 +24,11 @@ from .test_discovery import (
 
 
 
+def test_base_name(name: str) -> str:
+    """`test_x[1-2]` -> `test_x` (pytest parametrize id stripped)."""
+    return name.split("[", 1)[0]
+
+
 def _is_tautology(test: "_ast_module.expr") -> bool:
     """An assertion condition that holds whatever the code under test does."""
     if isinstance(test, _ast_module.Constant):
@@ -361,7 +366,9 @@ def capture_evidence(
     # Compare executed challenges against expected manifest
     skipped_tests = sandbox_res.get("skipped", [])
     # A skipped test was collected and run (it is not missing), but proves nothing.
-    all_executed = set(passed_tests).union(failed_tests).union(skipped_tests)
+    # pytest reports parametrized cases as name[param-id]; the manifest holds the
+    # function name, so a function counts as executed when any case of it ran.
+    all_executed = {test_base_name(t) for t in (*passed_tests, *failed_tests, *skipped_tests)}
     runner_error = sandbox_res.get("runner_error")
     # Nothing ran at all when the runner failed to start: nothing is "missing".
     missing_challenges = [] if runner_error else [
