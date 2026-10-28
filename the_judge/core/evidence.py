@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 from .baseline import compare_tests_to_baseline
 from .behavior_engine import BehaviorEngine
-from .property_engine import generate_property_tests
+from .property_engine import generate_property_tests, untriggered_probes
 from .sandbox import SandboxRunner
 from .test_discovery import (
     discover_workspace_tests,
@@ -421,6 +421,28 @@ def capture_evidence(
     test_suite_data["skipped_tests"] = [t for t in skipped_tests if t not in judge_authored_tests]
     test_suite_data["skipped_probes"] = [t for t in skipped_tests if t in judge_authored_tests]
 
+    # Which judge probes ran (and how they ended) and which did not run because no
+    # keyword trigger matched. Reported so a verdict never implies a check that
+    # did not happen.
+    probe_ran = []
+    for cand in candidates:
+        names = [ln.strip().split("(")[0][len("def "):] for ln in cand.challenge_code.splitlines()
+                 if ln.strip().startswith("def test_")]
+        for name in names:
+            outcome = (
+                "failed" if name in failed_tests
+                else "passed" if name in passed_tests
+                else "skipped" if name in skipped_tests
+                else "missing"
+            )
+            probe_ran.append({"kind": cand.kind, "module": cand.source_module,
+                              "symbol": cand.source_symbol, "test": name, "outcome": outcome})
+    probe_coverage = {
+        "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+        "ran": probe_ran,
+        "not_run": untriggered_probes(abs_dir, candidates),
+    }
+
     # 6. Detect vacuous tests in workspace test files
     workspace_modules = workspace_module_names(abs_dir)
 
@@ -439,6 +461,7 @@ def capture_evidence(
         "test_provenance": test_provenance,
         "vacuous_tests": vacuous_tests,
         "test_tampering": test_tampering,
+        "probe_coverage": probe_coverage,
         "challenge_manifest": {
             "expected_challenges": expected_challenges,
             "missing_challenges": missing_challenges,

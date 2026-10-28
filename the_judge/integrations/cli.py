@@ -741,7 +741,7 @@ def _print_human_readable_result(workspace_path: str, result: Any) -> None:
         "PARTIAL",
     )
     adv_ok = (
-        tp.get("adversarial_robustness_subdimensions", {}).get("evasion_resistance") == "VERIFIED"
+        tp.get("adversarial_robustness_subdimensions", {}).get("evasion_resistance") != "FAILED"
     )
 
     print(f"[1/5] Environment isolation       {'PASS' if env_ok else 'FAIL'}")
@@ -750,7 +750,24 @@ def _print_human_readable_result(workspace_path: str, result: Any) -> None:
         f"[3/5] Behavioral verification    {'PASS' if beh_ok else ('ABSTAIN' if result.decision == 'ABSTAIN' else 'FAIL')}"
     )
     print(f"[4/5] Evidence independence      {'PASS' if indep_ok else 'FAIL'}")
-    print(f"[5/5] Adversarial checks          {'PASS' if adv_ok else 'FAIL'}")
+    print(f"[5/5] Integrity checks (tamper)   {'PASS' if adv_ok else 'FAIL'}")
+    print()
+
+    probes = tp.get("probe_coverage", {})
+    print("JUDGE PROBES (heuristic, keyword-triggered; not a proof of correctness)")
+    print("----------------------------------------------------------------------")
+    ran = probes.get("ran", [])
+    if ran:
+        for p in ran:
+            print(f"  ran      {p['kind']:<19} {p['module']}.{p['symbol']}: {p['outcome']}")
+    else:
+        print("  ran      none: no probe trigger matched, so behaviour was checked only")
+        print("           by the workspace's own tests")
+    not_run: dict[str, list[str]] = {}
+    for p in probes.get("not_run", []):
+        not_run.setdefault(f"{p['module']}.{p['symbol']}", []).append(p["kind"])
+    for symbol, kinds in sorted(not_run.items()):
+        print(f"  not run  {symbol}: {', '.join(kinds)} (no keyword trigger)")
     print()
 
     spec_cov = tp.get("specification_coverage", {}).get("summary", {})

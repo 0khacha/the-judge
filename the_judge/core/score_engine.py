@@ -432,6 +432,11 @@ def evaluate(
         else "VERIFIED"
     )
 
+    probe_coverage = evidence.get("probe_coverage", {"ran": [], "not_run": []})
+    integrity_failed = bool(
+        cm.get("file_tampered") or coll_tampered or evidence.get("test_tampering", {}).get("issues")
+    )
+
     if len(judge_challenge_passed_tests) > 0 and len(independent_passed_tests) > 0:
         independence_integ = "VERIFIED"
     elif len(independent_passed_tests) > 0:
@@ -461,6 +466,7 @@ def evaluate(
             "passed_tests": passed_tests_count,
             "failed_tests": failed_tests_count,
             "requirement_checks": req_coverage,
+            "probe_coverage": probe_coverage,
             "evidence_integrity_subdimensions": {
                 "challenge_integrity": challenge_integ,
                 "collection_integrity": collection_integ,
@@ -475,17 +481,25 @@ def evaluate(
                 "import_isolation": "PARTIAL",
                 "cross_run_isolation": "VERIFIED",
             },
+            # Derived from what actually ran. VERIFIED only when a judge probe of
+            # that family executed its assertion and passed; NOT_CHECKED otherwise.
             "behavioral_coverage_subdimensions": {
-                "boundary_coverage": "VERIFIED" if evidence_level >= 2 else "INSUFFICIENT",
-                "perturbation_coverage": "VERIFIED" if evidence_level >= 2 else "INSUFFICIENT",
-                "state_coverage": "VERIFIED" if evidence_level >= 2 else "INSUFFICIENT",
-                "semantic_coverage": "VERIFIED" if evidence_level >= 2 else "INSUFFICIENT",
+                "boundary_coverage": "NOT_CHECKED",  # no sound boundary probe exists
+                "perturbation_coverage": _probe_family_status(probe_coverage, ("idempotency",)),
+                "state_coverage": _probe_family_status(
+                    probe_coverage, ("rollback_isolation", "expiration", "capacity_limit")
+                ),
+                "semantic_coverage": (
+                    "WORKSPACE_TESTS_ONLY" if workspace_passed_tests else "NOT_CHECKED"
+                ),
             },
+            # Only integrity gates (tampering, collection, verification denial) are
+            # implemented; adaptive and temporal attacks are not assessed.
             "adversarial_robustness_subdimensions": {
-                "known_attack_resistance": "VERIFIED",
-                "adaptive_attack_resistance": "VERIFIED",
-                "temporal_attack_resistance": "VERIFIED",
-                "evasion_resistance": "VERIFIED",
+                "known_attack_resistance": "FAILED" if integrity_failed else "CHECKED",
+                "adaptive_attack_resistance": "NOT_ASSESSED",
+                "temporal_attack_resistance": "NOT_ASSESSED",
+                "evasion_resistance": "FAILED" if (integrity_failed or verification_denial) else "CHECKED",
             },
             "abstention_correctness_subdimensions": {
                 "insufficient_evidence": "VERIFIED",
@@ -500,6 +514,15 @@ def evaluate(
             "deterministic_verdict": verdict,
         },
     }
+
+
+def _probe_family_status(probe_coverage: dict[str, Any], kinds: tuple[str, ...]) -> str:
+    outcomes = [p.get("outcome") for p in probe_coverage.get("ran", []) if p.get("kind") in kinds]
+    if "failed" in outcomes:
+        return "FAILED"
+    if "passed" in outcomes:
+        return "VERIFIED"
+    return "NOT_CHECKED"
 
 
 def explain_verdict(report: dict[str, Any]) -> str:
@@ -544,24 +567,24 @@ def explain_verdict(report: dict[str, Any]) -> str:
 
     beh_sub = ev_cov.get("behavioral_coverage_subdimensions", {})
     lines.append(f"[{'PASS' if ev_level >= 2 else 'ABSTAIN'}] Behavioral Coverage")
-    lines.append(f"├── Boundary Coverage      : {beh_sub.get('boundary_coverage', 'VERIFIED')}")
-    lines.append(f"├── Perturbation Coverage  : {beh_sub.get('perturbation_coverage', 'VERIFIED')}")
-    lines.append(f"├── State Coverage         : {beh_sub.get('state_coverage', 'VERIFIED')}")
-    lines.append(f"└── Semantic Coverage      : {beh_sub.get('semantic_coverage', 'VERIFIED')}")
+    lines.append(f"├── Boundary Coverage      : {beh_sub.get('boundary_coverage', 'NOT_CHECKED')}")
+    lines.append(f"├── Perturbation Coverage  : {beh_sub.get('perturbation_coverage', 'NOT_CHECKED')}")
+    lines.append(f"├── State Coverage         : {beh_sub.get('state_coverage', 'NOT_CHECKED')}")
+    lines.append(f"└── Semantic Coverage      : {beh_sub.get('semantic_coverage', 'NOT_CHECKED')}")
     lines.append("")
 
     adv_sub = ev_cov.get("adversarial_robustness_subdimensions", {})
-    lines.append("[PASS] Adversarial Robustness")
+    lines.append("[INFO] Adversarial Robustness (integrity gates only)")
     lines.append(
-        f"├── Known Attack Resistance: {adv_sub.get('known_attack_resistance', 'VERIFIED')}"
+        f"├── Known Attack Resistance: {adv_sub.get('known_attack_resistance', 'NOT_CHECKED')}"
     )
     lines.append(
-        f"├── Adaptive Attack Resist : {adv_sub.get('adaptive_attack_resistance', 'VERIFIED')}"
+        f"├── Adaptive Attack Resist : {adv_sub.get('adaptive_attack_resistance', 'NOT_CHECKED')}"
     )
     lines.append(
-        f"├── Temporal Attack Resist : {adv_sub.get('temporal_attack_resistance', 'VERIFIED')}"
+        f"├── Temporal Attack Resist : {adv_sub.get('temporal_attack_resistance', 'NOT_CHECKED')}"
     )
-    lines.append(f"└── Evasion Resistance     : {adv_sub.get('evasion_resistance', 'VERIFIED')}")
+    lines.append(f"└── Evasion Resistance     : {adv_sub.get('evasion_resistance', 'NOT_CHECKED')}")
     lines.append("")
 
     abs_sub = ev_cov.get("abstention_correctness_subdimensions", {})

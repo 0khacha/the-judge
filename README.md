@@ -224,35 +224,67 @@ The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses
 - [Threat Model](THREAT_MODEL.md) - Attack surface
 - [Full Documentation Index](docs/INDEX.md) - All documentation
 
-## Known Limitations of Auto-Generated Probes
+## Judge probes and known limitations
 
-When no explicit test file exists, The Judge auto-generates **vocabulary-free behavioral probes** based on AST structure and type signatures. These probes catch a specific, limited set of defects. Understanding what they cover — and what they don't — prevents over-trusting ad-hoc verification.
+The Judge runs your workspace's own tests (discovered recursively, honouring your
+pytest configuration) and, where it recognises a familiar shape, adds a small number
+of **judge probes**. Probe triggers are **heuristic and keyword-based**: they fire on
+parameter and method *names*. The same logic under other names gets no probe. Every
+report lists the probes that ran (with their outcome) and, per public class or
+function, the probe kinds that did **not** run because no trigger matched
+(`trust_profile.probe_coverage` in `--json`, the "JUDGE PROBES" section in the
+human report).
 
-### What auto-generated probes **do** catch
-
-| Probe type | Trigger condition | Example defect caught |
+| Probe | Trigger (keyword-based) | What it asserts |
 |---|---|---|
-| **Idempotency** | Single-arg string-transforming function (`sanitize`, `normalize`, `clean`, etc.) | `fn(fn(x)) != fn(x)` — applying twice changes the output |
-| **Multi-input variance** | Any function with parameters | Constant/hardcoded returns: `add(a,b)` returning `5` for all inputs |
-| **State isolation** | Class with a zero-arg constructor | Two instances share mutable state |
-| **Boundary perturbation** | Numeric `>` / `<` comparison in AST | Function behaves unexpectedly just above/below a threshold |
-| **Rollback isolation** | Class with `begin`/`rollback`-style methods | Uncommitted writes survive a rollback |
-| **Expiration** | Class with `ttl`/`expire` constructor param + get/put methods | Expired entries remain observable |
-| **Capacity** | Class with `capacity`/`max_size` constructor param + push/add method | Items accepted past the capacity bound |
-| **Uniqueness** | Function with `salt`/`hash`/`token` vocabulary + secret-like arg name | Repeated calls return identical outputs (fake entropy) |
-| **Always-raises** | Any function or class where **every** call throws a non-TypeError exception | Function is completely broken and crashes on every input |
+| **Rollback** | Class with `begin`/`start`/`checkpoint`/`savepoint`, `rollback`/`revert`/`abort`/`undo`, `set`/`put`/`write` and `get`/`read` methods | A write made after the checkpoint is undone; earlier state survives. Single level only. |
+| **Expiration** | Class whose `__init__` has `ttl`/`ttl_seconds`/`expire`/`expiry`, with a writer and a reader method, in a module whose clock is `time.time`/`time.monotonic` | With ttl=1, after the clock is advanced by 10⁷ s the stored value is no longer returned. |
+| **Capacity** | Class whose `__init__` has `capacity`/`max_size`/`limit`/`bound`, an insert method (`push`/`add`/`enqueue`/`put`/…) and `__len__` or a reader | With capacity 2, at most 2 of 3 inserted items are retained. |
+| **Idempotency** | Function with one `str`-annotated parameter whose name contains `sanitize`/`clean`/`strip`/`normalize`/`purify`/`harden` | `f(f(x)) == f(x)` on a few sample strings. |
 
-### What auto-generated probes **do not** catch
+Rules every probe follows:
 
-- **Semantic correctness of multi-argument numeric functions beyond constant detection**: The multi-input variance probe detects constant returns (e.g., `add(a, b)` always returning `5`), but cannot detect plausible-but-wrong implementations like `return a - b` instead of `return a + b` — the outputs vary across inputs, so the probe sees no anomaly. A real test asserting `add(2, 3) == 5` is required.
-- **Critical requirements without structural evidence**: A `judge.json` requirement marked `"priority": "critical"` is reported as `UNVERIFIED` (triggering `ABSTAIN`) when no matching structural pattern or real test exercises the described behaviour. A real test file is required to reach `PASS` for such requirements.
-- **Collection-integrity without tests**: Collection-tampering detection works by comparing statically discovered test function names against what pytest actually ran. If the workspace has no `test_*.py` files and no synthesized probes fire, there is nothing to manifest-check.
+- A probe invents its inputs, so an exception on those inputs means *not applicable*
+  (the probe is skipped and is not evidence), never *defect found*. Constructors are
+  built from the signature; a probe is skipped when a required argument can't be
+  satisfied.
+- Every probe has an unconditional assertion that fails on the defect it names. A
+  meta-test (`tests/test_audit_p1_5_probe_soundness.py`) checks that each probe kind
+  passes a correct implementation and fails a defective one.
 
-**Recommendation**: For any function containing real business logic (especially numeric, financial, or security-relevant functions), write explicit tests. The Judge is most effective when explicit tests exist — it then independently validates them for tampering, regression, and evidence independence.
+Probes that existed before and were **removed** because they failed correct code or
+could not fail at all: boundary perturbation, uniqueness, generic idempotency on any
+function, multi-input variance, and state isolation.
 
-> **Important**: The Judge requires at least one non-vacuous workspace test to reach PASS.
-> Probes alone (which test meta-properties like idempotency) are insufficient evidence of
-> correctness. Tests must contain meaningful assertions and reference the target module.
+### What this means for verdicts
+
+- **PASS needs independent evidence**: at least one non-vacuous workspace test passed
+  *and* at least one judge probe ran its assertion and passed. If no probe trigger
+  matches your code, the verdict is **ABSTAIN** even when all your tests pass. On the
+  bundled audit corpus most correct implementations get ABSTAIN for this reason (see
+  `tests/regression_audit/`).
+- **Most bugs are invisible to probes.** A wrong comparison, wrong rounding mode,
+  path-traversal hole, race condition or nested-transaction bug is caught only if a
+  test exercises it. The Judge adds tamper detection and a few contract probes on
+  top of your tests; it does not replace them.
+- **Tests that prove nothing are not evidence.** Skipped/xfail tests, tests without
+  a real assertion, tautologies (`assert x in (True, False)`, `assert x == x`) and
+  tests whose only assertion is `is not None` are reported and not counted.
+- **Weakened tests block PASS in git repositories.** Deleted tests, removed
+  assertions and newly added skips relative to `HEAD` (or `--baseline REF`) are a
+  blocking `tampering` finding. Outside git, a weakened-but-still-meaningful
+  assertion cannot be detected.
+- **`judge.json` requirements** are VERIFIED only by a passing workspace test that
+  names the requirement; a tag that maps to a generic probe gives at most
+  PARTIALLY_VERIFIED, and a critical requirement that is not fully verified makes the
+  verdict ABSTAIN.
+- **The sandbox is not a security boundary.** Tests run in a separate process in a
+  temporary directory with a sanitised environment, but a hostile implementation can
+  still detect it, read files, or use the network. Do not run untrusted code you would
+  not run on your own machine.
+- **mypy and ruff are optional.** If they are not on `PATH`, those checks are skipped,
+  reported as a `tooling` finding and the evidence level drops; the decision is not
+  affected.
 
 
 ## Project Status

@@ -1,10 +1,10 @@
-"""Black-Box Behavioral Verification Engine for The Judge v4.0.
+"""Black-box interface discovery for The Judge.
 
-Key Capabilities:
-  1. Vocabulary-Free Interface Discovery (inspect signatures, type annotations, return shapes)
-  2. Bounded Seed-Recorded Dynamic Input Generators (int, float, str, bytes, bool, list, dict)
-  3. Experimental Behavioral Probe Generation (determinism, idempotency, boundary consistency, state isolation)
-  4. Traceable execution metadata (seed, input, property, duration, process identity)
+Discovers a workspace's public functions and classes from the AST (signatures and
+annotations, without importing the code). It used to also emit generic probes
+(idempotency, multi-input variance, state isolation); those were unsound and have
+been removed, so generate_behavioral_probes() returns no probes. The remaining,
+keyword-triggered probes live in property_engine.
 """
 
 import importlib.util
@@ -70,7 +70,7 @@ class ValueGenerator:
 
 
 class BehaviorEngine:
-    """Structure-agnostic, vocabulary-free behavioral probe generator."""
+    """Interface discovery (and, formerly, generic behavioural probe generation)."""
 
     def __init__(self, seed: int = 98765):
         self.seed = seed

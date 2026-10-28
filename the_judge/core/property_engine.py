@@ -454,11 +454,8 @@ def test_prop_idempotency_{mod_name}_{fn.name}():
         return candidates
 
 
-def generate_property_tests(
-    task_dir: str, task_spec: Optional[dict[str, Any]] = None
-) -> list[PropertyCandidate]:
-    abs_target = os.path.abspath(task_dir)
-    py_files = [
+def _probe_target_files(abs_target: str) -> list[str]:
+    return sorted(
         f
         for f in os.listdir(abs_target)
         if f.endswith(".py")
@@ -473,12 +470,17 @@ def generate_property_tests(
             "repaired_code.py",
             "initial_code.py",
         )
-    ]
+    )
 
+
+def generate_property_tests(
+    task_dir: str, task_spec: Optional[dict[str, Any]] = None
+) -> list[PropertyCandidate]:
+    abs_target = os.path.abspath(task_dir)
     engine = StructurePropertyEngine(seed=48127)
     candidates: list[PropertyCandidate] = []
 
-    for fname in py_files:
+    for fname in _probe_target_files(abs_target):
         fpath = os.path.join(abs_target, fname)
         mod_name = fname[:-3]
         mod_candidates = engine.analyze_module_ast(fpath, mod_name)
@@ -493,3 +495,64 @@ def generate_property_tests(
         # no evidence for a critical requirement.
 
     return candidates
+
+
+# What each probe kind needs before it is generated. Triggers are heuristic and
+# keyword based: identical logic under other names gets no probe.
+PROBE_TRIGGERS: dict[str, str] = {
+    "expiration": (
+        "class whose __init__ has a parameter named "
+        + "/".join(StructurePropertyEngine._TTL_PARAMS)
+        + ", with a writer (" + "/".join(StructurePropertyEngine._PUT_METHODS)
+        + ") and a reader (" + "/".join(StructurePropertyEngine._GET_METHODS)
+        + "), in a module whose clock is time.time/time.monotonic"
+    ),
+    "capacity_limit": (
+        "class whose __init__ has a parameter named "
+        + "/".join(StructurePropertyEngine._CAPACITY_PARAMS)
+        + ", an insert method (push/add/enqueue/consume/put/write) and __len__ or a reader"
+    ),
+    "rollback_isolation": (
+        "class with begin/start/checkpoint/savepoint, rollback/revert/abort/undo, "
+        "set/put/write and get/read methods"
+    ),
+    "idempotency": (
+        "function with one str-annotated parameter whose name contains "
+        "sanitize/clean/strip/normalize/purify/harden"
+    ),
+}
+
+
+def untriggered_probes(
+    task_dir: str, candidates: list[PropertyCandidate]
+) -> list[dict[str, str]]:
+    """Probe kinds that did not run on each public class/function, and why."""
+    abs_target = os.path.abspath(task_dir)
+    triggered = {(c.source_module, c.source_symbol, c.kind) for c in candidates}
+    out: list[dict[str, str]] = []
+    for fname in _probe_target_files(abs_target):
+        mod_name = fname[:-3]
+        try:
+            with open(os.path.join(abs_target, fname), encoding="utf-8") as f:
+                tree = ast.parse(f.read())
+        except (OSError, SyntaxError, UnicodeDecodeError):
+            continue
+        for node in tree.body:
+            if isinstance(node, ast.ClassDef):
+                kinds: tuple[str, ...] = ("expiration", "capacity_limit", "rollback_isolation")
+            elif isinstance(node, ast.FunctionDef):
+                kinds = ("idempotency",)
+            else:
+                continue
+            if node.name.startswith("_"):
+                continue
+            for kind in kinds:
+                if (mod_name, node.name, kind) not in triggered:
+                    out.append({
+                        "module": mod_name,
+                        "symbol": node.name,
+                        "kind": kind,
+                        "reason": "no keyword trigger matched; this probe runs only for a "
+                        + PROBE_TRIGGERS[kind],
+                    })
+    return out

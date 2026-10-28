@@ -299,6 +299,22 @@ def verify(
             )
         )
 
+    # Judge probes are keyword-triggered: say which behaviour no probe looked at.
+    not_run = ground_truth.get("probe_coverage", {}).get("not_run", [])
+    if not_run:
+        symbols = sorted({f"{p['module']}.{p['symbol']}" for p in not_run})
+        structured_findings.append(
+            Finding(
+                id="COVER-001",
+                category="coverage",
+                severity="low",
+                description="No judge probe ran for some behaviour (probe triggers are keyword "
+                "based); it is evidenced only by the workspace tests: " + ", ".join(symbols),
+                suggested_focus="Add tests (or a judge.json contract with tests) for the "
+                "behaviour of these symbols.",
+            )
+        )
+
     # Optional tools that were not run: always reported, never decisive.
     for tool_key, label, install in (
         ("type_checker", "mypy", "pip install mypy"),
