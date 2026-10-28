@@ -39,8 +39,16 @@ def evaluate(
             "environment that runs The Judge."
         )
 
+    no_tests = bool(test_suite.get("no_tests_collected")) and not runner_error
+    if no_tests:
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 0 (No Tests): pytest collected no tests in this workspace, so no "
+            "behaviour was checked. Add test files named test_*.py (or *_test.py) containing "
+            "test_* functions that assert the expected results."
+        )
+
     # --- Hard Gate 1: Test failures in evidence ---
-    if runner_error:
+    if runner_error or no_tests:
         pass  # nothing ran; reported above, not a test failure
     elif test_suite.get("exit_code", 0) != 0 or len(failed_test_names) > 0:
         failed_str = ", ".join(failed_test_names) if failed_test_names else "non-zero exit code"
@@ -438,7 +446,10 @@ def evaluate(
     coll_tampered = bool(cm.get("missing_challenges")) or bool(unexecuted_expected)
     collection_integ = "FAILED" if coll_tampered else "VERIFIED"
 
-    execution_integ = "FAILED" if test_suite.get("exit_code", 0) != 0 else "VERIFIED"
+    execution_integ = (
+        "NOT_RUN" if (runner_error or no_tests)
+        else "FAILED" if test_suite.get("exit_code", 0) != 0 else "VERIFIED"
+    )
 
     result_integ = (
         "FAILED"

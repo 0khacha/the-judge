@@ -378,6 +378,11 @@ def capture_evidence(
     test_suite_data = {
         "exit_code": sandbox_res["exit_code"],
         "runner_error": runner_error,
+        # pytest exit code 5: it ran but collected nothing (no tests, no probes).
+        "no_tests_collected": (
+            not runner_error and sandbox_res["exit_code"] == 5
+            and not (passed_tests or failed_tests or skipped_tests)
+        ),
         "total_tests": len(passed_tests) + len(failed_tests),
         "passed_tests": passed_tests,
         "failed_tests": failed_tests,
