@@ -14,8 +14,8 @@ import os
 import shutil
 
 import pytest
-
 from audit_helpers import CORPUS, write
+
 from the_judge.core.behavior_engine import BehaviorEngine
 from the_judge.core.property_engine import generate_property_tests
 from the_judge.core.sandbox import SandboxRunner
@@ -143,14 +143,14 @@ def test_every_probe_kind_catches_its_defect_and_spares_correct_code(tmp_path):
     for kind, label, good, bad in _all_fixture_dirs(tmp_path):
         good_probes = [p for p in _probes(good) if p[0] == kind]
         emitted_kinds.update(p[0] for p in _probes(good) + _probes(bad))
-        for _, symbol, code in good_probes:
+        for _, _symbol, code in good_probes:
             passed, failed, skipped = _run(good, code)
             assert not failed, f"{kind} probe failed CORRECT {label}: {failed}"
         if label.endswith("unsatisfiable"):
             continue
         assert good_probes, f"no {kind} probe generated for {label}"
         caught = False
-        for _, symbol, code in [p for p in _probes(bad) if p[0] == kind]:
+        for _, _symbol, code in [p for p in _probes(bad) if p[0] == kind]:
             passed, failed, skipped = _run(bad, code)
             caught = caught or bool(failed)
         assert caught, f"{kind} probe did not catch the defect in {label}"

@@ -5,7 +5,6 @@ decision may be PASS or ABSTAIN, never FAIL, and no judge-authored test may fail
 """
 
 import pytest
-
 from audit_helpers import corpus_workspace, judge, judge_authored_failures, write
 
 ACCEPTANCE = [

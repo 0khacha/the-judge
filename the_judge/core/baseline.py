@@ -127,10 +127,11 @@ def compare_tests_to_baseline(abs_dir: str, ref: Optional[str] = None) -> dict[s
             continue
         base_funcs = _test_functions(source)
         here = current_by_file.get(rel)
-        if here is None and not os.path.exists(os.path.join(abs_dir, rel)):
-            if base_funcs and not all(n in current for n in base_funcs):
-                issues.append({"kind": "deleted_test_file", "file": rel, "test": "",
-                               "detail": f"test file {rel} was deleted"})
+        file_gone = here is None and not os.path.exists(os.path.join(abs_dir, rel))
+        # A deleted file whose tests all live on elsewhere was moved, not deleted.
+        if file_gone and base_funcs and not all(n in current for n in base_funcs):
+            issues.append({"kind": "deleted_test_file", "file": rel, "test": "",
+                           "detail": f"test file {rel} was deleted"})
         for name, base in base_funcs.items():
             now = (here or {}).get(name) or current.get(name)
             if now is None:

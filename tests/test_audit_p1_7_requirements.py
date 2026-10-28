@@ -9,7 +9,6 @@ carrying the requirement id in its name) verifies it.
 """
 
 import pytest
-
 from audit_helpers import corpus_workspace, judge, write
 
 TASK = "04_nested_transactions"

@@ -13,6 +13,7 @@ import subprocess
 import sys
 
 from audit_helpers import judge, write
+
 from the_judge.core.sandbox import SandboxRunner
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

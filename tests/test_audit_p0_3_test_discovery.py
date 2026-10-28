@@ -6,7 +6,6 @@ must be honoured. Virtualenvs, node_modules, hidden dirs and .git are excluded.
 """
 
 import pytest
-
 from audit_helpers import corpus_workspace, judge, write
 
 TASK = "04_nested_transactions"  # correct impl has passing tests and a passing probe

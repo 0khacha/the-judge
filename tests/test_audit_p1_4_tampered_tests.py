@@ -13,7 +13,6 @@ import subprocess
 import sys
 
 import pytest
-
 from audit_helpers import corpus_workspace, git, judge, write
 
 TASK = "11_tampered_tests"
