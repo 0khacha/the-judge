@@ -119,8 +119,18 @@ class SandboxRunner:
         test_scripts: list[tuple[str, str]],
         pytest_args: Optional[list[str]] = None,
         timeout: int = 30,
+        support_files: Optional[list[tuple[str, str]]] = None,
+        import_roots: Optional[list[str]] = None,
     ) -> dict[str, Any]:
-        """Execute test scripts in an anonymous, randomized temporary directory."""
+        """Execute test scripts in an anonymous, randomized temporary directory.
+
+        test_scripts: (relative path, source). Paths may contain sub-directories,
+            which are recreated; a basename not matching test_* is prefixed so the
+            sandbox's default pytest collection picks it up.
+        support_files: (relative path, source) written verbatim (conftest.py,
+            helper modules, __init__.py) so relocated tests keep their imports.
+        import_roots: directories put on PYTHONPATH (default: task_dir).
+        """
         abs_task_dir = os.path.abspath(task_dir)
 
         temp_dir = tempfile.mkdtemp(prefix=f't_{uuid.uuid4().hex[:8]}_')
@@ -143,16 +153,25 @@ class SandboxRunner:
 
             initial_hashes: dict[str, str] = {}
             created_files = []
+            for name, code in support_files or []:
+                filepath = os.path.join(temp_dir, os.path.normpath(name))
+                os.makedirs(os.path.dirname(filepath), exist_ok=True)
+                with open(filepath, "w", encoding="utf-8") as f:
+                    f.write(code)
+                initial_hashes[os.path.normpath(name)] = hashlib.sha256(code.encode("utf-8")).hexdigest()
             for name, code in test_scripts:
-                safe_name = name if name.startswith("test_") else f"test_{name}"
+                head, base = os.path.split(os.path.normpath(name))
+                safe_name = os.path.join(head, base if base.startswith("test_") else f"test_{base}")
                 filepath = os.path.join(temp_dir, safe_name)
+                os.makedirs(os.path.dirname(filepath), exist_ok=True)
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.write(code)
                 created_files.append(filepath)
                 initial_hashes[safe_name] = hashlib.sha256(code.encode("utf-8")).hexdigest()
 
+            roots = [os.path.abspath(r) for r in (import_roots or [abs_task_dir])]
             env = {
-                "PYTHONPATH": abs_task_dir + os.pathsep + os.environ.get("PYTHONPATH", ""),
+                "PYTHONPATH": os.pathsep.join(roots + [os.environ.get("PYTHONPATH", "")]),
                 # Importing workspace modules must not leave __pycache__ behind.
                 "PYTHONDONTWRITEBYTECODE": "1",
             }

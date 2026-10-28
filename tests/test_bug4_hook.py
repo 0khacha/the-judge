@@ -50,20 +50,31 @@ class TestBug4Hook:
             f"Hook should exit 0 for non-code command, got {result.returncode}"
         )
 
-    def test_hook_code_changing_command_processes(self):
-        """Hook receiving a code-changing command should attempt verification."""
+    def test_hook_code_changing_command_processes(self, tmp_path):
+        """Hook receiving a code-changing command should attempt verification.
+
+        Runs in a small project: the hook verifies its cwd, and since tests are
+        discovered recursively (P0-3) the repository root would mean running this
+        whole suite inside the hook.
+        """
+        (tmp_path / "calc.py").write_text("def add(a, b):\n    return a + b\n")
+        (tmp_path / "test_calc.py").write_text(
+            "from calc import add\n\ndef test_add():\n    assert add(1, 2) == 3\n"
+        )
         hook_input = json.dumps({
             "tool_name": "Bash",
             "tool_input": {"command": "python -m pytest tests/"},
             "tool_result": "1 passed"
         })
+        repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         result = subprocess.run(
             [sys.executable, "-m", "the_judge.hook"],
             input=hook_input,
             capture_output=True,
             text=True,
-            timeout=30,
-            cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            timeout=120,
+            cwd=str(tmp_path),
+            env=dict(os.environ, PYTHONPATH=repo),
         )
         # Should never crash — exit 0 unless FAIL
         assert result.returncode in (0, 1), (

@@ -13,6 +13,15 @@ from typing import Any, Optional
 from .behavior_engine import BehaviorEngine
 from .property_engine import generate_property_tests
 from .sandbox import SandboxRunner
+from .test_discovery import (
+    discover_workspace_tests,
+    import_roots,
+    support_files,
+    workspace_module_names,
+)
+
+# Sandbox sub-directory that receives the workspace's own tests.
+_WORKSPACE_SUITE_DIR = "suite"
 
 
 def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[str]:
@@ -260,12 +269,19 @@ def capture_evidence(
                 fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 expected_challenges.append(fn_name)
 
-    # Also capture visible workspace test scripts if present
-    visible_tests = [f for f in os.listdir(abs_dir) if f.startswith("test_") and f.endswith(".py")]
+    # Workspace tests, discovered recursively the way pytest would (testpaths,
+    # python_files, norecursedirs; venvs/hidden dirs/node_modules excluded). They are
+    # copied under a sub-directory of the sandbox with their relative layout, plus
+    # the conftest.py files and sibling helpers they import.
+    visible_tests = discover_workspace_tests(abs_dir)
+    support: list[tuple[str, str]] = []
+    for rel in support_files(abs_dir, visible_tests):
+        with open(os.path.join(abs_dir, rel), encoding="utf-8") as f:
+            support.append((os.path.join(_WORKSPACE_SUITE_DIR, rel), f.read()))
     for vt in visible_tests:
         with open(os.path.join(abs_dir, vt), encoding="utf-8") as f:
             content = f.read()
-        test_scripts.append((vt, content))
+        test_scripts.append((os.path.join(_WORKSPACE_SUITE_DIR, vt), content))
         # P3 fix: extract test function names from visible test files and add them to
         # expected_challenges so that collection tampering (conftest hijack, etc.) is
         # detectable even when no judge.json contract is present.
@@ -285,6 +301,8 @@ def capture_evidence(
         test_scripts=test_scripts,
         pytest_args=["-vv"],
         timeout=30,
+        support_files=support,
+        import_roots=import_roots(abs_dir),
     )
 
     passed_tests = sandbox_res["passed"]
@@ -349,10 +367,7 @@ def capture_evidence(
             }
 
     # 6. Detect vacuous tests in workspace test files
-    workspace_modules = set()
-    for f in os.listdir(abs_dir):
-        if f.endswith(".py") and not f.startswith("test_") and not f.startswith("_"):
-            workspace_modules.add(f[:-3])  # stem
+    workspace_modules = workspace_module_names(abs_dir)
 
     vacuous_tests: list[str] = []
     for vt in visible_tests:
