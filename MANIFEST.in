@@ -31,3 +31,12 @@ recursive-exclude .claude *
 recursive-exclude .git *
 recursive-exclude .mypy_cache *
 recursive-exclude .pytest_cache *
+
+# Local, git-ignored output must never be published with the sdist
+# (recursive-include above picks up anything on disk).
+prune benchmark/baselines
+prune benchmark/benchmark_abc/results
+prune dist_phase5
+exclude benchmark/LEVEL2_*.md
+global-exclude AGENT_STATE.md AGENT_CONTEXT.md
+prune examples/*/_judge_visual
