@@ -172,7 +172,7 @@ class TestBug1FalsePass:
     # --- Behavior engine probes ---
 
     def test_probe_skips_on_type_error(self):
-        """Probes must use pytest.skip, not return, on TypeError."""
+        """Probes must use pytest.skip, not return, when they do not apply."""
         import tempfile
         import shutil
         from the_judge.core.behavior_engine import BehaviorEngine
@@ -180,7 +180,7 @@ class TestBug1FalsePass:
         tmp = tempfile.mkdtemp()
         try:
             with open(os.path.join(tmp, "m.py"), "w") as f:
-                f.write("def add(a: int, b: int) -> int: return a + b\n")
+                f.write("class Box:\n    def put(self, x):\n        self.x = x\n")
             engine = BehaviorEngine()
             probes = engine.generate_behavioral_probes(tmp)
             assert probes, "Expected probes for m.py"
@@ -194,8 +194,13 @@ class TestBug1FalsePass:
         finally:
             shutil.rmtree(tmp)
 
-    def test_multi_input_variance_probe_generated(self):
-        """Functions with parameters must get a multi-input variance probe."""
+    def test_no_generic_function_probes_generated(self):
+        """P0-1: idempotency/variance probes on arbitrary functions were removed.
+
+        They asserted properties correct functions need not have (add() is not
+        idempotent; a predicate may be constant on invented inputs) and therefore
+        failed correct code.
+        """
         import tempfile
         import shutil
         from the_judge.core.behavior_engine import BehaviorEngine
@@ -206,10 +211,7 @@ class TestBug1FalsePass:
                 f.write("def add(a: int, b: int) -> int: return a + b\n")
             engine = BehaviorEngine()
             probes = engine.generate_behavioral_probes(tmp)
-            variance_probes = [p for p in probes if "multi_input" in p.property_kind]
-            assert len(variance_probes) > 0, (
-                "Expected a multi-input variance probe for add(a, b)"
-            )
+            assert [p for p in probes if p.target_symbol == "add"] == []
         finally:
             shutil.rmtree(tmp)
 

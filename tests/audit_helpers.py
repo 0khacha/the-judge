@@ -24,10 +24,11 @@ def corpus_workspace(dest, task, variant="correct", tests_subdir=None, git_basel
     visible = {}
     vis_dir = os.path.join(task_dir, "visible")
     for name in os.listdir(vis_dir):
-        visible[name] = os.path.join(vis_dir, name)
+        if name.endswith(".py"):
+            visible[name] = os.path.join(vis_dir, name)
     for name in os.listdir(variant_dir):
         path = os.path.join(variant_dir, name)
-        if not os.path.isfile(path):
+        if not (os.path.isfile(path) and name.endswith(".py")):
             continue
         if name.startswith("test_"):
             visible[name] = path

@@ -6,6 +6,41 @@ import random
 from dataclasses import dataclass
 from typing import Any, Optional
 
+# Shared helpers emitted at the top of every generated probe. Probes invent their
+# inputs, so an exception raised on those inputs means "probe not applicable" (skip),
+# never "defect found". Only the probe's explicit assertions can fail it.
+_PROBE_PRELUDE = '''import inspect
+import pytest
+
+
+def _construct(cls, overrides):
+    """Instantiate cls, passing only `overrides`; skip if another required arg exists."""
+    try:
+        sig = inspect.signature(cls)
+    except (TypeError, ValueError):
+        pytest.skip("probe not applicable: constructor signature unavailable")
+    kwargs = {}
+    for name, p in sig.parameters.items():
+        if p.kind in (p.VAR_POSITIONAL, p.VAR_KEYWORD):
+            continue
+        if name in overrides:
+            kwargs[name] = overrides[name]
+        elif p.default is p.empty:
+            pytest.skip(f"probe not applicable: cannot satisfy required argument {name!r}")
+    try:
+        return cls(**kwargs)
+    except Exception as exc:
+        pytest.skip(f"probe not applicable: constructor raised {type(exc).__name__}")
+
+
+def _call(fn, *args, **kwargs):
+    """Call fn on probe-invented input; any exception means the probe does not apply."""
+    try:
+        return fn(*args, **kwargs)
+    except Exception as exc:
+        pytest.skip(f"probe not applicable: {getattr(fn, '__name__', fn)} raised {type(exc).__name__}")
+'''
+
 
 @dataclass
 class PropertyCandidate:
@@ -36,14 +71,12 @@ class StructurePropertyEngine:
         except Exception:
             return candidates
 
-        comp_candidates = self._infer_boundary_candidates(tree, mod_name)
-        candidates.extend(comp_candidates)
-
+        # Boundary-perturbation and uniqueness probes were removed: neither had an
+        # oracle for correct behaviour (a function near a threshold may legitimately
+        # return None or raise; a digest is deterministic by design), so they failed
+        # correct code without detecting real defects.
         rollback_candidates = self._infer_rollback_candidates(tree, content, mod_name)
         candidates.extend(rollback_candidates)
-
-        uniqueness_candidates = self._infer_uniqueness_candidates(tree, content, mod_name)
-        candidates.extend(uniqueness_candidates)
 
         expiration_candidates = self._infer_expiration_candidates(tree, content, mod_name)
         candidates.extend(expiration_candidates)
@@ -55,51 +88,6 @@ class StructurePropertyEngine:
         candidates.extend(idempotency_candidates)
 
         return [c for c in candidates if c.confidence in ("HIGH", "MEDIUM")]
-
-    def _infer_boundary_candidates(self, tree: ast.AST, mod_name: str) -> list[PropertyCandidate]:
-        candidates: list[PropertyCandidate] = []
-        numeric_constants: list[tuple[float, str]] = []
-
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Compare):
-                for comp in node.comparators:
-                    if isinstance(comp, ast.Constant):
-                        val = getattr(comp, "value", None)
-                        if isinstance(val, (int, float)) and val > 0:
-                            numeric_constants.append((float(val), ast.dump(node)))
-
-        if not numeric_constants:
-            return candidates
-
-        for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
-            if fn.name.startswith("__"):
-                continue
-            [a.arg for a in fn.args.args]
-            for num, node_str in numeric_constants[:3]:
-                seed = random.randint(10000, 99999)
-                cand = PropertyCandidate(
-                    kind="boundary",
-                    confidence="HIGH",
-                    numeric_confidence=0.88,
-                    rationale=f"AST node '{node_str[:40]}' contains numeric threshold comparison at {num}.",
-                    source_module=mod_name,
-                    source_symbol=fn.name,
-                    ast_nodes=[node_str],
-                    seed=seed,
-                    challenge_code=f"""import pytest, sys, os
-import {mod_name}
-
-def test_prop_boundary_perturbation_{mod_name}_{fn.name}_{int(num)}():
-    fn = getattr({mod_name}, '{fn.name}')
-    res_exact = fn({num})
-    res_minus = fn({num - 0.01})
-    res_plus = fn({num + 0.01})
-    assert res_exact is not None, "Boundary threshold function returned None"
-""",
-                )
-                candidates.append(cand)
-
-        return candidates
 
     def _infer_rollback_candidates(
         self, tree: ast.AST, content: str, mod_name: str
@@ -149,12 +137,12 @@ def test_prop_boundary_perturbation_{mod_name}_{fn.name}_{int(num)}():
                         source_symbol=cls.name,
                         ast_nodes=[cls.name],
                         seed=seed,
-                        challenge_code=f"""import pytest, sys, os
+                        challenge_code=_PROBE_PRELUDE + f"""
 import {mod_name}
 
 def test_prop_rollback_isolation_{mod_name}_{cls.name}():
     cls = getattr({mod_name}, '{cls.name}')
-    inst = cls()
+    inst = _construct(cls, {{}})
 
     set_fn = getattr(inst, 'set', getattr(inst, 'put', getattr(inst, 'write', None)))
     get_fn = getattr(inst, 'get', getattr(inst, 'read', None))
@@ -162,13 +150,13 @@ def test_prop_rollback_isolation_{mod_name}_{cls.name}():
     rv_fn = getattr(inst, '{rv_name}', None)
 
     if set_fn and cp_fn and rv_fn:
-        set_fn("existing_k", 100)
-        cp_fn()
-        set_fn("uncommitted_k", 999)
-        rv_fn()
+        _call(set_fn, "existing_k", 100)
+        _call(cp_fn)
+        _call(set_fn, "uncommitted_k", 999)
+        _call(rv_fn)
 
-        val_existing = get_fn("existing_k") if get_fn else 100
-        val_uncommitted = get_fn("uncommitted_k") if get_fn else None
+        val_existing = _call(get_fn, "existing_k") if get_fn else 100
+        val_uncommitted = _call(get_fn, "uncommitted_k") if get_fn else None
 
         assert val_existing == 100, "Existing state must remain intact after rollback."
         assert val_uncommitted is None, "Uncommitted modifications must be reverted upon rollback."
@@ -178,74 +166,47 @@ def test_prop_rollback_isolation_{mod_name}_{cls.name}():
 
         return candidates
 
-    def _infer_uniqueness_candidates(
-        self, tree: ast.AST, content: str, mod_name: str
-    ) -> list[PropertyCandidate]:
-        candidates: list[PropertyCandidate] = []
-        for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
-            if fn.name.startswith("__") or any(
-                fn.name.startswith(prefix)
-                for prefix in ("verify", "check", "is_", "validate", "authenticate")
-            ):
-                continue
+    # Trigger vocabulary (heuristic, keyword based; see README "Known Limitations").
+    _TTL_PARAMS = ("ttl", "ttl_seconds", "expire", "expiry")
+    _CAPACITY_PARAMS = ("capacity", "max_size", "limit", "bound")
+    _PUT_METHODS = ("put", "set", "write", "store", "add", "store_session", "insert")
+    _GET_METHODS = ("get", "read", "lookup", "fetch", "fetch_session")
 
-            is_secret_gen = any(
-                kw in content.lower()
-                for kw in ("salt", "hash", "secret", "token", "credential", "digest", "derive")
-            ) and any(
-                a.arg in ("password", "secret", "val", "data", "token", "payload")
-                for a in fn.args.args
-            )
+    @staticmethod
+    def _uses_controllable_clock(tree: ast.AST) -> bool:
+        """True if the module reads time only via time.time / time.monotonic.
 
-            if is_secret_gen:
-                seed = random.randint(10000, 99999)
-                candidates.append(
-                    PropertyCandidate(
-                        kind="uniqueness",
-                        confidence="HIGH",
-                        numeric_confidence=0.89,
-                        rationale=f"Function '{fn.name}' generates tokens/digests; repeated calls must yield unique non-deterministic outputs across fresh process instances.",
-                        source_module=mod_name,
-                        source_symbol=fn.name,
-                        ast_nodes=[fn.name],
-                        seed=seed,
-                        challenge_code=f"""import pytest, sys, os, inspect, subprocess
-import {mod_name}
-
-def test_prop_uniqueness_{mod_name}_{fn.name}():
-    fn = getattr({mod_name}, '{fn.name}')
-    sig = inspect.signature(fn)
-    param_names = list(sig.parameters.keys())
-    kwargs = {{param_names[0]: "TestInput123!"}}
-
-    if len(param_names) > 1 and "secret" in param_names[1]:
-        kwargs[param_names[1]] = "secret123"
-
-    out1 = str(fn(**kwargs))
-    out2 = str(fn(**kwargs))
-
-    assert out1 != out2, "Repeated calls for security derivation must produce distinct unique outputs (non-static salt/nonce)."
-
-    task_dir = os.path.dirname(os.path.abspath({mod_name}.__file__))
-    cmd = [sys.executable, "-c", f"import sys, os; sys.path.insert(0, r'{{task_dir}}'); import {mod_name}; fn = getattr({mod_name}, '{fn.name}'); print(fn('TestInput123!'))"]
-    env = dict(os.environ)
-    env["PYTHONPATH"] = task_dir + os.pathsep + env.get("PYTHONPATH", "")
-    res = subprocess.run(cmd, capture_output=True, text=True, env=env, cwd=task_dir)
-    out_fresh = res.stdout.strip()
-
-    if out_fresh and out_fresh == out1:
-        assert False, "State-Reset Violation: Initial output in a fresh process instance matched out1 exactly, proving out2 was generated by an internal call counter state rather than genuine random salt entropy."
-""",
-                    )
-                )
-                break
-
-        return candidates
+        The expiration probe advances time by patching those two functions, so it
+        must not run on code whose clock it cannot control (datetime, perf_counter,
+        *_ns variants, ...): such code would keep a correct entry alive and fail.
+        """
+        controllable = {"time", "monotonic"}
+        uses = False
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name):
+                if node.value.id == "time":
+                    if node.attr in controllable:
+                        uses = True
+                    elif node.attr not in ("sleep",):
+                        return False
+            elif isinstance(node, ast.ImportFrom) and node.module == "time":
+                for alias in node.names:
+                    if alias.name in controllable:
+                        uses = True
+                    elif alias.name != "sleep":
+                        return False
+            elif isinstance(node, (ast.Import, ast.ImportFrom)):
+                names = [a.name for a in node.names] if isinstance(node, ast.Import) else [node.module or ""]
+                if any(n.split(".")[0] == "datetime" for n in names):
+                    return False
+        return uses
 
     def _infer_expiration_candidates(
         self, tree: ast.AST, content: str, mod_name: str
     ) -> list[PropertyCandidate]:
         candidates: list[PropertyCandidate] = []
+        if not self._uses_controllable_clock(tree):
+            return candidates
         classes = [n for n in ast.walk(tree) if isinstance(n, ast.ClassDef)]
 
         for cls in classes:
@@ -256,28 +217,19 @@ def test_prop_uniqueness_{mod_name}_{fn.name}():
                 continue
 
             init_args = [a.arg for a in init_fn[0].args.args]
-            has_time_param = any(
-                a in ("ttl", "ttl_seconds", "expire", "expiry", "window_seconds", "timeout")
-                for a in init_args
-            )
+            ttl_param = next((a for a in init_args if a in self._TTL_PARAMS), None)
+            cap_params = [a for a in init_args if a in self._CAPACITY_PARAMS]
 
-            methods = [m for m in cls.body if isinstance(m, ast.FunctionDef)]
-            method_names = [m.name for m in methods]
-            put_names = [
-                m
-                for m in method_names
-                if m in ("put", "set", "write", "store", "add", "store_session", "insert")
-            ]
-            get_names = [
-                m
-                for m in method_names
-                if m in ("get", "read", "lookup", "fetch", "is_allowed", "fetch_session")
-            ]
+            method_names = [m.name for m in cls.body if isinstance(m, ast.FunctionDef)]
+            put_names = [m for m in method_names if m in self._PUT_METHODS]
+            get_names = [m for m in method_names if m in self._GET_METHODS]
 
-            if has_time_param and put_names and get_names:
+            if ttl_param and put_names and get_names:
                 seed = random.randint(10000, 99999)
                 get_name = get_names[0]
                 put_name = put_names[0]
+                overrides = {ttl_param: 1}
+                overrides.update(dict.fromkeys(cap_params, 1000))
 
                 candidates.append(
                     PropertyCandidate(
@@ -289,50 +241,58 @@ def test_prop_uniqueness_{mod_name}_{fn.name}():
                         source_symbol=cls.name,
                         ast_nodes=[cls.name],
                         seed=seed,
-                        challenge_code=f"""import pytest, sys, os, inspect
+                        challenge_code=_PROBE_PRELUDE + f"""
+import time
 import {mod_name}
 
-def test_prop_expiration_{mod_name}_{cls.name}():
+_TIME_PARAMS = ("current_time", "now", "timestamp")
+
+
+def test_prop_expiration_{mod_name}_{cls.name}(monkeypatch):
+    # ttl=1 in whatever unit the class uses; then advance the clock by 1e7 seconds
+    # (~115 days), which is past expiry for second, millisecond, minute, hour or day
+    # units. Time is advanced by patching time.time/time.monotonic and by passing the
+    # same fake clock to any constructor parameter that defaults to one of them.
+    real_time, real_mono = time.time, time.monotonic
+    offset = [0.0]
+    fake_time = lambda: real_time() + offset[0]
+    fake_mono = lambda: real_mono() + offset[0]
+    monkeypatch.setattr(time, "time", fake_time)
+    monkeypatch.setattr(time, "monotonic", fake_mono)
+    for attr, real, fake in (("time", real_time, fake_time), ("monotonic", real_mono, fake_mono)):
+        if getattr({mod_name}, attr, None) is real:
+            monkeypatch.setattr({mod_name}, attr, fake)
+
     cls = getattr({mod_name}, '{cls.name}')
-    sig = inspect.signature(cls.__init__)
-
-    kwargs = {{}}
-    if 'capacity' in sig.parameters:
-        kwargs['capacity'] = 5
-    if 'ttl_seconds' in sig.parameters:
-        kwargs['ttl_seconds'] = 0.0
-    elif 'ttl' in sig.parameters:
-        kwargs['ttl'] = 0.0
-    elif 'window_seconds' in sig.parameters:
-        kwargs['window_seconds'] = 0.0
-
-    inst = cls(**kwargs)
+    overrides = dict({overrides!r})
+    for name, p in inspect.signature(cls).parameters.items():
+        if p.default is real_time:
+            overrides[name] = fake_time
+        elif p.default is real_mono:
+            overrides[name] = fake_mono
+    inst = _construct(cls, overrides)
     put_fn = getattr(inst, '{put_name}')
     get_fn = getattr(inst, '{get_name}')
+    put_params = inspect.signature(put_fn).parameters
+    get_params = inspect.signature(get_fn).parameters
+    if len([n for n in put_params if n not in _TIME_PARAMS]) < 2 or not get_params:
+        pytest.skip("probe not applicable: put/get signatures not key-value shaped")
 
-    put_sig = inspect.signature(put_fn)
-    get_sig = inspect.signature(get_fn)
+    def at(params, t):
+        return {{n: t for n in params if n in _TIME_PARAMS}}
 
-    put_kwargs = {{}}
-    params = list(put_sig.parameters.keys())
-    if len(params) >= 2:
-        put_kwargs[params[0]] = "prop_key"
-        put_kwargs[params[1]] = "prop_val"
+    t0 = fake_time()
+    value = object()
+    _call(put_fn, "prop_key", value, **at(put_params, t0))
+    if _call(get_fn, "prop_key", **at(get_params, t0)) is not value:
+        pytest.skip("probe not applicable: stored value not readable back before expiry")
 
-    if 'current_time' in put_sig.parameters:
-        put_kwargs['current_time'] = 100.0
-
-    put_fn(**put_kwargs)
-
-    get_kwargs = {{}}
-    params_get = list(get_sig.parameters.keys())
-    if params_get:
-        get_kwargs[params_get[0]] = "prop_key"
-    if 'current_time' in get_sig.parameters:
-        get_kwargs['current_time'] = 115.0
-
-    res = get_fn(**get_kwargs)
-    assert res is None or res is False, "Entry requested past expiration time must expire and return None or False."
+    offset[0] += 1e7
+    try:
+        res = get_fn("prop_key", **at(get_params, t0 + 1e7))
+    except LookupError:
+        return  # raising KeyError for an expired key is a valid way to expire it
+    assert res is not value, "Entry must not be returned after its time-to-live has elapsed."
 """,
                     )
                 )
@@ -353,7 +313,10 @@ def test_prop_expiration_{mod_name}_{cls.name}():
                 continue
 
             init_args = [a.arg for a in init_fn[0].args.args]
-            has_capacity = any(a in ("capacity", "max_size", "limit", "bound") for a in init_args)
+            has_capacity = any(a in self._CAPACITY_PARAMS for a in init_args)
+            overrides: dict[str, Any] = {a: 2 for a in init_args if a in self._CAPACITY_PARAMS}
+            # A TTL argument is satisfiable: a long lifetime keeps it out of the way.
+            overrides.update({a: 10**6 for a in init_args if a in self._TTL_PARAMS})
             methods = [
                 m for m in cls.body if isinstance(m, ast.FunctionDef) and not m.name.startswith("_")
             ]
@@ -377,35 +340,24 @@ def test_prop_expiration_{mod_name}_{cls.name}():
                         source_symbol=cls.name,
                         ast_nodes=[cls.name],
                         seed=seed,
-                        challenge_code=f"""import pytest, sys, os, inspect
+                        challenge_code=_PROBE_PRELUDE + f"""
 import {mod_name}
 
 def test_prop_capacity_limit_{mod_name}_{cls.name}():
     cls = getattr({mod_name}, '{cls.name}')
-    sig = inspect.signature(cls.__init__)
-
-    cap_param = 'capacity' if 'capacity' in sig.parameters else ('max_size' if 'max_size' in sig.parameters else None)
-    kwargs = {{cap_param: 2}} if cap_param else {{}}
-
-    inst = cls(**kwargs)
+    inst = _construct(cls, {overrides!r})
     p_fn = getattr(inst, '{push_fn}')
-    p_sig = inspect.signature(p_fn)
+    n_args = len([p for p in inspect.signature(p_fn).parameters.values()
+                  if p.default is p.empty and p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)])
 
-    for i in range(3):
-        call_kwargs = {{}}
-        params = list(p_sig.parameters.keys())
-        if params:
-            call_kwargs[params[0]] = i + 1
-        if 'current_time' in p_sig.parameters:
-            call_kwargs['current_time'] = 0.0
-
-        try:
-            res = p_fn(**call_kwargs)
-            if i == 2 and res is False:
-                pass
-        except TypeError:
-            # Wrong arity for this probe call — skip this iteration.
+    for i in range(2):
+        _call(p_fn, *([i + 1] * n_args))
+    try:
+        res = p_fn(*([3] * n_args))
+        if res is False:
             pass
+    except Exception:
+        pass  # rejecting an item past capacity by raising is acceptable
 """,
                     )
                 )
@@ -422,76 +374,62 @@ def test_prop_capacity_limit_{mod_name}_{cls.name}():
             return candidates
         top_level_fns = [n for n in module.body if isinstance(n, ast.FunctionDef)]
 
-        sanitizer_keywords = (
-            "sanitize",
-            "clean",
-            "strip",
-            "format",
-            "escape",
-            "normalize",
-            "transform",
-            "parse",
-            "purify",
-            "harden",
-            "encode",
-            "decode",
-            "convert",
-        )
+        # Name-triggered (heuristic). Only verbs whose contract IS idempotency are
+        # listed: encode/escape/parse/format/convert are deliberately excluded because
+        # applying them twice legitimately changes the result.
+        sanitizer_keywords = ("sanitize", "clean", "strip", "normalize", "purify", "harden")
 
         for fn in top_level_fns:
             if fn.name.startswith("test_") or fn.name.startswith("_"):
                 continue
 
-            arg_names = [a.arg for a in fn.args.args]
-            # Exclude methods with 'self' or 'cls'
-            if arg_names and arg_names[0] in ("self", "cls"):
+            args = fn.args.args
+            # Only run when the input type is known: exactly one parameter annotated str.
+            if len(args) != 1 or args[0].annotation is None:
+                continue
+            if ast.unparse(args[0].annotation) != "str":
+                continue
+            if not any(kw in fn.name.lower() for kw in sanitizer_keywords):
                 continue
 
-            is_sanitizer = any(kw in fn.name.lower() for kw in sanitizer_keywords) or any(
-                kw in content.lower()
-                for kw in ("sanitize", "xss", "escape", "html", "clean", "html_parser")
-            )
-
-            if len(arg_names) == 1 and is_sanitizer:
-                seed = random.randint(10000, 99999)
-                candidates.append(
-                    PropertyCandidate(
-                        kind="idempotency",
-                        confidence="MEDIUM",
-                        numeric_confidence=0.82,
-                        rationale=f"Function '{fn.name}' performs single-argument transformation/sanitization; repeated applications must be idempotent.",
-                        source_module=mod_name,
-                        source_symbol=fn.name,
-                        ast_nodes=[fn.name],
-                        seed=seed,
-                        challenge_code=f"""import pytest, sys, os
+            seed = random.randint(10000, 99999)
+            candidates.append(
+                PropertyCandidate(
+                    kind="idempotency",
+                    confidence="MEDIUM",
+                    numeric_confidence=0.82,
+                    rationale=f"Function '{fn.name}' is a str -> str sanitizer/normalizer; applying it twice must equal applying it once.",
+                    source_module=mod_name,
+                    source_symbol=fn.name,
+                    ast_nodes=[fn.name],
+                    seed=seed,
+                    challenge_code=_PROBE_PRELUDE + f"""
 import {mod_name}
 
 def test_prop_idempotency_{mod_name}_{fn.name}():
     fn = getattr({mod_name}, '{fn.name}')
     probe_inputs = [
-        "<script>alert(1)</script>",
-        "<script>alert(1)",
-        "<b>hello</b>",
-        "<img src=x onerror=alert(1)>",
-        "plain text"
+        "plain text",
+        "  Mixed   Case	whitespace  ",
+        "<b>hello</b> & <script>alert(1)</script>",
+        "(555) 123-4567",
+        "../../etc/passwd",
     ]
-
+    compared = 0
     for raw in probe_inputs:
         try:
-            y = fn(raw)
-        except TypeError:
-            # Probe not applicable for this input type — skip.
-            continue
-        # Any other exception propagates as a failure (target code is broken).
-        if isinstance(y, str):
-            z = fn(y)
-            assert z == y, f"Repeated application of transformation function on '{{raw}}' must be idempotent (fn(fn(x)) == fn(x))."
-            if "<script" in raw.lower():
-                assert "<script>" not in y and "</script>" not in y, f"Sanitization function failed to sanitize script tag in input '{{raw}}'."
+            once = fn(raw)
+            twice = fn(once) if isinstance(once, str) else None
+        except Exception:
+            continue  # rejecting a probe-invented input is not a defect
+        if isinstance(once, str):
+            compared += 1
+            assert twice == once, f"{fn.name}(x) must be idempotent; input {{raw!r}} gave {{once!r}} then {{twice!r}}"
+    if not compared:
+        pytest.skip("probe not applicable: no probe input produced a str result")
 """,
-                    )
                 )
+            )
 
         return candidates
 

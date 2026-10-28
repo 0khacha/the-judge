@@ -79,8 +79,12 @@ class TestP1SwallowedExceptions:
         )
 
     def test_generated_idempotency_probe_code_does_not_swallow_runtime_errors(self):
-        """The generated idempotency probe code must only catch TypeError, not RuntimeError."""
-        from the_judge.core.behavior_engine import BehaviorEngine
+        """The idempotency probe must not silently pass a function that always raises.
+
+        P0-1: an exception on a probe-invented input makes the probe not applicable,
+        so it must end in pytest.skip (non-evidence), never in a bare pass.
+        """
+        from the_judge.core.property_engine import generate_property_tests
 
         workspace = _write_workspace(
             {
@@ -90,15 +94,15 @@ class TestP1SwallowedExceptions:
                 """
             }
         )
-        engine = BehaviorEngine()
-        probes = engine.generate_behavioral_probes(workspace)
-        assert probes, "Expected at least one probe to be generated for crasher.py"
+        probes = [c for c in generate_property_tests(workspace) if c.kind == "idempotency"]
+        assert probes, "Expected an idempotency probe for normalize(text: str)"
 
         for probe in probes:
-            code = probe.executable_code
+            code = probe.challenge_code
+            assert "pytest.skip" in code
             # The probe must NOT have a bare "except Exception: pass" that hides all crashes
             assert "except Exception:\n        pass" not in code, (
-                f"Probe '{probe.property_kind}' for '{probe.target_symbol}' contains bare "
+                f"Probe '{probe.kind}' for '{probe.source_symbol}' contains bare "
                 "'except Exception: pass' which silently swallows crashes. "
                 "Only TypeError should be caught."
             )
@@ -391,14 +395,13 @@ class TestP3CollectionTamperingNoContract:
 class TestP4ProbeScope:
     """Document and assert the known limitations of auto-generated probes."""
 
-    def test_numeric_function_wrong_return_gets_variance_probe(self):
+    def test_numeric_function_wrong_return_gets_no_unsound_probe(self):
         """
-        Bug 1 fix: A purely numeric function (int→int) with a completely wrong
-        return value now gets a multi-input variance probe that catches the defect.
-
-        Previously (known limitation): 2-param functions got no meaningful probe.
-        Now: the multi-input variance probe calls with varied inputs and asserts
-        outputs are not all identical, catching hardcoded/constant returns.
+        Known limitation (P0-1): a constant-return bug in add(a, b) is NOT caught
+        by a judge probe. The former multi-input variance probe asserted that
+        outputs differ across invented inputs, which correct predicates violate
+        (is_email() returns False for every garbage input), so it was removed.
+        Such bugs must be caught by the workspace tests.
         """
         workspace = _write_workspace(
             {
@@ -410,18 +413,6 @@ class TestP4ProbeScope:
         )
         from the_judge.core.behavior_engine import BehaviorEngine
 
-        engine = BehaviorEngine()
-        probes = engine.generate_behavioral_probes(workspace)
-
-        add_probes = [p for p in probes if p.target_symbol == "add"]
-        # With the Bug 1 fix, add() should get at least a variance probe
-        variance_probes = [p for p in add_probes if "multi_input" in p.property_kind]
-        assert len(variance_probes) > 0, (
-            "Bug 1 fix: add(a, b) should now get a multi-input variance probe."
-        )
-        # The variance probe should have an assertion that checks output diversity
-        for vp in variance_probes:
-            assert "unique_count" in vp.executable_code or "unique" in vp.executable_code, (
-                "Variance probe should check for output uniqueness across inputs."
-            )
+        probes = BehaviorEngine().generate_behavioral_probes(workspace)
+        assert [p for p in probes if p.target_symbol == "add"] == []
 
