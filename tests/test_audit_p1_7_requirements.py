@@ -50,7 +50,7 @@ def test_tag_mapped_requirement_is_not_verified(tmp_path, variant):
 
 
 def test_requirement_verified_by_a_named_passing_test(tmp_path):
-    ws = corpus_workspace(tmp_path, TASK, "correct")
+    ws = corpus_workspace(tmp_path, TASK, "correct", frozen=True)
     write(ws, {"test_nested.py": NESTED_TEST})
     spec = {"requirements": [dict(NESTED_REQ, tests=["test_nested_rollback_only_inner"])]}
     result = judge(ws, task_spec=spec)

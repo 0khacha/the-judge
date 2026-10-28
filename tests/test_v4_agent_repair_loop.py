@@ -2,6 +2,7 @@ import os
 import tempfile
 
 from the_judge import VerificationResult, verify
+from the_judge.api import freeze
 from the_judge.integrations import AgentAdapter, AgentRepairLoop
 
 CODE_ROUND1 = '''"""Round 1: Buggy implementation of bounded queue."""
@@ -71,10 +72,12 @@ def test_v4_public_api_verify():
     with tempfile.TemporaryDirectory(prefix="test_v4_api_") as tmp_dir:
         q_py = os.path.join(tmp_dir, "queue_impl.py")
         t_py = os.path.join(tmp_dir, "test_queue.py")
-        with open(q_py, "w", encoding="utf-8") as f:
-            f.write(CODE_ROUND2_REPAIRED)
+        # Tests first, frozen before the implementation (independent evidence).
         with open(t_py, "w", encoding="utf-8") as f:
             f.write(TEST_BOUNDED_QUEUE)
+        freeze(tmp_dir)
+        with open(q_py, "w", encoding="utf-8") as f:
+            f.write(CODE_ROUND2_REPAIRED)
 
         res = verify(tmp_dir)
         assert isinstance(res, VerificationResult)
@@ -88,10 +91,12 @@ def test_v4_agent_adapter():
     with tempfile.TemporaryDirectory(prefix="test_v4_adapter_") as tmp_dir:
         q_py = os.path.join(tmp_dir, "queue_impl.py")
         t_py = os.path.join(tmp_dir, "test_queue.py")
-        with open(q_py, "w", encoding="utf-8") as f:
-            f.write(CODE_ROUND1)
+        # Tests first, frozen before the implementation (independent evidence).
         with open(t_py, "w", encoding="utf-8") as f:
             f.write(TEST_BOUNDED_QUEUE)
+        freeze(tmp_dir)
+        with open(q_py, "w", encoding="utf-8") as f:
+            f.write(CODE_ROUND1)
 
         out = adapter.verify_workspace(tmp_dir)
         assert out["decision"] == "FAIL"
@@ -106,10 +111,12 @@ def test_v4_agent_repair_loop():
     with tempfile.TemporaryDirectory(prefix="test_v4_loop_") as tmp_dir:
         q_py = os.path.join(tmp_dir, "queue_impl.py")
         t_py = os.path.join(tmp_dir, "test_queue.py")
-        with open(q_py, "w", encoding="utf-8") as f:
-            f.write(CODE_ROUND1)
+        # Tests first, frozen before the implementation (independent evidence).
         with open(t_py, "w", encoding="utf-8") as f:
             f.write(TEST_BOUNDED_QUEUE)
+        freeze(tmp_dir)
+        with open(q_py, "w", encoding="utf-8") as f:
+            f.write(CODE_ROUND1)
 
         def mock_agent_repair(workspace_path: str, feedback: dict) -> bool:
             with open(os.path.join(workspace_path, "queue_impl.py"), "w", encoding="utf-8") as f:
@@ -131,10 +138,12 @@ def test_repair_loop_continues_after_judge_pass_until_quality_threshold_is_met()
     with tempfile.TemporaryDirectory(prefix="test_quality_loop_") as tmp_dir:
         q_py = os.path.join(tmp_dir, "queue_impl.py")
         t_py = os.path.join(tmp_dir, "test_queue.py")
-        with open(q_py, "w", encoding="utf-8") as f:
-            f.write(CODE_ROUND2_REPAIRED)
+        # Tests first, frozen before the implementation (independent evidence).
         with open(t_py, "w", encoding="utf-8") as f:
             f.write(TEST_BOUNDED_QUEUE)
+        freeze(tmp_dir)
+        with open(q_py, "w", encoding="utf-8") as f:
+            f.write(CODE_ROUND2_REPAIRED)
 
         def quality_evaluator(workspace_path: str, _result: dict) -> dict:
             with open(
@@ -175,10 +184,12 @@ def test_repair_loop_stops_when_callback_claims_improvement_without_a_workspace_
     with tempfile.TemporaryDirectory(prefix="test_noop_loop_") as tmp_dir:
         q_py = os.path.join(tmp_dir, "queue_impl.py")
         t_py = os.path.join(tmp_dir, "test_queue.py")
-        with open(q_py, "w", encoding="utf-8") as f:
-            f.write(CODE_ROUND1)
+        # Tests first, frozen before the implementation (independent evidence).
         with open(t_py, "w", encoding="utf-8") as f:
             f.write(TEST_BOUNDED_QUEUE)
+        freeze(tmp_dir)
+        with open(q_py, "w", encoding="utf-8") as f:
+            f.write(CODE_ROUND1)
 
         repair_loop = AgentRepairLoop(max_rounds=3)
         loop_res = repair_loop.run_repair_loop(tmp_dir, lambda *_: True)

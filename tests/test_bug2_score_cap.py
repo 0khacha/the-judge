@@ -57,6 +57,7 @@ class TestBug2ScoreCap:
                 "passed_tests": ["test_a", "test_b", "test_challenge_prop_boundary_fn"],
                 "failed_tests": [],
             },
+            "independence": {"independent": {"test_a": {"class": "frozen"}}},
             "test_provenance": {
                 "test_a": {
                     "source": "public_visible_test",

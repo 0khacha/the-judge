@@ -31,7 +31,7 @@ def _judge_cli(workspace, env):
 def test_correct_project_passes_without_mypy_and_ruff(tmp_path):
     # Correct nested-transaction store: passing root-level tests and a passing
     # rollback probe. With mypy/ruff absent from PATH it must still PASS.
-    ws = corpus_workspace(tmp_path / "ws", "04_nested_transactions")
+    ws = corpus_workspace(tmp_path / "ws", "04_nested_transactions", frozen=True)
     code, data = _judge_cli(ws, env_without_tools())
     assert data["decision"] == "PASS", data["insufficient_notes"]
     assert code == 0
@@ -55,6 +55,8 @@ def test_score_engine_unavailable_tools_are_info_not_abstain():
                 "independence_level": "externally_verified",
             },
         },
+        # test_x was frozen before the implementation (v1.0.1 independence rule).
+        "independence": {"independent": {"test_x": {"class": "frozen"}}},
         "type_checker": {"available": False, "exit_code": -1, "error_count": 0},
         "linter": {"available": False, "exit_code": -1, "error_count": 0},
     }

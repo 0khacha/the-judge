@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Optional
 
 
@@ -36,6 +36,10 @@ class VerificationResult:
     blocking_issues: list[str]
     insufficient_notes: list[str]
     runtime_seconds: float = 0.0
+    # Numbered, machine-readable steps telling the agent what to do next.
+    next_actions: list[dict[str, Any]] = field(default_factory=list)
+    # Iteration bookkeeping when verification history is recorded (CLI default).
+    loop: Optional[dict[str, Any]] = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -46,6 +50,8 @@ class VerificationResult:
             "provenance": self.provenance,
             "blocking_issues": self.blocking_issues,
             "insufficient_notes": self.insufficient_notes,
+            "next_actions": self.next_actions,
+            "loop": self.loop,
             "runtime": {
                 "duration_seconds": round(self.runtime_seconds, 3),
                 "judge_version": "v1.0.0",

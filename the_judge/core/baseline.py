@@ -53,6 +53,12 @@ def _test_functions(source: str) -> dict[str, dict[str, Any]]:
             text = ast.unparse(deco)
             if any(f"mark.{m}" in text for m in _SKIP_MARKERS):
                 skips.append(text)
+            # Each parametrize case is part of what the test checks: removing one
+            # weakens the test, adding one strengthens it.
+            if (isinstance(deco, ast.Call) and ast.unparse(deco.func).endswith("mark.parametrize")
+                    and len(deco.args) >= 2 and isinstance(deco.args[1], (ast.List, ast.Tuple))):
+                names = ast.unparse(deco.args[0])
+                asserts.extend(f"case {names}: {ast.unparse(e)}" for e in deco.args[1].elts)
         for node in ast.walk(fn):
             if isinstance(node, ast.Assert):
                 asserts.append(ast.unparse(node.test))
@@ -120,6 +126,7 @@ def compare_tests_to_baseline(abs_dir: str, ref: Optional[str] = None) -> dict[s
             current.setdefault(name, info)
 
     issues: list[dict[str, str]] = []
+    unchanged: list[str] = []
     for path in baseline_files:
         rel = path[len(prefix):]
         source = _git(top, "show", f"{commit.strip()}:{path}")
@@ -148,6 +155,24 @@ def compare_tests_to_baseline(abs_dir: str, ref: Optional[str] = None) -> dict[s
                 issues.append({"kind": "added_skip", "file": rel, "test": name,
                                "detail": f"test {name} in {rel} gained skip/xfail: "
                                          + ", ".join(added)})
+            if not missing and not added:
+                unchanged.append(name)
     result["checked"] = True
     result["issues"] = issues
+    # For the independence rule: tests unchanged (or only strengthened) since the
+    # baseline, and whether any implementation file is new or changed since then.
+    result["unchanged_tests"] = unchanged
+    result["sources_changed"] = _sources_changed(top, commit.strip(), prefix, patterns)
     return result
+
+
+def _sources_changed(top: str, commit: str, prefix: str, patterns: list[str]) -> bool:
+    def is_source(path: str) -> bool:
+        name = path.rsplit("/", 1)[-1]
+        return (path.endswith(".py") and name != "conftest.py"
+                and not any(fnmatch.fnmatch(name, pat) for pat in patterns)
+                and not any(part.startswith(".") for part in path.split("/")))
+
+    changed = (_git(top, "diff", "--name-only", commit, "--", prefix or ".") or "").splitlines()
+    untracked = (_git(top, "ls-files", "--others", "--exclude-standard", "--", prefix or ".") or "").splitlines()
+    return any(is_source(p) for p in changed + untracked)

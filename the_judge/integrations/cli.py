@@ -55,6 +55,15 @@ def main(args_list=None) -> int:
     # demo command
     subparsers.add_parser("demo", help="Run 60-second interactive verification demo")
 
+    # freeze command
+    freeze_parser = subparsers.add_parser(
+        "freeze",
+        help="Freeze the current tests; they count as independent evidence once the "
+        "implementation changes afterwards",
+    )
+    freeze_parser.add_argument("workspace", nargs="?", default=".", help="Path to workspace")
+    freeze_parser.add_argument("--json", action="store_true", help="Output JSON")
+
     # hook command
     hook_parser = subparsers.add_parser("hook", help="Manage git verification hooks")
     hook_sub = hook_parser.add_subparsers(dest="hook_action", help="Hook actions")
@@ -130,6 +139,20 @@ def main(args_list=None) -> int:
     )
 
     args = parser.parse_args(args_list)
+
+    if args.command == "freeze":
+        from the_judge.api import freeze
+
+        info = freeze(args.workspace)
+        if args.json:
+            print(json.dumps(info, indent=2))
+        else:
+            print(f"Froze {len(info['frozen_tests'])} test(s) into {info['path']}:")
+            for name in info["frozen_tests"]:
+                print(f"  {name}")
+            print("They count as independent evidence once an implementation file changes "
+                  "after this freeze. Do not weaken or delete them.")
+        return 0
 
     if args.command == "demo":
         run_demo()

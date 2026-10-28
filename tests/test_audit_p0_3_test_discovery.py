@@ -19,8 +19,8 @@ def _ran(result, name):
 
 @pytest.mark.parametrize("subdir", [None, "tests", "test", "src_tests/unit"])
 def test_same_decision_wherever_tests_live(tmp_path, subdir):
-    root = judge(corpus_workspace(tmp_path / "root", TASK))
-    moved = judge(corpus_workspace(tmp_path / "moved", TASK, tests_subdir=subdir))
+    root = judge(corpus_workspace(tmp_path / "root", TASK, frozen=True))
+    moved = judge(corpus_workspace(tmp_path / "moved", TASK, tests_subdir=subdir, frozen=True))
     assert root.decision == "PASS", root.insufficient_notes
     assert moved.decision == root.decision, moved.insufficient_notes
     assert moved.provenance["passed_tests"] == root.provenance["passed_tests"]
@@ -72,7 +72,7 @@ def test_pytest_config_testpaths_and_python_files_are_honoured(tmp_path):
 
 @pytest.mark.parametrize("excluded", [".venv", "venv", "node_modules", ".hidden", "build"])
 def test_tests_in_excluded_dirs_are_ignored(tmp_path, excluded):
-    ws = corpus_workspace(tmp_path, TASK, tests_subdir="tests")
+    ws = corpus_workspace(tmp_path, TASK, tests_subdir="tests", frozen=True)
     write(ws, {f"{excluded}/pkg/test_vendored.py": "def test_vendored():\n    assert False\n"})
     result = judge(ws)
     assert "test_vendored" not in str(result.trust_profile["requirement_checks"])

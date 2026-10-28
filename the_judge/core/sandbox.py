@@ -230,6 +230,7 @@ class SandboxRunner:
             # Skipped and xfail tests (junit <skipped>) did not demonstrate anything:
             # they are reported separately and never counted as passed.
             skipped_tests: list[str] = []
+            failure_messages: dict[str, str] = {}
 
             if os.path.exists(junitxml_path):
                 try:
@@ -237,8 +238,12 @@ class SandboxRunner:
                     tree = ET.parse(junitxml_path)
                     for testcase in tree.findall('.//testcase'):
                         name = testcase.get('name') or ""
-                        if testcase.find('failure') is not None or testcase.find('error') is not None:
+                        problem = testcase.find('failure')
+                        if problem is None:
+                            problem = testcase.find('error')
+                        if problem is not None:
                             failed_tests.append(name)
+                            failure_messages[name] = (problem.get('message') or problem.text or "")[:500]
                         elif testcase.find('skipped') is not None:
                             skipped_tests.append(name)
                         else:
@@ -276,6 +281,7 @@ class SandboxRunner:
                 "passed": passed_tests,
                 "failed": failed_tests,
                 "skipped": skipped_tests,
+                "failure_messages": failure_messages,
                 "runner_error": runner_error,
                 "file_tampered": file_tampered,
                 "stdout": res["stdout"],

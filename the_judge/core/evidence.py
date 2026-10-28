@@ -12,6 +12,7 @@ import uuid
 from typing import Any, Optional
 
 from .baseline import compare_tests_to_baseline
+from .independence import classify as classify_independence
 from .behavior_engine import BehaviorEngine
 from .property_engine import generate_property_tests, untriggered_probes
 from .sandbox import SandboxRunner
@@ -378,6 +379,8 @@ def capture_evidence(
     test_suite_data = {
         "exit_code": sandbox_res["exit_code"],
         "runner_error": runner_error,
+        # Assertion message per failing test (what was expected vs. observed).
+        "errors": sandbox_res.get("failure_messages", {}),
         # pytest exit code 5: it ran but collected nothing (no tests, no probes).
         "no_tests_collected": (
             not runner_error and sandbox_res["exit_code"] == 5
@@ -480,6 +483,7 @@ def capture_evidence(
         "test_provenance": test_provenance,
         "vacuous_tests": vacuous_tests,
         "test_tampering": test_tampering,
+        "independence": classify_independence(abs_dir, test_tampering),
         "probe_coverage": probe_coverage,
         "challenge_manifest": {
             "expected_challenges": expected_challenges,

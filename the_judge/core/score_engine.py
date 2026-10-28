@@ -158,7 +158,12 @@ def evaluate(
             f"TEST TAMPERING DETECTED (vs {tampering.get('ref', 'HEAD')}): {issue['detail']}"
         )
 
-    # --- Gate 7c: Skipped / xfail workspace tests prove nothing ---
+    # --- Hard Gate 7c: frozen tests weakened or deleted since `judge freeze` ---
+    independence = evidence.get("independence", {})
+    for issue in independence.get("tampering", []):
+        blocking_issues.append(f"TEST TAMPERING DETECTED (vs judge freeze): {issue['detail']}")
+
+    # --- Gate 7d: Skipped / xfail workspace tests prove nothing ---
     skipped_workspace = test_suite.get("skipped_tests", [])
     if skipped_workspace:
         insufficient_evidence_notes.append(
@@ -229,18 +234,22 @@ def evaluate(
     passed_tests_count = len(passed_test_names)
     failed_tests_count = len(failed_test_names)
 
-    has_challenge_evidence = len(judge_challenge_passed_tests) > 0
-
     # Workspace tests: non-synthesized tests that come from the workspace itself
     workspace_passed_tests = [
         t for t in passed_test_names
         if test_provenance.get(t, {}).get("source") != "judge_challenge_test"
     ]
 
+    independent_names = set(independence.get("independent", {}))
+    independent_workspace_passed = [
+        t for t in workspace_passed_tests if t.split("[", 1)[0] in independent_names
+    ]
+
     if total_tests == 0:
-        insufficient_evidence_notes.append(
-            "ABSTAIN Level 0: No executable unit tests were run to verify implementation."
-        )
+        if not (no_tests or runner_error):  # those already explain why nothing ran
+            insufficient_evidence_notes.append(
+                "ABSTAIN Level 0: No executable unit tests were run to verify implementation."
+            )
         evidence_level = 0
     elif passed_tests_count == 0:
         insufficient_evidence_notes.append(
@@ -252,19 +261,26 @@ def evaluate(
             "ABSTAIN Level 1: Cannot PASS based on agent_controlled evidence alone. Independent verification (judge_generated or externally_verified) is required."
         )
         evidence_level = 1
-    elif not has_challenge_evidence:
+    elif not independent_workspace_passed:
+        # Independent evidence = workspace tests fixed before the implementation they
+        # check (judge freeze snapshot or git baseline, implementation changed since).
+        # Tests written alongside the code still have to pass, but cannot earn a PASS
+        # on their own: the author could have fitted them to the code.
+        frozen_after = independence.get("frozen_after_implementation", [])
+        if frozen_after:
+            reason = (
+                "the frozen tests (" + ", ".join(frozen_after[:5]) + ") were frozen after the "
+                "implementation was written: no implementation file changed since the freeze"
+            )
+        elif workspace_passed_tests:
+            reason = (
+                "no passing test was fixed before the implementation (none is unchanged since a "
+                "`judge freeze` snapshot or the git baseline with the code changed afterwards)"
+            )
+        else:
+            reason = "no workspace test passed"
         insufficient_evidence_notes.append(
-            "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification."
-        )
-        evidence_level = 1
-    elif len(workspace_passed_tests) == 0:
-        # Judge probes alone test meta-properties (idempotency, state isolation).
-        # They do NOT verify that the implementation is correct — at least one
-        # workspace-authored test exercising the target module is required.
-        insufficient_evidence_notes.append(
-            "ABSTAIN Level 1 (Workspace Test Gate): No non-synthesized workspace tests passed. "
-            "Judge probes test meta-properties only; at least one workspace test exercising "
-            "the target module is required."
+            f"ABSTAIN Level 1 (No Independent Evidence): {reason}."
         )
         evidence_level = 1
     elif failed_tests_count > 0 or test_suite.get("exit_code", 0) != 0:

@@ -7,12 +7,15 @@ import subprocess
 CORPUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "regression_audit", "tasks")
 
 
-def corpus_workspace(dest, task, variant="correct", tests_subdir=None, git_baseline=False):
+def corpus_workspace(dest, task, variant="correct", tests_subdir=None, git_baseline=False,
+                     frozen=False):
     """Copy a corpus variant plus its visible tests into dest and return the path.
 
     tests_subdir: put the visible tests in this sub-directory instead of the root.
     git_baseline: commit the variant's baseline/ files at HEAD first, then write the
                   variant's own files on top (simulates tests edited after commit).
+    frozen: write the visible tests and `judge freeze` them BEFORE the implementation is
+            added (user-supplied tests), so they count as independent evidence.
     """
     dest = str(dest)
     os.makedirs(dest, exist_ok=True)
@@ -22,6 +25,7 @@ def corpus_workspace(dest, task, variant="correct", tests_subdir=None, git_basel
     os.makedirs(test_dir, exist_ok=True)
 
     visible = {}
+    impl = []
     vis_dir = os.path.join(task_dir, "visible")
     for name in os.listdir(vis_dir):
         if name.endswith(".py"):
@@ -33,7 +37,10 @@ def corpus_workspace(dest, task, variant="correct", tests_subdir=None, git_basel
         if name.startswith("test_"):
             visible[name] = path
         else:
-            shutil.copy2(path, os.path.join(dest, name))
+            impl.append(path)
+    if not frozen:
+        for path in impl:
+            shutil.copy2(path, os.path.join(dest, os.path.basename(path)))
 
     baseline_dir = os.path.join(variant_dir, "baseline")
     if git_baseline:
@@ -45,6 +52,12 @@ def corpus_workspace(dest, task, variant="correct", tests_subdir=None, git_basel
         git(dest, "commit", "-q", "-m", "baseline")
     for name, path in visible.items():
         shutil.copy2(path, os.path.join(test_dir, name))
+    if frozen:
+        from the_judge.api import freeze
+
+        freeze(dest)
+        for path in impl:
+            shutil.copy2(path, os.path.join(dest, os.path.basename(path)))
     return dest
 
 

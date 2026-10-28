@@ -273,6 +273,20 @@ def verify(
                 "instead. If the test change is intended, commit it or pass --baseline <ref>.",
             )
         )
+    frozen_issues = ground_truth.get("independence", {}).get("tampering", [])
+    for idx, issue in enumerate(frozen_issues, len(tampering.get("issues", [])) + 1):
+        structured_findings.append(
+            Finding(
+                id=f"TAMPER-{idx:03d}",
+                category="tampering",
+                severity="blocking",
+                description=f"Test weakened since judge freeze: {issue['detail']}",
+                property_name=issue.get("test") or issue.get("file"),
+                expected="Frozen tests unchanged or only strengthened.",
+                suggested_focus="Restore the frozen test and fix the code instead. If the test is "
+                "wrong, fix it, run `judge freeze .` again and tell the user why.",
+            )
+        )
 
     # Tests that ran but are not evidence: skipped/xfail and vacuous assertions.
     skipped = test_suite.get("skipped_tests", [])
@@ -383,8 +397,12 @@ def verify(
     # ev_cov was already extracted above; mutate it in-place to add spec coverage.
     ev_cov["specification_coverage"] = contract_eval
 
+    from the_judge.core.next_actions import build as build_next_actions
+
+    decision = eval_output.get("verdict", "ABSTAIN")
     return VerificationResult(
-        decision=eval_output.get("verdict", "ABSTAIN"),
+        next_actions=build_next_actions(decision, eval_output, ground_truth),
+        decision=decision,
         numeric_score=eval_output.get("numeric_score", 0.0),
         trust_profile=ev_cov,
         findings=structured_findings,
@@ -393,6 +411,17 @@ def verify(
         insufficient_notes=eval_output.get("insufficient_evidence_notes", []),
         runtime_seconds=elapsed,
     )
+
+
+def freeze(workspace: str) -> dict[str, Any]:
+    """Freeze the workspace's current tests (and record implementation hashes).
+
+    Tests frozen this way count as independent evidence once an implementation file
+    changes after the freeze; weakening or deleting a frozen test is tampering.
+    """
+    from the_judge.core.independence import freeze as do_freeze
+
+    return do_freeze(workspace)
 
 
 def verify_workspace(workspace_dir: str) -> VerificationResult:
