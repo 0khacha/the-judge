@@ -315,6 +315,24 @@ def verify(
             )
         )
 
+    # Static analysis that did run: advisory warnings, never decisive.
+    for tool_key, label in (("type_checker", "mypy"), ("linter", "linter")):
+        tool = ground_truth.get(tool_key, {})
+        count = tool.get("error_count", 0)
+        if tool.get("available", True) and count and tool.get("exit_code", 0) != 0:
+            first = [ln for ln in str(tool.get("raw_output", "")).splitlines() if ln.strip()][:3]
+            structured_findings.append(
+                Finding(
+                    id=f"STATIC-{len([f for f in structured_findings if f.category == 'static_analysis']) + 1:03d}",
+                    category="static_analysis",
+                    severity="low",
+                    description=f"{label} reported {count} issue(s) (advisory; does not affect the decision)",
+                    property_name=label,
+                    observed=" | ".join(first)[:300] or None,
+                    suggested_focus="Optional clean-up; correctness is decided by tests.",
+                )
+            )
+
     # Optional tools that were not run: always reported, never decisive.
     for tool_key, label, install in (
         ("type_checker", "mypy", "pip install mypy"),

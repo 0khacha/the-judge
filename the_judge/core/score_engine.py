@@ -54,10 +54,10 @@ def evaluate(
         failed_str = ", ".join(failed_test_names) if failed_test_names else "non-zero exit code"
         blocking_issues.append(f"Test suite failure: {failed_str}")
 
-    # --- Hard Gate 2: Type-check errors ---
-    # Optional tools never decide the verdict by their absence: an unavailable tool
-    # is reported as INFO and lowers the numeric score only. Only actual type errors
-    # block; a non-zero mypy exit without error lines (e.g. a config problem) is INFO.
+    # --- Gate 2: static analysis is advisory ---
+    # mypy and ruff never decide correctness: a missing tool is INFO, and type or lint
+    # errors are WARNINGs (reported as static_analysis findings, lowering the score).
+    # Behaviour is decided by tests only.
     if not type_checker.get("available", True):
         insufficient_evidence_notes.append(
             "INFO: Type checker (mypy) not found on PATH; type checking was not run, "
@@ -65,7 +65,10 @@ def evaluate(
         )
     elif type_checker.get("error_count", 0) > 0:
         err_cnt = type_checker.get("error_count", 1)
-        blocking_issues.append(f"Type checker failed with {err_cnt} error(s)")
+        insufficient_evidence_notes.append(
+            f"WARNING: Type checker (mypy) reported {err_cnt} error(s). Advisory only; it does "
+            "not affect the decision."
+        )
     elif type_checker.get("exit_code", 0) != 0:
         insufficient_evidence_notes.append(
             "INFO: Type checker exited non-zero without reporting type errors; see its output."
@@ -360,7 +363,9 @@ def evaluate(
 
     if len(blocking_issues) > 0:
         verdict = "FAIL"
-    elif any(not n.startswith("INFO:") for n in insufficient_evidence_notes) or evidence_level < 2:
+    elif evidence_level < 2 or any(
+        not n.startswith(("INFO:", "WARNING:")) for n in insufficient_evidence_notes
+    ):
         verdict = "ABSTAIN"
     else:
         verdict = "PASS"
@@ -388,6 +393,11 @@ def evaluate(
         linter_score = (
             100.0 if linter.get("exit_code", 0) == 0 else max(0.0, 100.0 - linter_errs * 10.0)
         )
+        if linter.get("exit_code", 0) != 0:
+            insufficient_evidence_notes.append(
+                f"WARNING: Linter reported {linter_errs} issue(s). Advisory only; it does not "
+                "affect the decision."
+            )
 
     type_score = 100.0 if type_checker.get("exit_code", 0) == 0 else 0.0
 

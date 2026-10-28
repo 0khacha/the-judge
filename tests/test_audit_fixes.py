@@ -252,15 +252,17 @@ class TestSelfClaimsCircularity:
 
 
 class TestDeadGates:
-    def test_type_checker_errors_without_strict_type_check_generate_blocking_issue(self):
+    def test_type_checker_errors_are_reported_as_advisory_warning(self):
+        # v1.0.1 (C): static analysis never decides correctness.
         evidence = {
             "test_suite": {"exit_code": 0, "total_tests": 1, "passed_tests": ["test_ok"], "failed_tests": []},
             "type_checker": {"available": True, "exit_code": 1, "error_count": 2},
             "linter": {"available": True, "exit_code": 0, "error_count": 0}
         }
         report = evaluate({}, evidence)
-        assert report["verdict"] == "FAIL"
-        assert any("Type checker failed with 2 error(s)" in issue for issue in report["blocking_issues"])
+        assert report["verdict"] != "FAIL"
+        assert not report["blocking_issues"]
+        assert any(n.startswith("WARNING:") and "2 error(s)" in n for n in report["insufficient_evidence_notes"])
 
     def test_type_checker_unavailable_generates_insufficient_evidence_note(self):
         evidence = {
