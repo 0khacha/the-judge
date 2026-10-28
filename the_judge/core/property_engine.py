@@ -105,27 +105,21 @@ class StructurePropertyEngine:
                 m in ("rollback", "revert", "abort", "revert_journal", "undo") for m in method_names
             )
 
-            if (
-                has_checkpoint or "journal" in content.lower() or "transaction" in content.lower()
-            ) and (has_revert or "revert" in content.lower()):
+            # The probe needs real methods to call: a checkpoint, a revert, a writer
+            # and a reader. Without all four it could not assert anything, so it is
+            # not emitted (module text mentioning "transaction" is not enough).
+            set_name = next((m for m in ("set", "put", "write") if m in method_names), None)
+            get_name = next((m for m in ("get", "read") if m in method_names), None)
+            if has_checkpoint and has_revert and set_name and get_name:
                 seed = random.randint(10000, 99999)
-                checkpoint_fn = [
-                    m
-                    for m in method_names
+                cp_name = next(
+                    m for m in method_names
                     if m in ("begin", "start", "checkpoint", "start_journal", "savepoint")
-                    or "start" in m
-                    or "begin" in m
-                ]
-                revert_fn = [
-                    m
-                    for m in method_names
+                )
+                rv_name = next(
+                    m for m in method_names
                     if m in ("rollback", "revert", "abort", "revert_journal", "undo")
-                    or "revert" in m
-                    or "rollback" in m
-                ]
-
-                cp_name = checkpoint_fn[0] if checkpoint_fn else "begin"
-                rv_name = revert_fn[0] if revert_fn else "rollback"
+                )
 
                 candidates.append(
                     PropertyCandidate(
@@ -144,22 +138,19 @@ def test_prop_rollback_isolation_{mod_name}_{cls.name}():
     cls = getattr({mod_name}, '{cls.name}')
     inst = _construct(cls, {{}})
 
-    set_fn = getattr(inst, 'set', getattr(inst, 'put', getattr(inst, 'write', None)))
-    get_fn = getattr(inst, 'get', getattr(inst, 'read', None))
-    cp_fn = getattr(inst, '{cp_name}', None)
-    rv_fn = getattr(inst, '{rv_name}', None)
+    _call(inst.{set_name}, "existing_k", 100)
+    _call(inst.{cp_name})
+    _call(inst.{set_name}, "uncommitted_k", 999)
+    _call(inst.{rv_name})
 
-    if set_fn and cp_fn and rv_fn:
-        _call(set_fn, "existing_k", 100)
-        _call(cp_fn)
-        _call(set_fn, "uncommitted_k", 999)
-        _call(rv_fn)
+    val_existing = _call(inst.{get_name}, "existing_k")
+    try:
+        val_uncommitted = inst.{get_name}("uncommitted_k")
+    except LookupError:
+        val_uncommitted = None  # raising KeyError for an absent key is fine
 
-        val_existing = _call(get_fn, "existing_k") if get_fn else 100
-        val_uncommitted = _call(get_fn, "uncommitted_k") if get_fn else None
-
-        assert val_existing == 100, "Existing state must remain intact after rollback."
-        assert val_uncommitted is None, "Uncommitted modifications must be reverted upon rollback."
+    assert val_existing == 100, "State written before the checkpoint must survive rollback."
+    assert val_uncommitted != 999, "A write made after the checkpoint must be undone by rollback."
 """,
                     )
                 )
@@ -326,8 +317,13 @@ def test_prop_expiration_{mod_name}_{cls.name}(monkeypatch):
                 for m in method_names
                 if m in ("push", "add", "enqueue", "consume", "put", "write")
             ]
+            # How many items are retained must be observable: via __len__, or via a
+            # reader method for keyed containers. Otherwise there is nothing to assert.
+            has_len = any(isinstance(m, ast.FunctionDef) and m.name == "__len__" for m in cls.body)
+            reader = next((m for m in method_names if m in self._GET_METHODS), None)
+            get_name = reader or "get"  # only used on the reader branch below
 
-            if has_capacity and push_names:
+            if has_capacity and push_names and (has_len or reader):
                 seed = random.randint(10000, 99999)
                 push_fn = push_names[0]
                 candidates.append(
@@ -349,15 +345,38 @@ def test_prop_capacity_limit_{mod_name}_{cls.name}():
     p_fn = getattr(inst, '{push_fn}')
     n_args = len([p for p in inspect.signature(p_fn).parameters.values()
                   if p.default is p.empty and p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)])
+    if n_args not in (1, 2):
+        pytest.skip("probe not applicable: insert method is neither item- nor key/value-shaped")
+    items = [("cap_key_%d" % i, "cap_value_%d" % i) for i in range(3)]
 
-    for i in range(2):
-        _call(p_fn, *([i + 1] * n_args))
+    def insert(i):
+        return p_fn(*items[i][2 - n_args:])
+
+    _call(insert, 0)
+    _call(insert, 1)
     try:
-        res = p_fn(*([3] * n_args))
-        if res is False:
-            pass
+        insert(2)
     except Exception:
-        pass  # rejecting an item past capacity by raising is acceptable
+        rejected = True  # rejecting an item past capacity by raising is acceptable
+    else:
+        rejected = False
+
+    if {has_len!r}:
+        retained = _call(len, inst)
+    elif n_args == 2:
+        def held(key, value):
+            try:
+                return inst.{get_name}(key) == value
+            except LookupError:
+                return False
+        retained = sum(held(k, v) for k, v in items)
+    else:
+        pytest.skip("probe not applicable: cannot observe how many items are retained")
+
+    assert retained <= 2, (
+        f"constructed with capacity 2 but {{retained}} items are retained after 3 inserts"
+        f" (third insert {{'raised' if rejected else 'returned normally'}})"
+    )
 """,
                     )
                 )
@@ -410,23 +429,24 @@ def test_prop_idempotency_{mod_name}_{fn.name}():
     fn = getattr({mod_name}, '{fn.name}')
     probe_inputs = [
         "plain text",
-        "  Mixed   Case	whitespace  ",
+        "  Mixed   Case\\twhitespace  ",
         "<b>hello</b> & <script>alert(1)</script>",
         "(555) 123-4567",
         "../../etc/passwd",
     ]
-    compared = 0
+    pairs = []
     for raw in probe_inputs:
         try:
             once = fn(raw)
-            twice = fn(once) if isinstance(once, str) else None
+            if not isinstance(once, str):
+                continue
+            pairs.append((raw, once, fn(once)))
         except Exception:
             continue  # rejecting a probe-invented input is not a defect
-        if isinstance(once, str):
-            compared += 1
-            assert twice == once, f"{fn.name}(x) must be idempotent; input {{raw!r}} gave {{once!r}} then {{twice!r}}"
-    if not compared:
+    if not pairs:
         pytest.skip("probe not applicable: no probe input produced a str result")
+    broken = [(raw, once, twice) for raw, once, twice in pairs if twice != once]
+    assert not broken, f"{fn.name}(x) must be idempotent; (input, once, twice): {{broken!r}}"
 """,
                 )
             )

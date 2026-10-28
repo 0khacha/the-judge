@@ -113,7 +113,11 @@ class TestP1SwallowedExceptions:
                 pytest.fail(f"Generated probe code has syntax error: {e}\n\nCode:\n{code}")
 
     def test_generated_state_isolation_probe_code_does_not_swallow_value_errors(self):
-        """The generated state-isolation probe must only catch TypeError."""
+        """No state-isolation probe may vouch for a class whose constructor always raises.
+
+        P1-5: the state-isolation probe (Cls() is not Cls()) could never fail on an
+        ordinary class, so it was removed; nothing is generated for BadClass.
+        """
         from the_judge.core.behavior_engine import BehaviorEngine
 
         workspace = _write_workspace(
@@ -129,14 +133,7 @@ class TestP1SwallowedExceptions:
         )
         engine = BehaviorEngine()
         probes = engine.generate_behavioral_probes(workspace)
-        assert probes, "Expected at least one probe for BadClass"
-
-        for probe in probes:
-            code = probe.executable_code
-            assert "except Exception:\n        pass" not in code, (
-                f"State-isolation probe contains bare 'except Exception: pass' which "
-                "would hide a ValueError from a broken constructor."
-            )
+        assert [p for p in probes if p.property_kind == "state_isolation"] == []
 
 
 # ---------------------------------------------------------------------------

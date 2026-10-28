@@ -17,6 +17,9 @@ class BoundedQueue:
         self.items.append(item)
         return True
 
+    def __len__(self) -> int:
+        return len(self.items)
+
     def pop(self) -> Optional[int]:
         if not self.items:
             return None
@@ -36,6 +39,9 @@ class BoundedQueue:
             return False
         self.items.append(item)
         return True
+
+    def __len__(self) -> int:
+        return len(self.items)
 
     def pop(self) -> Optional[int]:
         if not self.items:

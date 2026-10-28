@@ -155,54 +155,17 @@ class BehaviorEngine:
         return discovered
 
     def generate_behavioral_probes(self, task_dir: str) -> list[BehavioralProbe]:
-        """Generate black-box behavioral probes across discovered callables."""
-        callables = self.discover_callables(task_dir)
-        probes: list[BehavioralProbe] = []
+        """Generate black-box behavioral probes across discovered callables.
 
-        for item in callables:
-            if item["type"] == "function":
-                # No generic function probes. The former idempotency (fn(fn(x)) == fn(x))
-                # and multi-input variance ("outputs must differ") probes asserted
-                # properties that correct functions need not have (double(), is_email()
-                # on garbage), so they failed correct code. Without a contract there is
-                # no oracle; function behaviour is evidenced by tests and contract probes.
-                continue
-
-            if item["type"] == "class":
-                cls_name = item["name"]
-                mod_name = item["module"]
-                methods = item["methods"]
-
-                if not methods:
-                    continue
-
-                seed = random.randint(10000, 99999)
-                code = f"""import pytest, sys, os
-import {mod_name}
-
-def test_behavior_state_isolation_{mod_name}_{cls_name}():
-    cls = getattr({mod_name}, '{cls_name}')
-    try:
-        inst1 = cls()
-        inst2 = cls()
-    except TypeError:
-        # Probe not applicable: constructor requires arguments.
-        pytest.skip("Probe not applicable: constructor requires arguments")
-    # Any other exception (ValueError, RuntimeError, etc.) propagates as a failure —
-    # a constructor that always raises has a defect, not a signature mismatch.
-    assert inst1 is not inst2, "Independent class instantiations must yield distinct objects."
-"""
-                probes.append(
-                    BehavioralProbe(
-                        property_kind="state_isolation",
-                        target_symbol=cls_name,
-                        seed=seed,
-                        inputs=(),
-                        kwargs={},
-                        expected_invariant="inst1 is not inst2",
-                        rationale=f"Black-box probe: class '{cls_name}' instance state isolation check",
-                        executable_code=code,
-                    )
-                )
-
-        return probes
+        Returns no probes. The generic probes this engine used to emit were unsound:
+          * function idempotency (fn(fn(x)) == fn(x)) and multi-input variance
+            ("outputs must differ") assert properties correct functions need not
+            have, so they failed correct code (P0-1);
+          * class state isolation (Cls() is not Cls()) holds for every ordinary
+            class, so it could never fail and only padded "independent evidence"
+            (P1-5).
+        Contract-shaped probes live in property_engine; discover_callables() is kept
+        for callers that inspect a workspace's interface.
+        """
+        del task_dir
+        return []

@@ -175,20 +175,28 @@ class TestBug1FalsePass:
         """Probes must use pytest.skip, not return, when they do not apply."""
         import tempfile
         import shutil
-        from the_judge.core.behavior_engine import BehaviorEngine
+        from the_judge.core.property_engine import generate_property_tests
 
         tmp = tempfile.mkdtemp()
         try:
             with open(os.path.join(tmp, "m.py"), "w") as f:
-                f.write("class Box:\n    def put(self, x):\n        self.x = x\n")
-            engine = BehaviorEngine()
-            probes = engine.generate_behavioral_probes(tmp)
-            assert probes, "Expected probes for m.py"
+                f.write(
+                    "class Box:\n"
+                    "    def __init__(self, capacity):\n"
+                    "        self.capacity = capacity\n"
+                    "        self.items = []\n"
+                    "    def put(self, x):\n"
+                    "        self.items.append(x)\n"
+                    "    def __len__(self):\n"
+                    "        return len(self.items)\n"
+                )
+            probes = generate_property_tests(tmp)
+            assert probes, "Expected a capacity probe for m.py"
             for probe in probes:
-                code = probe.executable_code
-                # After the TypeError catch, the code should use pytest.skip, not bare return
+                code = probe.challenge_code
+                # Bailing out must use pytest.skip, not a bare return
                 assert "pytest.skip" in code, (
-                    f"Probe '{probe.property_kind}' catches TypeError but doesn't "
+                    f"Probe '{probe.kind}' can bail out but doesn't "
                     "use pytest.skip — bailed probes must not count as passed."
                 )
         finally:
