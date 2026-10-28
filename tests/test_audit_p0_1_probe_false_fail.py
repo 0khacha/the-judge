@@ -151,3 +151,48 @@ def test_capacity_probe_skips_unsatisfiable_constructor(tmp_path):
         ),
     })
     _assert_not_failed(judge(ws))
+
+
+def test_uniqueness_probe_does_not_fail_deterministic_digest(tmp_path):
+    ws = write(tmp_path, {
+        "digest.py": (
+            "import hashlib\n"
+            "def fingerprint(data: bytes) -> str:\n"
+            "    return hashlib.sha256(data).hexdigest()\n"
+        ),
+        "test_digest.py": (
+            "from digest import fingerprint\n"
+            "def test_fingerprint():\n"
+            "    assert fingerprint(b'abc').startswith('ba7816bf')\n"
+        ),
+    })
+    _assert_not_failed(judge(ws))
+
+
+def test_expiration_probe_does_not_rely_on_zero_ttl_and_wall_clock(tmp_path):
+    # Correct semantics: an entry is valid while age <= ttl. With ttl=0 and a coarse
+    # clock, a fresh entry is legitimately still valid.
+    ws = write(tmp_path, {
+        "sessions.py": (
+            "import time\n"
+            "class SessionCache:\n"
+            "    def __init__(self, ttl):\n"
+            "        self.ttl = ttl\n"
+            "        self._items = {}\n"
+            "    def put(self, key, value):\n"
+            "        self._items[key] = (value, int(time.time()))\n"
+            "    def get(self, key):\n"
+            "        entry = self._items.get(key)\n"
+            "        if entry is None or int(time.time()) - entry[1] > self.ttl:\n"
+            "            return None\n"
+            "        return entry[0]\n"
+        ),
+        "test_sessions.py": (
+            "from sessions import SessionCache\n"
+            "def test_roundtrip():\n"
+            "    c = SessionCache(ttl=60)\n"
+            "    c.put('a', 1)\n"
+            "    assert c.get('a') == 1\n"
+        ),
+    })
+    _assert_not_failed(judge(ws))
