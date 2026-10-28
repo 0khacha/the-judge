@@ -28,7 +28,7 @@ The Judge is designed to be easily integrated into any development environment t
 
 ```bash
 # Install
-pip install the-judge
+pip install git+https://github.com/0khacha/the-judge.git
 
 # Use in any project
 cd /path/to/your/project
@@ -90,7 +90,7 @@ judge init vscode
 ```yaml
 # GitHub Actions
 - name: Install The Judge
-  run: pip install the-judge
+  run: pip install git+https://github.com/0khacha/the-judge.git
 
 - name: Verify Code Quality
   run: judge verify . --json

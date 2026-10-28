@@ -1,4 +1,9 @@
-# Level 2 Evaluation: Real Coding-Agent A/B/C Benchmark Report
+# Level 2 Evaluation: Coding-Agent A/B/C Benchmark Report (results from a SIMULATED run)
+
+> **SIMULATED RUN.** The results in this report were produced with `Agent Mode: test`,
+> i.e. the scripted `TestAgent` (deterministic edits, constant per-turn token counts and
+> durations). No real coding agent or LLM was involved. The numbers are kept exactly as
+> recorded; they do not measure a real agent and should not be cited as such.
 
 **Benchmark Version**: 2.0.0-real  
 **Target Repository**: `C:\projects\the-judge`  
@@ -11,7 +16,7 @@
 
 This report documents the architectural overhaul and empirical evaluation of **Level 2 of The Judge Benchmark**.
 
-Following a forensic audit ([`benchmark/LEVEL2_AUDIT_REPORT.md`](file:///c:/projects/the-judge/benchmark/LEVEL2_AUDIT_REPORT.md)), the previous Level 2 implementation was invalidated because it executed a deterministic simulation harness (`TestAgent`), utilized synthetic token formulas (`chars // 4`), and invoked static oracle scripts (`apply_fix.py`).
+Following a forensic audit (a document that is not included in this repository), the previous Level 2 implementation was invalidated because it executed a deterministic simulation harness (`TestAgent`), utilized synthetic token formulas (`chars // 4`), and invoked static oracle scripts (`apply_fix.py`).
 
 The Level 2 benchmark has been rebuilt from scratch:
 1. **Real Provider Engine**: `LLMAgent` connects directly via native HTTP adapters (`AnthropicProvider`, `OpenAIProvider`, `GeminiProvider`) to execute live frontier models with zero simulation fallbacks.
@@ -88,7 +93,7 @@ No review prompt    Critical review     Structured findings feedback
 
 ## 4. Level 1 vs Level 2 Distinction
 
-| Dimension | Level 1: Deterministic Verification Benchmark | Level 2: Real Coding-Agent Benchmark |
+| Dimension | Level 1: Deterministic Verification Benchmark | Level 2: Coding-Agent Benchmark (as designed; the recorded run was SIMULATED) |
 |---|---|---|
 | **Primary Question** | Can The Judge detect flaws in static starting code? | Can an AI agent use Judge feedback to fix code? |
 | **Repair Mechanism** | Static oracle scripts (`apply_fix.py`) | Autonomous agent-authored edits (`LLMAgent`) |
@@ -301,7 +306,7 @@ The Luhn validator task demonstrates how verifier over-reach introduces regressi
 
 ## 21. Known Judge Failure Modes
 
-Cataloged in [`benchmark/JUDGE_CORE_DEFECTS.md`](file:///c:/projects/the-judge/benchmark/JUDGE_CORE_DEFECTS.md):
+Catalogued in a document that is not included in this repository:
 - **DEFECT-001**: Parameter Type Contract Blindness in `property_engine.py` (blind float probes).
 - **DEFECT-002**: Arity Mismatch in Multi-Argument Function Property Probes.
 - **DEFECT-003**: Lack of Native Stagnation Guards in `repair_loop.py`.
@@ -345,11 +350,9 @@ py -3 benchmark/validate_agent_benchmark.py --results benchmark/results/agent
 
 ## 24. Raw Artifact Locations
 
-- **Real Trial Records**: `benchmark/results/agent/raw/`
+- **Trial Records (Agent Mode: test, simulated)**: `benchmark/results/agent/raw/`
 - **Legacy Simulation Archive**: `benchmark/results/agent_legacy_simulation/`
 - **Calibration Simulation**: `benchmark/results/agent_simulation/`
-- **Forensic Audit**: `benchmark/LEVEL2_AUDIT_REPORT.md`
-- **Core Defect Registry**: `benchmark/JUDGE_CORE_DEFECTS.md`
 
 ---
 

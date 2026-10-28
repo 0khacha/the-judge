@@ -4,9 +4,17 @@ Get started with The Judge in 5 minutes.
 
 ## Installation
 
+> **Install from GitHub.** The PyPI project named `the-judge` is an **unrelated
+> package** by another author. Use:
+> `pip install git+https://github.com/0khacha/the-judge.git`
+
 ```bash
-pip install the-judge
+pip install git+https://github.com/0khacha/the-judge.git
 ```
+
+mypy and ruff are **optional**. If they are on `PATH`, The Judge also runs them; if not,
+those checks are skipped and reported as a `tooling` finding with reduced confidence,
+and the decision is unaffected. To enable them: `pip install mypy ruff`.
 
 ## Basic Usage
 

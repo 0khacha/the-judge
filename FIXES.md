@@ -166,7 +166,7 @@ being clearly labeled as simulated in the directory structure.
 
 **Fix**: Added `SIMULATION_NOTICE.md` to the legacy simulation directory.
 The actual benchmark reports already contained methodology disclaimers.
-The existing `LEVEL2_AUDIT_REPORT.md` forensic audit explicitly documents
+A forensic audit (a document that is not included in this repository) explicitly documented
 that Level 2 did not run a real LLM agent.
 
 ---

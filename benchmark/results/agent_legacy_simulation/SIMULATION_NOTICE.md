@@ -18,9 +18,8 @@ agent.
 This directory preserves the legacy simulation run for reference. The
 deterministic benchmark (`../deterministic/`) is the methodologically sound
 evaluation. For real agent evaluation, see `../agent/` (which also ran in
-`test` mode — see `benchmark/LEVEL2_AUDIT_REPORT.md` for the forensic audit).
+`test` mode, so it is simulated as well).
 
 ## See Also
 
-- `benchmark/LEVEL2_AUDIT_REPORT.md` — Forensic audit of Level 2 methodology
 - `benchmark/results/deterministic/` — Deterministic benchmark (oracle patches)

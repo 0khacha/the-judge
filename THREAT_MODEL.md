@@ -45,9 +45,17 @@ It is:
 
 ### Current scope of auto-generated probes
 
-Auto-generated ("vocabulary-free") probes detect idempotency violations, state-isolation failures, boundary perturbation, expiration, capacity, uniqueness, and always-crashing code. They do **not** catch:
+Judge probes are heuristic and **keyword-triggered** (parameter and method names). Four
+remain: single-level rollback, expiration (TTL), capacity, and idempotency of
+str -> str sanitizers/normalizers. Each asserts something that fails on the defect it
+names, and an exception on a probe-invented input makes it not applicable rather than
+failing. They do **not** catch:
 
-- Semantic errors in numeric functions (e.g. `add(a, b)` returning `0` — wrong value, right type).
-- Multi-argument business logic that requires coordinated inputs to exercise.
+- Semantic errors in ordinary functions (a wrong comparison, rounding mode, constant
+  return value, missing validation, path traversal, race condition, nested
+  transaction bug): only tests that exercise the behaviour catch these.
+- Anything in code whose names do not match a trigger: the report lists the probe kinds
+  that did not run for each public symbol.
 
-See the [Known Limitations of Auto-Generated Probes](README.md#known-limitations-of-auto-generated-probes) section in README.md for the full table.
+See [Judge probes and known limitations](README.md#judge-probes-and-known-limitations)
+in README.md for the full table.

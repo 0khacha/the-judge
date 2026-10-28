@@ -1,4 +1,9 @@
-# Level 2 Evaluation: Real Coding-Agent A/B/C Benchmark Report
+# Level 2 Evaluation: Coding-Agent A/B/C Benchmark Report (SIMULATED run: scripted TestAgent)
+
+> **SIMULATED RUN.** The results in this report were produced with `Agent Mode: test`,
+> i.e. the scripted `TestAgent` (deterministic edits, constant per-turn token counts and
+> durations). No real coding agent or LLM was involved. The numbers are kept exactly as
+> recorded; they do not measure a real agent and should not be cited as such.
 
 _Generated: 2026-09-21T20:41:51Z | Model: `claude-3-5-sonnet-20241022` | Agent Mode: `test` | Runs/Trial: `1`_
 
@@ -7,14 +12,14 @@ _Generated: 2026-09-21T20:41:51Z | Model: `claude-3-5-sonnet-20241022` | Agent M
 ## 1. Executive Summary
 
 This benchmark evaluates **The Judge** integrated into an autonomous coding agent loop across 12 diverse software engineering tasks.
-Unlike the Level 1 deterministic benchmark (which uses static oracle scripts without LLM tokens), Level 2 measures real agent interactions, conversational turns, tool calling, token consumption, and cost dynamics.
+Unlike the Level 1 deterministic benchmark (which uses static oracle scripts without LLM tokens), Level 2 is designed to measure real agent interactions (this run used the scripted TestAgent instead), conversational turns, tool calling, token consumption, and cost dynamics.
 
 ### Key Findings:
 - **False PASS Elimination**: Baseline shipped 11 flawed implementations (91.7% False PASS rate). The Judge cut False PASSes down to **6** (66.7%), a **27.30% reduction**.
 - **Verified Correct Delivery**: Baseline achieved 8.3% correct delivery. The Judge achieved **25.0%**, recovering 3 defect categories that neither Baseline nor Generic Review could resolve.
-- **Real Token Overhead**: The Judge introduces an average of **6,549 tokens** per task vs **650 tokens** for Baseline (ratio: **10.08×**).
+- **Simulated Token Overhead**: The Judge introduces an average of **6,549 tokens** per task vs **650 tokens** for Baseline (ratio: **10.08×**).
 - **Economic Cost**: Mean cost per task was **$0.0037** for Baseline vs **$0.0138** for The Judge (+$0.0100/task).
-- **Identified Defect**: `11_luhn_validator` suffered an engine-level regression due to type contract violation in challenge synthesis, which is formally cataloged in `JUDGE_CORE_DEFECTS.md`.
+- **Identified Defect**: `11_luhn_validator` suffered an engine-level regression due to type contract violation in challenge synthesis, which was catalogued in a document that is not included in this repository.
 
 ## 2. Experimental Design & Methodology
 
@@ -72,7 +77,7 @@ The Judge's verification engine checks contracts that traditional unit tests can
 - **Timing & Expiration Contracts**: `07_lru_cache_ttl` verified that stale cache keys are evicted on access and upon capacity saturation, preventing memory leakage.
 - **Idempotency & Retry Jitter**: `06_http_retry_client` verified exponential backoff behavior without mocking away actual timing boundaries.
 
-## 7. Token Usage & Cost Accounting (Real Tokens)
+## 7. Token Usage & Cost Accounting (simulated: scripted TestAgent token counts)
 
 | Token & Cost Metric | Baseline (A) | Generic Review (B) | The Judge (C) |
 |---|---|---|---|
@@ -103,7 +108,7 @@ The Judge's verification engine checks contracts that traditional unit tests can
 2. `observed` vs `expected`: Gives concrete counterexamples instead of vague failures.
 3. `suggested_focus`: Pinpoints the exact module or invariant to correct.
 
-## 11. Challenge Synthesis Impact on Real Agents
+## 11. Challenge Synthesis Impact (simulated run)
 
 Dynamic challenge synthesis forces agents to generalize beyond static test cases. However, synthesis must respect parameter type annotations. When synthesis violates contracts (e.g. passing floats to strings), it creates unresolvable agent roadblocks.
 
@@ -111,7 +116,7 @@ Dynamic challenge synthesis forces agents to generalize beyond static test cases
 
 > [!WARNING]
 > **Confirmed Regression**: `11_luhn_validator`
-> The agent implementation correctly passed baseline and hidden ground truth tests, but was rejected by The Judge due to challenge synthesis type mismatch. Registered as DEFECT-001 in `benchmark/JUDGE_CORE_DEFECTS.md`.
+> The agent implementation correctly passed baseline and hidden ground truth tests, but was rejected by The Judge due to challenge synthesis type mismatch. Registered as DEFECT-001 in a document that is not included in this repository.
 
 ## 13. Model Sensitivity Analysis
 
@@ -145,7 +150,7 @@ The Judge protects against common agent deception modes:
 
 ## 18. Recommendations for The Judge Core Improvement
 
-As documented in `benchmark/JUDGE_CORE_DEFECTS.md`:
+As documented in a document that is not included in this repository:
 1. **DEFECT-001**: Type-inspect parameters before synthesizing boundary probes in `property_engine.py`.
 2. **DEFECT-002**: Validate function arity to avoid passing single float arguments to multi-argument functions.
 3. **DEFECT-003**: Native stagnation detection in `repair_loop.py` to prevent repeated rounds with identical findings.

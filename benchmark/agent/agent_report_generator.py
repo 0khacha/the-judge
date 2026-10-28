@@ -43,7 +43,18 @@ def generate_agent_report(
     lines: List[str] = []
 
     # Title & Metadata
-    lines.append("# Level 2 Evaluation: Real Coding-Agent A/B/C Benchmark Report")
+    if mode == "real":
+        lines.append("# Level 2 Evaluation: Real Coding-Agent A/B/C Benchmark Report")
+    else:
+        lines.append(
+            "# Level 2 Evaluation: Coding-Agent A/B/C Benchmark Report "
+            "(SIMULATED run: scripted TestAgent)"
+        )
+        lines.append("")
+        lines.append(
+            "> **SIMULATED RUN.** Produced with the scripted `TestAgent` (deterministic edits, "
+            "constant token counts and durations). It does not measure a real coding agent."
+        )
     lines.append(f"\n_Generated: {ts} | Mode: `{mode.upper()}` | Provider: `{provider}` | Model: `{model}` | Runs/Trial: `{runs}`_\n")
     lines.append("---")
     lines.append("")
@@ -239,7 +250,7 @@ def generate_agent_report(
     # Section 21: Judge Failure Modes
     lines.append("## 21. Known Judge Failure Modes")
     lines.append("")
-    lines.append("Documented in `benchmark/JUDGE_CORE_DEFECTS.md`:")
+    lines.append("Known defects at the time of this run:")
     lines.append("1. **DEFECT-001**: Parameter Type Contract Blindness in `property_engine.py`.")
     lines.append("2. **DEFECT-002**: Arity Mismatch in Multi-Argument Function Invocation.")
     lines.append("3. **DEFECT-003**: Core Stagnation Loop Lack of Progress Detection.")
@@ -272,7 +283,6 @@ def generate_agent_report(
     lines.append("- Raw Trial JSONL: `benchmark/results/agent/raw/`")
     lines.append("- Condition Summaries: `benchmark/results/agent/summaries/`")
     lines.append("- Comparison Metrics: `benchmark/results/agent/metrics/`")
-    lines.append("- Forensic Audit: `benchmark/LEVEL2_AUDIT_REPORT.md`")
     lines.append("")
 
     # Section 25: Conclusions

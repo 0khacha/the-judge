@@ -109,7 +109,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install The Judge
-        run: pip install the-judge
+        run: pip install git+https://github.com/0khacha/the-judge.git
 
       - name: Execute Verification Gate
         run: judge verify . --json

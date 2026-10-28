@@ -12,16 +12,19 @@
 </p>
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/0khacha/the-judge?style=flat" alt="License"></a>
-  <a href="https://pypi.org/project/the-judge/"><img src="https://img.shields.io/pypi/v/the-judge?style=flat" alt="PyPI"></a>
-  <a href="https://pypi.org/project/the-judge/"><img src="https://img.shields.io/pypi/pyversions/the-judge?style=flat" alt="Python"></a>
+  <img src="https://img.shields.io/badge/python-3.9%2B-blue?style=flat" alt="Python 3.9+">
 </p>
 
 ## Install
 
+> **Install from GitHub.** The PyPI project named `the-judge` is an **unrelated
+> package** by another author. Use:
+> `pip install git+https://github.com/0khacha/the-judge.git`
+
 Copy/paste into your AI assistant prompt:
 
 ```text
-Run `pip install the-judge` to install the verification tool, then read
+Run `pip install git+https://github.com/0khacha/the-judge.git` to install the verification tool, then read
 AGENTS.md at https://raw.githubusercontent.com/0khacha/the-judge/main/AGENTS.md
 for the verification-repair loop protocol. After every critical code change,
 run `judge verify . --json` and act on the findings.
@@ -30,8 +33,12 @@ run `judge verify . --json` and act on the findings.
 Or install directly:
 
 ```bash
-pip install the-judge
+pip install git+https://github.com/0khacha/the-judge.git
 ```
+
+mypy and ruff are **optional**. If they are on `PATH`, The Judge also runs them; if not,
+those checks are skipped and reported as a `tooling` finding with reduced confidence,
+and the decision is unaffected. To enable them: `pip install mypy ruff`.
 
 Check the [installation instructions](INSTALL.md) for Claude Code, Cursor, Windsurf, Codex, Git hooks, VS Code, and CI/CD.
 

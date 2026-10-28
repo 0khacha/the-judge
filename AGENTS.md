@@ -2,6 +2,10 @@
 
 This file is the map for AI coding agents working with [The Judge](https://github.com/0khacha/the-judge). Read it after installing or cloning the repository. It defines the verification-repair loop protocol that agents must follow after each critical round of code changes.
 
+> **Install from GitHub.** The PyPI project named `the-judge` is an **unrelated
+> package** by another author. Use:
+> `pip install git+https://github.com/0khacha/the-judge.git`
+
 ## Start here
 
 1. Read `README.md` for the purpose and user-facing behavior.
