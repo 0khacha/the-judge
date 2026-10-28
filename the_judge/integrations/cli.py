@@ -32,6 +32,11 @@ def main(args_list=None) -> int:
         "--task-spec", type=str, default=None, help="Path to specification file (JSON or YAML)"
     )
     verify_parser.add_argument(
+        "--no-history",
+        action="store_true",
+        help="Do not record this run in .judge/history.json (no regression/stuck tracking)",
+    )
+    verify_parser.add_argument(
         "--baseline",
         type=str,
         default=None,
@@ -213,6 +218,7 @@ def main(args_list=None) -> int:
             workspace=workspace_path,
             task_spec=task_spec_dict,
             baseline=getattr(args, "baseline", None),
+            record_history=not getattr(args, "no_history", False),
         )
     except Exception as e:
         if is_json:
@@ -807,6 +813,24 @@ def _print_human_readable_result(workspace_path: str, result: Any) -> None:
     print(f"DECISION: {result.decision}")
     print(f"Numeric Trust Score: {result.numeric_score} / 100.0")
     print()
+
+    loop = result.loop or {}
+    if loop:
+        print(f"Iteration {loop.get('iteration')}: regressions {loop.get('regressions') or 'none'}, "
+              f"newly passing {loop.get('newly_passing') or 'none'}"
+              + (f", STUCK ({loop.get('stuck_reason')})" if loop.get("stuck") else ""))
+        print()
+    if result.next_actions:
+        print("NEXT ACTIONS")
+        print("------------")
+        for a in result.next_actions:
+            line = f"  {a['step']}. [{a['action']}] {a['detail']}"
+            if a.get("test"):
+                line += f"  (test: {a['test']})"
+            print(line)
+            if a.get("command"):
+                print(f"       run: {a['command']}")
+        print()
 
     if result.decision == "FAIL":
         print("FINDINGS:")

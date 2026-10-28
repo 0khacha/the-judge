@@ -81,6 +81,7 @@ def verify(
     agent_claims: Optional[dict[str, Any]] = None,
     _ground_truth: Optional[dict[str, Any]] = None,
     baseline: Optional[str] = None,
+    record_history: bool = False,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
     and adversarial integrity gates.
@@ -95,6 +96,9 @@ def verify(
             self-verification.
         _ground_truth: Pre-captured evidence dict. When provided, skips capture_evidence()
             (used by critique() to avoid running the sandbox twice).
+        record_history: record this verification in <workspace>/.judge/history.json and
+            compare it with the previous one (regressions, progress, stuck). The CLI
+            enables this by default.
         baseline: git ref to compare the workspace tests against for tampering
             (deleted tests, removed assertions, added skips). Defaults to HEAD when
             the workspace is a git repository.
@@ -193,6 +197,14 @@ def verify(
     contract_engine = ContractEngine(task_spec=task_spec)
     contract_eval = contract_engine.evaluate_contract_coverage(ground_truth, findings_dict)
     ground_truth["contract_data"] = contract_eval
+
+    from the_judge.core import history
+
+    history_dir = workspace_path if os.path.isdir(workspace_path) else os.path.dirname(workspace_path)
+    if record_history and previous_evidence is None:
+        prev = history.previous(history_dir)
+        if prev:
+            previous_evidence = {"test_suite": {"passed_tests": prev["passed"]}}
 
     # 4. Evaluate using score engine hard gates and trust profile engine
     eval_output = evaluate(
@@ -411,8 +423,13 @@ def verify(
     from the_judge.core.next_actions import build as build_next_actions
 
     decision = eval_output.get("verdict", "ABSTAIN")
+    loop = None
+    if record_history:
+        loop = history.record(history_dir, decision, passed_tests, failed_tests,
+                              eval_output.get("blocking_issues", []))
     return VerificationResult(
-        next_actions=build_next_actions(decision, eval_output, ground_truth),
+        next_actions=build_next_actions(decision, eval_output, ground_truth, loop=loop),
+        loop=loop,
         decision=decision,
         numeric_score=eval_output.get("numeric_score", 0.0),
         trust_profile=ev_cov,
