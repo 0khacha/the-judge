@@ -62,7 +62,11 @@ def test_score_engine_unavailable_tools_are_info_not_abstain():
                       linter={"available": True, "exit_code": 0, "error_count": 0})
     report = evaluate({}, evidence)
     assert report["verdict"] == "PASS", report["insufficient_evidence_notes"]
-    assert report["numeric_score"] < evaluate({}, with_tools)["numeric_score"]
+    # Reduced confidence, reported as INFO; the decision is unaffected.
+    full = evaluate({}, with_tools)
+    assert (report["evidence_coverage"]["evidence_level"]
+            < full["evidence_coverage"]["evidence_level"])
+    assert any(n.startswith("INFO:") for n in report["insufficient_evidence_notes"])
 
 
 def test_type_checker_nonzero_exit_without_errors_does_not_fail():

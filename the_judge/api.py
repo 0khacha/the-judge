@@ -252,6 +252,24 @@ def verify(
                 )
             )
 
+    # Optional tools that were not run: always reported, never decisive.
+    for tool_key, label, install in (
+        ("type_checker", "mypy", "pip install mypy"),
+        ("linter", "linter", "pip install ruff"),
+    ):
+        if not ground_truth.get(tool_key, {}).get("available", True):
+            structured_findings.append(
+                Finding(
+                    id=f"TOOL-{len([f for f in structured_findings if f.category == 'tooling']) + 1:03d}",
+                    category="tooling",
+                    severity="low",
+                    description=f"{label} not found on PATH; that check was not run, so "
+                    "confidence (evidence level) is reduced. The decision is unaffected.",
+                    property_name=label,
+                    suggested_focus=f"Optional: {install} for static checks.",
+                )
+            )
+
     # Map insufficient evidence notes as low/medium informational findings if ABSTAIN
     if eval_output.get("verdict") == "ABSTAIN":
         for idx, note in enumerate(eval_output.get("insufficient_evidence_notes", []), 1):

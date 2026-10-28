@@ -4,7 +4,9 @@ import ast as _ast_module
 import json
 import os
 import re
+import shutil
 import subprocess
+import tempfile
 import time
 from typing import Any, Optional
 
@@ -115,6 +117,54 @@ def run_command(cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None) 
             "stderr": str(e),
             "error": str(e),
         }
+
+
+def _run_type_checker(abs_dir: str, cache_dir: str) -> dict[str, Any]:
+    if shutil.which("mypy") is None:
+        return {"exit_code": -1, "error_count": 0, "raw_output": "", "available": False,
+                "tool": "mypy"}
+    res = run_command(
+        ["mypy", "--ignore-missing-imports", "--follow-imports=skip",
+         "--cache-dir", os.path.join(cache_dir, "mypy"), "."],
+        cwd=abs_dir,
+    )
+    if res["exit_code"] == -1:
+        return {"exit_code": -1, "error_count": 0, "raw_output": res["stderr"][:2048],
+                "available": False, "tool": "mypy"}
+    # Only genuine "file:line: error:" lines count. mypy also exits non-zero for
+    # configuration problems (exit 2), which are not type errors in the target code.
+    err_cnt = len(re.findall(r": error:", res["stdout"]))
+    return {
+        "exit_code": res["exit_code"],
+        "error_count": err_cnt,
+        "raw_output": (res["stdout"] + res["stderr"])[:2048],
+        "available": True,
+        "tool": "mypy",
+    }
+
+
+def _run_linter(abs_dir: str) -> dict[str, Any]:
+    if shutil.which("ruff") is not None:
+        cmd, tool = ["ruff", "check", ".", "--no-cache", "--output-format=concise"], "ruff"
+    elif shutil.which("flake8") is not None:
+        cmd, tool = ["flake8", "."], "flake8"
+    else:
+        return {"exit_code": -1, "error_count": 0, "raw_output": "", "available": False,
+                "tool": None}
+    res = run_command(cmd, cwd=abs_dir)
+    if res["exit_code"] == -1:
+        return {"exit_code": -1, "error_count": 0, "raw_output": res["stderr"][:2048],
+                "available": False, "tool": tool}
+    err_cnt = len(re.findall(r"^.+?:\d+:\d+: ", res["stdout"], flags=re.MULTILINE))
+    if err_cnt == 0 and res["exit_code"] != 0:
+        err_cnt = 1
+    return {
+        "exit_code": res["exit_code"],
+        "error_count": err_cnt,
+        "raw_output": res["stdout"][:2048],
+        "available": True,
+        "tool": tool,
+    }
 
 
 def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> dict[str, Any]:
@@ -253,41 +303,13 @@ def capture_evidence(
         "raw_stderr": sandbox_res["stderr"][:4096],
     }
 
-    # 3. Type checker check
-    type_res = run_command(
-        ["mypy", "--ignore-missing-imports", "--follow-imports=skip", "."], cwd=abs_dir
-    )
-    err_cnt = 0
-    if type_res["exit_code"] != 0 and type_res["exit_code"] != -1:
-        err_cnt = len(re.findall(r": error:", type_res["stdout"]))
-        if err_cnt == 0 and "error" in type_res["stdout"].lower():
-            err_cnt = 1
-
-    type_checker_data = {
-        "exit_code": type_res["exit_code"],
-        "error_count": err_cnt,
-        "raw_output": type_res["stdout"][:2048],
-        "available": type_res["exit_code"] != -1,
-    }
-
-    # 4. Linter check
-    linter_res = run_command(["ruff", "check", ".", "--output-format=text"], cwd=abs_dir)
-    if linter_res["exit_code"] == -1:
-        linter_res = run_command(["flake8", "."], cwd=abs_dir)
-        
-    if linter_res["exit_code"] == -1:
-        linter_data = {"exit_code": -1, "error_count": 0, "raw_output": "", "available": False}
-    else:
-        # Simple error count heuristic
-        linter_err_cnt = len([line for line in linter_res["stdout"].splitlines() if ":" in line])
-        if linter_err_cnt == 0 and linter_res["exit_code"] != 0:
-            linter_err_cnt = 1
-        linter_data = {
-            "exit_code": linter_res["exit_code"],
-            "error_count": linter_err_cnt,
-            "raw_output": linter_res["stdout"][:2048],
-            "available": True,
-        }
+    # 3/4. Optional static tools (discovered on PATH). A missing tool is reported as
+    # unavailable; the score engine treats that as information, not as a blocker.
+    # Caches are redirected to a throwaway directory so nothing is left in the
+    # user's workspace.
+    with tempfile.TemporaryDirectory() as tool_cache:
+        type_checker_data = _run_type_checker(abs_dir, tool_cache)
+        linter_data = _run_linter(abs_dir)
 
     # 5. Build test provenance mapping
     candidate_conf = {}

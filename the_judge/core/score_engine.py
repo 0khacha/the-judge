@@ -36,11 +36,21 @@ def evaluate(
         blocking_issues.append(f"Test suite failure: {failed_str}")
 
     # --- Hard Gate 2: Type-check errors ---
+    # Optional tools never decide the verdict by their absence: an unavailable tool
+    # is reported as INFO and lowers the numeric score only. Only actual type errors
+    # block; a non-zero mypy exit without error lines (e.g. a config problem) is INFO.
     if not type_checker.get("available", True):
-        insufficient_evidence_notes.append("ABSTAIN Level 1 (Tooling Gate): Type checker unavailable.")
-    elif type_checker.get("exit_code", 0) != 0 or type_checker.get("error_count", 0) > 0:
+        insufficient_evidence_notes.append(
+            "INFO: Type checker (mypy) not found on PATH; type checking was not run, "
+            "so confidence is reduced. Install with `pip install mypy`."
+        )
+    elif type_checker.get("error_count", 0) > 0:
         err_cnt = type_checker.get("error_count", 1)
         blocking_issues.append(f"Type checker failed with {err_cnt} error(s)")
+    elif type_checker.get("exit_code", 0) != 0:
+        insufficient_evidence_notes.append(
+            "INFO: Type checker exited non-zero without reporting type errors; see its output."
+        )
 
     # --- Hard Gate 3: Security notes with severity 'blocking' ---
     for sec in findings.get("security_notes", []):
@@ -308,7 +318,7 @@ def evaluate(
 
     if len(blocking_issues) > 0:
         verdict = "FAIL"
-    elif len(insufficient_evidence_notes) > 0 or evidence_level < 2:
+    elif any(not n.startswith("INFO:") for n in insufficient_evidence_notes) or evidence_level < 2:
         verdict = "ABSTAIN"
     else:
         verdict = "PASS"
@@ -327,8 +337,11 @@ def evaluate(
 
     linter_errs = linter.get("error_count", 0)
     if not linter.get("available", True):
-        linter_score = 100.0
-        insufficient_evidence_notes.append("Linter unavailable, scoring 100% with a warning.")
+        linter_score = 0.0
+        insufficient_evidence_notes.append(
+            "INFO: Linter (ruff or flake8) not found on PATH; linting was not run, "
+            "so confidence is reduced. Install with `pip install ruff`."
+        )
     else:
         linter_score = (
             100.0 if linter.get("exit_code", 0) == 0 else max(0.0, 100.0 - linter_errs * 10.0)
@@ -358,15 +371,22 @@ def evaluate(
             cq_penalty += 10.0
     cq_score = max(0.0, 100.0 - cq_penalty)
 
+    # Components that were not measured (tool not installed) are left out and the
+    # remaining weights renormalised: a missing optional tool lowers confidence
+    # (evidence level 2 instead of 3, plus a tooling finding), not the score, so
+    # score thresholds such as `judge improve --target-score` stay reachable.
+    components = [
+        (0.40, test_score, True),
+        (0.15, req_score, True),
+        (0.15, linter_score, linter.get("available", True)),
+        (0.10, type_score, type_checker.get("available", True)),
+        (0.10, edge_score, True),
+        (0.05, sec_score, True),
+        (0.05, cq_score, True),
+    ]
+    measured_weight = sum(w for w, _, measured in components if measured)
     weighted_numeric_score = round(
-        0.40 * test_score
-        + 0.15 * req_score
-        + 0.15 * linter_score
-        + 0.10 * type_score
-        + 0.10 * edge_score
-        + 0.05 * sec_score
-        + 0.05 * cq_score,
-        2,
+        sum(w * v for w, v, measured in components if measured) / measured_weight, 2
     )
 
     # Decision-based score cap: numeric score must not exceed the ceiling

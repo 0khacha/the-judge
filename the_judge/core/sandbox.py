@@ -151,10 +151,17 @@ class SandboxRunner:
                 created_files.append(filepath)
                 initial_hashes[safe_name] = hashlib.sha256(code.encode("utf-8")).hexdigest()
 
-            env = {"PYTHONPATH": abs_task_dir + os.pathsep + os.environ.get("PYTHONPATH", "")}
+            env = {
+                "PYTHONPATH": abs_task_dir + os.pathsep + os.environ.get("PYTHONPATH", ""),
+                # Importing workspace modules must not leave __pycache__ behind.
+                "PYTHONDONTWRITEBYTECODE": "1",
+            }
 
             junitxml_path = os.path.join(temp_dir, "junit.xml")
-            cmd = [sys.executable, "-m", "pytest", "-vv", f"--junitxml={junitxml_path}"]
+            cmd = [
+                sys.executable, "-m", "pytest", "-vv", "-p", "no:cacheprovider",
+                f"--junitxml={junitxml_path}",
+            ]
             if pytest_args:
                 cmd.extend(pytest_args)
             cmd.append(temp_dir)

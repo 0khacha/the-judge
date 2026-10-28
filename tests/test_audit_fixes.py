@@ -269,8 +269,10 @@ class TestDeadGates:
             "linter": {"available": True, "exit_code": 0, "error_count": 0}
         }
         report = evaluate({}, evidence)
-        assert report["verdict"] == "ABSTAIN"
-        assert any("Type checker unavailable" in note for note in report["insufficient_evidence_notes"])
+        # P0-2: a missing type checker is reported as INFO; it does not decide the verdict.
+        notes = report["insufficient_evidence_notes"]
+        assert any(n.startswith("INFO:") and "mypy" in n for n in notes)
+        assert not any("ABSTAIN" in n and "ype checker" in n for n in notes)
 
     def test_linter_unavailable_generates_proper_metadata(self):
         evidence = {
@@ -279,8 +281,9 @@ class TestDeadGates:
             "linter": {"available": False, "exit_code": -1, "error_count": 0}
         }
         report = evaluate({}, evidence)
-        assert report["score_breakdown"]["linter"] == 100.0
-        assert any("Linter unavailable" in note for note in report["insufficient_evidence_notes"])
+        # P0-2: a linter that was not run is reported as INFO and excluded from the score.
+        assert report["score_breakdown"]["linter"] == 0.0
+        assert any(n.startswith("INFO:") and "Linter" in n for n in report["insufficient_evidence_notes"])
 
 
 class TestResultParsing:
