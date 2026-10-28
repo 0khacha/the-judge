@@ -36,7 +36,7 @@ benchmark_abc/
 ### Setup
 
 ```bash
-pip install git+https://github.com/0khacha/the-judge.git  # or: pip install -e .
+pip install the-judge-verify  # or: pip install -e .
 pip install pytest
 ```
 

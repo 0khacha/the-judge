@@ -133,7 +133,7 @@ jobs:
         python-version: '3.11'
     
     - name: Install The Judge
-      run: pip install git+https://github.com/0khacha/the-judge.git
+      run: pip install the-judge-verify
     
     - name: Verify Code
       run: judge verify . --json

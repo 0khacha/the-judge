@@ -1,9 +1,8 @@
 # How to install
 
-> **Install from GitHub.** The PyPI project named `the-judge` is an **unrelated
-> package** by another author. This project's distribution name is
-> `the-judge-verify` (not yet on PyPI). Until it is published, install from git:
-> `pip install git+https://github.com/0khacha/the-judge.git`
+> **Install `the-judge-verify`.** The PyPI project named `the-judge` is an
+> **unrelated package** by another author:
+> `pip install the-judge-verify`
 
 mypy and ruff are **optional**. If they are on `PATH`, The Judge also runs them; if not,
 those checks are skipped and reported as a `tooling` finding with reduced confidence,
@@ -15,7 +14,7 @@ and the decision is unaffected. To enable them: `pip install mypy ruff`.
 ### Install
 
 ```bash
-pip install git+https://github.com/0khacha/the-judge.git
+pip install the-judge-verify
 ```
 
 ### Verify
@@ -28,7 +27,7 @@ judge verify .
 ### Update
 
 ```bash
-pip install --upgrade the-judge
+pip install --upgrade the-judge-verify
 ```
 
 ### Uninstall
@@ -47,7 +46,7 @@ pip uninstall the-judge-verify
 Copy/paste into your Claude Code prompt:
 
 ```text
-Run `pip install git+https://github.com/0khacha/the-judge.git` to install the verification tool, then read
+Run `pip install the-judge-verify` to install the verification tool, then read
 AGENTS.md at https://raw.githubusercontent.com/0khacha/the-judge/main/AGENTS.md
 for the verification-repair loop protocol. After every critical code change,
 run `judge verify . --json` and act on the findings.
@@ -82,7 +81,7 @@ After every code change, run `judge verify . --json`. If FAIL, fix the findings 
 
 ### Install
 
-1. Install the package: `pip install git+https://github.com/0khacha/the-judge.git`
+1. Install the package: `pip install the-judge-verify`
 2. Copy `AGENTS.md` to your project root:
 
 ```bash
@@ -110,7 +109,7 @@ Then `Ctrl+Shift+P` -> `Tasks: Run Task` -> `Judge: Verify Workspace`.
 
 ### Install
 
-1. Install the package: `pip install git+https://github.com/0khacha/the-judge.git`
+1. Install the package: `pip install the-judge-verify`
 2. Add `AGENTS.md` to your project root.
 
 Windsurf reads `AGENTS.md` and follows the verification-repair loop automatically.
@@ -128,7 +127,7 @@ judge verify .
 
 ### Install
 
-1. Install the package: `pip install git+https://github.com/0khacha/the-judge.git`
+1. Install the package: `pip install the-judge-verify`
 2. Add `AGENTS.md` to your project root or `~/.codex/AGENTS.md` for global use.
 
 ### Verify
@@ -147,7 +146,7 @@ Codex parses JSON output and uses `findings[].suggested_focus` for repairs.
 ### Install
 
 ```bash
-pip install git+https://github.com/0khacha/the-judge.git
+pip install the-judge-verify
 ```
 
 Add `AGENTS.md` to your project root. Antigravity auto-discovers it.
@@ -240,7 +239,7 @@ judge watch . --debounce 3    # 3-second debounce (default: 2)
 ### Install
 
 ```bash
-pip install git+https://github.com/0khacha/the-judge.git
+pip install the-judge-verify
 ```
 
 ### Use
@@ -282,7 +281,7 @@ result = loop.run_repair_loop(".", agent_repair_func=my_repair_fn)
 
 ```yaml
 - name: Install The Judge
-  run: pip install git+https://github.com/0khacha/the-judge.git
+  run: pip install the-judge-verify
 
 - name: Verify
   run: judge verify . --json
