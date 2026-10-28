@@ -16,7 +16,10 @@ import pytest
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GIT_INSTALL = "git+https://github.com/0khacha/the-judge.git"
-PYPI_INSTALL = re.compile(r"pip install\s+[\"']?the[-_]judge(\[[^\]]*\])?[\"']?(?![\w.+/-])")
+# `pip install [flags such as --upgrade / -U] the-judge[extras]`, i.e. the other package.
+PYPI_INSTALL = re.compile(
+    r"pip3? install(\s+-{1,2}[\w-]+)*\s+[\"']?the[-_]judge(\[[^\]]*\])?[\"']?(?![\w.+/-])"
+)
 
 
 def _tracked(*suffixes):
