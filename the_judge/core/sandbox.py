@@ -80,6 +80,10 @@ class SandboxRunner:
                 cmd,
                 cwd=cwd,
                 env=clean_env,
+                # Never inherit the parent's stdin: under pytest capture on Windows
+                # it can be an invalid handle (WinError 6), and target code must not
+                # be able to read from the controller's terminal anyway.
+                stdin=subprocess.DEVNULL,
                 capture_output=True,
                 text=True,
                 timeout=timeout,

@@ -97,6 +97,7 @@ def run_command(cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None) 
             cmd,
             cwd=cwd,
             env=env,
+            stdin=subprocess.DEVNULL,
             capture_output=True,
             text=True,
             timeout=60,
