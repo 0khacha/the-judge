@@ -92,3 +92,19 @@ def test_src_layout_is_importable(tmp_path):
     result = judge(ws)
     assert "test_add_src" in str(result.trust_profile["requirement_checks"])
     assert result.provenance["failed_tests"] == 0, result.blocking_issues
+
+
+def test_same_basename_in_two_dirs_and_at_root_all_run(tmp_path):
+    # Both copies must be collected as distinct modules, and a root-level test must
+    # not be shadowed by the identically named original on PYTHONPATH.
+    ws = write(tmp_path, {
+        "calc.py": "def add(a, b):\n    return a + b\n",
+        "test_calc.py": "from calc import add\ndef test_root():\n    assert add(1, 1) == 2\n",
+        "tests/unit/test_calc.py": "from calc import add\ndef test_unit():\n    assert add(1, 2) == 3\n",
+        "tests/integ/test_calc.py": "from calc import add\ndef test_integ():\n    assert add(2, 2) == 4\n",
+    })
+    for _ in range(3):
+        result = judge(ws)
+        checks = str(result.trust_profile["requirement_checks"])
+        assert result.provenance["failed_tests"] == 0, result.blocking_issues
+        assert all(name in checks for name in ("test_root", "test_unit", "test_integ"))
