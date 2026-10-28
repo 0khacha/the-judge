@@ -15,6 +15,30 @@ import uuid
 from typing import Any, Optional
 
 
+# Appended to the sandbox's root conftest. A test phase that raised (other than
+# pytest.skip) can never legitimately be reported as passed; if a plugin or workspace
+# conftest rewrote it, the real outcome is restored and the test is recorded.
+_OUTCOME_GUARD = '''
+_RAISED = set()
+_TAMPER_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_outcome_tamper.txt")
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    if call.excinfo is not None and not call.excinfo.errisinstance(pytest.skip.Exception):
+        _RAISED.add((item.nodeid, call.when))
+    yield
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_runtest_logreport(report):
+    if (report.nodeid, report.when) in _RAISED and report.passed:
+        report.outcome = "failed"
+        with open(_TAMPER_LOG, "a", encoding="utf-8") as f:
+            f.write(report.nodeid.rsplit("::", 1)[-1] + "\\n")
+'''
+
+
 class SandboxRunner:
     """Isolated subprocess runner for executing untrusted target code and tests."""
 
@@ -150,6 +174,7 @@ class SandboxRunner:
                     "    for k in list(os.environ.keys()):\n"
                     "        if k.startswith('JUDGE_') or k.startswith('BENCHMARK_'):\n"
                     "            os.environ.pop(k, None)\n"
+                    + _OUTCOME_GUARD
                 )
 
             import hashlib
@@ -264,6 +289,12 @@ class SandboxRunner:
                                 bucket.append(test_name)
                             break
 
+            outcome_tampered: list[str] = []
+            tamper_log = os.path.join(temp_dir, "_outcome_tamper.txt")
+            if os.path.exists(tamper_log):
+                with open(tamper_log, encoding="utf-8") as f:
+                    outcome_tampered = sorted({ln.strip() for ln in f if ln.strip()})
+
             # pytest that never got as far as writing its report did not run any
             # test: an infrastructure problem (e.g. pytest not installed for this
             # interpreter), not a test failure and not evidence of tampering.
@@ -282,6 +313,7 @@ class SandboxRunner:
                 "failed": failed_tests,
                 "skipped": skipped_tests,
                 "failure_messages": failure_messages,
+                "outcome_tampered": outcome_tampered,
                 "runner_error": runner_error,
                 "file_tampered": file_tampered,
                 "stdout": res["stdout"],

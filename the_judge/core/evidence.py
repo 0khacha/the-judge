@@ -12,7 +12,9 @@ import uuid
 from typing import Any, Optional
 
 from .baseline import compare_tests_to_baseline
+from .hardcoding import detect as detect_hardcoding
 from .independence import classify as classify_independence
+from .independence import source_files as implementation_files
 from .behavior_engine import BehaviorEngine
 from .property_engine import generate_property_tests, untriggered_probes
 from .sandbox import SandboxRunner
@@ -381,6 +383,8 @@ def capture_evidence(
         "runner_error": runner_error,
         # Assertion message per failing test (what was expected vs. observed).
         "errors": sandbox_res.get("failure_messages", {}),
+        # Tests that raised but were reported as passed by some plugin/conftest.
+        "outcome_tampered": sandbox_res.get("outcome_tampered", []),
         # pytest exit code 5: it ran but collected nothing (no tests, no probes).
         "no_tests_collected": (
             not runner_error and sandbox_res["exit_code"] == 5
@@ -474,6 +478,8 @@ def capture_evidence(
             content = f.read()
         vacuous_tests.extend(_detect_vacuous_tests(content, workspace_modules))
 
+    independence = classify_independence(abs_dir, test_tampering)
+
     evidence_data = {
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "workspace_dir": abs_dir,
@@ -483,7 +489,9 @@ def capture_evidence(
         "test_provenance": test_provenance,
         "vacuous_tests": vacuous_tests,
         "test_tampering": test_tampering,
-        "independence": classify_independence(abs_dir, test_tampering),
+        "independence": independence,
+        "hardcoding": detect_hardcoding(abs_dir, visible_tests, sorted(implementation_files(abs_dir)),
+                                        set(independence["independent"])),
         "probe_coverage": probe_coverage,
         "challenge_manifest": {
             "expected_challenges": expected_challenges,

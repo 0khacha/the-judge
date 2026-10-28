@@ -273,6 +273,17 @@ def verify(
                 "instead. If the test change is intended, commit it or pass --baseline <ref>.",
             )
         )
+    for name in test_suite.get("outcome_tampered", []):
+        structured_findings.append(
+            Finding(
+                id=f"TAMPER-R{len([f for f in structured_findings if f.category == 'tampering']) + 1:02d}",
+                category="tampering",
+                severity="blocking",
+                description=f"Result of {name} was rewritten from failed to passed by a conftest/plugin hook",
+                property_name=name,
+                suggested_focus="Remove the hook that alters test outcomes and fix the code.",
+            )
+        )
     frozen_issues = ground_truth.get("independence", {}).get("tampering", [])
     for idx, issue in enumerate(frozen_issues, len(tampering.get("issues", [])) + 1):
         structured_findings.append(

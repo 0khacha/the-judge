@@ -158,10 +158,28 @@ def evaluate(
             f"TEST TAMPERING DETECTED (vs {tampering.get('ref', 'HEAD')}): {issue['detail']}"
         )
 
+    # --- Hard Gate 7b2: a plugin/conftest rewrote a failing outcome as passed ---
+    rewritten = test_suite.get("outcome_tampered", [])
+    if rewritten:
+        blocking_issues.append(
+            "TEST TAMPERING DETECTED (result rewriting): test(s) raised but were reported as "
+            "passed by a conftest/plugin hook: " + ", ".join(rewritten)
+        )
+
     # --- Hard Gate 7c: frozen tests weakened or deleted since `judge freeze` ---
     independence = evidence.get("independence", {})
     for issue in independence.get("tampering", []):
         blocking_issues.append(f"TEST TAMPERING DETECTED (vs judge freeze): {issue['detail']}")
+
+    # --- Gate 7e: implementation hard-codes the independent tests' expected outputs ---
+    hard = evidence.get("hardcoding", {})
+    if hard.get("suspected"):
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 1 (Hard-coded Outputs): every literal assertion in the independent "
+            f"tests ({hard.get('literal_assertions')}) is answered by a literal table or if-chain "
+            "in the implementation (e.g. " + "; ".join(hard.get("examples", [])) + "). PASS is "
+            "withheld until a test with inputs that are not in those literals passes."
+        )
 
     # --- Gate 7d: Skipped / xfail workspace tests prove nothing ---
     skipped_workspace = test_suite.get("skipped_tests", [])
