@@ -1,0 +1,27 @@
+{
+  "task": "09_ttl_lru_cache",
+  "description": "TTLCache(capacity, ttl_seconds, clock) with put/get: LRU eviction at capacity and TTL expiry.",
+  "module": "ttl_cache.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_unbounded",
+      "expected": "wrong",
+      "bug": "never evicts; grows past capacity"
+    },
+    {
+      "variant": "wrong_never_expires",
+      "expected": "wrong",
+      "bug": "ignores ttl_seconds"
+    },
+    {
+      "variant": "wrong_fifo_eviction",
+      "expected": "wrong",
+      "bug": "evicts oldest insert instead of least recently used"
+    }
+  ]
+}

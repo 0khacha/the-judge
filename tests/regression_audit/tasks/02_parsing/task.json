@@ -1,0 +1,27 @@
+{
+  "task": "02_parsing",
+  "description": "parse_duration(s) -> int seconds from '<n>h<n>m<n>s' components; ValueError on ''/'abc'/'1h1h'/'10'.",
+  "module": "durations.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_duplicate_units",
+      "expected": "wrong",
+      "bug": "accepts repeated units such as '1h1h'"
+    },
+    {
+      "variant": "wrong_bare_number",
+      "expected": "wrong",
+      "bug": "treats a bare number '10' as seconds"
+    },
+    {
+      "variant": "wrong_trailing_garbage",
+      "expected": "wrong",
+      "bug": "ignores trailing garbage such as '10sxyz'"
+    }
+  ]
+}

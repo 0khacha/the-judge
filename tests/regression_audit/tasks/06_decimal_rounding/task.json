@@ -1,0 +1,27 @@
+{
+  "task": "06_decimal_rounding",
+  "description": "apply_discount(price, pct) -> Decimal rounded to cents with ROUND_HALF_UP; ValueError for pct outside 0..100.",
+  "module": "pricing.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_float_math",
+      "expected": "wrong",
+      "bug": "float arithmetic and round() lose half-up cents"
+    },
+    {
+      "variant": "wrong_bankers_rounding",
+      "expected": "wrong",
+      "bug": "quantize with the default ROUND_HALF_EVEN"
+    },
+    {
+      "variant": "wrong_no_range_check",
+      "expected": "wrong",
+      "bug": "pct outside 0..100 is accepted"
+    }
+  ]
+}

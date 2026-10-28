@@ -1,0 +1,22 @@
+{
+  "task": "07_hardcoded_lookup",
+  "description": "to_roman(n: int) -> str for 1..3999; ValueError outside that range.",
+  "module": "roman.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_lookup_table",
+      "expected": "wrong",
+      "bug": "hard-coded answers for the visible test inputs only"
+    },
+    {
+      "variant": "wrong_partial_subtractive",
+      "expected": "wrong",
+      "bug": "handles IV/IX but not XL/XC/CD/CM"
+    }
+  ]
+}

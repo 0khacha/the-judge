@@ -1,0 +1,27 @@
+{
+  "task": "04_nested_transactions",
+  "description": "KVStore with begin/commit/rollback; nested rollback undoes only the innermost transaction.",
+  "module": "kvstore.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_rollback_all",
+      "expected": "wrong",
+      "bug": "rollback discards every open transaction"
+    },
+    {
+      "variant": "wrong_commit_flattens",
+      "expected": "wrong",
+      "bug": "inner commit closes all transactions"
+    },
+    {
+      "variant": "wrong_delete_not_undone",
+      "expected": "wrong",
+      "bug": "delete inside a transaction is not rolled back"
+    }
+  ]
+}

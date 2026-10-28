@@ -1,0 +1,22 @@
+{
+  "task": "08_merge_intervals",
+  "description": "merge_intervals(list of (start, end)) -> sorted merged list; touching intervals merge.",
+  "module": "intervals.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_touching_not_merged",
+      "expected": "wrong",
+      "bug": "uses < so (1,2),(2,3) stay separate"
+    },
+    {
+      "variant": "wrong_unsorted_input",
+      "expected": "wrong",
+      "bug": "assumes the input is already sorted"
+    }
+  ]
+}

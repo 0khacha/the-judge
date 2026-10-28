@@ -1,0 +1,32 @@
+import time
+from collections import OrderedDict
+
+
+class ExpiringStore:
+    """LRU cache with a fixed limit and per-entry time-to-live."""
+
+    def __init__(self, limit, lifetime, clock=time.monotonic):
+        if limit < 1:
+            raise ValueError("limit must be >= 1")
+        self.limit = limit
+        self.lifetime = lifetime
+        self._clock = clock
+        self._items = OrderedDict()
+
+    def store(self, key, value):
+        if key in self._items:
+            self._items.move_to_end(key)
+        self._items[key] = (value, self._clock())
+        while len(self._items) > self.limit:
+            self._items.popitem(last=False)
+
+    def fetch(self, key, default=None):
+        entry = self._items.get(key)
+        if entry is None:
+            return default
+        value, stored_at = entry
+        self._items.move_to_end(key)
+        return value
+
+    def __len__(self):
+        return len(self._items)

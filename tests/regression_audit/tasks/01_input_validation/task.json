@@ -1,0 +1,27 @@
+{
+  "task": "01_input_validation",
+  "description": "validate_age(v): TypeError for non-int (incl. bool/float), ValueError outside 0..150.",
+  "module": "ages.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_accepts_bool",
+      "expected": "wrong",
+      "bug": "isinstance(v, int) lets True/False through"
+    },
+    {
+      "variant": "wrong_upper_bound",
+      "expected": "wrong",
+      "bug": "rejects 150 (uses >= instead of >)"
+    },
+    {
+      "variant": "wrong_accepts_float",
+      "expected": "wrong",
+      "bug": "accepts float ages such as 30.5"
+    }
+  ]
+}

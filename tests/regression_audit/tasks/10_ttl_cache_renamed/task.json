@@ -1,0 +1,22 @@
+{
+  "task": "10_ttl_cache_renamed",
+  "description": "Same logic as 09 with identifiers renamed (limit/lifetime/store/fetch).",
+  "module": "expiring_store.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_never_expires",
+      "expected": "wrong",
+      "bug": "ignores lifetime"
+    },
+    {
+      "variant": "wrong_unbounded",
+      "expected": "wrong",
+      "bug": "never evicts; grows past limit"
+    }
+  ]
+}

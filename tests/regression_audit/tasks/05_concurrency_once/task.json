@@ -1,0 +1,22 @@
+{
+  "task": "05_concurrency_once",
+  "description": "OnceMap.get_or_compute(key, factory) calls factory at most once per key, even across threads.",
+  "module": "once.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_no_lock",
+      "expected": "wrong",
+      "bug": "check-then-compute without any locking"
+    },
+    {
+      "variant": "wrong_lock_check_only",
+      "expected": "wrong",
+      "bug": "lock covers the lookup but factory runs outside it with no re-check"
+    }
+  ]
+}

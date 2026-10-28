@@ -1,0 +1,27 @@
+{
+  "task": "03_path_traversal",
+  "description": "safe_join(base, user_path) -> resolved path inside base; ValueError if it escapes.",
+  "module": "safe_paths.py",
+  "variants": [
+    {
+      "variant": "correct",
+      "expected": "correct",
+      "bug": null
+    },
+    {
+      "variant": "wrong_prefix_only",
+      "expected": "wrong",
+      "bug": "only rejects paths that start with '..'"
+    },
+    {
+      "variant": "wrong_startswith",
+      "expected": "wrong",
+      "bug": "string startswith check accepts sibling dir 'base2'"
+    },
+    {
+      "variant": "wrong_absolute",
+      "expected": "wrong",
+      "bug": "absolute user paths replace the base"
+    }
+  ]
+}
