@@ -40,8 +40,18 @@ def test_no_doc_installs_the_unrelated_pypi_package():
 
 
 @pytest.mark.parametrize("rel", ["README.md", "INSTALL.md", "AGENTS.md", "docs/QUICK_START.md"])
-def test_install_docs_use_git(rel):
-    assert GIT_INSTALL in _read(rel)
+def test_install_docs_use_the_published_distribution(rel):
+    # the-judge-verify 1.0.0 is on PyPI; the git URL is only a "latest from main" option.
+    text = _read(rel)
+    assert "pip install the-judge-verify" in text
+    assert "not yet on PyPI" not in text and "Until it is published" not in text
+
+
+def test_git_install_only_as_latest_from_main():
+    offenders = [f"{rel}:{n}" for rel in _tracked(".md", ".yml", ".yaml")
+                 for n, line in enumerate(_read(rel).splitlines(), 1)
+                 if GIT_INSTALL in line and rel != "README.md"]
+    assert offenders == []
 
 
 def test_readme_copy_paste_prompt_installs_the_renamed_distribution():
