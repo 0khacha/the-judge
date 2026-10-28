@@ -114,3 +114,16 @@ def test_cli_json_still_parses_with_relative_test_paths(tmp_path):
     )
     data = json.loads(proc.stdout[proc.stdout.index("{"):])
     assert data["provenance"]["failed_tests"] == 0, data["blocking_issues"]
+
+
+def test_pytest_rootdir_is_pinned_to_the_sandbox(tmp_path):
+    # Running from the workspace cwd must not let pytest pick a rootdir above the
+    # sandbox (the common ancestor of cwd and the sandbox is e.g. %TEMP%), which made
+    # collection walk unrelated temp dirs and fail when parallel runs deleted them.
+    ws = write(tmp_path / "ws", {"calc.py": "X = 1\n"})
+    res = SandboxRunner.execute_in_anonymous_sandbox(ws, [("test_spy.py", SPY)], pytest_args=["-s"])
+    rootdir = next(ln.split("rootdir:", 1)[1].split(",")[0].strip()
+                   for ln in res["stdout"].splitlines() if ln.startswith("rootdir:"))
+    spy = next(ln for ln in res["stdout"].splitlines() if "SPY{" in ln)
+    file_dir = json.loads(spy[spy.index("SPY") + 3:])["file_dir"]
+    assert os.path.realpath(rootdir) == os.path.realpath(file_dir)
