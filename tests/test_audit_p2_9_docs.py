@@ -44,12 +44,26 @@ def test_install_docs_use_git(rel):
     assert GIT_INSTALL in _read(rel)
 
 
-def test_readme_copy_paste_prompt_uses_git_install():
+def test_readme_copy_paste_prompt_installs_the_renamed_distribution():
+    # The README is frozen into the PyPI project page at upload, so it already
+    # names the published distribution; git stays as the "latest from main" option.
     readme = _read("README.md")
     prompt = readme[readme.index("Copy/paste into your AI assistant"):]
     prompt = prompt[:prompt.index("```", prompt.index("```") + 3)]
-    assert GIT_INSTALL in prompt
-    assert "pypi.org/project/the-judge" not in readme  # badges pointed at the other package
+    assert "pip install the-judge-verify" in prompt
+    assert GIT_INSTALL in readme
+    assert "not yet on PyPI" not in readme
+    assert "pypi.org/project/the-judge/" not in readme  # badges pointed at the other package
+
+
+def test_readme_has_no_relative_links_or_images():
+    # README.md is the PyPI long description; relative paths break there.
+    readme = _read("README.md")
+    refs = re.findall(r'\]\(([^)]+)\)|(?:src|href)="([^"]+)"', readme)
+    relative = [a or b for a, b in refs
+                if not re.match(r"(https?://|mailto:|#)", a or b)]
+    assert relative == []
+    assert "https://raw.githubusercontent.com/0khacha/the-judge/main/logo.svg" in readme
 
 
 @pytest.mark.parametrize("rel", [
