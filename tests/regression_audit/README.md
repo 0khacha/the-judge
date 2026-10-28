@@ -59,3 +59,26 @@ tasks/<NN_name>/
 
 `results/` holds the recorded outputs for the original code (commit `9bdff94`) and
 for the fixed code, with and without mypy/ruff on PATH.
+
+## Recorded results
+
+11 correct implementations, 32 incorrect variants (the three tampered variants are
+judged both with and without git). Same corpus, same runner, Windows, Python 3.14.
+
+| Metric | Before (`9bdff94`), with mypy/ruff | Before, without | After, with mypy/ruff | After, without |
+|---|---|---|---|---|
+| False FAIL (correct → FAIL) | 7/11 | 7/11 | **0/11** | **0/11** |
+| False PASS (wrong → PASS) | 14/32 | 0/32 | 4/32 | 4/32 |
+| ABSTAIN on correct code | 0/11 | 4/11 | 9/11 | 9/11 |
+| PASS on correct code | 4/11 | 0/11 | 2/11 | 2/11 |
+| Added value (bug passes visible tests, verdict ≠ correct impl's) | **0/32** | 0/32 | **5/32** (all FAIL) | 5/32 |
+
+Before, "without tools" had 0 false PASS only because nothing could PASS at all.
+
+The 5 bugs caught beyond the visible tests: TTL cache with no capacity bound and
+with no expiry (capacity / expiration probes), and the three tampered-test variants
+(git baseline comparison). Remaining false PASSes: the three nested-transaction
+bugs (only a single-level rollback probe exists) and FIFO-instead-of-LRU eviction
+(no probe checks recency). The ABSTAIN rate on correct code is high: for 9 of 11
+tasks no probe trigger matches, so the passing visible tests are the only evidence
+and the judge refuses to PASS on them alone. Full tables: `results/`.
