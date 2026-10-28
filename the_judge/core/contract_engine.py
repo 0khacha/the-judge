@@ -42,12 +42,16 @@ class ContractEngine:
             Dictionary containing requirement_coverages, coverage_summary, and critical_unverified_ids.
         """
         requirements_input = self.task_spec.get("requirements", [])
-        if not requirements_input:
+        is_auto_inferred = not requirements_input
+        if is_auto_inferred:
             # Infer baseline implicit requirements if no explicit contract provided
             requirements_input = self._infer_default_requirements(ground_truth)
 
         test_suite = ground_truth.get("test_suite", {})
-        passed_tests = set(test_suite.get("passed_tests", []))
+        # Vacuous tests passed but prove nothing, so they verify no requirement.
+        passed_tests = set(test_suite.get("passed_tests", [])) - set(
+            ground_truth.get("vacuous_tests", [])
+        )
         failed_tests = set(test_suite.get("failed_tests", []))
         test_provenance = ground_truth.get("test_provenance", {})
 
@@ -96,26 +100,32 @@ class ContractEngine:
                     )
                 )
 
-            # Determine requirement status
-            if matched_failed:
+            # Determine requirement status.
+            # Only a passing workspace test that is *named* for the requirement (listed
+            # in its "tests", or carrying its id in the test name) demonstrates the
+            # described behaviour. A property tag or keyword overlap that maps to a
+            # judge probe or an unrelated test is a generic signal only: at most
+            # PARTIALLY_VERIFIED. (Without a judge.json, each inferred requirement is
+            # one executed test, so that test's own outcome decides.)
+            named_passed = [t for t in passed_tests if self._names_requirement(req_data, t)]
+            named_failed = [t for t in failed_tests if self._names_requirement(req_data, t)]
+            if matched_failed or named_failed:
                 status = "CONFLICTING"
                 unverified_reason = f"Ground-truth test failed for {req_id}."
+            elif named_passed or (is_auto_inferred and matched_passed):
+                status = "VERIFIED"
+                unverified_reason = None
             elif matched_passed:
-                has_challenge = any(
-                    test_provenance.get(t, {}).get("source") == "judge_challenge_test"
-                    for t in matched_passed
+                status = "PARTIALLY_VERIFIED"
+                unverified_reason = (
+                    "Matched only by property tag or keyword ("
+                    + ", ".join(sorted(matched_passed))
+                    + "); that does not show the described behaviour is exercised. "
+                    f"List a test in the requirement's 'tests' or put '{req_id}' in its name."
                 )
-                if has_challenge or len(matched_passed) >= 2:
-                    status = "VERIFIED"
-                    unverified_reason = None
-                else:
-                    status = "PARTIALLY_VERIFIED"
-                    unverified_reason = "Only public workspace tests recorded; independent property challenges unverified."
             else:
                 status = "UNVERIFIED"
-                unverified_reason = (
-                    f"No independent behavioral challenge was generated or executed for {req_id}."
-                )
+                unverified_reason = f"No test or probe was found that exercises {req_id}."
 
             requirement_coverages.append(
                 RequirementCoverage(
@@ -153,7 +163,10 @@ class ContractEngine:
         overall_coverage_pct = (verified_cnt / total_reqs * 100.0) if total_reqs > 0 else 0.0
 
         unverified_critical_ids = [
-            r.requirement_id for r in critical_reqs if r.status in ("UNVERIFIED", "CONFLICTING")
+            # A critical requirement that is not fully VERIFIED blocks PASS (ABSTAIN).
+            r.requirement_id
+            for r in critical_reqs
+            if r.status in ("UNVERIFIED", "CONFLICTING", "PARTIALLY_VERIFIED")
         ]
 
         # Calculate Specification Escape Rate (% of failed ground-truth items caused by unverified requirements)
@@ -204,6 +217,18 @@ class ContractEngine:
                 }
             )
         return reqs
+
+    @staticmethod
+    def _names_requirement(req_data: dict[str, Any], test_name: str) -> bool:
+        """True if the requirement explicitly names this test.
+
+        Either the test is listed in the requirement's "tests", or the requirement id
+        (e.g. REQ-001 -> req_001) appears in the test name.
+        """
+        if test_name in req_data.get("tests", []):
+            return True
+        req_id = re.sub(r"[^a-z0-9]+", "_", str(req_data.get("id", "")).lower()).strip("_")
+        return bool(req_id) and req_id in test_name.lower()
 
     def _matches_test(self, req_data: dict[str, Any], test_name: str) -> bool:
         req_id = req_data.get("id", "")
