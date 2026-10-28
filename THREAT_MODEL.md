@@ -57,5 +57,5 @@ failing. They do **not** catch:
 - Anything in code whose names do not match a trigger: the report lists the probe kinds
   that did not run for each public symbol.
 
-See [Judge probes and known limitations](README.md#judge-probes-and-known-limitations)
+See [Judge probes](https://github.com/0khacha/the-judge/blob/main/README.md#judge-probes)
 in README.md for the full table.

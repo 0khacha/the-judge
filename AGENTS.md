@@ -20,14 +20,29 @@ After each critical round of code changes (new feature, bug fix, refactor, or an
 ### Protocol
 
 ```
-1. Make code changes.
-2. Run: judge verify . --json (or judge improve . for continuous multi-round refinement)
-3. Read the JSON output.
-4. If decision is PASS  -> report success to the user. Done.
-5. If decision is FAIL  -> read findings[].suggested_focus, fix the code, go to step 2.
-6. If decision is ABSTAIN -> provide independent tests or evidence, go to step 2.
-7. Maximum 5 repair rounds. After 5 failures, stop and report the blocking issues.
+1. Tests first. Before writing or changing the implementation, write tests for the
+   behaviour the task asks for (normal cases, edge cases, invalid input) and run:
+       judge freeze .
+   If the user gave you tests, freeze them before you touch the code.
+2. Implement (or change) the code. Do not edit the frozen tests.
+3. Run: judge verify . --json
+4. Do what next_actions[0] says. Every verdict has numbered next_actions, each with
+   "step", "action", "detail" and, where useful, "test", "command", "guidance":
+     done                         -> report PASS and numeric_score. Stop.
+     fix_code / fix_regression    -> change the IMPLEMENTATION so the named test passes.
+     restore_tests                -> undo your change to the named frozen test.
+     write_tests / freeze_tests   -> do what "detail" says, then implement.
+     stop                         -> stop and report loop.stuck_reason and the
+                                     remaining next_actions to the user.
+5. Go to 3. The judge counts iterations (.judge/history.json), reports regressions
+   (passed before, fails now) and says "stuck" after 3 identical non-PASS results or
+   5 runs without PASS.
 ```
+
+What counts as evidence: a test is *independent* when it is unchanged since `judge freeze`
+(or since the last git commit) **and** the implementation changed after that. Tests
+written after the code must pass but cannot earn PASS on their own. That is why step 1
+comes first.
 
 ### Adaptive Evaluation Engine
 
@@ -45,9 +60,9 @@ The Judge automatically adapts its evaluation method based on workspace classifi
 
 | Code | Decision | Meaning |
 |------|----------|---------|
-| 0 | PASS | All behavioral properties verified. Ship it. |
-| 1 | FAIL | Behavioral failures detected. Repair required. |
-| 2 | ABSTAIN | Insufficient evidence. Provide tests. |
+| 0 | PASS | Tests fixed before the implementation pass; no tampering detected. Not a proof of correctness. |
+| 1 | FAIL | A test failed, a regression appeared, or tests were tampered with. Follow next_actions. |
+| 2 | ABSTAIN | Not enough independent evidence; next_actions says exactly what is missing. |
 | 3 | ERROR | Execution error. Check the workspace path. |
 
 ### Reading structured findings
@@ -68,22 +83,30 @@ The `--json` flag returns machine-readable output. Key fields:
     }
   ],
   "blocking_issues": ["..."],
+  "next_actions": [
+    {"step": 1, "action": "fix_code", "test": "test_cache_expiration",
+     "detail": "AssertionError: assert None == 'v'",
+     "guidance": "Change the implementation so this test passes. Do not edit, skip, parametrize away or weaken the test."},
+    {"step": 2, "action": "re_verify", "detail": "After the fix, verify again.", "command": "judge verify . --json"}
+  ],
+  "loop": {"iteration": 2, "regressions": [], "newly_passing": [], "stuck": false, "stuck_reason": null},
   "trust_profile": { "evidence_level": 3 }
 }
 ```
 
-Use `findings[].suggested_focus` to determine what to fix. Use `findings[].id` to track which issues persist across rounds.
+Follow `next_actions` in order; `findings[]` holds the details. `loop` compares this run with the previous one.
 
 ### Rules for agents
 
 1. Never claim code works without running `judge verify .` first.
-2. Never skip verification because "the change is small."
+2. Never edit, skip, delete, parametrize away or weaken a frozen test to make it pass.
+   Adding tests is always fine. If a frozen test is genuinely wrong, fix it, run
+   `judge freeze .` again and tell the user which test you changed and why.
 3. Never modify files inside `the_judge/` -- that is the verifier, not your code.
-4. Parse JSON output. Do not regex-scrape human-readable output.
-5. If FAIL, fix the code and re-verify. Do not argue with the findings.
-6. If ABSTAIN, write tests that exercise the unverified behavior, then re-verify.
-7. After 5 failed rounds, stop. Report the remaining `blocking_issues` to the user.
-8. Report the `numeric_score` alongside the decision in your summary.
+4. Parse the JSON output and follow `next_actions` in order.
+5. mypy/ruff findings (`static_analysis`) are advisory; they never decide the verdict.
+6. When `loop.stuck` is true, stop and report; do not keep iterating.
+7. Report the decision and `numeric_score` in your summary.
 
 ### Quick reference
 
@@ -91,6 +114,7 @@ Use `findings[].suggested_focus` to determine what to fix. Use `findings[].id` t
 judge improve .                # Continuous multi-round improvement engine (Build -> Evaluate -> Improve)
 judge verify .                 # Human-readable evaluation report
 judge verify . --json          # Machine-readable JSON for agents
+judge freeze .                 # Freeze the current tests (do this before implementing)
 judge verify path/to/file.py   # Verify a single file
 judge contract .              # Inspect requirement coverage
 judge demo                    # 60-second interactive demo

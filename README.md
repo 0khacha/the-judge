@@ -50,9 +50,18 @@ Check the [installation instructions](https://github.com/0khacha/the-judge/blob/
 
 ## What it does
 
-**The Judge** is a verification and continuous improvement engine that transforms good code into great code. It doesn't just pass/fail — it actively drives multi-round improvements until your project reaches production-quality standards.
+**The Judge** is a verifier for AI coding agents. It runs your tests in an isolated
+subprocess, refuses to count tests that were weakened, skipped or written to fit the
+code, and answers every run with a verdict (PASS / FAIL / ABSTAIN) plus numbered,
+machine-readable `next_actions` telling the agent exactly what to do next.
 
-**Core loop**: `Build → Verify → Critique → Improve → Re-verify → Repeat`
+**Core loop**: `write tests → judge freeze → implement → judge verify → follow next_actions → repeat`
+
+It does not find bugs by itself: a bug is caught only if some test exercises it. What it
+adds is discipline around the tests (tests fixed before the code, no weakening, no
+self-grading), regression tracking between iterations, and a clean stop when the loop
+makes no progress. See [Known limitations](#known-limitations) and the measured results
+in [`eval_results/`](https://github.com/0khacha/the-judge/tree/main/eval_results).
 
 Works standalone or integrates with any AI coding assistant (Claude Code, Cursor, Windsurf, Aider, etc.) through the `AGENTS.md` protocol.
 
@@ -98,7 +107,8 @@ Action: fix and re-verify.
 | **Without The Judge** (baseline) | 52.0 / 100.0 | No nav, flat hierarchy, no stats, no tech tags |
 | **With The Judge** (4 rounds) | 96.5 / 100.0 (+44.5 pts) | Sticky nav, stats bar, tech tags, contact card |
 
-> **Note**: Visual project scores are evaluated by screenshot analysis and require a browser
+> **Note**: The visual-project numbers below come from an earlier version and were not
+> re-tested for 1.0.1. Visual project scores are evaluated by screenshot analysis and require a browser
 > (e.g., Playwright or Chrome). Without a browser available, visual projects produce `ABSTAIN`.
 > The 52→96.5 improvement was captured in an environment with screenshot support.
 
@@ -119,13 +129,13 @@ Action: fix and re-verify.
 
 10 rules enforced by The Judge:
 
-1. **Never trust self-claims.** Demand independent behavioral evidence. Discrepancy detection between agent claims and ground-truth evidence requires the caller to provide external `agent_claims` via the `verify()` API.
+1. **Never trust self-claims.** PASS needs tests that were fixed before the implementation (`judge freeze` or a git commit). Discrepancy detection between agent claims and ground-truth evidence requires the caller to provide external `agent_claims` via the `verify()` API.
 2. **Execute in anonymous sandboxes.** Strip process markers and inspection flags.
-3. **Synthesize challenge probes.** Prevent static test collection bypasses.
+3. **Synthesize challenge probes.** A few keyword-triggered probes add checks on top of your tests.
 4. **Enforce requirement contracts.** Unverified critical requirements trigger ABSTAIN.
 5. **Detect tampering.** Block conftest hijacking, sys.modules manipulation, TOCTOU symlinks.
 6. **Track regressions.** Flag fixed bugs broken again in subsequent rounds.
-7. **Return structured findings.** Actionable IDs (BEH-001), descriptions, focus areas.
+7. **Return next actions.** Every verdict has numbered `next_actions` (fix_code with the failing assertion, restore_tests, freeze_tests, stop, ...).
 8. **Predictable exit codes.** 0 = PASS, 1 = FAIL, 2 = ABSTAIN, 3 = ERROR.
 9. **No false guarantees.** Verification proves evidence under tested conditions, not mathematical proof.
 10. **Vendor-neutral.** Works with any agent via JSON CLI or Python API.
@@ -208,14 +218,18 @@ The loop gives the repair callback both Judge findings and quality weaknesses, v
 ## How it works
 
 ```text
-Your code -> The Judge -> Sandbox execution -> Behavioral checks -> Decision
-                |                                                      |
-                +--- PASS: ship it                                     |
-                +--- FAIL: structured findings -> agent repairs -> re-verify
-                +--- ABSTAIN: insufficient evidence -> provide tests
+write tests from the spec -> judge freeze . -> implement -> judge verify . --json
+                                                               |
+   PASS    -> next_actions: done                               |
+   FAIL    -> next_actions: fix_code <test> "<assertion>" -----+  (fix the code, not the test)
+   ABSTAIN -> next_actions: what evidence is missing ----------+
+   stuck   -> next_actions: stop (3 identical results, or 5 runs without PASS)
 ```
 
-The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses findings, makes a concrete repair, and re-verifies. The optional `AgentRepairLoop` can also accept a quality evaluator for UX, visual quality, accessibility, or maintainability, so a passing implementation continues through meaningful improvement rounds until it reaches the configured quality bar. Maximum 5 rounds by default.
+The agent follows [AGENTS.md](https://github.com/0khacha/the-judge/blob/main/AGENTS.md): it
+writes tests first, freezes them, implements, verifies, and does what `next_actions[0]`
+says. Each run is compared with the previous one (`.judge/history.json`): tests that
+passed before and fail now are reported as regressions. The optional `AgentRepairLoop` can also accept a quality evaluator for UX, visual quality, accessibility, or maintainability, so a passing implementation continues through meaningful improvement rounds until it reaches the configured quality bar. Maximum 5 rounds by default.
 
 ## Documentation
 
@@ -237,7 +251,7 @@ The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses
 - [Threat Model](https://github.com/0khacha/the-judge/blob/main/THREAT_MODEL.md) - Attack surface
 - [Full Documentation Index](https://github.com/0khacha/the-judge/tree/main/docs) - All documentation
 
-## Judge probes and known limitations
+## Judge probes
 
 The Judge runs your workspace's own tests (discovered recursively, honouring your
 pytest configuration) and, where it recognises a familiar shape, adds a small number
@@ -271,34 +285,47 @@ function, multi-input variance, and state isolation.
 
 ### What this means for verdicts
 
-- **PASS needs independent evidence**: at least one non-vacuous workspace test passed
-  *and* at least one judge probe ran its assertion and passed. If no probe trigger
-  matches your code, the verdict is **ABSTAIN** even when all your tests pass. On the
-  bundled audit corpus most correct implementations get ABSTAIN for this reason (see
-  `tests/regression_audit/`).
-- **Most bugs are invisible to probes.** A wrong comparison, wrong rounding mode,
-  path-traversal hole, race condition or nested-transaction bug is caught only if a
-  test exercises it. The Judge adds tamper detection and a few contract probes on
-  top of your tests; it does not replace them.
-- **Tests that prove nothing are not evidence.** Skipped/xfail tests, tests without
-  a real assertion, tautologies (`assert x in (True, False)`, `assert x == x`) and
-  tests whose only assertion is `is not None` are reported and not counted.
-- **Weakened tests block PASS in git repositories.** Deleted tests, removed
-  assertions and newly added skips relative to `HEAD` (or `--baseline REF`) are a
-  blocking `tampering` finding. Outside git, a weakened-but-still-meaningful
-  assertion cannot be detected.
-- **`judge.json` requirements** are VERIFIED only by a passing workspace test that
-  names the requirement; a tag that maps to a generic probe gives at most
-  PARTIALLY_VERIFIED, and a critical requirement that is not fully verified makes the
-  verdict ABSTAIN.
-- **The sandbox is not a security boundary.** Tests run in a separate process in a
-  temporary directory with a sanitised environment, but a hostile implementation can
-  still detect it, read files, or use the network. Do not run untrusted code you would
-  not run on your own machine.
-- **mypy and ruff are optional.** If they are not on `PATH`, those checks are skipped,
-  reported as a `tooling` finding and the evidence level drops; the decision is not
-  affected.
+- **PASS needs independent evidence**: at least one passing, non-vacuous workspace test
+  that was fixed *before* the implementation, i.e. unchanged since `judge freeze` (or the
+  last git commit) while an implementation file changed afterwards. Tests written after
+  the code must pass, but cannot earn PASS on their own. Judge probes add checks but are
+  not required.
+- **FAIL** means a test failed, a frozen/committed test was weakened or deleted, a test
+  result was rewritten by a hook, or a test that passed in the previous run fails now.
+- **ABSTAIN** means the evidence is insufficient, and `next_actions` lists, as numbered
+  steps, what would turn it into a verdict (write tests, freeze them, unskip, ...).
+- **Tests that prove nothing are not evidence.** Skipped/xfail tests, tests without a real
+  assertion, tautologies and `is not None`-only tests are reported and not counted.
+- **Static analysis is advisory.** mypy/ruff findings are `static_analysis` warnings;
+  they never decide the verdict. If the tools are not installed, nothing changes.
+- **`judge.json` requirements** are VERIFIED only by a passing test that names them.
 
+## Known limitations
+
+- **Bugs are only caught by tests.** The Judge does not invent oracles: a wrong comparison,
+  rounding mode, race condition or missing edge case is found only if a (frozen) test
+  exercises it. The four judge probes (rollback, expiration, capacity, idempotency) are
+  keyword-triggered and rarely apply.
+- **Independence is a protocol, not a proof.** An agent can write the code first, then
+  tests fitted to it, freeze them, and make a token change to the code; the rule
+  "unchanged since freeze, code changed afterwards" is then satisfied. Every freeze is
+  recorded in `.judge/frozen.json`, but intent cannot be verified.
+- **Hard-coded outputs: narrow detection.** PASS is withheld when every literal assertion
+  of the independent tests (`assert f(1, 2) == 3`) is answered by a dict literal or
+  if-return chain in the code. Lookup tables built at run time, string-encoded tables,
+  or assertions built from parametrize arguments are not detected.
+- **Result rewriting: runtime detection only.** A conftest/plugin that turns a raised
+  test into "passed" is caught by the sandbox's own hooks. A hostile plugin that
+  disables those hooks, or that alters what pytest collects in ways other than
+  removing whole test functions (for example dropping individual parametrize cases),
+  is not detected.
+- **Tampering outside git and freeze is invisible.** Without a freeze snapshot or a git
+  baseline, a weakened-but-still-meaningful assertion cannot be noticed.
+- **The sandbox is not a security boundary.** Tests run in a separate process with a
+  temporary collection directory and a reduced environment, but hostile code can still
+  detect it, read files or use the network.
+- **State in the workspace.** `judge freeze` and `judge verify` write `.judge/` (frozen
+  tests, history). Add it to `.gitignore` or commit it deliberately.
 
 ## Project Status
 
