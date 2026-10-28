@@ -407,7 +407,7 @@ def verify(
     provenance = {
         "workspace_path": workspace_path,
         "workspace_hash": workspace_hash,
-        "judge_version": "v1.0.0",
+        "judge_version": "v1.0.1",
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "evidence_level": ev_cov.get("evidence_level", 0),
         "total_tests": ev_cov.get("total_tests", 0),

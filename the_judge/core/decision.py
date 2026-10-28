@@ -54,6 +54,6 @@ class VerificationResult:
             "loop": self.loop,
             "runtime": {
                 "duration_seconds": round(self.runtime_seconds, 3),
-                "judge_version": "v1.0.0",
+                "judge_version": "v1.0.1",
             },
         }

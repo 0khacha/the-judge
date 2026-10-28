@@ -628,7 +628,7 @@ def test_{module_name}_boundary_values():
 
         spec = {
             "name": os.path.basename(self.workspace),
-            "version": "1.0.0",
+            "version": "1.0.1",
             "requirements": [
                 {
                     "id": "REQ-001",

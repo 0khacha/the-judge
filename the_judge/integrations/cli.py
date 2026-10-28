@@ -10,12 +10,12 @@ from the_judge.integrations.demo import run_demo
 
 
 def main(args_list=None) -> int:
-    """Main CLI entrypoint for The Judge v1.0.0."""
+    """Main CLI entrypoint for The Judge v1.0.1."""
     parser = argparse.ArgumentParser(
         prog="judge",
-        description="The Judge v1.0.0 -- Adversarial Verification & Improvement Engine",
+        description="The Judge v1.0.1 -- Adversarial Verification & Improvement Engine",
     )
-    parser.add_argument("--version", action="version", version="The Judge v1.0.0")
+    parser.add_argument("--version", action="version", version="The Judge v1.0.1")
     subparsers = parser.add_subparsers(dest="command", help="Available subcommands")
 
     # verify command
@@ -709,7 +709,7 @@ def _run_contract_command(
         print(json.dumps(spec_cov, indent=2))
     else:
         print("=" * 68)
-        print("THE JUDGE v1.0.0 -- Requirement Specification Contract Report")
+        print("THE JUDGE v1.0.1 -- Requirement Specification Contract Report")
         print("=" * 68)
         print(f"Workspace: {os.path.abspath(workspace_path)}")
         print()
@@ -750,7 +750,7 @@ def _run_contract_command(
 
 def _print_human_readable_result(workspace_path: str, result: Any) -> None:
     print("=" * 68)
-    print("THE JUDGE v1.0.0 -- Verification Report")
+    print("THE JUDGE v1.0.1 -- Verification Report")
     print("=" * 68)
     print(f"Workspace: {os.path.abspath(workspace_path)}")
     print()

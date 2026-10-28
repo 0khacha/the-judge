@@ -329,7 +329,7 @@ function, multi-input variance, and state isolation.
 
 ## Project Status
 
-**Status**: v1.0.0 · MIT License · Python 3.9+
+**Status**: v1.0.1 · MIT License · Python 3.9+
 
 ## Contributing
 
