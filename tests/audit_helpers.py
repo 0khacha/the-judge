@@ -78,3 +78,19 @@ def judge_authored_failures(result):
         f.description for f in result.findings
         if f.category == "behavior" and ("_prop_" in f.description or "test_behavior_" in f.description)
     ]
+
+
+TOOLS = ("mypy", "ruff", "flake8")
+
+
+def env_without_tools():
+    """os.environ with every PATH entry that provides mypy/ruff/flake8 removed."""
+    env = dict(os.environ)
+    keep = []
+    for entry in env.get("PATH", "").split(os.pathsep):
+        if entry and not any(
+            os.path.exists(os.path.join(entry, exe + ext)) for exe in TOOLS for ext in ("", ".exe")
+        ):
+            keep.append(entry)
+    env["PATH"] = os.pathsep.join(keep)
+    return env
