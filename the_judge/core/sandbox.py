@@ -173,8 +173,20 @@ class SandboxRunner:
                 initial_hashes[safe_name] = hashlib.sha256(code.encode("utf-8")).hexdigest()
 
             roots = [os.path.abspath(r) for r in (import_roots or [abs_task_dir])]
+            # Test files are imported by path (--import-mode=importlib), so a copied
+            # test can never be shadowed by the same-named original in the workspace
+            # (which is on PYTHONPATH). That mode does not put test directories on
+            # sys.path, so directories holding helper modules the tests import are
+            # added explicitly, after the workspace roots.
+            helper_dirs = sorted({
+                os.path.join(temp_dir, os.path.dirname(os.path.normpath(name)))
+                for name, _ in support_files or []
+                if os.path.basename(name) not in ("conftest.py", "__init__.py")
+            })
             env = {
-                "PYTHONPATH": os.pathsep.join(roots + [os.environ.get("PYTHONPATH", "")]),
+                "PYTHONPATH": os.pathsep.join(
+                    roots + helper_dirs + [os.environ.get("PYTHONPATH", "")]
+                ),
                 # Importing workspace modules must not leave __pycache__ behind.
                 "PYTHONDONTWRITEBYTECODE": "1",
             }
@@ -182,7 +194,7 @@ class SandboxRunner:
             junitxml_path = os.path.join(temp_dir, "junit.xml")
             cmd = [
                 sys.executable, "-m", "pytest", "-vv", "-p", "no:cacheprovider",
-                f"--junitxml={junitxml_path}",
+                "--import-mode=importlib", f"--junitxml={junitxml_path}",
             ]
             if pytest_args:
                 cmd.extend(pytest_args)
