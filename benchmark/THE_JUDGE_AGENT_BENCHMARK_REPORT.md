@@ -6,7 +6,7 @@
 > recorded; they do not measure a real agent and should not be cited as such.
 
 **Benchmark Version**: 2.0.0-real  
-**Target Repository**: `C:\projects\the-judge`  
+**Target Repository**: `the-judge` (repository root)  
 **Date**: 2026-09-21  
 **Architecture Status**: Genuine Provider-Based Agent Infrastructure with Physical Isolation & Fail-Closed Preflight
 

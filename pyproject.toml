@@ -90,7 +90,7 @@ the_judge = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-norecursedirs = ["benchmark", "starter_task", "examples", "demo", "_judge_visual", "regression_audit"]
+norecursedirs = ["benchmark", "examples", "demo", "_judge_visual", "regression_audit"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]

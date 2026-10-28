@@ -196,7 +196,7 @@ def generate_report(
     lines.append("3. **Type Contract Violation**: Because `validate_luhn(card_number: str)` expects a string, passing a float raised `TypeError: 'float' object is not iterable`. This was treated as a behavioral test failure rather than an invalid test probe.")
     lines.append("4. **Repair Loop Failure**: Even after `apply_fix.py` corrected the logic to `if doubled > 9`, the synthesized challenge tests continued to pass floats and crash with `TypeError`. The Judge failed the valid code on all 5 rounds, creating 7.53× resource overhead and degrading the result to `FALSE_FAIL`.")
     lines.append("")
-    lines.append("See [`benchmark/luhn_regression_analysis.md`](file:///c:/projects/the-judge/benchmark/luhn_regression_analysis.md) for full stack traces and reproduction scripts.")
+    lines.append("A separate analysis (luhn_regression_analysis, not included in this repository) has full stack traces and reproduction scripts.")
     lines.append("")
 
     # ------------------------------------------------------------------ #
@@ -217,7 +217,7 @@ def generate_report(
     lines.append("| `09_password_hasher` | 5 | 66.2% | 7,392 B | Identical file hash for rounds 2–5; identical 3 blocking issues repeated 4 times |")
     lines.append("| `11_luhn_validator` | 5 | 66.8% | 6,679 B | Identical file hash for rounds 2–5; identical synthesized TypeError repeated 4 times |")
     lines.append("")
-    lines.append("See [`benchmark/evidence_duplication_analysis.md`](file:///c:/projects/the-judge/benchmark/evidence_duplication_analysis.md) for the complete root cause analysis and recommended stagnation guards.")
+    lines.append("A separate analysis (evidence_duplication_analysis, not included in this repository) has the complete root cause analysis and recommended stagnation guards.")
     lines.append("")
 
     # ------------------------------------------------------------------ #

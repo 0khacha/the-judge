@@ -100,3 +100,6 @@ AGENT_STATE.md
 # ── Internal dev/audit documents (machine-specific paths) ─────────────────────
 benchmark/LEVEL2_AUDIT_REPORT.md
 benchmark/LEVEL2_SMOKE_TEST_REPORT.md
+
+# Editor settings (judge init vscode generates these in user projects)
+.vscode/
