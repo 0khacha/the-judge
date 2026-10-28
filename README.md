@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.svg" width="180" alt="The Judge">
+  <img src="https://raw.githubusercontent.com/0khacha/the-judge/main/logo.svg" width="180" alt="The Judge">
 </p>
 
 <h1 align="center">The Judge</h1>
@@ -11,27 +11,29 @@
   Drive any project to high quality through evidence-based evaluation and multi-round refinement
 </p>
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/0khacha/the-judge?style=flat" alt="License"></a>
+  <a href="https://github.com/0khacha/the-judge/blob/main/LICENSE"><img src="https://img.shields.io/github/license/0khacha/the-judge?style=flat" alt="License"></a>
   <img src="https://img.shields.io/badge/python-3.9%2B-blue?style=flat" alt="Python 3.9+">
 </p>
 
 ## Install
 
-> **Install from GitHub.** The PyPI project named `the-judge` is an **unrelated
-> package** by another author. This project's distribution name is
-> `the-judge-verify` (not yet on PyPI). Until it is published, install from git:
-> `pip install git+https://github.com/0khacha/the-judge.git`
+```bash
+pip install the-judge-verify
+```
+
+> The PyPI project named `the-judge` is an **unrelated package** by another author.
+> This project is published as **`the-judge-verify`**.
 
 Copy/paste into your AI assistant prompt:
 
 ```text
-Run `pip install git+https://github.com/0khacha/the-judge.git` to install the verification tool, then read
+Run `pip install the-judge-verify` to install the verification tool, then read
 AGENTS.md at https://raw.githubusercontent.com/0khacha/the-judge/main/AGENTS.md
 for the verification-repair loop protocol. After every critical code change,
 run `judge verify . --json` and act on the findings.
 ```
 
-Or install directly:
+Latest from `main` instead of the last release:
 
 ```bash
 pip install git+https://github.com/0khacha/the-judge.git
@@ -44,7 +46,7 @@ and the decision is unaffected. To enable them: `pip install mypy ruff`.
 Names: the distribution is `the-judge-verify`, the Python package is still
 `import the_judge`, and the command is `judge`.
 
-Check the [installation instructions](INSTALL.md) for Claude Code, Cursor, Windsurf, Codex, Git hooks, VS Code, and CI/CD.
+Check the [installation instructions](https://github.com/0khacha/the-judge/blob/main/INSTALL.md) for Claude Code, Cursor, Windsurf, Codex, Git hooks, VS Code, and CI/CD.
 
 ## What it does
 
@@ -106,8 +108,8 @@ Action: fix and re-verify.
 <td width="50%" align="center"><strong>After (4 rounds)</strong></td>
 </tr>
 <tr>
-<td><img src="examples/alex_morgan_portfolio/before.png" alt="Before The Judge" width="100%"></td>
-<td><img src="examples/alex_morgan_portfolio/after.png" alt="After The Judge" width="100%"></td>
+<td><img src="https://raw.githubusercontent.com/0khacha/the-judge/main/examples/alex_morgan_portfolio/before.png" alt="Before The Judge" width="100%"></td>
+<td><img src="https://raw.githubusercontent.com/0khacha/the-judge/main/examples/alex_morgan_portfolio/after.png" alt="After The Judge" width="100%"></td>
 </tr>
 </table>
 
@@ -218,22 +220,22 @@ The agent reads AGENTS.md, runs `judge verify . --json` after each round, parses
 ## Documentation
 
 ### Getting Started
-- [Quick Start Guide](docs/QUICK_START.md) - Get started in 5 minutes
-- [Installation Guide](INSTALL.md) - Platform-specific setup
-- [Plugin Integration Guide](PLUGIN_GUIDE.md) - Integrate into any IDE or CLI
+- [Quick Start Guide](https://github.com/0khacha/the-judge/blob/main/docs/QUICK_START.md) - Get started in 5 minutes
+- [Installation Guide](https://github.com/0khacha/the-judge/blob/main/INSTALL.md) - Platform-specific setup
+- [Plugin Integration Guide](https://github.com/0khacha/the-judge/blob/main/PLUGIN_GUIDE.md) - Integrate into any IDE or CLI
 
 ### Reference
-- [Python API Reference](docs/API.md) - Complete API documentation
-- [Agent Integration Protocol](AGENTS.md) - AI assistant integration
-- [CLI Commands](docs/INDEX.md#cli-reference) - Command reference
-- [Integration Examples](examples/INTEGRATION_EXAMPLES.md) - Real-world usage
+- [Python API Reference](https://github.com/0khacha/the-judge/blob/main/docs/API.md) - Complete API documentation
+- [Agent Integration Protocol](https://github.com/0khacha/the-judge/blob/main/AGENTS.md) - AI assistant integration
+- [CLI Commands](https://github.com/0khacha/the-judge/blob/main/AGENTS.md#quick-reference) - Command reference
+- [Integration Examples](https://github.com/0khacha/the-judge/blob/main/examples/INTEGRATION_EXAMPLES.md) - Real-world usage
 
 ### Advanced
-- [Architecture Specification](docs/architecture.md) - System design
-- [Development Guide](docs/DEVELOPMENT.md) - Contributing guide
-- [Security Model](SECURITY.md) - Security boundaries
-- [Threat Model](THREAT_MODEL.md) - Attack surface
-- [Full Documentation Index](docs/INDEX.md) - All documentation
+- [Architecture Specification](https://github.com/0khacha/the-judge/blob/main/docs/architecture.md) - System design
+- [Development Guide](https://github.com/0khacha/the-judge/blob/main/CONTRIBUTING.md) - Contributing guide
+- [Security Model](https://github.com/0khacha/the-judge/blob/main/SECURITY.md) - Security boundaries
+- [Threat Model](https://github.com/0khacha/the-judge/blob/main/THREAT_MODEL.md) - Attack surface
+- [Full Documentation Index](https://github.com/0khacha/the-judge/tree/main/docs) - All documentation
 
 ## Judge probes and known limitations
 
@@ -304,14 +306,14 @@ function, multi-input variance, and state isolation.
 
 ## Contributing
 
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions welcome! See [CONTRIBUTING.md](https://github.com/0khacha/the-judge/blob/main/CONTRIBUTING.md) for guidelines.
 
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/0khacha/the-judge/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/0khacha/the-judge/discussions)
-- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+- **Changelog**: [CHANGELOG.md](https://github.com/0khacha/the-judge/blob/main/CHANGELOG.md)
 
 ## License
 
-[MIT License](LICENSE) -- Copyright (c) 2026 **@0khacha**
+[MIT License](https://github.com/0khacha/the-judge/blob/main/LICENSE) -- Copyright (c) 2026 **@0khacha**
