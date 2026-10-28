@@ -191,9 +191,16 @@ class SandboxRunner:
                 "PYTHONDONTWRITEBYTECODE": "1",
             }
 
+            # Pin pytest's rootdir and configuration to the sandbox. pytest otherwise
+            # derives rootdir from the common ancestor of cwd (the workspace) and the
+            # args, e.g. %TEMP%, and would collect from / read configs above it.
+            ini_path = os.path.join(temp_dir, "pytest.ini")
+            with open(ini_path, "w", encoding="utf-8") as f:
+                f.write("[pytest]\n")
             junitxml_path = os.path.join(temp_dir, "junit.xml")
             cmd = [
                 sys.executable, "-m", "pytest", "-vv", "-p", "no:cacheprovider",
+                "-c", ini_path, "--rootdir", temp_dir,
                 "--import-mode=importlib", f"--junitxml={junitxml_path}",
             ]
             if pytest_args:
