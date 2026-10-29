@@ -76,12 +76,16 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
     """Detect test functions that provide no meaningful behavioral evidence.
 
     A test is vacuous if it:
-      - has no assertion (assert statement or pytest.raises), or
+      - has no assertion (assert, pytest.raises/fail, raise AssertionError,
+        self.assert*/fail), or
       - only has tautological assertions (assert True, x == x,
         `(...) in (True, False)`, `x is None or x is not None`), or
       - only asserts `x is not None`, or
       - never references any workspace module (doesn't exercise target code).
 
+    Module-level helpers and fixtures count for the tests that use them: a test that
+    builds target objects through ``make_book()`` or a ``book`` fixture references the
+    target, and a test that calls an asserting helper asserts.
     Test methods of Test* classes are included and reported by method name.
     """
     try:
@@ -114,35 +118,55 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
         elif isinstance(node, _ast_module.ClassDef) and node.name.startswith("Test"):
             functions.extend(n for n in node.body if isinstance(n, _ast_module.FunctionDef))
 
+    def scan(fn: _ast_module.FunctionDef) -> tuple[bool, bool, set[str]]:
+        """(has meaningful assertion, references target, names used) for one function."""
+        has_assert = refs = False
+        names: set[str] = {a.arg for a in fn.args.args}  # fixtures arrive as parameters
+        for child in _ast_module.walk(fn):
+            if isinstance(child, _ast_module.Assert):
+                if not (_is_tautology(child.test) or _is_existence_only(child.test)):
+                    has_assert = True
+            elif isinstance(child, _ast_module.Raise) and child.exc is not None:
+                exc = child.exc.func if isinstance(child.exc, _ast_module.Call) else child.exc
+                if isinstance(exc, _ast_module.Name) and exc.id == "AssertionError":
+                    has_assert = True
+            elif isinstance(child, _ast_module.Attribute) and isinstance(child.value, _ast_module.Name):
+                owner, attr = child.value.id, child.attr
+                # pytest.raises / pytest.fail, unittest self.assert* / self.fail
+                if (owner == "pytest" and attr in ("raises", "fail")) or (
+                        owner == "self" and (attr.startswith("assert") or attr == "fail")):
+                    has_assert = True
+                if owner in target_names:
+                    refs = True
+            if isinstance(child, _ast_module.Name):
+                names.add(child.id)
+                if child.id in target_names:
+                    refs = True
+        return has_assert, refs, names
+
+    # Module-level helpers and fixtures pass their properties on to the tests that use
+    # them (directly, as a fixture parameter, or through other helpers).
+    helpers = {n.name: scan(n) for n in tree.body
+               if isinstance(n, _ast_module.FunctionDef) and not n.name.startswith("test_")}
+    helper_props = {name: [a, r] for name, (a, r, _) in helpers.items()}
+    changed = True
+    while changed:
+        changed = False
+        for name, (_, _, used) in helpers.items():
+            for dep in used & helper_props.keys() - {name}:
+                for i in (0, 1):
+                    if helper_props[dep][i] and not helper_props[name][i]:
+                        helper_props[name][i] = True
+                        changed = True
+
     vacuous: set[str] = set()
     for node in functions:
         if not node.name.startswith("test_"):
             continue
-
-        has_meaningful_assert = False
-        references_target = False
-
-        for child in _ast_module.walk(node):
-            if isinstance(child, _ast_module.Assert):
-                if _is_tautology(child.test) or _is_existence_only(child.test):
-                    continue
-                has_meaningful_assert = True
-            # pytest.raises(...) asserts that the code under test raises
-            if (
-                isinstance(child, _ast_module.Attribute)
-                and child.attr == "raises"
-                and isinstance(child.value, _ast_module.Name)
-                and child.value.id == "pytest"
-            ):
-                has_meaningful_assert = True
-
-            # Check if any name references a workspace module or imported symbol
-            if isinstance(child, _ast_module.Name) and child.id in target_names:
-                references_target = True
-            if isinstance(child, _ast_module.Attribute):
-                if isinstance(child.value, _ast_module.Name) and child.value.id in target_names:
-                    references_target = True
-
+        has_meaningful_assert, references_target, used = scan(node)
+        for dep in used & helper_props.keys():
+            has_meaningful_assert = has_meaningful_assert or helper_props[dep][0]
+            references_target = references_target or helper_props[dep][1]
         if not has_meaningful_assert or not references_target:
             vacuous.add(node.name)
 
