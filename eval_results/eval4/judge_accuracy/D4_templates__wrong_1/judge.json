@@ -1,0 +1,524 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 8,
+  "passed_tests": 8,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_plain_and_var",
+    "description": "Verified behavior in test_plain_and_var",
+    "status": "pass",
+    "evidence_ref": "test_plain_and_var",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_dotted_and_index",
+    "description": "Verified behavior in test_dotted_and_index",
+    "status": "pass",
+    "evidence_ref": "test_dotted_and_index",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_filters",
+    "description": "Verified behavior in test_filters",
+    "status": "pass",
+    "evidence_ref": "test_filters",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_escape_and_safe",
+    "description": "Verified behavior in test_escape_and_safe",
+    "status": "pass",
+    "evidence_ref": "test_escape_and_safe",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_for",
+    "description": "Verified behavior in test_for",
+    "status": "pass",
+    "evidence_ref": "test_for",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_unknown_filter_error",
+    "description": "Verified behavior in test_unknown_filter_error",
+    "status": "pass",
+    "evidence_ref": "test_unknown_filter_error",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_strict",
+    "description": "Verified behavior in test_strict",
+    "status": "pass",
+    "evidence_ref": "test_strict",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_cli",
+    "description": "Verified behavior in test_cli",
+    "status": "pass",
+    "evidence_ref": "test_cli",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 10,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_cli",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_cli",
+       "requirement_id": "REQ-001",
+       "property_name": "test_cli",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_cli' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_dotted_and_index",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_dotted_and_index",
+       "requirement_id": "REQ-002",
+       "property_name": "test_dotted_and_index",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_dotted_and_index' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_escape_and_safe",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_escape_and_safe",
+       "requirement_id": "REQ-003",
+       "property_name": "test_escape_and_safe",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_escape_and_safe' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-004",
+     "description": "Behavioral verification of property test_filters",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_filters",
+       "requirement_id": "REQ-004",
+       "property_name": "test_filters",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_filters' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-005",
+     "description": "Behavioral verification of property test_for",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_for",
+       "requirement_id": "REQ-005",
+       "property_name": "test_for",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_for' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-006",
+     "description": "Behavioral verification of property test_plain_and_var",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_plain_and_var",
+       "requirement_id": "REQ-006",
+       "property_name": "test_plain_and_var",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_plain_and_var' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-007",
+     "description": "Behavioral verification of property test_strict",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_strict",
+       "requirement_id": "REQ-007",
+       "property_name": "test_strict",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_strict' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-008",
+     "description": "Behavioral verification of property test_unknown_filter_error",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_unknown_filter_error",
+       "requirement_id": "REQ-008",
+       "property_name": "test_unknown_filter_error",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_unknown_filter_error' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 8,
+    "verified_count": 8,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: **Filter arguments.** A filter may be written with arguments: `{{ x | join(\", \") }}`. Arguments are separated by commas and are either string literals (single or double quoted; the text between the quotes is taken literally and may contain `|`, `,`, `(` or `)`) or integers (optional leading `-`). Filters can be chained with and without arguments. Giving a filter the wrong number of arguments, or a malformed argument, is a `TemplateError` (raised when the template is parsed) with a `line N:` message. Filters without arguments, `{{ x | upper }}`, keep working.",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: **New filters.**",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: `default(fallback)`: result is `fallback` if the variable is undefined or `None`; any other value (including `\"\"` and `0`) is kept. It is meant to be the first filter of a chain.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: `join(sep)`: joins a list or tuple, converting every item with `str`; any other value raises `TemplateError` (message starting with `line N:`).",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: `truncate(n)`: `str(value)` unchanged if it has at most `n` characters, otherwise the first `n` characters followed by `...`. A negative `n` raises `TemplateError` with a `line N:` message.",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: **strict mode and `default`.** With `strict=True`, an undefined variable normally raises `TemplateError`; it does not when the first filter of its chain is `default(...)`.",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: **Escaping** is unchanged and applies to the new filters too: the result is HTML-escaped unless the last filter that ran was `safe`. So `{{ x | default(\"<none>\") }}` prints `&lt;none&gt;`, `{{ x | default(\"<b>\") | safe }}` prints `<b>`, and `join`/`truncate` results are escaped.",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: **Conditionals.** `{% if COND %}...{% elif COND %}...{% else %}...{% endif %}` (`elif` and `else` optional, any number of `elif`). `COND` is one of: `path`, `not path`, `path == LITERAL`, `path != LITERAL`, `not path == LITERAL` (this negates the comparison); `LITERAL` is a quoted string or an integer. A plain `path` is true when the value is truthy (Python rules). An undefined variable is falsy and never equal to a literal, also in strict mode (no error). `if` blocks may be nested and may contain, or be inside, `for` blocks. Tags do not swallow surrounding whitespace.",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R9",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R9 (TASK.md) has no passing test that names it: **Block errors**, all `TemplateError` with a `line N:` message: a bad condition (line of the tag); `elif`/`else`/`endif` without an open `if`, `elif` or a second `else` after `else` (line of that tag); `endif` closing an open `for` or `endfor` closing an open `if` (line of the closing tag); an `if` or `for` never closed (line where it was opened; if several are open, the innermost one).",
+   "property": "R9",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R9 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R10",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R10 (TASK.md) has no passing test that names it: **Loop variable.** Inside a `for`, `loop` is available with `loop.index` (starts at 1), `loop.index0`, `loop.first` and `loop.last` (booleans) and `loop.length`. In nested loops `loop` refers to the innermost loop, and after the inner loop ends it refers to the outer loop again. Outside any loop `loop` is undefined (unless the context defines it).",
+   "property": "R10",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R10 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 28 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "tests\\test_basic.py:1:1: I001 [*] Import block is un-sorted or un-formatted | tpl\\cli.py:22:13: UP031 Use format specifiers instead of percent format | tpl\\parser.py:40:29: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 28 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 10 of 10 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval4\\judge_accuracy\\D4_templates__wrong_1\\workspace",
+  "workspace_hash": "f3599719b7911067114e30d4f0233ce7e8cdcafaa6755b73dd105175fc59b28f",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T17:21:47Z",
+  "evidence_level": 2,
+  "total_tests": 8,
+  "passed_tests": 8,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 28 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 10 of 10 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"**Filter arguments.** A filter may be written with arguments: `{{ x | join(\", \") }}`. Arguments are separated by commas and are either string literals (single or double quoted; the text between the quotes is taken literally and may contain `|`, `,`, `(` or `)`) or integers (optional leading `-`). Filters can be chained with and without arguments. Giving a filter the wrong number of arguments, or a malformed argument, is a `TemplateError` (raised when the template is parsed) with a `line N:` message. Filters without arguments, `{{ x | upper }}`, keep working.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"**New filters.**\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"`default(fallback)`: result is `fallback` if the variable is undefined or `None`; any other value (including `\"\"` and `0`) is kept. It is meant to be the first filter of a chain.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"`join(sep)`: joins a list or tuple, converting every item with `str`; any other value raises `TemplateError` (message starting with `line N:`).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"`truncate(n)`: `str(value)` unchanged if it has at most `n` characters, otherwise the first `n` characters followed by `...`. A negative `n` raises `TemplateError` with a `line N:` message.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"**strict mode and `default`.** With `strict=True`, an undefined variable normally raises `TemplateError`; it does not when the first filter of its chain is `default(...)`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"**Escaping** is unchanged and applies to the new filters too: the result is HTML-escaped unless the last filter that ran was `safe`. So `{{ x | default(\"<none>\") }}` prints `&lt;none&gt;`, `{{ x | default(\"<b>\") | safe }}` prints `<b>`, and `join`/`truncate` results are escaped.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"**Conditionals.** `{% if COND %}...{% elif COND %}...{% else %}...{% endif %}` (`elif` and `else` optional, any number of `elif`). `COND` is one of: `path`, `not path`, `path == LITERAL`, `path != LITERAL`, `not path == LITERAL` (this negates the comparison); `LITERAL` is a quoted string or an integer. A plain `path` is true when the value is truthy (Python rules). An undefined variable is falsy and never equal to a literal, also in strict mode (no error). `if` blocks may be nested and may contain, or be inside, `for` blocks. Tags do not swallow surrounding whitespace.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 5.415,
+  "judge_version": "v1.0.2"
+ }
+}

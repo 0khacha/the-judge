@@ -1,0 +1,502 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 8,
+  "passed_tests": 8,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_add_and_get",
+    "description": "Verified behavior in test_add_and_get",
+    "status": "pass",
+    "evidence_ref": "test_add_and_get",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_complete_sets_done_on",
+    "description": "Verified behavior in test_complete_sets_done_on",
+    "status": "pass",
+    "evidence_ref": "test_complete_sets_done_on",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_blocked_by_dependency",
+    "description": "Verified behavior in test_blocked_by_dependency",
+    "status": "pass",
+    "evidence_ref": "test_blocked_by_dependency",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_ready_and_overdue",
+    "description": "Verified behavior in test_ready_and_overdue",
+    "status": "pass",
+    "evidence_ref": "test_ready_and_overdue",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_delete_needed",
+    "description": "Verified behavior in test_delete_needed",
+    "status": "pass",
+    "evidence_ref": "test_delete_needed",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_roundtrip",
+    "description": "Verified behavior in test_roundtrip",
+    "status": "pass",
+    "evidence_ref": "test_roundtrip",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_agenda",
+    "description": "Verified behavior in test_agenda",
+    "status": "pass",
+    "evidence_ref": "test_agenda",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_cli",
+    "description": "Verified behavior in test_cli",
+    "status": "pass",
+    "evidence_ref": "test_cli",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 8,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_add_and_get",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_add_and_get",
+       "requirement_id": "REQ-001",
+       "property_name": "test_add_and_get",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_add_and_get' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_agenda",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_agenda",
+       "requirement_id": "REQ-002",
+       "property_name": "test_agenda",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_agenda' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_blocked_by_dependency",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_blocked_by_dependency",
+       "requirement_id": "REQ-003",
+       "property_name": "test_blocked_by_dependency",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_blocked_by_dependency' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-004",
+     "description": "Behavioral verification of property test_cli",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_cli",
+       "requirement_id": "REQ-004",
+       "property_name": "test_cli",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_cli' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-005",
+     "description": "Behavioral verification of property test_complete_sets_done_on",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_complete_sets_done_on",
+       "requirement_id": "REQ-005",
+       "property_name": "test_complete_sets_done_on",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_complete_sets_done_on' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-006",
+     "description": "Behavioral verification of property test_delete_needed",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_delete_needed",
+       "requirement_id": "REQ-006",
+       "property_name": "test_delete_needed",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_delete_needed' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-007",
+     "description": "Behavioral verification of property test_ready_and_overdue",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_ready_and_overdue",
+       "requirement_id": "REQ-007",
+       "property_name": "test_ready_and_overdue",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_ready_and_overdue' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-008",
+     "description": "Behavioral verification of property test_roundtrip",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_roundtrip",
+       "requirement_id": "REQ-008",
+       "property_name": "test_roundtrip",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_roundtrip' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 8,
+    "verified_count": 8,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: `TaskStore.add(title, due=None, priority=2, tags=(), deps=(), repeat=None)`. `repeat` is `None`, `\"daily\"`, `\"weekly\"` or `\"monthly\"`; anything else raises `ValueError`. A recurring task must have a due date, otherwise `ValueError`. A rejected `add` creates nothing and uses no id. `Task` gets two new attributes: `repeat` (default `None`) and `next_id` (default `None`).",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: Completing a recurring task (via `complete`) marks it done as before and creates the next occurrence: a new open task with the same title, priority, a copy of the tags, the same `repeat`, no dependencies, and a fresh id (the normal id counter). `complete` still returns the task that was completed, and its `next_id` is set to the id of the new task. Completing a task that is not recurring does not create anything. A completion that fails (already done, `BlockedError`) creates nothing.",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: The due date of the new task is computed from the *old due date*, not from the completion date (even if that gives a date in the past): daily = +1 day, weekly = +7 days, monthly = same day of the month in the next month, clamped to the last day of that month (31 Jan 2024 -> 29 Feb 2024, 31 Mar -> 30 Apr, December rolls into January of the next year).",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: `reopen` of a task whose successor (`next_id`) is still open raises `ValueError` and changes nothing. Otherwise the task is reopened as before and its `next_id` is reset to `None`.",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: `delete` of a task that some other task has as `next_id` sets that task's `next_id` back to `None`.",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: `storage.dump` writes `\"repeat\"` and `\"next_id\"` for every task (null when not set); `storage.load` must still accept data without these keys (older files).",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: `views.agenda`: the line of a recurring task gets the text ` (repeats <kind>)` after the `(due ...)` part and before the ` OVERDUE` flag, for example `  #3 [P2] Water plants (due 2024-01-12) (repeats weekly) OVERDUE`.",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: Command line: `add` takes `--repeat KIND` (a missing due date or bad kind gives `error: ...` and exit code 1); `done` prints `done #<id>` and, when a new occurrence was created, a second line `next #<newid> due <date>`; the `list` and `ready` lines of recurring tasks end with ` repeat <kind>`.",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 25 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "tests\\test_store.py:1:1: I001 [*] Import block is un-sorted or un-formatted | tracker\\cli.py:18:34: UP031 Use format specifiers instead of percent format | tracker\\cli.py:39:9: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 25 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 8 of 8 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval4\\judge_accuracy\\D3_tracker__wrong_2\\workspace",
+  "workspace_hash": "72449eee09e024220b8bcf600db7302f41c421ac3d8756061515b07f120a1f06",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T17:21:22Z",
+  "evidence_level": 2,
+  "total_tests": 8,
+  "passed_tests": 8,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 25 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 8 of 8 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"`TaskStore.add(title, due=None, priority=2, tags=(), deps=(), repeat=None)`. `repeat` is `None`, `\"daily\"`, `\"weekly\"` or `\"monthly\"`; anything else raises `ValueError`. A recurring task must have a due date, otherwise `ValueError`. A rejected `add` creates nothing and uses no id. `Task` gets two new attributes: `repeat` (default `None`) and `next_id` (default `None`).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"Completing a recurring task (via `complete`) marks it done as before and creates the next occurrence: a new open task with the same title, priority, a copy of the tags, the same `repeat`, no dependencies, and a fresh id (the normal id counter). `complete` still returns the task that was completed, and its `next_id` is set to the id of the new task. Completing a task that is not recurring does not create anything. A completion that fails (already done, `BlockedError`) creates nothing.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"The due date of the new task is computed from the *old due date*, not from the completion date (even if that gives a date in the past): daily = +1 day, weekly = +7 days, monthly = same day of the month in the next month, clamped to the last day of that month (31 Jan 2024 -> 29 Feb 2024, 31 Mar -> 30 Apr, December rolls into January of the next year).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"`reopen` of a task whose successor (`next_id`) is still open raises `ValueError` and changes nothing. Otherwise the task is reopened as before and its `next_id` is reset to `None`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"`delete` of a task that some other task has as `next_id` sets that task's `next_id` back to `None`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"`storage.dump` writes `\"repeat\"` and `\"next_id\"` for every task (null when not set); `storage.load` must still accept data without these keys (older files).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"`views.agenda`: the line of a recurring task gets the text ` (repeats <kind>)` after the `(due ...)` part and before the ` OVERDUE` flag, for example `  #3 [P2] Water plants (due 2024-01-12) (repeats weekly) OVERDUE`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"Command line: `add` takes `--repeat KIND` (a missing due date or bad kind gives `error: ...` and exit code 1); `done` prints `done #<id>` and, when a new occurrence was created, a second line `next #<newid> due <date>`; the `list` and `ready` lines of recurring tasks end with ` repeat <kind>`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 8.255,
+  "judge_version": "v1.0.2"
+ }
+}

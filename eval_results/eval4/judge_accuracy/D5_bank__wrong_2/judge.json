@@ -1,0 +1,439 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_deposit_withdraw",
+    "description": "Verified behavior in test_deposit_withdraw",
+    "status": "pass",
+    "evidence_ref": "test_deposit_withdraw",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_insufficient",
+    "description": "Verified behavior in test_insufficient",
+    "status": "pass",
+    "evidence_ref": "test_insufficient",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_transfer",
+    "description": "Verified behavior in test_transfer",
+    "status": "pass",
+    "evidence_ref": "test_transfer",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_close_rules",
+    "description": "Verified behavior in test_close_rules",
+    "status": "pass",
+    "evidence_ref": "test_close_rules",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_interest",
+    "description": "Verified behavior in test_interest",
+    "status": "pass",
+    "evidence_ref": "test_interest",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_statement",
+    "description": "Verified behavior in test_statement",
+    "status": "pass",
+    "evidence_ref": "test_statement",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_exports",
+    "description": "Verified behavior in test_exports",
+    "status": "pass",
+    "evidence_ref": "test_exports",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 6,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_close_rules",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_close_rules",
+       "requirement_id": "REQ-001",
+       "property_name": "test_close_rules",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_close_rules' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_deposit_withdraw",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_deposit_withdraw",
+       "requirement_id": "REQ-002",
+       "property_name": "test_deposit_withdraw",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_deposit_withdraw' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_exports",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_exports",
+       "requirement_id": "REQ-003",
+       "property_name": "test_exports",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_exports' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-004",
+     "description": "Behavioral verification of property test_insufficient",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_insufficient",
+       "requirement_id": "REQ-004",
+       "property_name": "test_insufficient",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_insufficient' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-005",
+     "description": "Behavioral verification of property test_interest",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_interest",
+       "requirement_id": "REQ-005",
+       "property_name": "test_interest",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_interest' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-006",
+     "description": "Behavioral verification of property test_statement",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_statement",
+       "requirement_id": "REQ-006",
+       "property_name": "test_statement",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_statement' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-007",
+     "description": "Behavioral verification of property test_transfer",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_transfer",
+       "requirement_id": "REQ-007",
+       "property_name": "test_transfer",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_transfer' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 7,
+    "verified_count": 7,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: `Ledger.open_account(owner, overdraft=0)`: `overdraft` is the overdraft limit in cents, a non-negative `int`, otherwise `ValueError` (and no account is created). `Account` gets an `overdraft` attribute. New method `Ledger.set_overdraft(account_id, limit)` returns the account; it raises `ValueError` for a negative or non-int limit, and also when the new limit is smaller than the current debt (that is, when `balance < -limit`); unknown account -> `UnknownAccount`, closed account -> `AccountClosed`.",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: `withdraw` and the source side of `transfer` are allowed as long as `balance - amount >= -overdraft`; otherwise `InsufficientFunds` and nothing changes (no transactions, no balances). Deposits and the destination side of a transfer are unchanged.",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: Overdraft fee: whenever a successful `withdraw` or `transfer` leaves the *source* account with a balance below 0, a further transaction of kind `\"fee\"`, amount `-500`, memo `\"overdraft fee\"` is posted on that account straight after the operation's own transactions (for a transfer: after the `transfer_in`). The fee itself is not checked against the limit, so it may take the balance below `-overdraft`. A balance of exactly 0 is not charged, and a failed operation never charges a fee. The values returned by `withdraw` (its own txn) and `transfer` (the `(out, in)` pair) do not change.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: `interest.accrue(ledger, rate_bp)`: in addition to the existing credit for positive balances, every open account with a negative balance is charged 150 basis points of its debt (`abs(balance)`, rounded half up) as an `\"interest\"` transaction with a negative amount and memo `\"overdraft interest\"`. The `rate_bp` argument only concerns the positive balances. A charge that rounds to 0 posts nothing. The returned list is in account-id order.",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: `statement.render`: for an account with `overdraft > 0`, the two lines `Overdraft limit: <limit>` and `Available: <balance + limit>` follow the `Balance:` line (before `Account closed`, if present). Accounts without an overdraft look exactly as before.",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: `export.accounts_csv`: the header becomes `account_id,owner,balance,overdraft,open` and every row gets the overdraft limit after the balance. (`history_csv` is unchanged; it will simply contain `fee` rows.)",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 14 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "bank\\export.py:8:21: UP031 Use format specifiers instead of percent format | bank\\export.py:16:21: UP031 Use format specifiers instead of percent format | bank\\interest.py:24:66: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 14 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 6 of 6 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval4\\judge_accuracy\\D5_bank__wrong_2\\workspace",
+  "workspace_hash": "719f49924477842fafc48e1708a8f5573aa58d672cefd7ed21dfe8726c17ad3e",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T17:23:05Z",
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 14 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 6 of 6 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"`Ledger.open_account(owner, overdraft=0)`: `overdraft` is the overdraft limit in cents, a non-negative `int`, otherwise `ValueError` (and no account is created). `Account` gets an `overdraft` attribute. New method `Ledger.set_overdraft(account_id, limit)` returns the account; it raises `ValueError` for a negative or non-int limit, and also when the new limit is smaller than the current debt (that is, when `balance < -limit`); unknown account -> `UnknownAccount`, closed account -> `AccountClosed`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"`withdraw` and the source side of `transfer` are allowed as long as `balance - amount >= -overdraft`; otherwise `InsufficientFunds` and nothing changes (no transactions, no balances). Deposits and the destination side of a transfer are unchanged.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"Overdraft fee: whenever a successful `withdraw` or `transfer` leaves the *source* account with a balance below 0, a further transaction of kind `\"fee\"`, amount `-500`, memo `\"overdraft fee\"` is posted on that account straight after the operation's own transactions (for a transfer: after the `transfer_in`). The fee itself is not checked against the limit, so it may take the balance below `-overdraft`. A balance of exactly 0 is not charged, and a failed operation never charges a fee. The values returned by `withdraw` (its own txn) and `transfer` (the `(out, in)` pair) do not change.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"`interest.accrue(ledger, rate_bp)`: in addition to the existing credit for positive balances, every open account with a negative balance is charged 150 basis points of its debt (`abs(balance)`, rounded half up) as an `\"interest\"` transaction with a negative amount and memo `\"overdraft interest\"`. The `rate_bp` argument only concerns the positive balances. A charge that rounds to 0 posts nothing. The returned list is in account-id order.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"`statement.render`: for an account with `overdraft > 0`, the two lines `Overdraft limit: <limit>` and `Available: <balance + limit>` follow the `Balance:` line (before `Account closed`, if present). Accounts without an overdraft look exactly as before.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"`export.accounts_csv`: the header becomes `account_id,owner,balance,overdraft,open` and every row gets the overdraft limit after the balance. (`history_csv` is unchanged; it will simply contain `fee` rows.)\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 13.835,
+  "judge_version": "v1.0.2"
+ }
+}

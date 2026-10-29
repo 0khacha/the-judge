@@ -1,0 +1,12 @@
+You are a coding agent working on a small Python task.
+
+Workspace: C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws4/D4_templates__A__r1
+Python to use: C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/venv_102/Scripts/python.exe (pytest is installed in it)
+
+Rules:
+- Work only inside the workspace. Do not read, list or search any other directory or file on this machine.
+- Read TASK.md in the workspace and create or change the module(s) it asks for, in the workspace.
+- You may run tests from inside the workspace with: <python> -m pytest -q
+- Do not install packages.
+
+When you are done, reply with: the file(s) you created or changed, and one sentence on whether you believe the solution is complete.

@@ -1,0 +1,456 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_book_and_list",
+    "description": "Verified behavior in test_book_and_list",
+    "status": "pass",
+    "evidence_ref": "test_book_and_list",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_conflict_and_back_to_back",
+    "description": "Verified behavior in test_conflict_and_back_to_back",
+    "status": "pass",
+    "evidence_ref": "test_conflict_and_back_to_back",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_rules_and_capacity",
+    "description": "Verified behavior in test_rules_and_capacity",
+    "status": "pass",
+    "evidence_ref": "test_rules_and_capacity",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_cancel_and_reschedule",
+    "description": "Verified behavior in test_cancel_and_reschedule",
+    "status": "pass",
+    "evidence_ref": "test_cancel_and_reschedule",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_free_slots",
+    "description": "Verified behavior in test_free_slots",
+    "status": "pass",
+    "evidence_ref": "test_free_slots",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_find_room",
+    "description": "Verified behavior in test_find_room",
+    "status": "pass",
+    "evidence_ref": "test_find_room",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_report",
+    "description": "Verified behavior in test_report",
+    "status": "pass",
+    "evidence_ref": "test_report",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 7,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_book_and_list",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_book_and_list",
+       "requirement_id": "REQ-001",
+       "property_name": "test_book_and_list",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_book_and_list' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_cancel_and_reschedule",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_cancel_and_reschedule",
+       "requirement_id": "REQ-002",
+       "property_name": "test_cancel_and_reschedule",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_cancel_and_reschedule' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_conflict_and_back_to_back",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_conflict_and_back_to_back",
+       "requirement_id": "REQ-003",
+       "property_name": "test_conflict_and_back_to_back",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_conflict_and_back_to_back' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-004",
+     "description": "Behavioral verification of property test_find_room",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_find_room",
+       "requirement_id": "REQ-004",
+       "property_name": "test_find_room",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_find_room' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-005",
+     "description": "Behavioral verification of property test_free_slots",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_free_slots",
+       "requirement_id": "REQ-005",
+       "property_name": "test_free_slots",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_free_slots' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-006",
+     "description": "Behavioral verification of property test_report",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_report",
+       "requirement_id": "REQ-006",
+       "property_name": "test_report",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_report' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-007",
+     "description": "Behavioral verification of property test_rules_and_capacity",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_rules_and_capacity",
+       "requirement_id": "REQ-007",
+       "property_name": "test_rules_and_capacity",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_rules_and_capacity' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 7,
+    "verified_count": 7,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: `Scheduler.add_room(name, capacity, buffer_minutes=0)`. `buffer_minutes` is an `int` from 0 to 60 (inclusive; no `bool`), otherwise `ValueError` and no room is created. `Room` gets the attribute `buffer_minutes`.",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: In a room with a buffer, every booking blocks the room for `buffer_minutes` after its end. Two bookings of the same room must be separated by a gap of at least the buffer: a new booking conflicts (`Conflict`) with an existing one if it starts earlier than `existing.end + buffer`, and also if it ends later than `existing.start - buffer`. A gap exactly equal to the buffer is fine. With buffer 0 nothing changes (back-to-back bookings are allowed). The buffer is a property of the room: other rooms are unaffected.",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: A buffer is not subject to the opening hours: a booking that ends at 18:00 is fine even though its buffer lies after closing. Buffers never carry over into another day.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: The rule of point 2 is used everywhere conflicts matter: `book`, `reschedule`, `free_slots` and `find_room`. A rescheduled booking never conflicts with itself (including its own buffer); other bookings still count, with their buffer.",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: `free_slots(room, day, minutes)` still returns exactly the start times at which `book(room, start, start + minutes, ...)` would currently be accepted (ignoring capacity).",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: `report.day_schedule`: the header line of a room with a buffer becomes `<name> (cap <n>, buffer <m> min)`; rooms without a buffer keep `<name> (cap <n>)`.",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: `report.utilization` keeps counting only the booked minutes (the buffer is not counted as booked).",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 10 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "rooms\\report.py:6:14: UP031 Use format specifiers instead of percent format | rooms\\report.py:10:26: UP031 Use format specifiers instead of percent format | rooms\\report.py:12:26: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 10 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 7 of 7 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval4\\judge_accuracy\\D8_rooms__reference\\workspace",
+  "workspace_hash": "910f42165d81834cec96d9c303389b9d353956750bb51e123176737574f98cb0",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T17:24:22Z",
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 10 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 7 of 7 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"`Scheduler.add_room(name, capacity, buffer_minutes=0)`. `buffer_minutes` is an `int` from 0 to 60 (inclusive; no `bool`), otherwise `ValueError` and no room is created. `Room` gets the attribute `buffer_minutes`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"In a room with a buffer, every booking blocks the room for `buffer_minutes` after its end. Two bookings of the same room must be separated by a gap of at least the buffer: a new booking conflicts (`Conflict`) with an existing one if it starts earlier than `existing.end + buffer`, and also if it ends later than `existing.start - buffer`. A gap exactly equal to the buffer is fine. With buffer 0 nothing changes (back-to-back bookings are allowed). The buffer is a property of the room: other rooms are unaffected.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"A buffer is not subject to the opening hours: a booking that ends at 18:00 is fine even though its buffer lies after closing. Buffers never carry over into another day.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"The rule of point 2 is used everywhere conflicts matter: `book`, `reschedule`, `free_slots` and `find_room`. A rescheduled booking never conflicts with itself (including its own buffer); other bookings still count, with their buffer.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"`free_slots(room, day, minutes)` still returns exactly the start times at which `book(room, start, start + minutes, ...)` would currently be accepted (ignoring capacity).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"`report.day_schedule`: the header line of a room with a buffer becomes `<name> (cap <n>, buffer <m> min)`; rooms without a buffer keep `<name> (cap <n>)`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"`report.utilization` keeps counting only the booked minutes (the buffer is not counted as booked).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 6.259,
+  "judge_version": "v1.0.2"
+ }
+}

@@ -1,0 +1,9 @@
+D1_library lines=285 (label 285) new=26 reg=17 reqs=8 original:tests(p9/f0),hidden(p18/f25) reference:tests(p9/f0),hidden(p43/f0) wrong_1:tests(p9/f0),hidden(p41/f2) wrong_2:tests(p9/f0),hidden(p40/f3) VALID=True
+D2_shop lines=245 (label 245) new=28 reg=13 reqs=8 original:tests(p7/f0),hidden(p0/f2) reference:tests(p7/f0),hidden(p41/f0) wrong_1:tests(p7/f0),hidden(p28/f13) wrong_2:tests(p7/f0),hidden(p40/f1) VALID=True
+D3_tracker lines=268 (label 268) new=30 reg=16 reqs=8 original:tests(p8/f0),hidden(p17/f29) reference:tests(p8/f0),hidden(p46/f0) wrong_1:tests(p8/f0),hidden(p43/f3) wrong_2:tests(p8/f0),hidden(p45/f1) VALID=True
+D4_templates lines=261 (label 261) new=33 reg=14 reqs=7 original:tests(p8/f0),hidden(p17/f30) reference:tests(p8/f0),hidden(p47/f0) wrong_1:tests(p8/f0),hidden(p37/f10) wrong_2:tests(p8/f0),hidden(p46/f1) VALID=True
+D5_bank lines=177 (label 177) new=29 reg=11 reqs=6 original:tests(p7/f0),hidden(p5/f35) reference:tests(p7/f0),hidden(p40/f0) wrong_1:tests(p7/f0),hidden(p39/f1) wrong_2:tests(p7/f0),hidden(p39/f1) VALID=True
+D6_cache lines=170 (label 170) new=29 reg=13 reqs=8 original:tests(p6/f0),hidden(p13/f29) reference:tests(p6/f0),hidden(p42/f0) wrong_1:tests(p6/f0),hidden(p36/f6) wrong_2:tests(p6/f0),hidden(p37/f5) VALID=True
+D7_config lines=244 (label 244) new=29 reg=12 reqs=7 original:tests(p7/f0),hidden(p19/f29) reference:tests(p7/f0),hidden(p48/f0) wrong_1:tests(p7/f0),hidden(p42/f6) wrong_2:tests(p7/f0),hidden(p47/f1) VALID=True
+D8_rooms lines=201 (label 201) new=20 reg=16 reqs=7 original:tests(p7/f0),hidden(p1/f35) reference:tests(p7/f0),hidden(p36/f0) wrong_1:tests(p7/f0),hidden(p31/f5) wrong_2:tests(p7/f0),hidden(p33/f3) VALID=True
+D9_etl lines=283 (label 283) new=26 reg=17 reqs=6 original:tests(p7/f0),hidden(p17/f26) reference:tests(p7/f0),hidden(p43/f0) wrong_1:tests(p7/f0),hidden(p31/f12) wrong_2:tests(p7/f0),hidden(p40/f3) VALID=True

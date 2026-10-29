@@ -1,0 +1,14 @@
+{
+ "task": "D8_rooms",
+ "lines": 201,
+ "change_requirements": 7,
+ "traps": [
+  "buffer must apply in reschedule/free_slots/find_room, not only book",
+  "gap also required before an existing booking (end + buffer > existing.start)",
+  "buffer ignores opening hours (no RuleError for 18:00 end)",
+  "reschedule must not conflict with itself, even through its own buffer",
+  "free_slots equals exactly the set book would accept",
+  "report header only with buffer; utilization excludes buffer",
+  "regression: reschedule overlapping own old slot with buffer 0"
+ ]
+}

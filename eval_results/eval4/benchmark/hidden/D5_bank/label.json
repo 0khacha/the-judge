@@ -1,0 +1,14 @@
+{
+ "task": "D5_bank",
+ "lines": 177,
+ "change_requirements": 6,
+ "traps": [
+  "transfer source must also honour overdraft and fee (ledger.transfer)",
+  "fee after transfer_in, not limit-checked, exact zero no fee, failed op no fee",
+  "interest for negative balances in interest.accrue, order by id, half-up",
+  "statement lines only when overdraft>0, before 'Account closed'",
+  "accounts_csv new column",
+  "set_overdraft validation against current debt",
+  "regression: close needs balance exactly 0 (also negative), atomic failed transfer"
+ ]
+}

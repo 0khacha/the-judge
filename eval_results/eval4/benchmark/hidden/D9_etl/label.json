@@ -1,0 +1,14 @@
+{
+ "task": "D9_etl",
+ "lines": 283,
+ "change_requirements": 6,
+ "traps": [
+  "keep=last: reject names the next row with the same key (chain), attached to superseded line",
+  "invalid rows must not claim keys / supersede",
+  "duplicates after coercion (01 == 1)",
+  "stats: superseded added, duplicates counts both, rejected includes all",
+  "cli --key comma list, --keep, summary format",
+  "rejects must stay sorted by line (regression)",
+  "sorted by key tuple with numeric comparison"
+ ]
+}

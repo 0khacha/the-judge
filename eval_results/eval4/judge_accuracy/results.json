@@ -1,0 +1,164 @@
+[
+ {
+  "task": "D1_library",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D1_library",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D1_library",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D2_shop",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D2_shop",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D2_shop",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D3_tracker",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D3_tracker",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D3_tracker",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D4_templates",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D4_templates",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D4_templates",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D5_bank",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D5_bank",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D5_bank",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D6_cache",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D6_cache",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D6_cache",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D7_config",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D7_config",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D7_config",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D8_rooms",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D8_rooms",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D8_rooms",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D9_etl",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D9_etl",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "D9_etl",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ }
+]

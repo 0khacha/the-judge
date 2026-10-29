@@ -1,0 +1,14 @@
+{
+ "task": "D6_cache",
+ "lines": 170,
+ "change_requirements": 8,
+ "traps": [
+  "total weight must be released on every removal path (expiry in get/purge, delete, clear)",
+  "weight > capacity leaves existing entry untouched (validate before removing old)",
+  "just-put entry never evicted; expired purged before evictions (expirations vs evictions)",
+  "replacement must move key to MRU and release old weight",
+  "persist weight round trip + old dumps",
+  "memoize weigher",
+  "regression: replacement moves to MRU, peek/contains side-effect free"
+ ]
+}

@@ -1,0 +1,495 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_price_simple",
+    "description": "Verified behavior in test_price_simple",
+    "status": "pass",
+    "evidence_ref": "test_price_simple",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_bulk_discount",
+    "description": "Verified behavior in test_bulk_discount",
+    "status": "pass",
+    "evidence_ref": "test_bulk_discount",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_nontaxable",
+    "description": "Verified behavior in test_nontaxable",
+    "status": "pass",
+    "evidence_ref": "test_nontaxable",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_place_and_stock",
+    "description": "Verified behavior in test_place_and_stock",
+    "status": "pass",
+    "evidence_ref": "test_place_and_stock",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_out_of_stock",
+    "description": "Verified behavior in test_out_of_stock",
+    "status": "pass",
+    "evidence_ref": "test_out_of_stock",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_cancel_restocks",
+    "description": "Verified behavior in test_cancel_restocks",
+    "status": "pass",
+    "evidence_ref": "test_cancel_restocks",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_invoice_and_csv",
+    "description": "Verified behavior in test_invoice_and_csv",
+    "status": "pass",
+    "evidence_ref": "test_invoice_and_csv",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 10,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_bulk_discount",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_bulk_discount",
+       "requirement_id": "REQ-001",
+       "property_name": "test_bulk_discount",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_bulk_discount' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_cancel_restocks",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_cancel_restocks",
+       "requirement_id": "REQ-002",
+       "property_name": "test_cancel_restocks",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_cancel_restocks' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_invoice_and_csv",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_invoice_and_csv",
+       "requirement_id": "REQ-003",
+       "property_name": "test_invoice_and_csv",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_invoice_and_csv' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-004",
+     "description": "Behavioral verification of property test_nontaxable",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_nontaxable",
+       "requirement_id": "REQ-004",
+       "property_name": "test_nontaxable",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_nontaxable' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-005",
+     "description": "Behavioral verification of property test_out_of_stock",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_out_of_stock",
+       "requirement_id": "REQ-005",
+       "property_name": "test_out_of_stock",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_out_of_stock' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-006",
+     "description": "Behavioral verification of property test_place_and_stock",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_place_and_stock",
+       "requirement_id": "REQ-006",
+       "property_name": "test_place_and_stock",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_place_and_stock' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-007",
+     "description": "Behavioral verification of property test_price_simple",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_price_simple",
+       "requirement_id": "REQ-007",
+       "property_name": "test_price_simple",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_price_simple' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 7,
+    "verified_count": 7,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: New module `shop.coupons` with `Coupon(code, kind, value, min_subtotal=0, expires=None, max_uses=None)` (a dataclass that also has a `uses` counter starting at 0), `CouponError` (subclass of `ValueError`) and `CouponBook` with `add(coupon)`, and `get(code)`. `get` ignores letter case and raises `KeyError` for unknown codes; adding a second coupon whose code only differs in case raises `ValueError`. `kind` is `\"percent\"` (value 1..100) or `\"fixed\"` (value in cents, > 0); anything else raises `ValueError` when the coupon is constructed.",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: `pricing.price(cart, catalog, coupon=None, today=None)` and `OrderBook.place(cart, catalog, coupon=None, today=None)` accept a coupon (`today` defaults to `date.today()`). The coupon is applied after the bulk discount: let `base = subtotal - discount` (the existing bulk `discount`).",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: percent: `coupon_discount = value% of base`, rounded half up (use `pricing.pct`);",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: fixed: `coupon_discount = min(value, base)`.",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: A coupon is rejected with `CouponError` when `today` is after `expires` (the expiry day itself is still valid), when `base < min_subtotal`, or when `uses >= max_uses`. A rejected coupon changes nothing: no order, no order id consumed, no stock reserved.",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: `Quote` gets `coupon_discount` (0 without a coupon) and `coupon_code` (None without a coupon). `quote.discount` stays the bulk discount. `total = subtotal - discount - coupon_discount + tax`.",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: Tax: the coupon reduces the taxable amount proportionally. With `taxable` = sum of the taxable lines after bulk discount, the taxed amount is `taxable * (base - coupon_discount) / base`, tax = 8% of that, rounded half up. (If `base` is 0 there is no coupon discount and no tax.)",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: `OrderBook.place` counts a use (`coupon.uses += 1`) only when the order is actually placed; an order that fails (empty cart, `OutOfStock`, rejected coupon) uses nothing. `Order.coupon_code` holds the code (None if no coupon). Cancelling an order gives its coupon use back (`uses` goes down by one); cancelling the same order twice is still an error and must not give back twice.",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R9",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R9 (TASK.md) has no passing test that names it: `invoice.render` prints `Coupon <CODE>: -<amount>` on a line right after the bulk `Discount` line (or after `Subtotal` if there is no bulk discount), only when the coupon discount is non-zero.",
+   "property": "R9",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R9 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R10",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R10 (TASK.md) has no passing test that names it: `invoice.export_csv` header becomes `order_id,status,subtotal,discount,coupon,tax,total`. The `discount` column is the bulk plus coupon discount; `coupon` is the code or empty.",
+   "property": "R10",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R10 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 18 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "shop\\catalog.py:25:30: UP031 Use format specifiers instead of percent format | shop\\catalog.py:40:30: UP031 Use format specifiers instead of percent format | shop\\coupons.py:31:30: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 18 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 10 of 10 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval4\\judge_accuracy\\D2_shop__wrong_2\\workspace",
+  "workspace_hash": "d6e03355e440caf2210ec668641f8e09a89e9500ac457fc07dca7fdffbf828ae",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T17:20:28Z",
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 18 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 10 of 10 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"New module `shop.coupons` with `Coupon(code, kind, value, min_subtotal=0, expires=None, max_uses=None)` (a dataclass that also has a `uses` counter starting at 0), `CouponError` (subclass of `ValueError`) and `CouponBook` with `add(coupon)`, and `get(code)`. `get` ignores letter case and raises `KeyError` for unknown codes; adding a second coupon whose code only differs in case raises `ValueError`. `kind` is `\"percent\"` (value 1..100) or `\"fixed\"` (value in cents, > 0); anything else raises `ValueError` when the coupon is constructed.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"`pricing.price(cart, catalog, coupon=None, today=None)` and `OrderBook.place(cart, catalog, coupon=None, today=None)` accept a coupon (`today` defaults to `date.today()`). The coupon is applied after the bulk discount: let `base = subtotal - discount` (the existing bulk `discount`).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"percent: `coupon_discount = value% of base`, rounded half up (use `pricing.pct`);\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"fixed: `coupon_discount = min(value, base)`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"A coupon is rejected with `CouponError` when `today` is after `expires` (the expiry day itself is still valid), when `base < min_subtotal`, or when `uses >= max_uses`. A rejected coupon changes nothing: no order, no order id consumed, no stock reserved.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"`Quote` gets `coupon_discount` (0 without a coupon) and `coupon_code` (None without a coupon). `quote.discount` stays the bulk discount. `total = subtotal - discount - coupon_discount + tax`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"Tax: the coupon reduces the taxable amount proportionally. With `taxable` = sum of the taxable lines after bulk discount, the taxed amount is `taxable * (base - coupon_discount) / base`, tax = 8% of that, rounded half up. (If `base` is 0 there is no coupon discount and no tax.)\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"`OrderBook.place` counts a use (`coupon.uses += 1`) only when the order is actually placed; an order that fails (empty cart, `OutOfStock`, rejected coupon) uses nothing. `Order.coupon_code` holds the code (None if no coupon). Cancelling an order gives its coupon use back (`uses` goes down by one); cancelling the same order twice is still an error and must not give back twice.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 13.438,
+  "judge_version": "v1.0.2"
+ }
+}

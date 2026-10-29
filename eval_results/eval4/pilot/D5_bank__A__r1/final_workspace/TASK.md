@@ -1,0 +1,12 @@
+# Ticket: overdraft
+
+Some customers should be allowed to go below zero. Implement overdraft accounts.
+
+1. `Ledger.open_account(owner, overdraft=0)`: `overdraft` is the overdraft limit in cents, a non-negative `int`, otherwise `ValueError` (and no account is created). `Account` gets an `overdraft` attribute. New method `Ledger.set_overdraft(account_id, limit)` returns the account; it raises `ValueError` for a negative or non-int limit, and also when the new limit is smaller than the current debt (that is, when `balance < -limit`); unknown account -> `UnknownAccount`, closed account -> `AccountClosed`.
+2. `withdraw` and the source side of `transfer` are allowed as long as `balance - amount >= -overdraft`; otherwise `InsufficientFunds` and nothing changes (no transactions, no balances). Deposits and the destination side of a transfer are unchanged.
+3. Overdraft fee: whenever a successful `withdraw` or `transfer` leaves the *source* account with a balance below 0, a further transaction of kind `"fee"`, amount `-500`, memo `"overdraft fee"` is posted on that account straight after the operation's own transactions (for a transfer: after the `transfer_in`). The fee itself is not checked against the limit, so it may take the balance below `-overdraft`. A balance of exactly 0 is not charged, and a failed operation never charges a fee. The values returned by `withdraw` (its own txn) and `transfer` (the `(out, in)` pair) do not change.
+4. `interest.accrue(ledger, rate_bp)`: in addition to the existing credit for positive balances, every open account with a negative balance is charged 150 basis points of its debt (`abs(balance)`, rounded half up) as an `"interest"` transaction with a negative amount and memo `"overdraft interest"`. The `rate_bp` argument only concerns the positive balances. A charge that rounds to 0 posts nothing. The returned list is in account-id order.
+5. `statement.render`: for an account with `overdraft > 0`, the two lines `Overdraft limit: <limit>` and `Available: <balance + limit>` follow the `Balance:` line (before `Account closed`, if present). Accounts without an overdraft look exactly as before.
+6. `export.accounts_csv`: the header becomes `account_id,owner,balance,overdraft,open` and every row gets the overdraft limit after the balance. (`history_csv` is unchanged; it will simply contain `fee` rows.)
+
+Everything else (validation, closing rules, history, errors, rounding of positive interest) must keep working as before.

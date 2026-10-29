@@ -1,0 +1,14 @@
+{
+ "task": "D7_config",
+ "lines": 244,
+ "change_requirements": 7,
+ "traps": [
+  "DEFAULT override must not beat a section's own value",
+  "overrides applied lazily so interpolated references see them (including cross-section)",
+  "keys()/as_dict() include override-created keys (loader)",
+  "${env:..:-fallback} parsing, error on read not load",
+  "CLI must read os.environ, --prefix anywhere, source command",
+  "section matching case-insensitive; first __ split",
+  "regression: case-insensitive references, parser errors, circular detection"
+ ]
+}

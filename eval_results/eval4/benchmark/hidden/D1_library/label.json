@@ -1,0 +1,14 @@
+{
+ "task": "D1_library",
+ "lines": 285,
+ "change_requirements": 8,
+ "traps": [
+  "renew must use the member's current tier loan period (store.renew)",
+  "overdue_report fine must use tier rate (report -> fines)",
+  "limit shown in member_summary must be per member",
+  "set_tier must not alter existing due dates",
+  "fine rate taken at return time, not checkout time",
+  "CLI add-member/set-tier",
+  "regression: renew-once rule, overdue ordering, block threshold, fine cap/rounding"
+ ]
+}

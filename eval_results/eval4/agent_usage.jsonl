@@ -1,0 +1,18 @@
+{"id": "D5_bank__A__r2", "tokens": 57503, "tool_uses": 25, "duration_ms": 314559, "report": "Changed models/ledger/interest/statement/export; added 6 tests; 13 passed; believes complete."}
+{"id": "D8_rooms__A__r1", "tokens": 50342, "tool_uses": 17, "duration_ms": 315334, "report": "Changed models/service/report; existing 7 tests pass + ad-hoc; believes complete."}
+{"id": "D2_shop__A__r2", "tokens": 58085, "tool_uses": 18, "duration_ms": 315745, "report": "Added coupons.py, changed pricing/orders/invoice/__init__; existing 7 pass + ad-hoc; believes complete."}
+{"id": "D6_cache__A__r2", "tokens": 55208, "tool_uses": 17, "duration_ms": 320101, "report": "Changed store/memoize/persist/README; existing 6 pass + ad-hoc; believes complete."}
+{"id": "D9_etl__A__r2", "tokens": 50351, "tool_uses": 13, "duration_ms": 321026, "report": "Changed pipeline/cli/README; existing 7 pass + ad-hoc; believes complete."}
+{"id": "D3_tracker__A__r1", "tokens": 54821, "tool_uses": 21, "duration_ms": 333724, "report": "Changed models/store/storage/views/cli; existing 8 pass + manual check; believes complete."}
+{"id": "D8_rooms__A__r2", "tokens": 53339, "tool_uses": 13, "duration_ms": 401770, "report": "Changed models/service/report; existing 7 pass + inline checks; believes complete."}
+{"id": "D7_config__A__r2", "tokens": 66681, "tool_uses": 12, "duration_ms": 535333, "report": "Changed loader/interp/cli, added test_env_overrides.py; 16 pass; believes complete."}
+{"id": "D6_cache__A__r1", "tokens": 48716, "tool_uses": 9, "duration_ms": 545405, "report": "Changed store/persist/memoize, added 6 tests; 12 pass; believes complete."}
+{"id": "D5_bank__A__r1", "tokens": 50470, "tool_uses": 7, "duration_ms": 574427, "report": "Changed models/ledger/interest/statement/export; existing 7 pass + spot-check; believes complete."}
+{"id": "D4_templates__A__r1", "tokens": 69486, "tool_uses": 14, "duration_ms": 603696, "report": "Changed nodes/filters/parser/render; existing 8 pass + ad-hoc; believes complete (changed safe escaping rule)."}
+{"id": "D3_tracker__A__r2", "tokens": 55526, "tool_uses": 16, "duration_ms": 684232, "report": "Changed models/store/storage/views/cli + added tests; 14 pass; believes complete."}
+{"id": "D7_config__A__r1", "tokens": 63122, "tool_uses": 14, "duration_ms": 694539, "report": "Changed loader/interp/cli/README, added 9 tests; 16 pass; believes complete."}
+{"id": "D2_shop__A__r1", "tokens": 61164, "tool_uses": 7, "duration_ms": 704927, "report": "Added coupons.py, changed pricing/orders/invoice/__init__; existing 7 pass + scenarios; believes complete."}
+{"id": "D1_library__A__r2", "tokens": 52606, "tool_uses": 6, "duration_ms": 750499, "report": "Changed policy/models/fines/store/report/cli; existing 9 pass + smoke; believes complete (flags half-even rounding)."}
+{"id": "D1_library__A__r1", "tokens": 55659, "tool_uses": 8, "duration_ms": 816364, "report": "Changed policy/models/fines/store/report/cli/README; existing 9 pass + inline checks; believes complete."}
+{"id": "D4_templates__A__r2", "tokens": 73678, "tool_uses": 8, "duration_ms": 817071, "report": "Changed nodes/filters/parser/render; existing 8 pass + ~40 ad-hoc checks; believes complete."}
+{"id": "D9_etl__A__r1", "tokens": 58592, "tool_uses": 13, "duration_ms": 835816, "report": "Rewrote pipeline, changed cli/README, added 8 tests; 15 pass; believes complete."}

@@ -1,0 +1,456 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_basic_get_and_default_inheritance",
+    "description": "Verified behavior in test_basic_get_and_default_inheritance",
+    "status": "pass",
+    "evidence_ref": "test_basic_get_and_default_inheritance",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_interpolation_and_escape",
+    "description": "Verified behavior in test_interpolation_and_escape",
+    "status": "pass",
+    "evidence_ref": "test_interpolation_and_escape",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_cross_section_reference",
+    "description": "Verified behavior in test_cross_section_reference",
+    "status": "pass",
+    "evidence_ref": "test_cross_section_reference",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_typed_getters",
+    "description": "Verified behavior in test_typed_getters",
+    "status": "pass",
+    "evidence_ref": "test_typed_getters",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_errors",
+    "description": "Verified behavior in test_errors",
+    "status": "pass",
+    "evidence_ref": "test_errors",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_as_dict_and_sections",
+    "description": "Verified behavior in test_as_dict_and_sections",
+    "status": "pass",
+    "evidence_ref": "test_as_dict_and_sections",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_cli",
+    "description": "Verified behavior in test_cli",
+    "status": "pass",
+    "evidence_ref": "test_cli",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 7,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_as_dict_and_sections",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_as_dict_and_sections",
+       "requirement_id": "REQ-001",
+       "property_name": "test_as_dict_and_sections",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_as_dict_and_sections' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_basic_get_and_default_inheritance",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_basic_get_and_default_inheritance",
+       "requirement_id": "REQ-002",
+       "property_name": "test_basic_get_and_default_inheritance",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_basic_get_and_default_inheritance' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_cli",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_cli",
+       "requirement_id": "REQ-003",
+       "property_name": "test_cli",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_cli' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-004",
+     "description": "Behavioral verification of property test_cross_section_reference",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_cross_section_reference",
+       "requirement_id": "REQ-004",
+       "property_name": "test_cross_section_reference",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_cross_section_reference' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-005",
+     "description": "Behavioral verification of property test_errors",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_errors",
+       "requirement_id": "REQ-005",
+       "property_name": "test_errors",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_errors' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-006",
+     "description": "Behavioral verification of property test_interpolation_and_escape",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_interpolation_and_escape",
+       "requirement_id": "REQ-006",
+       "property_name": "test_interpolation_and_escape",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_interpolation_and_escape' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-007",
+     "description": "Behavioral verification of property test_typed_getters",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_typed_getters",
+       "requirement_id": "REQ-007",
+       "property_name": "test_typed_getters",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_typed_getters' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 7,
+    "verified_count": 7,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: **Overrides.** `Config.loads(text, env=None, prefix=\"APP\")`. `env` is a mapping of environment variables (the library never reads `os.environ` itself; `None` means no variables). A variable named `<PREFIX>_<SECTION>__<KEY>` overrides `key` in `section`: `PREFIX` is the upper-cased `prefix`; the name is split at the *first* `__` after the prefix; `SECTION` is matched case-insensitively against the sections of the file, or is `DEFAULT`; `KEY` (non-empty) is lower-cased like keys in the file (so it may contain further `__`). The override may replace an existing key or create a new key. Variables with another prefix, without `__`, with an empty key, or naming a section that does not exist are ignored. An empty string is a valid override value.",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: **Precedence.** Per section: override of that section's key, then the section's own value, then override of `DEFAULT`'s key, then the file's `[DEFAULT]` value. So an override of `DEFAULT.level` changes the sections that do not define `level` themselves and leaves the others alone, while an override of `web.level` wins over everything.",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: **Overrides behave like file values.** They are interpolated when read (`${key}`, `${section.key}`, `$$`), the typed getters work on them, and references from other values see the overridden value (`url = pg://${host}` follows an overridden `host`, also from another section via `${db.host}`).",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: **`${env:NAME}`** in any value (file or override) is replaced by the variable `NAME` from the `env` mapping. `${env:NAME:-fallback}` uses `fallback` (possibly empty, no `}` inside) when `NAME` is not in `env`. A missing variable without fallback raises `ConfigError(\"unknown environment variable NAME\")` when the value is read (not when the config is loaded). The substituted text is used literally (it is not expanded again).",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: **`Config.source(section, key)`** returns `\"env\"` (value comes from an override of the section's key), `\"file\"` (the section's own value from the file) or `\"default\"` (value inherited from `DEFAULT`, whether from the file or from a `DEFAULT` override). Unknown section or key: `KeyError`.",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: `keys(section)` and `as_dict()` include keys created by overrides (and `DEFAULT` overrides for every section) and show overridden values.",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: **CLI.** `show` and `get` use `os.environ` (read when the command runs) with the default prefix `APP`, and accept `--prefix P` anywhere after the command name (before or after FILE). New command `source FILE section.key` prints `env`, `file` or `default` (unknown key: `error: no such key <section.key>`, exit code 1). The usage line is printed with exit code 2 for bad invocations as before.",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 27 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "cfg\\cli.py:37:21: UP031 Use format specifiers instead of percent format | cfg\\cli.py:39:25: UP031 Use format specifiers instead of percent format | cfg\\cli.py:42:21: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 27 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 7 of 7 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval4\\judge_accuracy\\D7_config__wrong_2\\workspace",
+  "workspace_hash": "8c474fec0d3325e3a9aefef75f3c513d7855a5b6c8ac629948dedf9298dff195",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T17:24:11Z",
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 27 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 7 of 7 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"**Overrides.** `Config.loads(text, env=None, prefix=\"APP\")`. `env` is a mapping of environment variables (the library never reads `os.environ` itself; `None` means no variables). A variable named `<PREFIX>_<SECTION>__<KEY>` overrides `key` in `section`: `PREFIX` is the upper-cased `prefix`; the name is split at the *first* `__` after the prefix; `SECTION` is matched case-insensitively against the sections of the file, or is `DEFAULT`; `KEY` (non-empty) is lower-cased like keys in the file (so it may contain further `__`). The override may replace an existing key or create a new key. Variables with another prefix, without `__`, with an empty key, or naming a section that does not exist are ignored. An empty string is a valid override value.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"**Precedence.** Per section: override of that section's key, then the section's own value, then override of `DEFAULT`'s key, then the file's `[DEFAULT]` value. So an override of `DEFAULT.level` changes the sections that do not define `level` themselves and leaves the others alone, while an override of `web.level` wins over everything.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"**Overrides behave like file values.** They are interpolated when read (`${key}`, `${section.key}`, `$$`), the typed getters work on them, and references from other values see the overridden value (`url = pg://${host}` follows an overridden `host`, also from another section via `${db.host}`).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"**`${env:NAME}`** in any value (file or override) is replaced by the variable `NAME` from the `env` mapping. `${env:NAME:-fallback}` uses `fallback` (possibly empty, no `}` inside) when `NAME` is not in `env`. A missing variable without fallback raises `ConfigError(\"unknown environment variable NAME\")` when the value is read (not when the config is loaded). The substituted text is used literally (it is not expanded again).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"**`Config.source(section, key)`** returns `\"env\"` (value comes from an override of the section's key), `\"file\"` (the section's own value from the file) or `\"default\"` (value inherited from `DEFAULT`, whether from the file or from a `DEFAULT` override). Unknown section or key: `KeyError`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"`keys(section)` and `as_dict()` include keys created by overrides (and `DEFAULT` overrides for every section) and show overridden values.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"**CLI.** `show` and `get` use `os.environ` (read when the command runs) with the default prefix `APP`, and accept `--prefix P` anywhere after the command name (before or after FILE). New command `source FILE section.key` prints `env`, `file` or `default` (unknown key: `error: no such key <section.key>`, exit code 1). The usage line is printed with exit code 2 for bad invocations as before.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 11.173,
+  "judge_version": "v1.0.2"
+ }
+}

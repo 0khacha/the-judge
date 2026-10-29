@@ -1,0 +1,13 @@
+{
+ "task": "D2_shop",
+ "lines": 245,
+ "change_requirements": 8,
+ "traps": [
+  "tax must be reduced proportionally by coupon (pricing)",
+  "coupon use must be released on cancel, only once (orders)",
+  "failed order (OutOfStock) must not consume a use or id (orders)",
+  "csv discount column = bulk+coupon, new coupon column",
+  "invoice coupon line position",
+  "regression: all-or-nothing reservation, pct rounding, revenue/reports ignore cancelled"
+ ]
+}

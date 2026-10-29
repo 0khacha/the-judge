@@ -1,0 +1,14 @@
+{
+ "task": "D4_templates",
+ "lines": 261,
+ "change_requirements": 7,
+ "traps": [
+  "filter args with | , ( ) inside quotes (parser split)",
+  "strict mode + default exemption only when default is first (render)",
+  "undefined in if never errors in strict, but errors inside taken branch",
+  "mismatched endif/endfor detection; unclosed reports innermost opening line",
+  "nested loop variable restored",
+  "escaping of new filters; safe only effective last",
+  "regression: strict for-source, scope restore, comment line counting"
+ ]
+}

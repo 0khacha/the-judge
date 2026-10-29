@@ -1,0 +1,444 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 6,
+  "passed_tests": 6,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_put_get_and_eviction",
+    "description": "Verified behavior in test_put_get_and_eviction",
+    "status": "pass",
+    "evidence_ref": "test_put_get_and_eviction",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_ttl_expiry",
+    "description": "Verified behavior in test_ttl_expiry",
+    "status": "pass",
+    "evidence_ref": "test_ttl_expiry",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_default_ttl_and_validation",
+    "description": "Verified behavior in test_default_ttl_and_validation",
+    "status": "pass",
+    "evidence_ref": "test_default_ttl_and_validation",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_delete_clear_len",
+    "description": "Verified behavior in test_delete_clear_len",
+    "status": "pass",
+    "evidence_ref": "test_delete_clear_len",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_memoize",
+    "description": "Verified behavior in test_memoize",
+    "status": "pass",
+    "evidence_ref": "test_memoize",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_persist_roundtrip",
+    "description": "Verified behavior in test_persist_roundtrip",
+    "status": "pass",
+    "evidence_ref": "test_persist_roundtrip",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 8,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_default_ttl_and_validation",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_default_ttl_and_validation",
+       "requirement_id": "REQ-001",
+       "property_name": "test_default_ttl_and_validation",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_default_ttl_and_validation' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_delete_clear_len",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_delete_clear_len",
+       "requirement_id": "REQ-002",
+       "property_name": "test_delete_clear_len",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_delete_clear_len' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_memoize",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_memoize",
+       "requirement_id": "REQ-003",
+       "property_name": "test_memoize",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_memoize' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-004",
+     "description": "Behavioral verification of property test_persist_roundtrip",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_persist_roundtrip",
+       "requirement_id": "REQ-004",
+       "property_name": "test_persist_roundtrip",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_persist_roundtrip' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-005",
+     "description": "Behavioral verification of property test_put_get_and_eviction",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_put_get_and_eviction",
+       "requirement_id": "REQ-005",
+       "property_name": "test_put_get_and_eviction",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_put_get_and_eviction' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-006",
+     "description": "Behavioral verification of property test_ttl_expiry",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_ttl_expiry",
+       "requirement_id": "REQ-006",
+       "property_name": "test_ttl_expiry",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_ttl_expiry' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 6,
+    "verified_count": 6,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: `Cache.put(key, value, ttl=None, weight=1)`. `weight` must be a positive `int` (not a `bool`), otherwise `ValueError`. `capacity` is now the maximum total weight. With the default weight of 1 the cache behaves exactly as before (capacity = number of entries).",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: A `weight` larger than `capacity` raises `ValueError` and changes nothing at all - in particular an existing entry stored under the same key stays as it was.",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: After inserting, the cache first drops expired entries (counted as expirations) and then evicts least recently used entries (each counted as an eviction) until the total weight is `<= capacity`. The entry that was just put is never the one evicted.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: Putting an existing key replaces the old entry (value, ttl and weight), the old weight stops counting, and the key becomes the most recently used. This holds even when the old entry had already expired.",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: New read-only property `Cache.total_weight`: the summed weight of the live entries. Like `len(cache)` it first purges expired entries (counted as expirations). It must be right after every way an entry can disappear: eviction, `delete`, `clear`, replacement, and expiry found by `get`, `len`, `keys`, `put` or `total_weight` itself.",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: `Cache.snapshot()` gets one more key, `\"weight\"`, holding `total_weight` (the other keys are unchanged).",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: `persist.dump` adds `\"weight\"` to every entry; `persist.load` restores the weights and must still accept entries that have no `\"weight\"` (older dumps: weight 1).",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: `memoize(cache, key_fn=None, ttl=None, weigher=None)`: when `weigher` is given, the weight of a cached result is `weigher(result)`; without it the weight is 1. An invalid weight is an error (`ValueError`) exactly as for `put`.",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 2 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "cachelib\\store.py:51:30: UP031 Use format specifiers instead of percent format | tests\\test_cache.py:1:1: I001 [*] Import block is un-sorted or un-formatted | Found 2 errors.",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 2 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 8 of 8 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval4\\judge_accuracy\\D6_cache__reference\\workspace",
+  "workspace_hash": "0287127baa83650bcabdb3d7a8996a149fcc500fcbed2cd398e9d26f5b2a288b",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T17:23:14Z",
+  "evidence_level": 2,
+  "total_tests": 6,
+  "passed_tests": 6,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 2 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 8 of 8 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"`Cache.put(key, value, ttl=None, weight=1)`. `weight` must be a positive `int` (not a `bool`), otherwise `ValueError`. `capacity` is now the maximum total weight. With the default weight of 1 the cache behaves exactly as before (capacity = number of entries).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"A `weight` larger than `capacity` raises `ValueError` and changes nothing at all - in particular an existing entry stored under the same key stays as it was.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"After inserting, the cache first drops expired entries (counted as expirations) and then evicts least recently used entries (each counted as an eviction) until the total weight is `<= capacity`. The entry that was just put is never the one evicted.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"Putting an existing key replaces the old entry (value, ttl and weight), the old weight stops counting, and the key becomes the most recently used. This holds even when the old entry had already expired.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"New read-only property `Cache.total_weight`: the summed weight of the live entries. Like `len(cache)` it first purges expired entries (counted as expirations). It must be right after every way an entry can disappear: eviction, `delete`, `clear`, replacement, and expiry found by `get`, `len`, `keys`, `put` or `total_weight` itself.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"`Cache.snapshot()` gets one more key, `\"weight\"`, holding `total_weight` (the other keys are unchanged).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"`persist.dump` adds `\"weight\"` to every entry; `persist.load` restores the weights and must still accept entries that have no `\"weight\"` (older dumps: weight 1).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"`memoize(cache, key_fn=None, ttl=None, weigher=None)`: when `weigher` is given, the weight of a cached result is `weigher(result)`; without it the weight is 1. An invalid weight is an error (`ValueError`) exactly as for `put`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 3.751,
+  "judge_version": "v1.0.2"
+ }
+}

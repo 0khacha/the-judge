@@ -1,0 +1,473 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_run_basic",
+    "description": "Verified behavior in test_run_basic",
+    "status": "pass",
+    "evidence_ref": "test_run_basic",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_missing_column",
+    "description": "Verified behavior in test_missing_column",
+    "status": "pass",
+    "evidence_ref": "test_missing_column",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_wrong_field_count_and_blank_lines",
+    "description": "Verified behavior in test_wrong_field_count_and_blank_lines",
+    "status": "pass",
+    "evidence_ref": "test_wrong_field_count_and_blank_lines",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_dedupe_first_and_sort",
+    "description": "Verified behavior in test_dedupe_first_and_sort",
+    "status": "pass",
+    "evidence_ref": "test_dedupe_first_and_sort",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_key_validation",
+    "description": "Verified behavior in test_key_validation",
+    "status": "pass",
+    "evidence_ref": "test_key_validation",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_writers",
+    "description": "Verified behavior in test_writers",
+    "status": "pass",
+    "evidence_ref": "test_writers",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_cli",
+    "description": "Verified behavior in test_cli",
+    "status": "pass",
+    "evidence_ref": "test_cli",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 8,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_cli",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_cli",
+       "requirement_id": "REQ-001",
+       "property_name": "test_cli",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_cli' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_dedupe_first_and_sort",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_dedupe_first_and_sort",
+       "requirement_id": "REQ-002",
+       "property_name": "test_dedupe_first_and_sort",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_dedupe_first_and_sort' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_key_validation",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_key_validation",
+       "requirement_id": "REQ-003",
+       "property_name": "test_key_validation",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_key_validation' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-004",
+     "description": "Behavioral verification of property test_missing_column",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_missing_column",
+       "requirement_id": "REQ-004",
+       "property_name": "test_missing_column",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_missing_column' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-005",
+     "description": "Behavioral verification of property test_run_basic",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_run_basic",
+       "requirement_id": "REQ-005",
+       "property_name": "test_run_basic",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_run_basic' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-006",
+     "description": "Behavioral verification of property test_writers",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_writers",
+       "requirement_id": "REQ-006",
+       "property_name": "test_writers",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_writers' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-007",
+     "description": "Behavioral verification of property test_wrong_field_count_and_blank_lines",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_wrong_field_count_and_blank_lines",
+       "requirement_id": "REQ-007",
+       "property_name": "test_wrong_field_count_and_blank_lines",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_wrong_field_count_and_blank_lines' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 7,
+    "verified_count": 7,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: `pipeline.run(text, schema, key=None, keep=\"first\")`. `key` may now be a single field name (as before) or a list/tuple of field names (composite key). An empty list/tuple means no key. Every key field must exist in the schema (`EtlError(\"unknown key field <name>\")`) and be required (`EtlError(\"key field <name> must be required\")`). `keep` must be `\"first\"` or `\"last\"`, otherwise `EtlError`.",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: Two accepted rows are duplicates when all key values are equal *after coercion* (so `01` and `1` are the same `int` key).",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: `keep=\"first\"`: the first row stays and every later one is rejected with `line N: duplicate of line M` (M = line of the row that stays), as today.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: `keep=\"last\"`: the last row of a group stays; every earlier row is rejected with `line N: superseded by line M`, where M is the line of the *next* row with the same key (so a group of three has two rejects, each naming its successor).",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: Only valid rows take part in de-duplication. A row rejected for a coercion problem (or wrong field count) never counts as a duplicate and never supersedes anything, and it does not claim a key either (under `keep=\"first\"` a later valid row with the same key is accepted).",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: Without a key the rows keep file order and nothing is de-duplicated (also for `keep=\"last\"`). With a key the accepted rows are sorted by the key tuple (in the order of the names given, comparing coerced values); `Result.lines` stays aligned with `Result.rows`.",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: `Result.stats` gets a new entry `\"superseded\"` (rows removed under `keep=\"last\"`, always 0 for `keep=\"first\"`). `\"duplicates\"` counts every row removed as a duplicate or superseded; `\"rejected\"` still counts all rejects (invalid, duplicate and superseded). `Result.rejects` stays sorted by line; a superseded reject carries the line of the superseded row.",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: CLI: `--key` takes a comma separated list (`--key region,id`), new option `--keep first|last` (default `first`); bad values print `error: ...` and return 1 like other errors. The summary line becomes `read=<n> accepted=<n> rejected=<n> duplicates=<n> superseded=<n>`.",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 23 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "etl\\cli.py:21:30: UP031 Use format specifiers instead of percent format | etl\\cli.py:38:13: UP031 Use format specifiers instead of percent format | etl\\cli.py:41:9: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 23 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 8 of 8 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval4\\judge_accuracy\\D9_etl__wrong_2\\workspace",
+  "workspace_hash": "024e506f4828b3c98ef3c749c2f609f5b2d7da678ccad215c82c563377929f3a",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T17:25:40Z",
+  "evidence_level": 2,
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 23 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 8 of 8 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"`pipeline.run(text, schema, key=None, keep=\"first\")`. `key` may now be a single field name (as before) or a list/tuple of field names (composite key). An empty list/tuple means no key. Every key field must exist in the schema (`EtlError(\"unknown key field <name>\")`) and be required (`EtlError(\"key field <name> must be required\")`). `keep` must be `\"first\"` or `\"last\"`, otherwise `EtlError`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"Two accepted rows are duplicates when all key values are equal *after coercion* (so `01` and `1` are the same `int` key).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"`keep=\"first\"`: the first row stays and every later one is rejected with `line N: duplicate of line M` (M = line of the row that stays), as today.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"`keep=\"last\"`: the last row of a group stays; every earlier row is rejected with `line N: superseded by line M`, where M is the line of the *next* row with the same key (so a group of three has two rejects, each naming its successor).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"Only valid rows take part in de-duplication. A row rejected for a coercion problem (or wrong field count) never counts as a duplicate and never supersedes anything, and it does not claim a key either (under `keep=\"first\"` a later valid row with the same key is accepted).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"Without a key the rows keep file order and nothing is de-duplicated (also for `keep=\"last\"`). With a key the accepted rows are sorted by the key tuple (in the order of the names given, comparing coerced values); `Result.lines` stays aligned with `Result.rows`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"`Result.stats` gets a new entry `\"superseded\"` (rows removed under `keep=\"last\"`, always 0 for `keep=\"first\"`). `\"duplicates\"` counts every row removed as a duplicate or superseded; `\"rejected\"` still counts all rejects (invalid, duplicate and superseded). `Result.rejects` stays sorted by line; a superseded reject carries the line of the superseded row.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"CLI: `--key` takes a comma separated list (`--key region,id`), new option `--keep first|last` (default `first`); bad values print `error: ...` and return 1 like other errors. The summary line becomes `read=<n> accepted=<n> rejected=<n> duplicates=<n> superseded=<n>`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 11.116,
+  "judge_version": "v1.0.2"
+ }
+}

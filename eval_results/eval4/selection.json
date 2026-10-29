@@ -1,0 +1,52 @@
+{
+ "pilot": [
+  {
+   "task": "D1_library",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "D2_shop",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "D3_tracker",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "D4_templates",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "D5_bank",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "D6_cache",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "D7_config",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "D8_rooms",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "D9_etl",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  }
+ ],
+ "qualifying": [],
+ "selected": [],
+ "verdict": "insufficient headroom"
+}

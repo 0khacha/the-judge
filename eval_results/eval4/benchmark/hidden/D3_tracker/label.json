@@ -1,0 +1,14 @@
+{
+ "task": "D3_tracker",
+ "lines": 268,
+ "change_requirements": 8,
+ "traps": [
+  "due computed from old due, monthly clamp / year rollover",
+  "storage must persist repeat and next_id and load old data",
+  "delete must reset predecessor next_id",
+  "reopen with open successor rejected, resets next_id",
+  "failed completion must not spawn; rejected add consumes no id",
+  "agenda suffix order before OVERDUE; cli done second line; list suffix",
+  "regression: delete detaches done dep from other tasks' deps, ordering, ready"
+ ]
+}
