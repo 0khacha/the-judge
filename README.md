@@ -67,10 +67,20 @@ Since 1.0.2 it also looks for what the tests miss, and turns it into next action
   bugs come back as `add_test file.py:LINE` actions.
 
 A bug is still only caught when some test exercises it; these two steps make the agent
-write those tests. Measured results so far, including negative ones, are in
-[`eval_results/`](https://github.com/0khacha/the-judge/tree/main/eval_results) (evaluation 2
-found no improvement over a baseline agent with 1.0.1 on tasks the baseline already
-solved). See [Known limitations](#known-limitations).
+write those tests.
+
+**Measured so far** (pre-registered evaluations with Claude Haiku, raw data in
+[`eval_results/`](https://github.com/0khacha/the-judge/tree/main/eval_results)):
+
+- It has **not** been shown to make an agent's code more correct. On every benchmark
+  tried -- small tasks, harder tasks with 41-149 hidden tests, and change requests in
+  existing projects with hidden regression tests -- the agent without the judge already
+  passed all hidden tests in 65 of 66 runs, leaving nothing to improve.
+- As a gate it is accurate: 1.0.2 gave PASS to none of 36 wrong solutions, never a
+  false FAIL, and no agent weakened a frozen test. The price is strictness: correct code
+  gets ABSTAIN until each spec rule has a test, and a verify takes 10-20 s longer.
+
+See [Known limitations](#known-limitations).
 
 Works standalone or integrates with any AI coding assistant (Claude Code, Cursor, Windsurf, Aider, etc.) through the `AGENTS.md` protocol.
 
