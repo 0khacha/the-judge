@@ -92,9 +92,9 @@ def test_cache_capacity():
 
 
 def run_demo() -> None:
-    """Run interactive 60-second public demonstration of The Judge v1.0.1 verification layer."""
+    """Run interactive 60-second public demonstration of The Judge v1.0.2 verification layer."""
     print("=" * 68)
-    print("  THE JUDGE v1.0.1 — INDEPENDENT VERIFICATION LAYER DEMO")
+    print("  THE JUDGE v1.0.2 — INDEPENDENT VERIFICATION LAYER DEMO")
     print("  Scenario: Real-Time Coding-Agent Verification & Auto-Repair Loop")
     print("=" * 68)
     print()

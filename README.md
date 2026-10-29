@@ -57,11 +57,20 @@ machine-readable `next_actions` telling the agent exactly what to do next.
 
 **Core loop**: `write tests → judge freeze → implement → judge verify → follow next_actions → repeat`
 
-It does not find bugs by itself: a bug is caught only if some test exercises it. What it
-adds is discipline around the tests (tests fixed before the code, no weakening, no
-self-grading), regression tracking between iterations, and a clean stop when the loop
-makes no progress. See [Known limitations](#known-limitations) and the measured results
-in [`eval_results/`](https://github.com/0khacha/the-judge/tree/main/eval_results).
+Since 1.0.2 it also looks for what the tests miss, and turns it into next actions:
+
+- **Requirements checklist.** Every rule of `TASK.md` / `SPEC.md` / `REQUIREMENTS.md`
+  (R1..Rn) needs a passing test that names it. `judge freeze` lists the rules no test
+  covers yet, so they can be tested before the code exists.
+- **Mutation feedback.** Before PASS, the judge plants small bugs in the code (`<` ->
+  `<=`, `+` -> `-`, a removed `raise`, ...) and reruns the tests on a copy. Uncaught
+  bugs come back as `add_test file.py:LINE` actions.
+
+A bug is still only caught when some test exercises it; these two steps make the agent
+write those tests. Measured results so far, including negative ones, are in
+[`eval_results/`](https://github.com/0khacha/the-judge/tree/main/eval_results) (evaluation 2
+found no improvement over a baseline agent with 1.0.1 on tasks the baseline already
+solved). See [Known limitations](#known-limitations).
 
 Works standalone or integrates with any AI coding assistant (Claude Code, Cursor, Windsurf, Aider, etc.) through the `AGENTS.md` protocol.
 
@@ -222,7 +231,9 @@ write tests from the spec -> judge freeze . -> implement -> judge verify . --jso
                                                                |
    PASS    -> next_actions: done                               |
    FAIL    -> next_actions: fix_code <test> "<assertion>" -----+  (fix the code, not the test)
-   ABSTAIN -> next_actions: what evidence is missing ----------+
+   ABSTAIN -> next_actions: cover_requirement R4 "<rule>" -----+  (spec rule without a test)
+              next_actions: add_test grade.py:12 "'>=' -> '>'"-+  (planted bug no test caught)
+              next_actions: what other evidence is missing ----+
    stuck   -> next_actions: stop (3 identical results, or 5 runs without PASS)
 ```
 
@@ -303,9 +314,17 @@ function, multi-input variance, and state isolation.
 ## Known limitations
 
 - **Bugs are only caught by tests.** The Judge does not invent oracles: a wrong comparison,
-  rounding mode, race condition or missing edge case is found only if a (frozen) test
-  exercises it. The four judge probes (rollback, expiration, capacity, idempotency) are
+  rounding mode, race condition or missing edge case is found only if a test exercises
+  it. The checklist and mutation feedback push the agent to write those tests; they do
+  not write them. The four judge probes (rollback, expiration, capacity, idempotency) are
   keyword-triggered and rarely apply.
+- **Checklist: mention, not meaning.** A test covers rule R4 when its source names `R4`;
+  the judge cannot check that the test really exercises the rule. Rules are taken from
+  list items only; prose requirements outside lists are not numbered.
+- **Mutation: sample and threshold.** At most 25 mutants per run, spread over lines.
+  Some mutants are equivalent (cannot be caught), hence the 85% threshold. Mutation finds
+  code no test checks, not behaviour the code lacks. It adds one pytest run per mutant
+  (about 10-20 s on a small project); `--no-mutation` skips it.
 - **Independence is a protocol, not a proof.** An agent can write the code first, then
   tests fitted to it, freeze them, and make a token change to the code; the rule
   "unchanged since freeze, code changed afterwards" is then satisfied. Every freeze is
@@ -329,7 +348,7 @@ function, multi-input variance, and state isolation.
 
 ## Project Status
 
-**Status**: v1.0.1 · MIT License · Python 3.9+
+**Status**: v1.0.2 · MIT License · Python 3.9+
 
 ## Contributing
 
