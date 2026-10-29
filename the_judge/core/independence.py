@@ -112,22 +112,28 @@ def classify(abs_dir: str, baseline: Optional[dict[str, Any]] = None) -> dict[st
     tampering: list[dict[str, str]] = []
 
     freezes = _load(abs_dir)["freezes"]
-    latest: dict[tuple[str, str], tuple[int, dict[str, Any]]] = {}
+    versions: dict[tuple[str, str], list[tuple[int, dict[str, Any]]]] = {}
     for idx, snap in enumerate(freezes):
         for rel, src in snap["tests"].items():
             for name, info in _test_functions(src).items():
-                latest[(rel, name)] = (idx, info)
-    for (rel, name), (idx, info) in sorted(latest.items()):
+                versions.setdefault((rel, name), []).append((idx, info))
+    for (rel, name), frozen in sorted(versions.items()):
         now = current.get(rel, {}).get(name) or by_name.get(name)
-        state = _compare(info, now)
+        # Tampering is judged against the latest frozen version of the test.
+        state = _compare(frozen[-1][1], now)
         if state in ("weakened", "deleted"):
             what = "was deleted" if state == "deleted" else "was weakened (assertion or case removed, or skip added)"
             tampering.append({"kind": f"frozen_test_{state}", "file": rel, "test": name,
                               "detail": f"frozen test {name} in {rel} {what} since judge freeze"})
             continue
-        snap = freezes[idx]
-        if snap["sources"] != sources_now:
-            independent.setdefault(name, {"class": "frozen", "file": rel, "since": snap["time"]})
+        # Independent if unchanged (or only strengthened) since any freeze taken before the
+        # current implementation: a later re-freeze does not erase earlier evidence.
+        earliest = next((idx for idx, info in frozen
+                         if _compare(info, now) in ("same", "strengthened")
+                         and freezes[idx]["sources"] != sources_now), None)
+        if earliest is not None:
+            independent.setdefault(name, {"class": "frozen", "file": rel,
+                                          "since": freezes[earliest]["time"]})
         else:
             frozen_after.append(name)
 
