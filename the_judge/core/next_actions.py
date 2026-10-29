@@ -9,6 +9,10 @@ from typing import Any
 VERIFY = "judge verify . --json"
 FREEZE = "judge freeze ."
 MAX_MUTANT_STEPS = 5
+MAX_REQUIREMENT_STEPS = 8
+REQUIREMENT_GUIDANCE = ("Write a test that checks exactly this rule, including its edge cases, "
+                        "and put {rid} in a comment or the docstring of the test. Take the expected "
+                        "results from the rule, not from the code. If the test fails, fix the code.")
 MUTANT_GUIDANCE = ("Decide the correct behaviour at this line from the task specification "
                    "(not from what the code does now) and add a test that checks it. If the new "
                    "test fails, the code is wrong: fix the code. Do not edit the frozen tests.")
@@ -77,6 +81,13 @@ def build(decision: str, eval_output: dict[str, Any], evidence: dict[str, Any],
 
     # ---- ABSTAIN ---------------------------------------------------------------------
     text = " ".join(notes)
+    if "(Uncovered Requirements)" in text:
+        info = evidence.get("requirements_checklist") or {}
+        by_id = {r["id"]: r for r in info.get("requirements", [])}
+        for rid in info.get("uncovered", [])[:MAX_REQUIREMENT_STEPS]:
+            req = by_id[rid]
+            steps.add("cover_requirement", f"{rid} ({req['source']}): \"{req['text']}\" has no "
+                      "passing test.", guidance=REQUIREMENT_GUIDANCE.format(rid=rid))
     if "(Weak Tests)" in text:
         for surv in mutation.get("survivors", [])[:MAX_MUTANT_STEPS]:
             steps.add("add_test", f"{surv['file']}:{surv['line']}: changing {surv['change']} in "

@@ -31,6 +31,8 @@ After each critical round of code changes (new feature, bug fix, refactor, or an
      done                         -> report PASS and numeric_score. Stop.
      fix_code / fix_regression    -> change the IMPLEMENTATION so the named test passes.
      restore_tests                -> undo your change to the named frozen test.
+     cover_requirement            -> the named spec rule (R1, R2, ...) has no passing test:
+                                     write one that checks the rule and names its id.
      add_test                     -> a planted bug at the named file:line went unnoticed:
                                      decide the correct behaviour there FROM THE SPEC, add a
                                      test for it; if that test fails, fix the code.
@@ -47,6 +49,12 @@ What counts as evidence: a test is *independent* when it is unchanged since `jud
 written after the code must pass but cannot earn PASS on their own. That is why step 1
 comes first. Correcting one of your own frozen tests and freezing again only costs that
 one test its independence.
+
+Requirements checklist: the judge numbers the rules (list items) of TASK.md, SPEC.md or
+REQUIREMENTS.md as R1..Rn. `judge freeze` prints them and marks the ones no test names
+yet. Write a test per rule and name the id in a comment or docstring
+(`def test_unterminated_quote():  # R4`), so every rule is tested before you implement.
+PASS requires each rule to have a passing test that names it.
 
 Mutation feedback: before PASS, the judge plants small bugs in the implementation
 (`<` -> `<=`, `+` -> `-`, a removed `raise`, ...) and reruns all tests on a copy of

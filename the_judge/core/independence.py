@@ -72,8 +72,10 @@ def freeze(abs_dir: str) -> dict[str, Any]:
     abs_dir = os.path.abspath(abs_dir)
     data = _load(abs_dir)
     tests = _current_tests(abs_dir)
+    from .checklist import read_spec
+
     snapshot = {"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                "tests": tests, "sources": source_files(abs_dir)}
+                "tests": tests, "sources": source_files(abs_dir), "spec": read_spec(abs_dir)}
     data["freezes"].append(snapshot)
     os.makedirs(os.path.join(abs_dir, FREEZE_DIR), exist_ok=True)
     with open(os.path.join(abs_dir, FREEZE_DIR, FREEZE_FILE), "w", encoding="utf-8") as f:

@@ -42,6 +42,11 @@ def main(args_list=None) -> int:
         help="Skip mutation feedback (planting small bugs to find behaviour no test checks)",
     )
     verify_parser.add_argument(
+        "--no-requirements",
+        action="store_true",
+        help="Skip the requirements checklist (every TASK.md/SPEC.md rule needs a test naming it)",
+    )
+    verify_parser.add_argument(
         "--baseline",
         type=str,
         default=None,
@@ -162,6 +167,16 @@ def main(args_list=None) -> int:
                 print(f"  {name}")
             print("They count as independent evidence once an implementation file changes "
                   "after this freeze. Do not weaken or delete them.")
+            reqs = info.get("requirements", [])
+            if reqs:
+                uncovered = set(info.get("uncovered_requirements", []))
+                print(f"\nRequirements checklist ({len(reqs)} rules from the spec; a test covers a "
+                      "rule when its comment or docstring names the id):")
+                for req in reqs:
+                    mark = "MISSING" if req["id"] in uncovered else "covered"
+                    print(f"  [{mark}] {req['id']} ({req['source']}): {req['text']}")
+                if uncovered:
+                    print("Write tests for the MISSING rules and freeze again BEFORE implementing.")
         return 0
 
     if args.command == "demo":
@@ -225,6 +240,7 @@ def main(args_list=None) -> int:
             baseline=getattr(args, "baseline", None),
             record_history=not getattr(args, "no_history", False),
             mutation=not getattr(args, "no_mutation", False),
+            requirements=not getattr(args, "no_requirements", False),
         )
     except Exception as e:
         if is_json:

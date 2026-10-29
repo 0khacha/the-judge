@@ -83,6 +83,7 @@ def verify(
     baseline: Optional[str] = None,
     record_history: bool = False,
     mutation: bool = True,
+    requirements: bool = True,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
     and adversarial integrity gates.
@@ -106,6 +107,8 @@ def verify(
         mutation: before PASS, plant small bugs in the implementation and rerun the
             tests (see core/mutation.py). When fewer than THRESHOLD of them are caught,
             the verdict is ABSTAIN and next_actions names the uncaught ones.
+        requirements: every rule of TASK.md / SPEC.md / REQUIREMENTS.md must be named
+            (R1, R2, ...) by a passing test, else ABSTAIN (see core/checklist.py).
 
     Returns:
         VerificationResult containing structured decision, findings, trust profile, and provenance.
@@ -217,6 +220,26 @@ def verify(
         previous_evidence=previous_evidence,
         agent_claims_provided=(agent_claims is not None),
     )
+
+    # 4a. Requirement checklist: every spec rule needs a passing test that names it.
+    from the_judge.core import checklist
+    from the_judge.core.independence import _current_tests, _load
+
+    checklist_info = None
+    if requirements and os.path.isdir(workspace_path):
+        reqs = checklist.requirements(workspace_path, _load(workspace_path)["freezes"])
+        if reqs:
+            checklist_info = checklist.check(reqs, _current_tests(workspace_path),
+                                             passed_tests, failed_tests)
+            ground_truth["requirements_checklist"] = checklist_info
+            if eval_output.get("verdict") == "PASS" and checklist_info["uncovered"]:
+                eval_output["verdict"] = "ABSTAIN"
+                eval_output["numeric_score"] = min(eval_output.get("numeric_score", 0.0), 65.0)
+                eval_output.setdefault("insufficient_evidence_notes", []).append(
+                    f"(Uncovered Requirements) {len(checklist_info['uncovered'])} of {len(reqs)} "
+                    f"rules of the specification have no passing test that names them: "
+                    + ", ".join(checklist_info["uncovered"]))
+    eval_output.setdefault("evidence_coverage", {})["requirements_checklist"] = checklist.summary(checklist_info)
 
     # 4b. Mutation feedback: only when everything else says PASS.
     from the_judge.core import mutation as mutation_engine
@@ -358,6 +381,22 @@ def verify(
             )
         )
 
+    # Spec rules no passing test names.
+    by_id = {r["id"]: r for r in (checklist_info or {}).get("requirements", [])}
+    for rid in (checklist_info or {}).get("uncovered", []):
+        structured_findings.append(
+            Finding(
+                id=f"REQ-{rid}",
+                category="requirements",
+                severity="medium",
+                description=f"{rid} ({by_id[rid]['source']}) has no passing test that names it: "
+                f"{by_id[rid]['text']}",
+                property_name=rid,
+                suggested_focus=f"Add a test that checks this rule and mentions {rid} in a "
+                "comment or its docstring.",
+            )
+        )
+
     # Mutants no test caught: behaviour that is not checked.
     for idx, surv in enumerate((mutation_result or {}).get("survivors", []), 1):
         structured_findings.append(
@@ -483,10 +522,19 @@ def freeze(workspace: str) -> dict[str, Any]:
 
     Tests frozen this way count as independent evidence once an implementation file
     changes after the freeze; weakening or deleting a frozen test is tampering.
+    The result also lists the spec's requirements and those no test mentions yet, so
+    they can be covered before the implementation is written.
     """
-    from the_judge.core.independence import freeze as do_freeze
+    from the_judge.core import checklist
+    from the_judge.core.independence import _current_tests, _load, freeze as do_freeze
 
-    return do_freeze(workspace)
+    result = do_freeze(workspace)
+    abs_dir = os.path.abspath(workspace)
+    reqs = checklist.requirements(abs_dir, _load(abs_dir)["freezes"])
+    mentioned = checklist.covered_ids(_current_tests(abs_dir))
+    result["requirements"] = reqs
+    result["uncovered_requirements"] = [r["id"] for r in reqs if r["id"] not in mentioned]
+    return result
 
 
 def verify_workspace(workspace_dir: str) -> VerificationResult:
