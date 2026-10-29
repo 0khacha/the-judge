@@ -31,6 +31,9 @@ After each critical round of code changes (new feature, bug fix, refactor, or an
      done                         -> report PASS and numeric_score. Stop.
      fix_code / fix_regression    -> change the IMPLEMENTATION so the named test passes.
      restore_tests                -> undo your change to the named frozen test.
+     add_test                     -> a planted bug at the named file:line went unnoticed:
+                                     decide the correct behaviour there FROM THE SPEC, add a
+                                     test for it; if that test fails, fix the code.
      write_tests / freeze_tests   -> do what "detail" says, then implement.
      stop                         -> stop and report loop.stuck_reason and the
                                      remaining next_actions to the user.
@@ -42,7 +45,15 @@ After each critical round of code changes (new feature, bug fix, refactor, or an
 What counts as evidence: a test is *independent* when it is unchanged since `judge freeze`
 (or since the last git commit) **and** the implementation changed after that. Tests
 written after the code must pass but cannot earn PASS on their own. That is why step 1
-comes first.
+comes first. Correcting one of your own frozen tests and freezing again only costs that
+one test its independence.
+
+Mutation feedback: before PASS, the judge plants small bugs in the implementation
+(`<` -> `<=`, `+` -> `-`, a removed `raise`, ...) and reruns all tests on a copy of
+the workspace. If fewer than 85% are caught, the verdict is ABSTAIN with one `add_test`
+action per uncaught bug. Tests you add for them do not need to be frozen. Write them
+from the specification, not from what the code currently returns -- that is how they
+find bugs. `--no-mutation` skips this step.
 
 ### Adaptive Evaluation Engine
 

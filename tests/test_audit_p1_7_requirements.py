@@ -53,7 +53,7 @@ def test_requirement_verified_by_a_named_passing_test(tmp_path):
     ws = corpus_workspace(tmp_path, TASK, "correct", frozen=True)
     write(ws, {"test_nested.py": NESTED_TEST})
     spec = {"requirements": [dict(NESTED_REQ, tests=["test_nested_rollback_only_inner"])]}
-    result = judge(ws, task_spec=spec)
+    result = judge(ws, task_spec=spec, mutation=False)  # minimal corpus tests; mutation not under test
     req = _coverage(result)["requirements"][0]
     assert req["status"] == "VERIFIED", req
     assert result.decision == "PASS", result.insufficient_notes

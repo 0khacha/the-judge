@@ -103,7 +103,7 @@ def to_roman(n):
     ws = write(tmp_path, {"test_roman.py": tests})
     freeze(ws)
     write(ws, {"roman.py": impl})
-    assert judge(ws).decision == "PASS"
+    assert judge(ws, mutation=False).decision == "PASS"  # mutation not under test here
 
 
 def test_correct_code_with_frozen_tests_still_passes(tmp_path):

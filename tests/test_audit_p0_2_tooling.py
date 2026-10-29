@@ -21,7 +21,7 @@ def _judge_cli(workspace, env):
         "from the_judge.integrations.cli import main; sys.exit(main(sys.argv[1:]))"
     )
     proc = subprocess.run(
-        [sys.executable, "-c", launcher, REPO, "verify", str(workspace), "--json"],
+        [sys.executable, "-c", launcher, REPO, "verify", str(workspace), "--json", "--no-mutation"],
         env=env, capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=600,
     )
     out = proc.stdout

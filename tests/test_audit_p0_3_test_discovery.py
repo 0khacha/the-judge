@@ -9,6 +9,8 @@ import pytest
 from audit_helpers import corpus_workspace, judge, write
 
 TASK = "04_nested_transactions"  # correct impl has passing tests and a passing probe
+# The corpus visible tests are minimal by design (kept unchanged) and leave planted bugs
+# uncaught; these tests are about discovery, so mutation feedback is off where PASS is asserted.
 
 
 def _ran(result, name):
@@ -19,8 +21,8 @@ def _ran(result, name):
 
 @pytest.mark.parametrize("subdir", [None, "tests", "test", "src_tests/unit"])
 def test_same_decision_wherever_tests_live(tmp_path, subdir):
-    root = judge(corpus_workspace(tmp_path / "root", TASK, frozen=True))
-    moved = judge(corpus_workspace(tmp_path / "moved", TASK, tests_subdir=subdir, frozen=True))
+    root = judge(corpus_workspace(tmp_path / "root", TASK, frozen=True), mutation=False)
+    moved = judge(corpus_workspace(tmp_path / "moved", TASK, tests_subdir=subdir, frozen=True), mutation=False)
     assert root.decision == "PASS", root.insufficient_notes
     assert moved.decision == root.decision, moved.insufficient_notes
     assert moved.provenance["passed_tests"] == root.provenance["passed_tests"]
@@ -74,7 +76,7 @@ def test_pytest_config_testpaths_and_python_files_are_honoured(tmp_path):
 def test_tests_in_excluded_dirs_are_ignored(tmp_path, excluded):
     ws = corpus_workspace(tmp_path, TASK, tests_subdir="tests", frozen=True)
     write(ws, {f"{excluded}/pkg/test_vendored.py": "def test_vendored():\n    assert False\n"})
-    result = judge(ws)
+    result = judge(ws, mutation=False)
     assert "test_vendored" not in str(result.trust_profile["requirement_checks"])
     assert result.decision == "PASS", result.blocking_issues + result.insufficient_notes
 

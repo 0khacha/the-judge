@@ -82,6 +82,7 @@ def verify(
     _ground_truth: Optional[dict[str, Any]] = None,
     baseline: Optional[str] = None,
     record_history: bool = False,
+    mutation: bool = True,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
     and adversarial integrity gates.
@@ -102,6 +103,9 @@ def verify(
         baseline: git ref to compare the workspace tests against for tampering
             (deleted tests, removed assertions, added skips). Defaults to HEAD when
             the workspace is a git repository.
+        mutation: before PASS, plant small bugs in the implementation and rerun the
+            tests (see core/mutation.py). When fewer than THRESHOLD of them are caught,
+            the verdict is ABSTAIN and next_actions names the uncaught ones.
 
     Returns:
         VerificationResult containing structured decision, findings, trust profile, and provenance.
@@ -213,6 +217,24 @@ def verify(
         previous_evidence=previous_evidence,
         agent_claims_provided=(agent_claims is not None),
     )
+
+    # 4b. Mutation feedback: only when everything else says PASS.
+    from the_judge.core import mutation as mutation_engine
+
+    mutation_result = None
+    if mutation and eval_output.get("verdict") == "PASS" and os.path.isdir(workspace_path):
+        mutation_result = mutation_engine.run_mutation(workspace_path)
+        ground_truth["mutation"] = mutation_result
+        if mutation_result["ran"] and mutation_result["score"] < mutation_result["threshold"]:
+            eval_output["verdict"] = "ABSTAIN"
+            eval_output["numeric_score"] = min(eval_output.get("numeric_score", 0.0), 65.0)
+            eval_output.setdefault("insufficient_evidence_notes", []).append(
+                f"(Weak Tests) The tests caught {mutation_result['killed']} of "
+                f"{mutation_result['total']} small bugs planted in the implementation "
+                f"({mutation_result['score']:.0%}, required {mutation_result['threshold']:.0%}); "
+                f"{len(mutation_result['survivors'])} went unnoticed, so that behaviour is unchecked."
+            )
+    eval_output.setdefault("evidence_coverage", {})["mutation"] = mutation_engine.summary(mutation_result)
 
     # 4. Construct structured Findings for AI Agent consumption
     structured_findings: list[Finding] = []
@@ -333,6 +355,21 @@ def verify(
                 description="Vacuous test(s) not counted as evidence (no real assertion, "
                 "tautology, or only `is not None`): " + ", ".join(vacuous),
                 suggested_focus="Assert the actual expected value of the code under test.",
+            )
+        )
+
+    # Mutants no test caught: behaviour that is not checked.
+    for idx, surv in enumerate((mutation_result or {}).get("survivors", []), 1):
+        structured_findings.append(
+            Finding(
+                id=f"MUT-{idx:03d}",
+                category="mutation",
+                severity="medium",
+                description=f"{surv['file']}:{surv['line']}: changing {surv['change']} in "
+                f"`{surv['code']}` was not detected by any test",
+                property_name=f"{surv['file']}:{surv['line']}",
+                suggested_focus="Write a test, from the specification, for the behaviour this "
+                "line implements; if it fails, the code is wrong.",
             )
         )
 

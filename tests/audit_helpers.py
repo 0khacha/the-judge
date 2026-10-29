@@ -79,10 +79,10 @@ def write(dest, files):
     return dest
 
 
-def judge(workspace, task_spec=None):
+def judge(workspace, task_spec=None, mutation=True):
     from the_judge.api import verify
 
-    return verify(str(workspace), task_spec=task_spec)
+    return verify(str(workspace), task_spec=task_spec, mutation=mutation)
 
 
 def judge_authored_failures(result):

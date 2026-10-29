@@ -8,6 +8,10 @@ from typing import Any
 
 VERIFY = "judge verify . --json"
 FREEZE = "judge freeze ."
+MAX_MUTANT_STEPS = 5
+MUTANT_GUIDANCE = ("Decide the correct behaviour at this line from the task specification "
+                   "(not from what the code does now) and add a test that checks it. If the new "
+                   "test fails, the code is wrong: fix the code. Do not edit the frozen tests.")
 FIX_GUIDANCE = ("Change the implementation so this test passes. Do not edit, skip, "
                 "parametrize away or weaken the test.")
 
@@ -35,10 +39,14 @@ def build(decision: str, eval_output: dict[str, Any], evidence: dict[str, Any],
         steps.add("stop", f"No progress: {loop.get('stuck_reason')}. Stop iterating and report the "
                   "remaining issues listed below to the user.")
 
+    mutation = evidence.get("mutation") or {}
     if decision == "PASS":
         n = len(independence.get("independent", {}))
+        caught = (f" The tests caught {mutation['killed']} of {mutation['total']} planted bugs."
+                  if mutation.get("ran") else "")
         steps.add("done", f"PASS: all tests passed, including {n} independent test(s) fixed before "
-                  f"the implementation. Report success with numeric_score {eval_output.get('numeric_score')}.")
+                  f"the implementation.{caught} Report success with numeric_score "
+                  f"{eval_output.get('numeric_score')}.")
         return steps.items
 
     # ---- FAIL ------------------------------------------------------------------------
@@ -69,6 +77,11 @@ def build(decision: str, eval_output: dict[str, Any], evidence: dict[str, Any],
 
     # ---- ABSTAIN ---------------------------------------------------------------------
     text = " ".join(notes)
+    if "(Weak Tests)" in text:
+        for surv in mutation.get("survivors", [])[:MAX_MUTANT_STEPS]:
+            steps.add("add_test", f"{surv['file']}:{surv['line']}: changing {surv['change']} in "
+                      f"`{surv['code']}` was not detected by any test.",
+                      guidance=MUTANT_GUIDANCE)
     if "(Test Runner)" in text:
         steps.add("install_pytest", "pytest could not be started, so no test ran.",
                   command="pip install pytest")

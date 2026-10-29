@@ -37,6 +37,11 @@ def main(args_list=None) -> int:
         help="Do not record this run in .judge/history.json (no regression/stuck tracking)",
     )
     verify_parser.add_argument(
+        "--no-mutation",
+        action="store_true",
+        help="Skip mutation feedback (planting small bugs to find behaviour no test checks)",
+    )
+    verify_parser.add_argument(
         "--baseline",
         type=str,
         default=None,
@@ -219,6 +224,7 @@ def main(args_list=None) -> int:
             task_spec=task_spec_dict,
             baseline=getattr(args, "baseline", None),
             record_history=not getattr(args, "no_history", False),
+            mutation=not getattr(args, "no_mutation", False),
         )
     except Exception as e:
         if is_json:
