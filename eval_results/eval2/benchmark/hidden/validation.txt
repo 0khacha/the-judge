@@ -1,0 +1,24 @@
+T1_semver      reference  visible=PASS hidden=PASS expected_ok=True | 19 passed in 0.03s
+T1_semver      wrong_1    visible=PASS hidden=FAIL expected_ok=True | 4 failed, 15 passed in 0.07s
+T1_semver      wrong_2    visible=PASS hidden=FAIL expected_ok=True | 2 failed, 17 passed in 0.09s
+T1_semver      starter    visible=FAIL (no solution; should FAIL)
+T2_money       reference  visible=PASS hidden=PASS expected_ok=True | 38 passed in 0.03s
+T2_money       wrong_1    visible=PASS hidden=FAIL expected_ok=True | 9 failed, 29 passed in 0.11s
+T2_money       wrong_2    visible=PASS hidden=FAIL expected_ok=True | 7 failed, 31 passed in 0.11s
+T2_money       starter    visible=FAIL (no solution; should FAIL)
+T3_exprlib     reference  visible=PASS hidden=PASS expected_ok=True | 23 passed in 0.04s
+T3_exprlib     wrong_1    visible=PASS hidden=FAIL expected_ok=True | 3 failed, 20 passed in 0.10s
+T3_exprlib     wrong_2    visible=PASS hidden=FAIL expected_ok=True | 3 failed, 20 passed in 0.10s
+T3_exprlib     starter    visible=FAIL (no solution; should FAIL)
+T4_orders      reference  visible=PASS hidden=PASS expected_ok=True | 12 passed in 0.03s
+T4_orders      wrong_1    visible=PASS hidden=FAIL expected_ok=True | 1 failed, 11 passed in 0.07s
+T4_orders      wrong_2    visible=PASS hidden=FAIL expected_ok=True | 2 failed, 10 passed in 0.09s
+T4_orders      starter    visible=FAIL (no solution; should FAIL)
+T5_wrap        reference  visible=PASS hidden=PASS expected_ok=True | 18 passed in 0.02s
+T5_wrap        wrong_1    visible=PASS hidden=FAIL expected_ok=True | 6 failed, 12 passed in 0.08s
+T5_wrap        wrong_2    visible=PASS hidden=FAIL expected_ok=True | 7 failed, 11 passed in 0.09s
+T5_wrap        starter    visible=FAIL (no solution; should FAIL)
+T6_csv         reference  visible=PASS hidden=PASS expected_ok=True | 17 passed in 0.02s
+T6_csv         wrong_1    visible=PASS hidden=FAIL expected_ok=True | 4 failed, 13 passed in 0.08s
+T6_csv         wrong_2    visible=PASS hidden=FAIL expected_ok=True | 5 failed, 12 passed in 0.07s
+T6_csv         starter    visible=FAIL (no solution; should FAIL)

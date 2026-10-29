@@ -1,0 +1,146 @@
+[
+ {
+  "task": "T1_semver",
+  "solution": "reference",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T1_semver",
+  "solution": "wrong_1",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T1_semver",
+  "solution": "wrong_2",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T2_money",
+  "solution": "reference",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T2_money",
+  "solution": "wrong_1",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T2_money",
+  "solution": "wrong_2",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T3_exprlib",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "exit": 2,
+  "blocking": [],
+  "next": "strengthen_tests"
+ },
+ {
+  "task": "T3_exprlib",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "exit": 2,
+  "blocking": [],
+  "next": "strengthen_tests"
+ },
+ {
+  "task": "T3_exprlib",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "exit": 2,
+  "blocking": [],
+  "next": "strengthen_tests"
+ },
+ {
+  "task": "T4_orders",
+  "solution": "reference",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T4_orders",
+  "solution": "wrong_1",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T4_orders",
+  "solution": "wrong_2",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T5_wrap",
+  "solution": "reference",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T5_wrap",
+  "solution": "wrong_1",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T5_wrap",
+  "solution": "wrong_2",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T6_csv",
+  "solution": "reference",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T6_csv",
+  "solution": "wrong_1",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ },
+ {
+  "task": "T6_csv",
+  "solution": "wrong_2",
+  "decision": "PASS",
+  "exit": 0,
+  "blocking": [],
+  "next": "done"
+ }
+]

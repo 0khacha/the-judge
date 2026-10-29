@@ -1,0 +1,11 @@
+{
+ "freezes": [
+  {
+   "time": "2026-10-28T23:18:49Z",
+   "tests": {
+    "test_visible.py": "from csvparse import parse_csv\n\ndef test_simple():\n    assert parse_csv(\"a,b,c\\n1,2,3\") == [[\"a\", \"b\", \"c\"], [\"1\", \"2\", \"3\"]]\n\ndef test_quoted_comma_and_escape():\n    assert parse_csv('x,\"hello, world\",\"say \"\"hi\"\" \"') == [[\"x\", \"hello, world\", 'say \"hi\" ']]\n"
+   },
+   "sources": {}
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+Froze 22 test(s) into .judge/frozen.json:
+  test_visible.py::test_basic
+  test_visible.py::test_empty_and_collapse
+  test_visible.py::test_width_and_errors
+  test_wrap_spec.py::test_display_width_ascii
+  test_wrap_spec.py::test_display_width_combining_and_format_chars_are_zero
+  test_wrap_spec.py::test_display_width_mixed
+  test_wrap_spec.py::test_display_width_wide_chars
+  test_wrap_spec.py::test_empty_and_blank_return_empty_list
+  test_wrap_spec.py::test_exact_fit_stays_on_one_line
+  test_wrap_spec.py::test_final_piece_does_not_join_when_too_wide
+  test_wrap_spec.py::test_final_piece_is_current_line_and_words_may_join
+  test_wrap_spec.py::test_invalid_width_raises_value_error
+  test_wrap_spec.py::test_long_word_after_text_starts_on_new_line
+  test_wrap_spec.py::test_long_word_hard_split_into_pieces
+  test_wrap_spec.py::test_single_char_wider_than_width_placed_alone_not_dropped
+  test_wrap_spec.py::test_whitespace_collapsed_and_greedy_fill
+  test_wrap_spec.py::test_wide_chars_count_two_columns
+  test_wrap_spec.py::test_width_one_is_valid
+  test_wrap_spec.py::test_word_exactly_width_not_split
+  test_wrap_spec.py::test_wrapping_at_word_boundaries_no_split
+  test_wrap_spec.py::test_zero_width_char_attaches_to_preceding_char
+  test_wrap_spec.py::test_zero_width_char_does_not_add_columns
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

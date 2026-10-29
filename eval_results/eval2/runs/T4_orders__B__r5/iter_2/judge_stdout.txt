@@ -1,0 +1,1240 @@
+{
+  "decision": "ABSTAIN",
+  "numeric_score": 65.0,
+  "trust_profile": {
+    "evidence_level": 1,
+    "total_tests": 21,
+    "passed_tests": 21,
+    "failed_tests": 0,
+    "requirement_checks": [
+      {
+        "id": "REQ-test_place_and_cancel",
+        "description": "Verified behavior in test_place_and_cancel",
+        "status": "pass",
+        "evidence_ref": "test_place_and_cancel",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_fulfill",
+        "description": "Verified behavior in test_fulfill",
+        "status": "pass",
+        "evidence_ref": "test_fulfill",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_out_of_stock",
+        "description": "Verified behavior in test_out_of_stock",
+        "status": "pass",
+        "evidence_ref": "test_out_of_stock",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_add_and_stock",
+        "description": "Verified behavior in test_add_and_stock",
+        "status": "pass",
+        "evidence_ref": "test_add_and_stock",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_unknown_sku_is_zero",
+        "description": "Verified behavior in test_unknown_sku_is_zero",
+        "status": "pass",
+        "evidence_ref": "test_unknown_sku_is_zero",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_add_rejects_non_positive[0]",
+        "description": "Verified behavior in test_add_rejects_non_positive[0]",
+        "status": "pass",
+        "evidence_ref": "test_add_rejects_non_positive[0]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_add_rejects_non_positive[-1]",
+        "description": "Verified behavior in test_add_rejects_non_positive[-1]",
+        "status": "pass",
+        "evidence_ref": "test_add_rejects_non_positive[-1]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_reserve_reduces_available_not_stock",
+        "description": "Verified behavior in test_reserve_reduces_available_not_stock",
+        "status": "pass",
+        "evidence_ref": "test_reserve_reduces_available_not_stock",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_reserve_more_than_available_raises_out_of_stock",
+        "description": "Verified behavior in test_reserve_more_than_available_raises_out_of_stock",
+        "status": "pass",
+        "evidence_ref": "test_reserve_more_than_available_raises_out_of_stock",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_reserve_unknown_sku_raises_out_of_stock",
+        "description": "Verified behavior in test_reserve_unknown_sku_raises_out_of_stock",
+        "status": "pass",
+        "evidence_ref": "test_reserve_unknown_sku_raises_out_of_stock",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_reserve_rejects_non_positive[0]",
+        "description": "Verified behavior in test_reserve_rejects_non_positive[0]",
+        "status": "pass",
+        "evidence_ref": "test_reserve_rejects_non_positive[0]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_reserve_rejects_non_positive[-2]",
+        "description": "Verified behavior in test_reserve_rejects_non_positive[-2]",
+        "status": "pass",
+        "evidence_ref": "test_reserve_rejects_non_positive[-2]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_release_restores_available",
+        "description": "Verified behavior in test_release_restores_available",
+        "status": "pass",
+        "evidence_ref": "test_release_restores_available",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_release_more_than_reserved_raises_value_error",
+        "description": "Verified behavior in test_release_more_than_reserved_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_release_more_than_reserved_raises_value_error",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_release_unknown_sku_raises_value_error",
+        "description": "Verified behavior in test_release_unknown_sku_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_release_unknown_sku_raises_value_error",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_commit_removes_stock_and_reservation",
+        "description": "Verified behavior in test_commit_removes_stock_and_reservation",
+        "status": "pass",
+        "evidence_ref": "test_commit_removes_stock_and_reservation",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_commit_more_than_reserved_raises_value_error",
+        "description": "Verified behavior in test_commit_more_than_reserved_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_commit_more_than_reserved_raises_value_error",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_commit_zero_or_negative_rejected",
+        "description": "Verified behavior in test_commit_zero_or_negative_rejected",
+        "status": "pass",
+        "evidence_ref": "test_commit_zero_or_negative_rejected",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_out_of_stock_is_exception",
+        "description": "Verified behavior in test_out_of_stock_is_exception",
+        "status": "pass",
+        "evidence_ref": "test_out_of_stock_is_exception",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_place_reserves_all_lines",
+        "description": "Verified behavior in test_place_reserves_all_lines",
+        "status": "pass",
+        "evidence_ref": "test_place_reserves_all_lines",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_place_all_or_nothing_on_out_of_stock",
+        "description": "Verified behavior in test_place_all_or_nothing_on_out_of_stock",
+        "status": "pass",
+        "evidence_ref": "test_place_all_or_nothing_on_out_of_stock",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_failed_place_does_not_record_id",
+        "description": "Verified behavior in test_failed_place_does_not_record_id",
+        "status": "pass",
+        "evidence_ref": "test_failed_place_does_not_record_id",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_place_empty_lines_raises_value_error",
+        "description": "Verified behavior in test_place_empty_lines_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_place_empty_lines_raises_value_error",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_place_non_positive_qty_raises_value_error[0]",
+        "description": "Verified behavior in test_place_non_positive_qty_raises_value_error[0]",
+        "status": "pass",
+        "evidence_ref": "test_place_non_positive_qty_raises_value_error[0]",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_place_non_positive_qty_raises_value_error[-1]",
+        "description": "Verified behavior in test_place_non_positive_qty_raises_value_error[-1]",
+        "status": "pass",
+        "evidence_ref": "test_place_non_positive_qty_raises_value_error[-1]",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_place_duplicate_id_raises_value_error",
+        "description": "Verified behavior in test_place_duplicate_id_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_place_duplicate_id_raises_value_error",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_duplicate_id_rejected_even_after_cancel",
+        "description": "Verified behavior in test_duplicate_id_rejected_even_after_cancel",
+        "status": "pass",
+        "evidence_ref": "test_duplicate_id_rejected_even_after_cancel",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_duplicate_id_rejected_after_fulfill",
+        "description": "Verified behavior in test_duplicate_id_rejected_after_fulfill",
+        "status": "pass",
+        "evidence_ref": "test_duplicate_id_rejected_after_fulfill",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_status_unknown_id_raises_key_error",
+        "description": "Verified behavior in test_status_unknown_id_raises_key_error",
+        "status": "pass",
+        "evidence_ref": "test_status_unknown_id_raises_key_error",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_cancel_releases_reservations",
+        "description": "Verified behavior in test_cancel_releases_reservations",
+        "status": "pass",
+        "evidence_ref": "test_cancel_releases_reservations",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_cancel_twice_raises_value_error",
+        "description": "Verified behavior in test_cancel_twice_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_cancel_twice_raises_value_error",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_cancel_fulfilled_raises_value_error",
+        "description": "Verified behavior in test_cancel_fulfilled_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_cancel_fulfilled_raises_value_error",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_cancel_unknown_raises_key_error",
+        "description": "Verified behavior in test_cancel_unknown_raises_key_error",
+        "status": "pass",
+        "evidence_ref": "test_cancel_unknown_raises_key_error",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      },
+      {
+        "id": "REQ-test_fulfill_decreases_stock",
+        "description": "Verified behavior in test_fulfill_decreases_stock",
+        "status": "pass",
+        "evidence_ref": "test_fulfill_decreases_stock",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_fulfill_twice_raises_value_error",
+        "description": "Verified behavior in test_fulfill_twice_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_fulfill_twice_raises_value_error",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_fulfill_cancelled_raises_value_error",
+        "description": "Verified behavior in test_fulfill_cancelled_raises_value_error",
+        "status": "pass",
+        "evidence_ref": "test_fulfill_cancelled_raises_value_error",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_fulfill_unknown_raises_key_error",
+        "description": "Verified behavior in test_fulfill_unknown_raises_key_error",
+        "status": "pass",
+        "evidence_ref": "test_fulfill_unknown_raises_key_error",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_orders_are_independent",
+        "description": "Verified behavior in test_orders_are_independent",
+        "status": "pass",
+        "evidence_ref": "test_orders_are_independent",
+        "evidence_source": "agent_claim",
+        "independence_level": "agent_controlled",
+        "evidence_strength": "level_1",
+        "verification": "partially_verified"
+      }
+    ],
+    "probe_coverage": {
+      "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+      "ran": [],
+      "not_run": []
+    },
+    "evidence_integrity_subdimensions": {
+      "challenge_integrity": "VERIFIED",
+      "collection_integrity": "VERIFIED",
+      "execution_integrity": "VERIFIED",
+      "result_integrity": "VERIFIED",
+      "evidence_independence": "PARTIAL"
+    },
+    "environment_isolation_subdimensions": {
+      "process_isolation": "VERIFIED",
+      "filesystem_isolation": "PARTIAL",
+      "environment_isolation": "VERIFIED",
+      "import_isolation": "PARTIAL",
+      "cross_run_isolation": "VERIFIED"
+    },
+    "behavioral_coverage_subdimensions": {
+      "boundary_coverage": "NOT_CHECKED",
+      "perturbation_coverage": "NOT_CHECKED",
+      "state_coverage": "NOT_CHECKED",
+      "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+    },
+    "adversarial_robustness_subdimensions": {
+      "known_attack_resistance": "CHECKED",
+      "adaptive_attack_resistance": "NOT_ASSESSED",
+      "temporal_attack_resistance": "NOT_ASSESSED",
+      "evasion_resistance": "CHECKED"
+    },
+    "abstention_correctness_subdimensions": {
+      "insufficient_evidence": "VERIFIED",
+      "conflicting_evidence": "VERIFIED",
+      "synthesis_failure": "VERIFIED",
+      "verification_denial": "VERIFIED"
+    },
+    "specification_coverage": {
+      "requirements": [
+        {
+          "id": "REQ-001",
+          "description": "Behavioral verification of property test_add_and_stock",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_add_and_stock",
+              "requirement_id": "REQ-001",
+              "property_name": "test_add_and_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_add_and_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-002",
+          "description": "Behavioral verification of property test_add_rejects_non_positive[-1]",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_add_rejects_non_positive[-1]",
+              "requirement_id": "REQ-002",
+              "property_name": "test_add_rejects_non_positive[-1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_add_rejects_non_positive[-1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_add_rejects_non_positive[0]",
+              "requirement_id": "REQ-002",
+              "property_name": "test_add_rejects_non_positive[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_add_rejects_non_positive[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-003",
+          "description": "Behavioral verification of property test_add_rejects_non_positive[0]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_add_rejects_non_positive[-1]",
+              "requirement_id": "REQ-003",
+              "property_name": "test_add_rejects_non_positive[-1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_add_rejects_non_positive[-1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_add_rejects_non_positive[0]",
+              "requirement_id": "REQ-003",
+              "property_name": "test_add_rejects_non_positive[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_add_rejects_non_positive[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-004",
+          "description": "Behavioral verification of property test_cancel_fulfilled_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_fulfill",
+              "requirement_id": "REQ-004",
+              "property_name": "test_fulfill",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_fulfill' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-005",
+          "description": "Behavioral verification of property test_cancel_releases_reservations",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-005."
+        },
+        {
+          "id": "REQ-006",
+          "description": "Behavioral verification of property test_cancel_twice_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-006."
+        },
+        {
+          "id": "REQ-007",
+          "description": "Behavioral verification of property test_cancel_unknown_raises_key_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-007."
+        },
+        {
+          "id": "REQ-008",
+          "description": "Behavioral verification of property test_commit_more_than_reserved_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_commit_more_than_reserved_raises_value_error",
+              "requirement_id": "REQ-008",
+              "property_name": "test_commit_more_than_reserved_raises_value_error",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_commit_more_than_reserved_raises_value_error' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-009",
+          "description": "Behavioral verification of property test_commit_removes_stock_and_reservation",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_commit_removes_stock_and_reservation",
+              "requirement_id": "REQ-009",
+              "property_name": "test_commit_removes_stock_and_reservation",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_commit_removes_stock_and_reservation' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-010",
+          "description": "Behavioral verification of property test_commit_zero_or_negative_rejected",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_commit_zero_or_negative_rejected",
+              "requirement_id": "REQ-010",
+              "property_name": "test_commit_zero_or_negative_rejected",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_commit_zero_or_negative_rejected' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-011",
+          "description": "Behavioral verification of property test_duplicate_id_rejected_after_fulfill",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_fulfill",
+              "requirement_id": "REQ-011",
+              "property_name": "test_fulfill",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_fulfill' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-012",
+          "description": "Behavioral verification of property test_duplicate_id_rejected_even_after_cancel",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-012."
+        },
+        {
+          "id": "REQ-013",
+          "description": "Behavioral verification of property test_failed_place_does_not_record_id",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_failed_place_does_not_record_id",
+              "requirement_id": "REQ-013",
+              "property_name": "test_failed_place_does_not_record_id",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_failed_place_does_not_record_id' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-014",
+          "description": "Behavioral verification of property test_fulfill",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_fulfill",
+              "requirement_id": "REQ-014",
+              "property_name": "test_fulfill",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_fulfill' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-015",
+          "description": "Behavioral verification of property test_fulfill_cancelled_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_fulfill",
+              "requirement_id": "REQ-015",
+              "property_name": "test_fulfill",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_fulfill' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-016",
+          "description": "Behavioral verification of property test_fulfill_decreases_stock",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_fulfill",
+              "requirement_id": "REQ-016",
+              "property_name": "test_fulfill",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_fulfill' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-017",
+          "description": "Behavioral verification of property test_fulfill_twice_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_fulfill",
+              "requirement_id": "REQ-017",
+              "property_name": "test_fulfill",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_fulfill' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-018",
+          "description": "Behavioral verification of property test_fulfill_unknown_raises_key_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_fulfill",
+              "requirement_id": "REQ-018",
+              "property_name": "test_fulfill",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_fulfill' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-019",
+          "description": "Behavioral verification of property test_orders_are_independent",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-019."
+        },
+        {
+          "id": "REQ-020",
+          "description": "Behavioral verification of property test_out_of_stock",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_out_of_stock_is_exception",
+              "requirement_id": "REQ-020",
+              "property_name": "test_out_of_stock_is_exception",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_out_of_stock_is_exception' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_out_of_stock",
+              "requirement_id": "REQ-020",
+              "property_name": "test_out_of_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_out_of_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-021",
+          "description": "Behavioral verification of property test_out_of_stock_is_exception",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_out_of_stock_is_exception",
+              "requirement_id": "REQ-021",
+              "property_name": "test_out_of_stock_is_exception",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_out_of_stock_is_exception' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_out_of_stock",
+              "requirement_id": "REQ-021",
+              "property_name": "test_out_of_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_out_of_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-022",
+          "description": "Behavioral verification of property test_place_all_or_nothing_on_out_of_stock",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_place_all_or_nothing_on_out_of_stock",
+              "requirement_id": "REQ-022",
+              "property_name": "test_place_all_or_nothing_on_out_of_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_place_all_or_nothing_on_out_of_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_out_of_stock",
+              "requirement_id": "REQ-022",
+              "property_name": "test_out_of_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_out_of_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-023",
+          "description": "Behavioral verification of property test_place_and_cancel",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_place_and_cancel",
+              "requirement_id": "REQ-023",
+              "property_name": "test_place_and_cancel",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_place_and_cancel' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-024",
+          "description": "Behavioral verification of property test_place_duplicate_id_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-024."
+        },
+        {
+          "id": "REQ-025",
+          "description": "Behavioral verification of property test_place_empty_lines_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-025."
+        },
+        {
+          "id": "REQ-026",
+          "description": "Behavioral verification of property test_place_non_positive_qty_raises_value_error[-1]",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-026."
+        },
+        {
+          "id": "REQ-027",
+          "description": "Behavioral verification of property test_place_non_positive_qty_raises_value_error[0]",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-027."
+        },
+        {
+          "id": "REQ-028",
+          "description": "Behavioral verification of property test_place_reserves_all_lines",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-028."
+        },
+        {
+          "id": "REQ-029",
+          "description": "Behavioral verification of property test_release_more_than_reserved_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_release_more_than_reserved_raises_value_error",
+              "requirement_id": "REQ-029",
+              "property_name": "test_release_more_than_reserved_raises_value_error",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_release_more_than_reserved_raises_value_error' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-030",
+          "description": "Behavioral verification of property test_release_restores_available",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_release_restores_available",
+              "requirement_id": "REQ-030",
+              "property_name": "test_release_restores_available",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_release_restores_available' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-031",
+          "description": "Behavioral verification of property test_release_unknown_sku_raises_value_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_release_unknown_sku_raises_value_error",
+              "requirement_id": "REQ-031",
+              "property_name": "test_release_unknown_sku_raises_value_error",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_release_unknown_sku_raises_value_error' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-032",
+          "description": "Behavioral verification of property test_reserve_more_than_available_raises_out_of_stock",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_reserve_more_than_available_raises_out_of_stock",
+              "requirement_id": "REQ-032",
+              "property_name": "test_reserve_more_than_available_raises_out_of_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_reserve_more_than_available_raises_out_of_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_out_of_stock",
+              "requirement_id": "REQ-032",
+              "property_name": "test_out_of_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_out_of_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-033",
+          "description": "Behavioral verification of property test_reserve_reduces_available_not_stock",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_reserve_reduces_available_not_stock",
+              "requirement_id": "REQ-033",
+              "property_name": "test_reserve_reduces_available_not_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_reserve_reduces_available_not_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-034",
+          "description": "Behavioral verification of property test_reserve_rejects_non_positive[-2]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_reserve_rejects_non_positive[0]",
+              "requirement_id": "REQ-034",
+              "property_name": "test_reserve_rejects_non_positive[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_reserve_rejects_non_positive[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_reserve_rejects_non_positive[-2]",
+              "requirement_id": "REQ-034",
+              "property_name": "test_reserve_rejects_non_positive[-2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_reserve_rejects_non_positive[-2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-035",
+          "description": "Behavioral verification of property test_reserve_rejects_non_positive[0]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_reserve_rejects_non_positive[0]",
+              "requirement_id": "REQ-035",
+              "property_name": "test_reserve_rejects_non_positive[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_reserve_rejects_non_positive[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_reserve_rejects_non_positive[-2]",
+              "requirement_id": "REQ-035",
+              "property_name": "test_reserve_rejects_non_positive[-2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_reserve_rejects_non_positive[-2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-036",
+          "description": "Behavioral verification of property test_reserve_unknown_sku_raises_out_of_stock",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_reserve_unknown_sku_raises_out_of_stock",
+              "requirement_id": "REQ-036",
+              "property_name": "test_reserve_unknown_sku_raises_out_of_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_reserve_unknown_sku_raises_out_of_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_out_of_stock",
+              "requirement_id": "REQ-036",
+              "property_name": "test_out_of_stock",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_out_of_stock' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-037",
+          "description": "Behavioral verification of property test_status_unknown_id_raises_key_error",
+          "category": "functional",
+          "priority": "important",
+          "status": "UNVERIFIED",
+          "mapped_properties": [],
+          "unverified_reason": "No test or probe was found that exercises REQ-037."
+        },
+        {
+          "id": "REQ-038",
+          "description": "Behavioral verification of property test_unknown_sku_is_zero",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_unknown_sku_is_zero",
+              "requirement_id": "REQ-038",
+              "property_name": "test_unknown_sku_is_zero",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_unknown_sku_is_zero' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        }
+      ],
+      "summary": {
+        "total_requirements": 38,
+        "verified_count": 27,
+        "partially_verified_count": 0,
+        "unverified_count": 11,
+        "conflicting_count": 0,
+        "critical_coverage_pct": 100.0,
+        "important_coverage_pct": 69.4,
+        "overall_coverage_pct": 71.1,
+        "specification_escape_rate_pct": 28.9,
+        "critical_unverified_ids": []
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "EVID-VACUOUS",
+      "category": "evidence",
+      "severity": "medium",
+      "description": "Vacuous test(s) not counted as evidence (no real assertion, tautology, or only `is not None`): test_cancel_fulfilled_raises_value_error, test_cancel_releases_reservations, test_cancel_twice_raises_value_error, test_cancel_unknown_raises_key_error, test_duplicate_id_rejected_after_fulfill, test_duplicate_id_rejected_even_after_cancel, test_fulfill_cancelled_raises_value_error, test_fulfill_decreases_stock, test_fulfill_twice_raises_value_error, test_fulfill_unknown_raises_key_error, test_orders_are_independent, test_place_duplicate_id_raises_value_error, test_place_empty_lines_raises_value_error, test_place_non_positive_qty_raises_value_error, test_place_reserves_all_lines, test_status_unknown_id_raises_key_error",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Assert the actual expected value of the code under test."
+    },
+    {
+      "id": "STATIC-001",
+      "category": "static_analysis",
+      "severity": "low",
+      "description": "linter reported 3 issue(s) (advisory; does not affect the decision)",
+      "property": "linter",
+      "observed": "store\\orders.py:1:41: RUF100 [*] Unused `noqa` directive (unused: `F401`) | test_visible.py:1:1: I001 [*] Import block is un-sorted or un-formatted | tests\\test_store_spec.py:1:1: I001 [*] Import block is un-sorted or un-formatted",
+      "expected": null,
+      "suggested_focus": "Optional clean-up; correctness is decided by tests."
+    },
+    {
+      "id": "EVID-001",
+      "category": "collection",
+      "severity": "medium",
+      "description": "ABSTAIN Level 1 (No Independent Evidence): the frozen tests (test_add_and_stock, test_add_rejects_non_positive, test_cancel_fulfilled_raises_value_error, test_cancel_releases_reservations, test_cancel_twice_raises_value_error) were frozen after the implementation was written: no implementation file changed since the freeze.",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+    },
+    {
+      "id": "EVID-002",
+      "category": "collection",
+      "severity": "medium",
+      "description": "WARNING: Linter reported 3 issue(s). Advisory only; it does not affect the decision.",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+    }
+  ],
+  "provenance": {
+    "workspace_path": "C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\ws2\\T4_orders__B__r5",
+    "workspace_hash": "ce422acbede640ba53054944fea4f1e6a43a99d197215fbaa4394207ea6249bb",
+    "judge_version": "v1.0.1",
+    "timestamp": "2026-10-29T13:08:59Z",
+    "evidence_level": 1,
+    "total_tests": 21,
+    "passed_tests": 21,
+    "failed_tests": 0
+  },
+  "blocking_issues": [],
+  "insufficient_notes": [
+    "ABSTAIN Level 1 (No Independent Evidence): the frozen tests (test_add_and_stock, test_add_rejects_non_positive, test_cancel_fulfilled_raises_value_error, test_cancel_releases_reservations, test_cancel_twice_raises_value_error) were frozen after the implementation was written: no implementation file changed since the freeze.",
+    "WARNING: Linter reported 3 issue(s). Advisory only; it does not affect the decision."
+  ],
+  "next_actions": [
+    {
+      "step": 1,
+      "action": "strengthen_tests",
+      "detail": "These tests assert nothing real and are not counted: test_cancel_fulfilled_raises_value_error, test_cancel_releases_reservations, test_cancel_twice_raises_value_error, test_cancel_unknown_raises_key_error, test_duplicate_id_rejected_after_fulfill, test_duplicate_id_rejected_even_after_cancel, test_fulfill_cancelled_raises_value_error, test_fulfill_decreases_stock, test_fulfill_twice_raises_value_error, test_fulfill_unknown_raises_key_error, test_orders_are_independent, test_place_duplicate_id_raises_value_error, test_place_empty_lines_raises_value_error, test_place_non_positive_qty_raises_value_error, test_place_reserves_all_lines, test_status_unknown_id_raises_key_error",
+      "guidance": "Assert the concrete expected result of the code under test."
+    },
+    {
+      "step": 2,
+      "action": "freeze_tests",
+      "detail": "Tests frozen after the code was written cannot count: they may have been fitted to it. Write tests for the behaviour the task specifies (including cases your code does not obviously handle), run `judge freeze .`, and only then change the implementation; tests frozen before a code change count as independent.",
+      "command": "judge freeze ."
+    },
+    {
+      "step": 3,
+      "action": "or_user_tests",
+      "detail": "Alternatively, ask the user to provide tests and freeze or commit them before you change the code (`judge freeze .` or `git commit`)."
+    },
+    {
+      "step": 4,
+      "action": "or_stop",
+      "detail": "If neither is possible, stop: report ABSTAIN and that the code is verified only by tests written after it."
+    },
+    {
+      "step": 5,
+      "action": "re_verify",
+      "detail": "Verify again after the step(s) above.",
+      "command": "judge verify . --json"
+    }
+  ],
+  "loop": {
+    "iteration": 2,
+    "iterations_since_pass": 2,
+    "previous_decision": "ABSTAIN",
+    "regressions": [],
+    "newly_passing": [],
+    "progress": false,
+    "stuck": false,
+    "stuck_reason": null,
+    "max_iterations": 5
+  },
+  "runtime": {
+    "duration_seconds": 3.895,
+    "judge_version": "v1.0.1"
+  }
+}

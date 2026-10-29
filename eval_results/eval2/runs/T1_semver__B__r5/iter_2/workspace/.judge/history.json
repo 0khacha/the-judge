@@ -1,0 +1,60 @@
+{
+ "runs": [
+  {
+   "iteration": 1,
+   "time": "2026-10-29T13:07:13Z",
+   "decision": "PASS",
+   "passed": [
+    "test_alphanumeric_identifiers_lexical_ascii",
+    "test_build_metadata_does_not_break_core_order",
+    "test_build_metadata_ignored",
+    "test_build_metadata_ignored_with_prerelease",
+    "test_equal_versions",
+    "test_fewer_identifiers_lower_when_prefix_equal",
+    "test_identical_prerelease_equal",
+    "test_invalid_version_raises_value_error[ 1.2.3]",
+    "test_invalid_version_raises_value_error[-1.0.0]",
+    "test_invalid_version_raises_value_error[1..3]",
+    "test_invalid_version_raises_value_error[1.2.3-.alpha]",
+    "test_invalid_version_raises_value_error[1.2.3-]",
+    "test_invalid_version_raises_value_error[1.2.3-alpha..1]",
+    "test_invalid_version_raises_value_error[1.2.3-alpha.]",
+    "test_invalid_version_raises_value_error[1.2.3.4]",
+    "test_invalid_version_raises_value_error[1.2.x]",
+    "test_invalid_version_raises_value_error[1.2]",
+    "test_invalid_version_raises_value_error[1]",
+    "test_invalid_version_raises_value_error[]",
+    "test_invalid_version_raises_value_error[a.b.c]",
+    "test_invalid_version_raises_value_error[v1.2.3]",
+    "test_major_dominates",
+    "test_major_minor_patch_numeric_not_lexical",
+    "test_non_string_raises_value_error[1.0.0]",
+    "test_non_string_raises_value_error[1.0]",
+    "test_non_string_raises_value_error[1]",
+    "test_non_string_raises_value_error[None]",
+    "test_non_string_raises_value_error[bad3]",
+    "test_numeric_core",
+    "test_numeric_identifier_lower_than_alphanumeric",
+    "test_numeric_identifiers_compared_numerically",
+    "test_prerelease_compared_only_after_core",
+    "test_prerelease_lower",
+    "test_prerelease_lower_than_release",
+    "test_return_values_are_ints_in_set",
+    "test_sort",
+    "test_sort_versions_basic_example",
+    "test_sort_versions_empty_and_single",
+    "test_sort_versions_full_precedence_ordering",
+    "test_sort_versions_invalid_entry_raises_value_error",
+    "test_sort_versions_returns_new_list",
+    "test_sort_versions_stable_for_equal_precedence",
+    "test_spec_example_ordering"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"task": "T2_money", "multi_file": false, "trap": true, "what_wrong_1_gets_wrong": "float round() => banker rounding/float error in to_cents; allocate rounds each share and dumps diff on last entry", "what_wrong_2_gets_wrong": "Decimal ROUND_HALF_EVEN in to_cents; allocate hands leftover cents sequentially from index 0 instead of largest remainder"}

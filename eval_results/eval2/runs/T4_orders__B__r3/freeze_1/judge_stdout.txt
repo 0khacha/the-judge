@@ -1,0 +1,26 @@
+Froze 24 test(s) into .judge/frozen.json:
+  test_edges.py::test_add_rejects_non_positive
+  test_edges.py::test_cancel_after_fulfill_raises_value_error
+  test_edges.py::test_cancel_twice_raises_value_error
+  test_edges.py::test_cancel_unknown_raises_key_error
+  test_edges.py::test_commit_more_than_reserved_raises
+  test_edges.py::test_commit_reduces_stock_and_reserved
+  test_edges.py::test_duplicate_id_raises_in_any_status
+  test_edges.py::test_empty_lines_raises
+  test_edges.py::test_failed_place_id_can_be_reused
+  test_edges.py::test_fulfill_after_cancel_raises_value_error
+  test_edges.py::test_fulfill_unknown_raises_key_error
+  test_edges.py::test_line_qty_non_positive_raises
+  test_edges.py::test_multi_line_cancel_releases_all_lines
+  test_edges.py::test_multi_line_fulfill_commits_all_lines
+  test_edges.py::test_place_is_all_or_nothing
+  test_edges.py::test_release_more_than_reserved_raises
+  test_edges.py::test_reservations_of_other_orders_are_respected
+  test_edges.py::test_reserve_more_than_available_raises_out_of_stock
+  test_edges.py::test_reserve_rejects_non_positive
+  test_edges.py::test_status_unknown_raises_key_error
+  test_edges.py::test_unknown_sku_is_zero
+  test_visible.py::test_fulfill
+  test_visible.py::test_out_of_stock
+  test_visible.py::test_place_and_cancel
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

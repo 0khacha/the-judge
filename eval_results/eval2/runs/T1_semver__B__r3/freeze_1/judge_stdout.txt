@@ -1,0 +1,28 @@
+Froze 26 test(s) into .judge/frozen.json:
+  test_semver.py::test_alphanumeric_prerelease_lexical_ascii
+  test_semver.py::test_ascii_order_uppercase_before_lowercase
+  test_semver.py::test_build_metadata_ignored
+  test_semver.py::test_build_metadata_ignored_with_prerelease
+  test_semver.py::test_equal_versions
+  test_semver.py::test_hyphen_inside_identifier_is_part_of_identifier
+  test_semver.py::test_invalid_string_raises_value_error
+  test_semver.py::test_major_numeric_not_lexical
+  test_semver.py::test_minor_numeric_not_lexical
+  test_semver.py::test_non_string_raises_value_error
+  test_semver.py::test_numeric_identifier_lower_than_non_numeric
+  test_semver.py::test_numeric_prerelease_identifiers_compare_numerically
+  test_semver.py::test_patch_numeric_not_lexical
+  test_semver.py::test_prerelease_does_not_override_core
+  test_semver.py::test_prerelease_identifiers_left_to_right
+  test_semver.py::test_prerelease_lower_than_release
+  test_semver.py::test_shorter_prerelease_lower_when_prefix_equal
+  test_semver.py::test_sort_basic
+  test_semver.py::test_sort_empty
+  test_semver.py::test_sort_full_precedence_chain
+  test_semver.py::test_sort_invalid_element_raises_value_error
+  test_semver.py::test_sort_returns_new_list_and_keeps_input
+  test_semver.py::test_sort_stable_for_equal_precedence
+  test_visible.py::test_numeric_core
+  test_visible.py::test_prerelease_lower
+  test_visible.py::test_sort
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

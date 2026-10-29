@@ -1,0 +1,15 @@
+{
+ "freezes": [
+  {
+   "time": "2026-10-28T23:17:22Z",
+   "tests": {
+    "test_visible.py": "from exprlib.evaluator import evaluate, EvalError\n\ndef test_basic():\n    assert evaluate(\"1+2*3\") == 7\n    assert evaluate(\"(1+2)*3\") == 9\n\ndef test_vars():\n    assert evaluate(\"x*2 + y\", {\"x\": 4, \"y\": 1}) == 9\n\ndef test_error():\n    try:\n        evaluate(\"1 +\")\n    except EvalError:\n        pass\n    else:\n        raise AssertionError(\"expected EvalError\")\n"
+   },
+   "sources": {
+    "exprlib/errors.py": "905a3c5bdd5c8a5f9fb99dd2f7eb819255ecbf92df19e2f11c36403f95a98bab",
+    "exprlib/tokenizer.py": "8d75c3a5e74a16539d8b5d4ea360dbbaedd94c455790397e1d7153d5598fdc9c",
+    "exprlib/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  }
+ ]
+}

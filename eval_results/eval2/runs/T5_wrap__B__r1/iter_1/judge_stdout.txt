@@ -1,0 +1,1213 @@
+{
+  "decision": "ABSTAIN",
+  "numeric_score": 65.0,
+  "trust_profile": {
+    "evidence_level": 1,
+    "total_tests": 29,
+    "passed_tests": 29,
+    "failed_tests": 0,
+    "requirement_checks": [
+      {
+        "id": "REQ-test_basic",
+        "description": "Verified behavior in test_basic",
+        "status": "pass",
+        "evidence_ref": "test_basic",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_empty_and_collapse",
+        "description": "Verified behavior in test_empty_and_collapse",
+        "status": "pass",
+        "evidence_ref": "test_empty_and_collapse",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_width_and_errors",
+        "description": "Verified behavior in test_width_and_errors",
+        "status": "pass",
+        "evidence_ref": "test_width_and_errors",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_width_ascii",
+        "description": "Verified behavior in test_width_ascii",
+        "status": "pass",
+        "evidence_ref": "test_width_ascii",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_width_wide_and_fullwidth",
+        "description": "Verified behavior in test_width_wide_and_fullwidth",
+        "status": "pass",
+        "evidence_ref": "test_width_wide_and_fullwidth",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_width_combining_and_format_are_zero",
+        "description": "Verified behavior in test_width_combining_and_format_are_zero",
+        "status": "pass",
+        "evidence_ref": "test_width_combining_and_format_are_zero",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_width_precomposed_is_one",
+        "description": "Verified behavior in test_width_precomposed_is_one",
+        "status": "pass",
+        "evidence_ref": "test_width_precomposed_is_one",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_basic_greedy",
+        "description": "Verified behavior in test_basic_greedy",
+        "status": "pass",
+        "evidence_ref": "test_basic_greedy",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_exact_fit_stays_on_line",
+        "description": "Verified behavior in test_exact_fit_stays_on_line",
+        "status": "pass",
+        "evidence_ref": "test_exact_fit_stays_on_line",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_greedy_breaks_when_next_word_does_not_fit",
+        "description": "Verified behavior in test_greedy_breaks_when_next_word_does_not_fit",
+        "status": "pass",
+        "evidence_ref": "test_greedy_breaks_when_next_word_does_not_fit",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_whitespace_collapsed_and_split",
+        "description": "Verified behavior in test_whitespace_collapsed_and_split",
+        "status": "pass",
+        "evidence_ref": "test_whitespace_collapsed_and_split",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_empty_and_blank_return_empty_list",
+        "description": "Verified behavior in test_empty_and_blank_return_empty_list",
+        "status": "pass",
+        "evidence_ref": "test_empty_and_blank_return_empty_list",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_single_word_fits",
+        "description": "Verified behavior in test_single_word_fits",
+        "status": "pass",
+        "evidence_ref": "test_single_word_fits",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_long_word_hard_split",
+        "description": "Verified behavior in test_long_word_hard_split",
+        "status": "pass",
+        "evidence_ref": "test_long_word_hard_split",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_final_piece_can_be_joined_by_following_words",
+        "description": "Verified behavior in test_final_piece_can_be_joined_by_following_words",
+        "status": "pass",
+        "evidence_ref": "test_final_piece_can_be_joined_by_following_words",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_final_piece_does_not_join_when_too_wide",
+        "description": "Verified behavior in test_final_piece_does_not_join_when_too_wide",
+        "status": "pass",
+        "evidence_ref": "test_final_piece_does_not_join_when_too_wide",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_long_word_after_text_starts_on_new_line",
+        "description": "Verified behavior in test_long_word_after_text_starts_on_new_line",
+        "status": "pass",
+        "evidence_ref": "test_long_word_after_text_starts_on_new_line",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_width_one_splits_every_char",
+        "description": "Verified behavior in test_width_one_splits_every_char",
+        "status": "pass",
+        "evidence_ref": "test_width_one_splits_every_char",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_zero_width_char_stays_with_preceding_char",
+        "description": "Verified behavior in test_zero_width_char_stays_with_preceding_char",
+        "status": "pass",
+        "evidence_ref": "test_zero_width_char_stays_with_preceding_char",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_zero_width_char_in_middle_of_piece",
+        "description": "Verified behavior in test_zero_width_char_in_middle_of_piece",
+        "status": "pass",
+        "evidence_ref": "test_zero_width_char_in_middle_of_piece",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_wide_chars_split_by_columns",
+        "description": "Verified behavior in test_wide_chars_split_by_columns",
+        "status": "pass",
+        "evidence_ref": "test_wide_chars_split_by_columns",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_single_wide_char_wider_than_width_not_dropped",
+        "description": "Verified behavior in test_single_wide_char_wider_than_width_not_dropped",
+        "status": "pass",
+        "evidence_ref": "test_single_wide_char_wider_than_width_not_dropped",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_wide_word_fits_exactly",
+        "description": "Verified behavior in test_wide_word_fits_exactly",
+        "status": "pass",
+        "evidence_ref": "test_wide_word_fits_exactly",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_width_raises[0]",
+        "description": "Verified behavior in test_invalid_width_raises[0]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_width_raises[0]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_width_raises[-1]",
+        "description": "Verified behavior in test_invalid_width_raises[-1]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_width_raises[-1]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_width_raises[2.5]",
+        "description": "Verified behavior in test_invalid_width_raises[2.5]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_width_raises[2.5]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_width_raises[3]",
+        "description": "Verified behavior in test_invalid_width_raises[3]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_width_raises[3]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_width_raises[None]",
+        "description": "Verified behavior in test_invalid_width_raises[None]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_width_raises[None]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_no_line_exceeds_width_and_no_word_lost",
+        "description": "Verified behavior in test_no_line_exceeds_width_and_no_word_lost",
+        "status": "pass",
+        "evidence_ref": "test_no_line_exceeds_width_and_no_word_lost",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      }
+    ],
+    "probe_coverage": {
+      "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+      "ran": [],
+      "not_run": [
+        {
+          "module": "wrap",
+          "symbol": "display_width",
+          "kind": "idempotency",
+          "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+        },
+        {
+          "module": "wrap",
+          "symbol": "wrap_text",
+          "kind": "idempotency",
+          "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+        }
+      ]
+    },
+    "evidence_integrity_subdimensions": {
+      "challenge_integrity": "VERIFIED",
+      "collection_integrity": "VERIFIED",
+      "execution_integrity": "VERIFIED",
+      "result_integrity": "VERIFIED",
+      "evidence_independence": "PARTIAL"
+    },
+    "environment_isolation_subdimensions": {
+      "process_isolation": "VERIFIED",
+      "filesystem_isolation": "PARTIAL",
+      "environment_isolation": "VERIFIED",
+      "import_isolation": "PARTIAL",
+      "cross_run_isolation": "VERIFIED"
+    },
+    "behavioral_coverage_subdimensions": {
+      "boundary_coverage": "NOT_CHECKED",
+      "perturbation_coverage": "NOT_CHECKED",
+      "state_coverage": "NOT_CHECKED",
+      "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+    },
+    "adversarial_robustness_subdimensions": {
+      "known_attack_resistance": "CHECKED",
+      "adaptive_attack_resistance": "NOT_ASSESSED",
+      "temporal_attack_resistance": "NOT_ASSESSED",
+      "evasion_resistance": "CHECKED"
+    },
+    "abstention_correctness_subdimensions": {
+      "insufficient_evidence": "VERIFIED",
+      "conflicting_evidence": "VERIFIED",
+      "synthesis_failure": "VERIFIED",
+      "verification_denial": "VERIFIED"
+    },
+    "specification_coverage": {
+      "requirements": [
+        {
+          "id": "REQ-001",
+          "description": "Behavioral verification of property test_basic",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_basic",
+              "requirement_id": "REQ-001",
+              "property_name": "test_basic",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_basic' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_basic_greedy",
+              "requirement_id": "REQ-001",
+              "property_name": "test_basic_greedy",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_basic_greedy' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-002",
+          "description": "Behavioral verification of property test_basic_greedy",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_basic",
+              "requirement_id": "REQ-002",
+              "property_name": "test_basic",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_basic' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_basic_greedy",
+              "requirement_id": "REQ-002",
+              "property_name": "test_basic_greedy",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_basic_greedy' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-003",
+          "description": "Behavioral verification of property test_empty_and_blank_return_empty_list",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_empty_and_blank_return_empty_list",
+              "requirement_id": "REQ-003",
+              "property_name": "test_empty_and_blank_return_empty_list",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_empty_and_blank_return_empty_list' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-004",
+          "description": "Behavioral verification of property test_empty_and_collapse",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_empty_and_collapse",
+              "requirement_id": "REQ-004",
+              "property_name": "test_empty_and_collapse",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_empty_and_collapse' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-005",
+          "description": "Behavioral verification of property test_exact_fit_stays_on_line",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_exact_fit_stays_on_line",
+              "requirement_id": "REQ-005",
+              "property_name": "test_exact_fit_stays_on_line",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_exact_fit_stays_on_line' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-006",
+          "description": "Behavioral verification of property test_final_piece_can_be_joined_by_following_words",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_final_piece_can_be_joined_by_following_words",
+              "requirement_id": "REQ-006",
+              "property_name": "test_final_piece_can_be_joined_by_following_words",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_final_piece_can_be_joined_by_following_words' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-007",
+          "description": "Behavioral verification of property test_final_piece_does_not_join_when_too_wide",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_final_piece_does_not_join_when_too_wide",
+              "requirement_id": "REQ-007",
+              "property_name": "test_final_piece_does_not_join_when_too_wide",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_final_piece_does_not_join_when_too_wide' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-008",
+          "description": "Behavioral verification of property test_greedy_breaks_when_next_word_does_not_fit",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_greedy_breaks_when_next_word_does_not_fit",
+              "requirement_id": "REQ-008",
+              "property_name": "test_greedy_breaks_when_next_word_does_not_fit",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_greedy_breaks_when_next_word_does_not_fit' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-009",
+          "description": "Behavioral verification of property test_invalid_width_raises[-1]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_width_raises[None]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_width_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[3]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_width_raises[3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[0]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_width_raises[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[-1]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_width_raises[-1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[-1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[2.5]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_width_raises[2.5]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[2.5]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-010",
+          "description": "Behavioral verification of property test_invalid_width_raises[0]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_width_raises[None]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_width_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[3]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_width_raises[3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[0]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_width_raises[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[-1]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_width_raises[-1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[-1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[2.5]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_width_raises[2.5]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[2.5]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-011",
+          "description": "Behavioral verification of property test_invalid_width_raises[2.5]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_width_raises[None]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_width_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[3]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_width_raises[3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[0]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_width_raises[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[-1]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_width_raises[-1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[-1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[2.5]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_width_raises[2.5]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[2.5]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-012",
+          "description": "Behavioral verification of property test_invalid_width_raises[3]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_width_raises[None]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_width_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[3]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_width_raises[3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[0]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_width_raises[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[-1]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_width_raises[-1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[-1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[2.5]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_width_raises[2.5]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[2.5]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-013",
+          "description": "Behavioral verification of property test_invalid_width_raises[None]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_width_raises[None]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_width_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[3]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_width_raises[3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[0]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_width_raises[0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[-1]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_width_raises[-1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[-1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_width_raises[2.5]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_width_raises[2.5]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_width_raises[2.5]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-014",
+          "description": "Behavioral verification of property test_long_word_after_text_starts_on_new_line",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_long_word_after_text_starts_on_new_line",
+              "requirement_id": "REQ-014",
+              "property_name": "test_long_word_after_text_starts_on_new_line",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_long_word_after_text_starts_on_new_line' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-015",
+          "description": "Behavioral verification of property test_long_word_hard_split",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_long_word_hard_split",
+              "requirement_id": "REQ-015",
+              "property_name": "test_long_word_hard_split",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_long_word_hard_split' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-016",
+          "description": "Behavioral verification of property test_no_line_exceeds_width_and_no_word_lost",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_no_line_exceeds_width_and_no_word_lost",
+              "requirement_id": "REQ-016",
+              "property_name": "test_no_line_exceeds_width_and_no_word_lost",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_no_line_exceeds_width_and_no_word_lost' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-017",
+          "description": "Behavioral verification of property test_single_wide_char_wider_than_width_not_dropped",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_single_wide_char_wider_than_width_not_dropped",
+              "requirement_id": "REQ-017",
+              "property_name": "test_single_wide_char_wider_than_width_not_dropped",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_single_wide_char_wider_than_width_not_dropped' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-018",
+          "description": "Behavioral verification of property test_single_word_fits",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_single_word_fits",
+              "requirement_id": "REQ-018",
+              "property_name": "test_single_word_fits",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_single_word_fits' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-019",
+          "description": "Behavioral verification of property test_whitespace_collapsed_and_split",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_whitespace_collapsed_and_split",
+              "requirement_id": "REQ-019",
+              "property_name": "test_whitespace_collapsed_and_split",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_whitespace_collapsed_and_split' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-020",
+          "description": "Behavioral verification of property test_wide_chars_split_by_columns",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_wide_chars_split_by_columns",
+              "requirement_id": "REQ-020",
+              "property_name": "test_wide_chars_split_by_columns",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_wide_chars_split_by_columns' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-021",
+          "description": "Behavioral verification of property test_wide_word_fits_exactly",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_wide_word_fits_exactly",
+              "requirement_id": "REQ-021",
+              "property_name": "test_wide_word_fits_exactly",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_wide_word_fits_exactly' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-022",
+          "description": "Behavioral verification of property test_width_and_errors",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_width_and_errors",
+              "requirement_id": "REQ-022",
+              "property_name": "test_width_and_errors",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_width_and_errors' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-023",
+          "description": "Behavioral verification of property test_width_ascii",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_width_ascii",
+              "requirement_id": "REQ-023",
+              "property_name": "test_width_ascii",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_width_ascii' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-024",
+          "description": "Behavioral verification of property test_width_combining_and_format_are_zero",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_width_combining_and_format_are_zero",
+              "requirement_id": "REQ-024",
+              "property_name": "test_width_combining_and_format_are_zero",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_width_combining_and_format_are_zero' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-025",
+          "description": "Behavioral verification of property test_width_one_splits_every_char",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_width_one_splits_every_char",
+              "requirement_id": "REQ-025",
+              "property_name": "test_width_one_splits_every_char",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_width_one_splits_every_char' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-026",
+          "description": "Behavioral verification of property test_width_precomposed_is_one",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_width_precomposed_is_one",
+              "requirement_id": "REQ-026",
+              "property_name": "test_width_precomposed_is_one",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_width_precomposed_is_one' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-027",
+          "description": "Behavioral verification of property test_width_wide_and_fullwidth",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_width_wide_and_fullwidth",
+              "requirement_id": "REQ-027",
+              "property_name": "test_width_wide_and_fullwidth",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_width_wide_and_fullwidth' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-028",
+          "description": "Behavioral verification of property test_zero_width_char_in_middle_of_piece",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_zero_width_char_in_middle_of_piece",
+              "requirement_id": "REQ-028",
+              "property_name": "test_zero_width_char_in_middle_of_piece",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_zero_width_char_in_middle_of_piece' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-029",
+          "description": "Behavioral verification of property test_zero_width_char_stays_with_preceding_char",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_zero_width_char_stays_with_preceding_char",
+              "requirement_id": "REQ-029",
+              "property_name": "test_zero_width_char_stays_with_preceding_char",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_zero_width_char_stays_with_preceding_char' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        }
+      ],
+      "summary": {
+        "total_requirements": 29,
+        "verified_count": 29,
+        "partially_verified_count": 0,
+        "unverified_count": 0,
+        "conflicting_count": 0,
+        "critical_coverage_pct": 100.0,
+        "important_coverage_pct": 100.0,
+        "overall_coverage_pct": 100.0,
+        "specification_escape_rate_pct": 0.0,
+        "critical_unverified_ids": []
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "COVER-001",
+      "category": "coverage",
+      "severity": "low",
+      "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: wrap.display_width, wrap.wrap_text",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+    },
+    {
+      "id": "STATIC-001",
+      "category": "static_analysis",
+      "severity": "low",
+      "description": "linter reported 4 issue(s) (advisory; does not affect the decision)",
+      "property": "linter",
+      "observed": "test_visible.py:1:1: I001 [*] Import block is un-sorted or un-formatted | test_wrap.py:1:1: I001 [*] Import block is un-sorted or un-formatted | test_wrap.py:21:27: PLE2515 [*] Invalid unescaped character zero-width-space, use \"\\u200B\" instead",
+      "expected": null,
+      "suggested_focus": "Optional clean-up; correctness is decided by tests."
+    },
+    {
+      "id": "EVID-001",
+      "category": "collection",
+      "severity": "medium",
+      "description": "ABSTAIN Level 1 (No Independent Evidence): the frozen tests (test_basic, test_basic_greedy, test_empty_and_blank_return_empty_list, test_empty_and_collapse, test_exact_fit_stays_on_line) were frozen after the implementation was written: no implementation file changed since the freeze.",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+    },
+    {
+      "id": "EVID-002",
+      "category": "collection",
+      "severity": "medium",
+      "description": "WARNING: Linter reported 4 issue(s). Advisory only; it does not affect the decision.",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+    }
+  ],
+  "provenance": {
+    "workspace_path": "C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\ws2\\T5_wrap__B__r1",
+    "workspace_hash": "43d5604c89dab5f19fdd47c5d4c7b45f6dde06a827c0a8e2b87208fe5e0bcfeb",
+    "judge_version": "v1.0.1",
+    "timestamp": "2026-10-28T23:20:04Z",
+    "evidence_level": 1,
+    "total_tests": 29,
+    "passed_tests": 29,
+    "failed_tests": 0
+  },
+  "blocking_issues": [],
+  "insufficient_notes": [
+    "ABSTAIN Level 1 (No Independent Evidence): the frozen tests (test_basic, test_basic_greedy, test_empty_and_blank_return_empty_list, test_empty_and_collapse, test_exact_fit_stays_on_line) were frozen after the implementation was written: no implementation file changed since the freeze.",
+    "WARNING: Linter reported 4 issue(s). Advisory only; it does not affect the decision."
+  ],
+  "next_actions": [
+    {
+      "step": 1,
+      "action": "freeze_tests",
+      "detail": "Tests frozen after the code was written cannot count: they may have been fitted to it. Write tests for the behaviour the task specifies (including cases your code does not obviously handle), run `judge freeze .`, and only then change the implementation; tests frozen before a code change count as independent.",
+      "command": "judge freeze ."
+    },
+    {
+      "step": 2,
+      "action": "or_user_tests",
+      "detail": "Alternatively, ask the user to provide tests and freeze or commit them before you change the code (`judge freeze .` or `git commit`)."
+    },
+    {
+      "step": 3,
+      "action": "or_stop",
+      "detail": "If neither is possible, stop: report ABSTAIN and that the code is verified only by tests written after it."
+    },
+    {
+      "step": 4,
+      "action": "re_verify",
+      "detail": "Verify again after the step(s) above.",
+      "command": "judge verify . --json"
+    }
+  ],
+  "loop": {
+    "iteration": 1,
+    "iterations_since_pass": 1,
+    "previous_decision": null,
+    "regressions": [],
+    "newly_passing": [],
+    "progress": false,
+    "stuck": false,
+    "stuck_reason": null,
+    "max_iterations": 5
+  },
+  "runtime": {
+    "duration_seconds": 7.5,
+    "judge_version": "v1.0.1"
+  }
+}

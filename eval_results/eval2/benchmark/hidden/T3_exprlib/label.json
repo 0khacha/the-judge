@@ -1,0 +1,1 @@
+{"task": "T3_exprlib", "multi_file": true, "trap": true, "what_wrong_1_gets_wrong": "unary minus binds tighter than ** and ** is left-associative (-2**2 == 4, 2**3**2 == 64)", "what_wrong_2_gets_wrong": "raises raw ZeroDivisionError/KeyError instead of EvalError"}

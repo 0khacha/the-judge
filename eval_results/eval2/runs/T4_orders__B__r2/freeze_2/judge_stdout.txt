@@ -1,0 +1,36 @@
+Froze 34 test(s) into .judge/frozen.json:
+  test_spec.py::test_add_accumulates
+  test_spec.py::test_add_rejects_nonpositive
+  test_spec.py::test_cancel_fulfilled_raises_valueerror
+  test_spec.py::test_cancel_releases_and_sets_status
+  test_spec.py::test_cancel_twice_raises_valueerror
+  test_spec.py::test_cancel_unknown_raises_keyerror
+  test_spec.py::test_commit_more_than_reserved_raises
+  test_spec.py::test_commit_reduces_stock_and_reserved
+  test_spec.py::test_duplicate_id_raises_after_cancel
+  test_spec.py::test_duplicate_id_raises_after_fulfill
+  test_spec.py::test_duplicate_id_raises_while_placed
+  test_spec.py::test_failed_place_id_can_be_reused
+  test_spec.py::test_fulfill_cancelled_raises_valueerror
+  test_spec.py::test_fulfill_commits_stock
+  test_spec.py::test_fulfill_twice_raises_valueerror
+  test_spec.py::test_fulfill_unknown_raises_keyerror
+  test_spec.py::test_multiple_orders_share_stock
+  test_spec.py::test_outofstock_is_exception
+  test_spec.py::test_place_empty_lines_raises
+  test_spec.py::test_place_is_all_or_nothing
+  test_spec.py::test_place_nonpositive_qty_raises_and_reserves_nothing
+  test_spec.py::test_place_reserves_all_lines
+  test_spec.py::test_release_more_than_reserved_raises
+  test_spec.py::test_release_nothing_reserved_raises
+  test_spec.py::test_release_restores_available
+  test_spec.py::test_reserve_exact_available_ok
+  test_spec.py::test_reserve_over_available_raises_and_changes_nothing
+  test_spec.py::test_reserve_rejects_nonpositive
+  test_spec.py::test_reserve_unknown_sku_raises_outofstock
+  test_spec.py::test_status_unknown_raises_keyerror
+  test_spec.py::test_unknown_sku_is_zero
+  test_visible.py::test_fulfill
+  test_visible.py::test_out_of_stock
+  test_visible.py::test_place_and_cancel
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

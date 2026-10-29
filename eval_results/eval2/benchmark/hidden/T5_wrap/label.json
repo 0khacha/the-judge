@@ -1,0 +1,1 @@
+{"task": "T5_wrap", "multi_file": false, "trap": true, "what_wrong_1_gets_wrong": "uses len() so wide CJK chars count 1 and combining marks count 1", "what_wrong_2_gets_wrong": "correct widths but never hard-splits words wider than the line width"}

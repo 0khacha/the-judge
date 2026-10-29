@@ -1,0 +1,17 @@
+Froze 15 test(s) into .judge/frozen.json:
+  test_evaluator.py::test_deep_nesting_raises_eval_error
+  test_evaluator.py::test_division_by_zero_raises_eval_error
+  test_evaluator.py::test_eval_error_is_exception_subclass
+  test_evaluator.py::test_eval_error_is_same_class
+  test_evaluator.py::test_invalid_input_raises_eval_error
+  test_evaluator.py::test_normal_cases
+  test_evaluator.py::test_overflow_raises_eval_error_not_raw_exception
+  test_evaluator.py::test_unary_and_power
+  test_evaluator.py::test_undefined_variable_raises_eval_error
+  test_evaluator.py::test_variable_lookup_is_by_name_only
+  test_evaluator.py::test_variables
+  test_evaluator.py::test_variables_default_none
+  test_visible.py::test_basic
+  test_visible.py::test_error
+  test_visible.py::test_vars
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

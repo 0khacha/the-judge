@@ -1,0 +1,30 @@
+Froze 28 test(s) into .judge/frozen.json:
+  test_spec.py::test_empty_and_blank_return_empty_list
+  test_spec.py::test_exact_fit_on_one_line
+  test_spec.py::test_following_word_does_not_join_full_final_piece
+  test_spec.py::test_following_word_joins_final_piece
+  test_spec.py::test_following_word_too_wide_for_final_piece
+  test_spec.py::test_greedy_fill
+  test_spec.py::test_invalid_width_raises
+  test_spec.py::test_lines_respect_width_property
+  test_spec.py::test_long_word_exact_multiple
+  test_spec.py::test_long_word_flushes_previous_line_first
+  test_spec.py::test_long_word_hard_split_final_piece_starts_line
+  test_spec.py::test_single_wide_char_wider_than_width_kept
+  test_spec.py::test_whitespace_runs_collapse_including_tabs_and_newlines
+  test_spec.py::test_wide_char_alone_when_wider_than_width
+  test_spec.py::test_wide_chars_greedy
+  test_spec.py::test_wide_chars_hard_split
+  test_spec.py::test_width_combining_is_zero
+  test_spec.py::test_width_format_char_is_zero
+  test_spec.py::test_width_fullwidth_latin
+  test_spec.py::test_width_mixed
+  test_spec.py::test_width_plain_ascii
+  test_spec.py::test_width_wide_east_asian
+  test_spec.py::test_word_exactly_width_not_split
+  test_spec.py::test_zero_width_never_starts_new_piece
+  test_spec.py::test_zero_width_stays_with_preceding_char_at_boundary
+  test_visible.py::test_basic
+  test_visible.py::test_empty_and_collapse
+  test_visible.py::test_width_and_errors
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

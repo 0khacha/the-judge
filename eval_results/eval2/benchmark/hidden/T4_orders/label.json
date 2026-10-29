@@ -1,0 +1,1 @@
+{"task": "T4_orders", "multi_file": true, "trap": true, "what_wrong_1_gets_wrong": "sequential reserve without rollback: failed multi-line order leaves earlier lines reserved", "what_wrong_2_gets_wrong": "records the order id before reserving and keeps it after OutOfStock, so retry raises ValueError / status is not KeyError"}

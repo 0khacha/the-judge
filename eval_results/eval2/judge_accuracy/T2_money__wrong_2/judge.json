@@ -1,0 +1,184 @@
+{
+ "decision": "PASS",
+ "numeric_score": 95.5,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_to_cents",
+    "description": "Verified behavior in test_to_cents",
+    "status": "pass",
+    "evidence_ref": "test_to_cents",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_allocate",
+    "description": "Verified behavior in test_allocate",
+    "status": "pass",
+    "evidence_ref": "test_allocate",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": [
+    {
+     "module": "money",
+     "symbol": "to_cents",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    },
+    {
+     "module": "money",
+     "symbol": "allocate",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    }
+   ]
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_allocate",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_allocate",
+       "requirement_id": "REQ-001",
+       "property_name": "test_allocate",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_allocate' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_to_cents",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_to_cents",
+       "requirement_id": "REQ-002",
+       "property_name": "test_to_cents",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_to_cents' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 2,
+    "verified_count": 2,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "COVER-001",
+   "category": "coverage",
+   "severity": "low",
+   "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: money.allocate, money.to_cents",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 3 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "money.py:1:1: I001 [*] Import block is un-sorted or un-formatted | money.py:8:9: B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling | test_visible.py:1:1: I001 [*] Import block is un-sorted or un-f",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval2\\judge_accuracy\\T2_money__wrong_2\\workspace",
+  "workspace_hash": "de04407a29270b88a57036ae20e810d06bb340417e20ba969523ec88da791adc",
+  "judge_version": "v1.0.1",
+  "timestamp": "2026-10-28T23:16:50Z",
+  "evidence_level": 2,
+  "total_tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 3 issue(s). Advisory only; it does not affect the decision."
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "done",
+   "detail": "PASS: all tests passed, including 2 independent test(s) fixed before the implementation. Report success with numeric_score 95.5."
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 9.05,
+  "judge_version": "v1.0.1"
+ }
+}

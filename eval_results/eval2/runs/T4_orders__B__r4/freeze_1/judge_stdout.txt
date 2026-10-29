@@ -1,0 +1,30 @@
+Froze 28 test(s) into .judge/frozen.json:
+  test_spec.py::test_add_and_stock_unknown_is_zero
+  test_spec.py::test_add_invalid_qty
+  test_spec.py::test_cancel_fulfill_unknown_key_error
+  test_spec.py::test_cancel_one_order_does_not_affect_other
+  test_spec.py::test_cancel_only_from_placed
+  test_spec.py::test_cancel_releases_and_sets_status
+  test_spec.py::test_commit_more_than_reserved_raises
+  test_spec.py::test_commit_removes_from_stock_and_reserved
+  test_spec.py::test_fulfill_commits_and_sets_status
+  test_spec.py::test_out_of_stock_is_exception
+  test_spec.py::test_place_all_or_nothing_rolls_back_and_id_not_recorded
+  test_spec.py::test_place_duplicate_id_value_error_any_status
+  test_spec.py::test_place_empty_lines_value_error
+  test_spec.py::test_place_multi_line
+  test_spec.py::test_place_nonpositive_qty_value_error
+  test_spec.py::test_place_status_placed
+  test_spec.py::test_release_more_than_reserved_raises
+  test_spec.py::test_release_restores_available
+  test_spec.py::test_release_unknown_sku_raises
+  test_spec.py::test_reserve_exact_available_ok
+  test_spec.py::test_reserve_invalid_qty
+  test_spec.py::test_reserve_reduces_available_not_stock
+  test_spec.py::test_reserve_too_much_raises_out_of_stock_and_changes_nothing
+  test_spec.py::test_reserve_unknown_sku_out_of_stock
+  test_spec.py::test_status_unknown_key_error
+  test_visible.py::test_fulfill
+  test_visible.py::test_out_of_stock
+  test_visible.py::test_place_and_cancel
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

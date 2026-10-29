@@ -1,0 +1,18 @@
+Froze 16 test(s) into .judge/frozen.json:
+  test_csvparse.py::test_blank_line_is_record_with_single_empty_field
+  test_csvparse.py::test_empty_text_gives_no_records
+  test_csvparse.py::test_final_terminator_does_not_add_record
+  test_csvparse.py::test_quote_in_middle_of_unquoted_field_is_literal
+  test_csvparse.py::test_quoted_comma_and_escaped_quote
+  test_csvparse.py::test_quoted_empty_field
+  test_csvparse.py::test_quoted_field_followed_by_junk_raises
+  test_csvparse.py::test_quoted_field_followed_by_space_raises
+  test_csvparse.py::test_quoted_field_followed_by_terminator_or_comma_ok
+  test_csvparse.py::test_quoted_field_keeps_newlines_verbatim
+  test_csvparse.py::test_simple_lf_and_crlf
+  test_csvparse.py::test_trailing_comma_gives_trailing_empty_field
+  test_csvparse.py::test_unterminated_quote_raises
+  test_csvparse.py::test_whitespace_preserved
+  test_visible.py::test_quoted_comma_and_escape
+  test_visible.py::test_simple
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

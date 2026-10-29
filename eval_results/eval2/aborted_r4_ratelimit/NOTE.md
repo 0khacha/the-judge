@@ -1,0 +1,1 @@
+All 12 run-4 agents were terminated by an API usage limit (HTTP 429, 5-hour limit) before finishing. Partial workspaces/logs archived here; workspaces reset from the frozen public benchmark and run 4 re-launched fresh. Reported as a deviation in REPORT2.md.

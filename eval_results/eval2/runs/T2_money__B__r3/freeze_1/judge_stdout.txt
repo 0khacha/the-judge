@@ -1,0 +1,22 @@
+Froze 20 test(s) into .judge/frozen.json:
+  test_money.py::test_allocate_all_zero_weights_raises
+  test_money.py::test_allocate_always_sums_to_total
+  test_money.py::test_allocate_empty_weights_raises
+  test_money.py::test_allocate_is_exact_for_large_values
+  test_money.py::test_allocate_leftover_goes_to_largest_remainder
+  test_money.py::test_allocate_negative_total_raises
+  test_money.py::test_allocate_negative_weight_raises
+  test_money.py::test_allocate_single_weight_gets_everything
+  test_money.py::test_allocate_spec_examples
+  test_money.py::test_allocate_ties_broken_by_lowest_index
+  test_money.py::test_allocate_zero_total
+  test_money.py::test_allocate_zero_weight_gets_nothing
+  test_money.py::test_to_cents_basic
+  test_money.py::test_to_cents_invalid_string_raises
+  test_money.py::test_to_cents_large_value_is_exact
+  test_money.py::test_to_cents_non_string_raises
+  test_money.py::test_to_cents_rounding
+  test_money.py::test_to_cents_surrounding_whitespace
+  test_visible.py::test_allocate
+  test_visible.py::test_to_cents
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

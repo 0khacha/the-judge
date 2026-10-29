@@ -1,0 +1,51 @@
+{
+ "runs": [
+  {
+   "iteration": 1,
+   "time": "2026-10-28T23:27:27Z",
+   "decision": "PASS",
+   "passed": [
+    "test_add_accumulates",
+    "test_add_rejects_nonpositive",
+    "test_cancel_fulfilled_raises_valueerror",
+    "test_cancel_releases_and_sets_status",
+    "test_cancel_twice_raises_valueerror",
+    "test_cancel_unknown_raises_keyerror",
+    "test_commit_more_than_reserved_raises",
+    "test_commit_reduces_stock_and_reserved",
+    "test_duplicate_id_raises_after_cancel",
+    "test_duplicate_id_raises_after_fulfill",
+    "test_duplicate_id_raises_while_placed",
+    "test_failed_place_id_can_be_reused",
+    "test_fulfill",
+    "test_fulfill_cancelled_raises_valueerror",
+    "test_fulfill_commits_stock",
+    "test_fulfill_twice_raises_valueerror",
+    "test_fulfill_unknown_raises_keyerror",
+    "test_multiple_orders_share_stock",
+    "test_out_of_stock",
+    "test_outofstock_is_exception",
+    "test_place_and_cancel",
+    "test_place_empty_lines_raises",
+    "test_place_is_all_or_nothing",
+    "test_place_nonpositive_qty_raises_and_reserves_nothing",
+    "test_place_reserves_all_lines",
+    "test_release_more_than_reserved_raises",
+    "test_release_nothing_reserved_raises",
+    "test_release_restores_available",
+    "test_reserve_exact_available_ok",
+    "test_reserve_over_available_raises_and_changes_nothing",
+    "test_reserve_rejects_nonpositive",
+    "test_reserve_unknown_sku_raises_outofstock",
+    "test_status_unknown_raises_keyerror",
+    "test_unknown_sku_is_zero"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  }
+ ]
+}

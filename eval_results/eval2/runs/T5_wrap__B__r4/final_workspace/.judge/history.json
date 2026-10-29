@@ -1,0 +1,49 @@
+{
+ "runs": [
+  {
+   "iteration": 1,
+   "time": "2026-10-29T12:59:55Z",
+   "decision": "PASS",
+   "passed": [
+    "test_basic",
+    "test_empty_and_blank_return_empty_list",
+    "test_empty_and_collapse",
+    "test_exact_fit_on_one_line",
+    "test_following_word_does_not_join_full_final_piece",
+    "test_following_word_joins_final_piece",
+    "test_following_word_too_wide_for_final_piece",
+    "test_greedy_fill",
+    "test_invalid_width_raises[-1]",
+    "test_invalid_width_raises[0]",
+    "test_invalid_width_raises[2.5]",
+    "test_invalid_width_raises[3]",
+    "test_invalid_width_raises[None]",
+    "test_lines_respect_width_property",
+    "test_long_word_exact_multiple",
+    "test_long_word_flushes_previous_line_first",
+    "test_long_word_hard_split_final_piece_starts_line",
+    "test_single_wide_char_wider_than_width_kept",
+    "test_whitespace_runs_collapse_including_tabs_and_newlines",
+    "test_wide_char_alone_when_wider_than_width",
+    "test_wide_chars_greedy",
+    "test_wide_chars_hard_split",
+    "test_width_and_errors",
+    "test_width_combining_is_zero",
+    "test_width_format_char_is_zero",
+    "test_width_fullwidth_latin",
+    "test_width_mixed",
+    "test_width_plain_ascii",
+    "test_width_wide_east_asian",
+    "test_word_exactly_width_not_split",
+    "test_zero_width_never_starts_new_piece",
+    "test_zero_width_stays_with_preceding_char_at_boundary"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  }
+ ]
+}

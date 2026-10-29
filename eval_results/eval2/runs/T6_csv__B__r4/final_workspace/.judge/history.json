@@ -1,0 +1,36 @@
+{
+ "runs": [
+  {
+   "iteration": 1,
+   "time": "2026-10-29T12:59:02Z",
+   "decision": "PASS",
+   "passed": [
+    "test_blank_line_is_record_with_single_empty_field",
+    "test_char_after_closing_quote_must_be_separator_or_terminator",
+    "test_doubled_quote_is_literal_quote",
+    "test_empty_quoted_field",
+    "test_empty_text_gives_no_records",
+    "test_final_terminator_does_not_create_extra_record",
+    "test_leading_comma_yields_leading_empty_field",
+    "test_multiple_records_lf_and_crlf",
+    "test_only_terminator_is_one_blank_record",
+    "test_quote_in_middle_of_unquoted_field_is_literal",
+    "test_quoted_comma_and_escape",
+    "test_quoted_field_at_end_of_input",
+    "test_quoted_field_keeps_commas_and_newlines",
+    "test_quoted_field_then_terminator",
+    "test_simple",
+    "test_simple_record",
+    "test_trailing_comma_yields_trailing_empty_field",
+    "test_unterminated_quote_raises",
+    "test_whitespace_preserved"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  }
+ ]
+}

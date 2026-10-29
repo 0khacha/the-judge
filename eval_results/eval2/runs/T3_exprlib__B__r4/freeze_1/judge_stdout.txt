@@ -1,0 +1,14 @@
+Froze 12 test(s) into .judge/frozen.json:
+  test_evaluator_spec.py::test_arithmetic
+  test_evaluator_spec.py::test_evalerror_is_same_class
+  test_evaluator_spec.py::test_exponentiation
+  test_evaluator_spec.py::test_invalid_raises_evalerror
+  test_evaluator_spec.py::test_none_variables_with_name_raises_evalerror
+  test_evaluator_spec.py::test_unary
+  test_evaluator_spec.py::test_undefined_variable_raises_evalerror
+  test_evaluator_spec.py::test_variables
+  test_evaluator_spec.py::test_whitespace_is_ignored
+  test_visible.py::test_basic
+  test_visible.py::test_error
+  test_visible.py::test_vars
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

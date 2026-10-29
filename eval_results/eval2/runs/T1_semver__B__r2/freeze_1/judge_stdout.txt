@@ -1,0 +1,24 @@
+Froze 22 test(s) into .judge/frozen.json:
+  test_semver.py::test_build_metadata_does_not_affect_order
+  test_semver.py::test_build_metadata_ignored
+  test_semver.py::test_core_numeric_not_lexical
+  test_semver.py::test_equal_versions
+  test_semver.py::test_fewer_identifiers_lower_when_prefix_equal
+  test_semver.py::test_invalid_strings_raise
+  test_semver.py::test_leading_zero_numeric_identifier_compared_numerically
+  test_semver.py::test_minor_and_patch_precedence
+  test_semver.py::test_non_string_raises
+  test_semver.py::test_numeric_identifier_lower_than_alphanumeric
+  test_semver.py::test_prerelease_alphanumeric_lexical_ascii
+  test_semver.py::test_prerelease_identifier_numeric_compare
+  test_semver.py::test_prerelease_lower_than_release
+  test_semver.py::test_semver_spec_example_chain
+  test_semver.py::test_sort_basic
+  test_semver.py::test_sort_empty_and_single
+  test_semver.py::test_sort_full_mixed
+  test_semver.py::test_sort_is_stable_for_equal_precedence
+  test_semver.py::test_sort_returns_new_list_and_does_not_mutate
+  test_visible.py::test_numeric_core
+  test_visible.py::test_prerelease_lower
+  test_visible.py::test_sort
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

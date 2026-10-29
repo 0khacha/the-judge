@@ -1,0 +1,60 @@
+{"id": "T1_semver__A__r1", "tokens": 36960, "tool_uses": 6, "duration_ms": 122372, "report": "Created semver.py (compare, sort_versions); 3 visible pass; no extra tests."}
+{"id": "T5_wrap__A__r1", "tokens": 39048, "tool_uses": 7, "duration_ms": 124321, "report": "Created wrap.py; 3 visible pass; spot checks."}
+{"id": "T6_csv__A__r1", "tokens": 37059, "tool_uses": 6, "duration_ms": 127641, "report": "Created csvparse.py state machine; 2 visible pass."}
+{"id": "T2_money__A__r1", "tokens": 37258, "tool_uses": 6, "duration_ms": 145992, "report": "Created money.py (to_cents, allocate); 2 visible pass; spot checks."}
+{"id": "T4_orders__A__r1", "tokens": 38096, "tool_uses": 8, "duration_ms": 162476, "report": "Created store/__init__.py, inventory.py, orders.py; 3 visible pass."}
+{"id": "T3_exprlib__A__r1", "tokens": 39673, "tool_uses": 7, "duration_ms": 236645, "report": "Created exprlib/evaluator.py (recursive descent); 3 visible pass; spot checks."}
+{"id": "T6_csv__B__r1", "tokens": 51434, "tool_uses": 9, "duration_ms": 289195, "report": "Wrote test_spec.py (18 tests), froze with visible tests, implemented csvparse.py; judge PASS 98.5 at iteration 1."}
+{"id": "T2_money__B__r1", "tokens": 42439, "tool_uses": 9, "duration_ms": 293132, "report": "Wrote test_edge.py (20 tests), froze, implemented money.py; 60 pass; judge PASS 95.5."}
+{"id": "T4_orders__B__r1", "tokens": 48812, "tool_uses": 14, "duration_ms": 342283, "report": "Wrote test_spec.py (24 tests), froze with visible, implemented store/; judge PASS 97.0; one botched wrapper call via bash (no verdict)."}
+{"id": "T1_semver__B__r1", "tokens": 43472, "tool_uses": 7, "duration_ms": 343239, "report": "Wrote test_semver_spec.py (21 tests), froze, implemented semver.py; judge PASS 94.0; one botched wrapper call via bash."}
+{"id": "T3_exprlib__B__r1", "tokens": 48877, "tool_uses": 10, "duration_ms": 380035, "report": "Wrote test_evaluator.py (40 tests) first, froze, implemented evaluator.py; judge PASS 85.0 twice."}
+{"id": "T5_wrap__B__r1", "tokens": 53798, "tool_uses": 13, "duration_ms": 382411, "report": "Wrote test_wrap.py (25), froze, implemented; fixed own buggy test and re-froze after code -> tests not independent; ABSTAIN 65 (freeze_tests). Wrote a file outside its workspace (ws2/T5_verify2.json)."}
+{"id": "T1_semver__A__r2", "tokens": 36683, "tool_uses": 6, "duration_ms": 56188, "report": "Created semver.py; 3 visible pass; spot checks."}
+{"id": "T2_money__A__r2", "tokens": 36039, "tool_uses": 4, "duration_ms": 59368, "report": "Created money.py; 2 visible pass; spot checks."}
+{"id": "T5_wrap__A__r2", "tokens": 37779, "tool_uses": 5, "duration_ms": 67448, "report": "Created wrap.py; spot checks only."}
+{"id": "T6_csv__A__r2", "tokens": 37417, "tool_uses": 6, "duration_ms": 73249, "report": "Created csvparse.py; 2 visible pass."}
+{"id": "T3_exprlib__A__r2", "tokens": 40439, "tool_uses": 10, "duration_ms": 78615, "report": "Created exprlib/evaluator.py; 3 visible pass."}
+{"id": "T4_orders__A__r2", "tokens": 38013, "tool_uses": 9, "duration_ms": 93522, "report": "Created store/ package; 3 visible pass."}
+{"id": "T6_csv__B__r2", "tokens": 51198, "tool_uses": 8, "duration_ms": 162190, "report": "Wrote test_csvparse.py (19) first, froze, implemented; judge PASS 98.5 at verify 1; one botched wrapper call."}
+{"id": "T1_semver__B__r2", "tokens": 43581, "tool_uses": 10, "duration_ms": 190299, "report": "Wrote test_semver.py (22 fns/39 cases) first, froze, implemented; judge PASS 94.0."}
+{"id": "T5_wrap__B__r2", "tokens": 44377, "tool_uses": 9, "duration_ms": 208187, "report": "Wrote test_wrap.py (24) first, froze, implemented; judge PASS 91.0 at verify 1; one stray wrapper call with no args."}
+{"id": "T2_money__B__r2", "tokens": 45937, "tool_uses": 13, "duration_ms": 247133, "report": "Wrote test_money.py (28) first, froze, implemented; judge PASS 94.0; one botched wrapper call."}
+{"id": "T3_exprlib__B__r2", "tokens": 48283, "tool_uses": 10, "duration_ms": 248390, "report": "Wrote test_evaluator.py (33) first, froze, implemented; judge PASS 86.5."}
+{"id": "T4_orders__B__r2", "tokens": 49059, "tool_uses": 15, "duration_ms": 257620, "report": "Wrote test_spec.py (33) first; corrected own test and re-froze before any implementation; implemented store/; judge PASS 84.0."}
+{"id": "T2_money__A__r3", "tokens": 35397, "tool_uses": 4, "duration_ms": 32682, "report": "Wrote money.py; ad-hoc sanity checks only, no pytest run; believes complete."}
+{"id": "T5_wrap__A__r3", "tokens": 35951, "tool_uses": 5, "duration_ms": 44620, "report": "Wrote wrap.py; spot checks only, no pytest run; believes complete."}
+{"id": "T1_semver__A__r3", "tokens": 35556, "tool_uses": 4, "duration_ms": 57466, "report": "Wrote semver.py; ad-hoc script + visible tests 3 passed; believes complete."}
+{"id": "T4_orders__A__r3", "tokens": 37758, "tool_uses": 8, "duration_ms": 91426, "report": "Wrote store/ package; visible tests 3 passed; believes complete."}
+{"id": "T6_csv__A__r3", "tokens": 39372, "tool_uses": 7, "duration_ms": 92731, "report": "Wrote csvparse.py; visible tests 2 passed + spot checks; lone CR treated as text; believes complete."}
+{"id": "T4_orders__B__r3", "tokens": 43692, "tool_uses": 9, "duration_ms": 165151, "report": "Wrote test_edges.py (21) first, froze, implemented store/; 2 verify runs; judge PASS 95.5."}
+{"id": "T6_csv__B__r3", "tokens": 49608, "tool_uses": 9, "duration_ms": 168330, "report": "Wrote test_csvparse.py (14) first, froze, implemented csvparse.py; 1 verify run; judge PASS 98.5."}
+{"id": "T3_exprlib__A__r3", "tokens": 43481, "tool_uses": 9, "duration_ms": 262489, "report": "Wrote exprlib/evaluator.py; visible tests 3 passed + spec examples; guards huge powers; believes complete."}
+{"id": "T3_exprlib__B__r3", "tokens": 47462, "tool_uses": 9, "duration_ms": 273733, "report": "Wrote test_evaluator.py (21) first, froze, implemented exprlib/evaluator.py; 2 verify runs; judge PASS 85.0."}
+{"id": "T1_semver__B__r3", "tokens": 45392, "tool_uses": 15, "duration_ms": 284630, "report": "Wrote test_semver.py (26) first, froze, implemented semver.py; judge PASS 95.5."}
+{"id": "T2_money__B__r3", "tokens": 46503, "tool_uses": 13, "duration_ms": 285249, "report": "Wrote test_money.py first (corrected one expectation before freeze), froze, implemented money.py; 2 verify runs; judge PASS 95.5."}
+{"id": "T5_wrap__B__r3", "tokens": 44868, "tool_uses": 8, "duration_ms": 301641, "report": "Wrote test_wrap_spec.py (22) first, froze, implemented wrap.py; 2 verify runs (second only to re-read large output); judge PASS 97.0."}
+{"id": "T1_semver__A__r4", "tokens": 39963, "tool_uses": 6, "duration_ms": 58049, "report": "Wrote semver.py; visible tests 3 passed; rejects leading zeros; believes complete. (Relaunch after rate-limit abort.)"}
+{"id": "T6_csv__A__r4", "tokens": 40105, "tool_uses": 4, "duration_ms": 40068, "report": "Wrote csvparse.py; ad-hoc checks only, no pytest run; believes complete. (Relaunch after rate-limit abort.)"}
+{"id": "T2_money__A__r4", "tokens": 40818, "tool_uses": 6, "duration_ms": 70465, "report": "Wrote money.py; visible tests 2 passed + spot checks; believes complete. (Relaunch after rate-limit abort.)"}
+{"id": "T5_wrap__A__r4", "tokens": 41688, "tool_uses": 6, "duration_ms": 81601, "report": "Wrote wrap.py; visible tests 3 passed; believes complete. (Relaunch after rate-limit abort.)"}
+{"id": "T4_orders__A__r4", "tokens": 42049, "tool_uses": 8, "duration_ms": 87693, "report": "Wrote store/ package; visible tests 3 passed; believes complete. (Relaunch after rate-limit abort.)"}
+{"id": "T3_exprlib__A__r4", "tokens": 44658, "tool_uses": 9, "duration_ms": 89891, "report": "Wrote exprlib/evaluator.py; visible tests 3 passed + ad-hoc checks; believes complete. (Relaunch after rate-limit abort.)"}
+{"id": "T6_csv__B__r4", "tokens": 54197, "tool_uses": 8, "duration_ms": 187653, "report": "Wrote test_csvparse.py (18) first, froze, implemented csvparse.py; 1 verify run; judge PASS 98.5. (Relaunch after rate-limit abort.)"}
+{"id": "T5_wrap__B__r4", "tokens": 49472, "tool_uses": 11, "duration_ms": 236962, "report": "Wrote test_spec.py first, froze, implemented wrap.py; 1 verify run; judge PASS 95.5. (Relaunch after rate-limit abort.)"}
+{"id": "T2_money__B__r4", "tokens": 48029, "tool_uses": 10, "duration_ms": 281991, "report": "Wrote test_money.py (29) first, froze, implemented money.py; 1 verify run; judge PASS 95.5. (Relaunch after rate-limit abort.)"}
+{"id": "T3_exprlib__B__r4", "tokens": 49842, "tool_uses": 10, "duration_ms": 284041, "report": "Wrote test_evaluator_spec.py (12) first, froze, implemented exprlib/evaluator.py; first call ran wrapper without python (no verdict); 2 verify runs; judge PASS 88.0. (Relaunch after rate-limit abort.)"}
+{"id": "T4_orders__B__r4", "tokens": 54990, "tool_uses": 10, "duration_ms": 346110, "report": "Wrote test_spec.py (28) first, froze, implemented store/; fixed one wrong own assertion and re-froze after code -> not independent; 2 verify runs; judge ABSTAIN 65.0 (strengthen_tests/freeze_tests); stopped honestly. (Relaunch after rate-limit abort.)"}
+{"id": "T1_semver__B__r4", "tokens": 51716, "tool_uses": 14, "duration_ms": 387687, "report": "Wrote test_semver.py (18) first, froze, implemented semver.py; two wrapper calls without python (no verdict); 2 verify runs; judge PASS 94.0. (Relaunch after rate-limit abort.)"}
+{"id": "T2_money__A__r5", "tokens": 40066, "tool_uses": 6, "duration_ms": 55489, "report": "Wrote money.py; visible tests 2 passed + spot checks; believes complete."}
+{"id": "T5_wrap__A__r5", "tokens": 40835, "tool_uses": 6, "duration_ms": 56092, "report": "Wrote wrap.py; visible tests 3 passed; believes complete."}
+{"id": "T6_csv__A__r5", "tokens": 41691, "tool_uses": 7, "duration_ms": 78356, "report": "Wrote csvparse.py + own test_csvparse.py (23); found and fixed lone-CR bug; believes complete."}
+{"id": "T3_exprlib__A__r5", "tokens": 43479, "tool_uses": 6, "duration_ms": 85048, "report": "Wrote exprlib/evaluator.py; visible tests 3 passed + ad-hoc checks; believes complete."}
+{"id": "T1_semver__A__r5", "tokens": 41318, "tool_uses": 6, "duration_ms": 91201, "report": "Wrote semver.py; sanity checks only, no pytest run; believes complete."}
+{"id": "T4_orders__A__r5", "tokens": 41004, "tool_uses": 5, "duration_ms": 97211, "report": "Wrote store/ package; visible tests 3 passed + manual edge checks; believes complete."}
+{"id": "T6_csv__B__r5", "tokens": 48060, "tool_uses": 11, "duration_ms": 188451, "report": "Wrote test_spec.py (26) first, froze, implemented csvparse.py; one wrapper call without python (no verdict); 1 verify run; judge PASS 98.5."}
+{"id": "T2_money__B__r5", "tokens": 48073, "tool_uses": 8, "duration_ms": 196002, "report": "Wrote test_money.py first, froze, implemented money.py; 1 verify run; judge PASS 95.5."}
+{"id": "T1_semver__B__r5", "tokens": 49800, "tool_uses": 12, "duration_ms": 204614, "report": "Wrote test_semver_spec.py first (dropped two out-of-spec cases before freezing), froze, implemented semver.py; verify re-run to parse large output; judge PASS 97.0."}
+{"id": "T5_wrap__B__r5", "tokens": 53565, "tool_uses": 11, "duration_ms": 226547, "report": "Wrote test_spec.py (30) first, froze, implemented wrap.py; one wrapper call without python (no verdict); 2 verify runs; judge PASS 95.5."}
+{"id": "T3_exprlib__B__r5", "tokens": 52748, "tool_uses": 10, "duration_ms": 242914, "report": "Wrote test_evaluator.py first, froze, implemented exprlib/evaluator.py; one wrapper call without python (no verdict); 2 verify runs; judge PASS 86.5."}
+{"id": "T4_orders__B__r5", "tokens": 59796, "tool_uses": 17, "duration_ms": 297514, "report": "Wrote tests/test_store_spec.py (38) first, froze, implemented store/; corrected two wrong own expectations and re-froze after code -> not independent; 2 verify runs; judge ABSTAIN 65.0; stopped honestly."}

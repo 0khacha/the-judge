@@ -1,0 +1,3117 @@
+{
+  "decision": "PASS",
+  "numeric_score": 94.0,
+  "trust_profile": {
+    "evidence_level": 2,
+    "total_tests": 37,
+    "passed_tests": 37,
+    "failed_tests": 0,
+    "requirement_checks": [
+      {
+        "id": "REQ-test_core_numeric_not_lexical",
+        "description": "Verified behavior in test_core_numeric_not_lexical",
+        "status": "pass",
+        "evidence_ref": "test_core_numeric_not_lexical",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_equal_versions",
+        "description": "Verified behavior in test_equal_versions",
+        "status": "pass",
+        "evidence_ref": "test_equal_versions",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_minor_and_patch_order",
+        "description": "Verified behavior in test_minor_and_patch_order",
+        "status": "pass",
+        "evidence_ref": "test_minor_and_patch_order",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_prerelease_lower_than_release",
+        "description": "Verified behavior in test_prerelease_lower_than_release",
+        "status": "pass",
+        "evidence_ref": "test_prerelease_lower_than_release",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_spec_prerelease_ordering_chain",
+        "description": "Verified behavior in test_spec_prerelease_ordering_chain",
+        "status": "pass",
+        "evidence_ref": "test_spec_prerelease_ordering_chain",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_numeric_identifiers_compared_numerically",
+        "description": "Verified behavior in test_numeric_identifiers_compared_numerically",
+        "status": "pass",
+        "evidence_ref": "test_numeric_identifiers_compared_numerically",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_numeric_identifier_lower_than_alphanumeric",
+        "description": "Verified behavior in test_numeric_identifier_lower_than_alphanumeric",
+        "status": "pass",
+        "evidence_ref": "test_numeric_identifier_lower_than_alphanumeric",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_shorter_prerelease_lower_when_prefix_equal",
+        "description": "Verified behavior in test_shorter_prerelease_lower_when_prefix_equal",
+        "status": "pass",
+        "evidence_ref": "test_shorter_prerelease_lower_when_prefix_equal",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_ascii_lexical_for_non_numeric",
+        "description": "Verified behavior in test_ascii_lexical_for_non_numeric",
+        "status": "pass",
+        "evidence_ref": "test_ascii_lexical_for_non_numeric",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_build_metadata_ignored",
+        "description": "Verified behavior in test_build_metadata_ignored",
+        "status": "pass",
+        "evidence_ref": "test_build_metadata_ignored",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1.2]",
+        "description": "Verified behavior in test_invalid_strings_raise[1.2]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1.2]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1.2.3.4]",
+        "description": "Verified behavior in test_invalid_strings_raise[1.2.3.4]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1.2.3.4]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1]",
+        "description": "Verified behavior in test_invalid_strings_raise[1]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[]",
+        "description": "Verified behavior in test_invalid_strings_raise[]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[a.b.c]",
+        "description": "Verified behavior in test_invalid_strings_raise[a.b.c]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[a.b.c]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1.2.x]",
+        "description": "Verified behavior in test_invalid_strings_raise[1.2.x]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1.2.x]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1..3]",
+        "description": "Verified behavior in test_invalid_strings_raise[1..3]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1..3]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[-1.2.3]",
+        "description": "Verified behavior in test_invalid_strings_raise[-1.2.3]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[-1.2.3]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1.2.3-]",
+        "description": "Verified behavior in test_invalid_strings_raise[1.2.3-]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1.2.3-]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1.2.3-alpha..1]",
+        "description": "Verified behavior in test_invalid_strings_raise[1.2.3-alpha..1]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1.2.3-alpha..1]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1.2.3-.alpha]",
+        "description": "Verified behavior in test_invalid_strings_raise[1.2.3-.alpha]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1.2.3-.alpha]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1.2.3-alpha.]",
+        "description": "Verified behavior in test_invalid_strings_raise[1.2.3-alpha.]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1.2.3-alpha.]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[1.2.3+]",
+        "description": "Verified behavior in test_invalid_strings_raise[1.2.3+]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[1.2.3+]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_strings_raise[ 1.2.3]",
+        "description": "Verified behavior in test_invalid_strings_raise[ 1.2.3]",
+        "status": "pass",
+        "evidence_ref": "test_invalid_strings_raise[ 1.2.3]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_non_string_raises[None]",
+        "description": "Verified behavior in test_non_string_raises[None]",
+        "status": "pass",
+        "evidence_ref": "test_non_string_raises[None]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_non_string_raises[123]",
+        "description": "Verified behavior in test_non_string_raises[123]",
+        "status": "pass",
+        "evidence_ref": "test_non_string_raises[123]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_non_string_raises[1.0]",
+        "description": "Verified behavior in test_non_string_raises[1.0]",
+        "status": "pass",
+        "evidence_ref": "test_non_string_raises[1.0]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_non_string_raises[bad3]",
+        "description": "Verified behavior in test_non_string_raises[bad3]",
+        "status": "pass",
+        "evidence_ref": "test_non_string_raises[bad3]",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_sort_versions_ascending",
+        "description": "Verified behavior in test_sort_versions_ascending",
+        "status": "pass",
+        "evidence_ref": "test_sort_versions_ascending",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_sort_versions_returns_new_list",
+        "description": "Verified behavior in test_sort_versions_returns_new_list",
+        "status": "pass",
+        "evidence_ref": "test_sort_versions_returns_new_list",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_sort_versions_stable_for_equal_precedence",
+        "description": "Verified behavior in test_sort_versions_stable_for_equal_precedence",
+        "status": "pass",
+        "evidence_ref": "test_sort_versions_stable_for_equal_precedence",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_sort_versions_full_chain_shuffled",
+        "description": "Verified behavior in test_sort_versions_full_chain_shuffled",
+        "status": "pass",
+        "evidence_ref": "test_sort_versions_full_chain_shuffled",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_sort_versions_empty",
+        "description": "Verified behavior in test_sort_versions_empty",
+        "status": "pass",
+        "evidence_ref": "test_sort_versions_empty",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_sort_versions_invalid_raises",
+        "description": "Verified behavior in test_sort_versions_invalid_raises",
+        "status": "pass",
+        "evidence_ref": "test_sort_versions_invalid_raises",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_numeric_core",
+        "description": "Verified behavior in test_numeric_core",
+        "status": "pass",
+        "evidence_ref": "test_numeric_core",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_prerelease_lower",
+        "description": "Verified behavior in test_prerelease_lower",
+        "status": "pass",
+        "evidence_ref": "test_prerelease_lower",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_sort",
+        "description": "Verified behavior in test_sort",
+        "status": "pass",
+        "evidence_ref": "test_sort",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_2",
+        "verification": "sufficient"
+      }
+    ],
+    "probe_coverage": {
+      "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+      "ran": [],
+      "not_run": [
+        {
+          "module": "semver",
+          "symbol": "compare",
+          "kind": "idempotency",
+          "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+        },
+        {
+          "module": "semver",
+          "symbol": "sort_versions",
+          "kind": "idempotency",
+          "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+        }
+      ]
+    },
+    "evidence_integrity_subdimensions": {
+      "challenge_integrity": "VERIFIED",
+      "collection_integrity": "VERIFIED",
+      "execution_integrity": "VERIFIED",
+      "result_integrity": "VERIFIED",
+      "evidence_independence": "PARTIAL"
+    },
+    "environment_isolation_subdimensions": {
+      "process_isolation": "VERIFIED",
+      "filesystem_isolation": "PARTIAL",
+      "environment_isolation": "VERIFIED",
+      "import_isolation": "PARTIAL",
+      "cross_run_isolation": "VERIFIED"
+    },
+    "behavioral_coverage_subdimensions": {
+      "boundary_coverage": "NOT_CHECKED",
+      "perturbation_coverage": "NOT_CHECKED",
+      "state_coverage": "NOT_CHECKED",
+      "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+    },
+    "adversarial_robustness_subdimensions": {
+      "known_attack_resistance": "CHECKED",
+      "adaptive_attack_resistance": "NOT_ASSESSED",
+      "temporal_attack_resistance": "NOT_ASSESSED",
+      "evasion_resistance": "CHECKED"
+    },
+    "abstention_correctness_subdimensions": {
+      "insufficient_evidence": "VERIFIED",
+      "conflicting_evidence": "VERIFIED",
+      "synthesis_failure": "VERIFIED",
+      "verification_denial": "VERIFIED"
+    },
+    "specification_coverage": {
+      "requirements": [
+        {
+          "id": "REQ-001",
+          "description": "Behavioral verification of property test_ascii_lexical_for_non_numeric",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_ascii_lexical_for_non_numeric",
+              "requirement_id": "REQ-001",
+              "property_name": "test_ascii_lexical_for_non_numeric",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_ascii_lexical_for_non_numeric' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-002",
+          "description": "Behavioral verification of property test_build_metadata_ignored",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_build_metadata_ignored",
+              "requirement_id": "REQ-002",
+              "property_name": "test_build_metadata_ignored",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_build_metadata_ignored' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-003",
+          "description": "Behavioral verification of property test_core_numeric_not_lexical",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_core_numeric_not_lexical",
+              "requirement_id": "REQ-003",
+              "property_name": "test_core_numeric_not_lexical",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_core_numeric_not_lexical' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-004",
+          "description": "Behavioral verification of property test_equal_versions",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_equal_versions",
+              "requirement_id": "REQ-004",
+              "property_name": "test_equal_versions",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_equal_versions' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-005",
+          "description": "Behavioral verification of property test_invalid_strings_raise[ 1.2.3]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-005",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-006",
+          "description": "Behavioral verification of property test_invalid_strings_raise[-1.2.3]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-006",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-007",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1..3]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-007",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-008",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1.2.3+]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-008",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-009",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1.2.3-.alpha]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_numeric_identifier_lower_than_alphanumeric",
+              "requirement_id": "REQ-009",
+              "property_name": "test_numeric_identifier_lower_than_alphanumeric",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_numeric_identifier_lower_than_alphanumeric' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-009",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-010",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1.2.3-]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-010",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-011",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1.2.3-alpha..1]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_numeric_identifier_lower_than_alphanumeric",
+              "requirement_id": "REQ-011",
+              "property_name": "test_numeric_identifier_lower_than_alphanumeric",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_numeric_identifier_lower_than_alphanumeric' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-011",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-012",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1.2.3-alpha.]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_numeric_identifier_lower_than_alphanumeric",
+              "requirement_id": "REQ-012",
+              "property_name": "test_numeric_identifier_lower_than_alphanumeric",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_numeric_identifier_lower_than_alphanumeric' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-012",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-013",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1.2.3.4]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-013",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-014",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1.2.x]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-014",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-015",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1.2]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-015",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-016",
+          "description": "Behavioral verification of property test_invalid_strings_raise[1]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-016",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-017",
+          "description": "Behavioral verification of property test_invalid_strings_raise[]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-017",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-018",
+          "description": "Behavioral verification of property test_invalid_strings_raise[a.b.c]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[a.b.c]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[a.b.c]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[a.b.c]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3.4]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1.2.3.4]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3.4]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha..1]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha..1]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha..1]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.x]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1.2.x]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.x]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-.alpha]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1.2.3-.alpha]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-.alpha]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1.2]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-alpha.]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1.2.3-alpha.]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-alpha.]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[ 1.2.3]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[ 1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[ 1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1..3]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1..3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1..3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[-1.2.3]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[-1.2.3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[-1.2.3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3-]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1.2.3-]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3-]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_invalid_strings_raise[1.2.3+]",
+              "requirement_id": "REQ-018",
+              "property_name": "test_invalid_strings_raise[1.2.3+]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_strings_raise[1.2.3+]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-019",
+          "description": "Behavioral verification of property test_minor_and_patch_order",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_minor_and_patch_order",
+              "requirement_id": "REQ-019",
+              "property_name": "test_minor_and_patch_order",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_minor_and_patch_order' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-020",
+          "description": "Behavioral verification of property test_non_string_raises[1.0]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_non_string_raises[1.0]",
+              "requirement_id": "REQ-020",
+              "property_name": "test_non_string_raises[1.0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[1.0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[None]",
+              "requirement_id": "REQ-020",
+              "property_name": "test_non_string_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[bad3]",
+              "requirement_id": "REQ-020",
+              "property_name": "test_non_string_raises[bad3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[bad3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[123]",
+              "requirement_id": "REQ-020",
+              "property_name": "test_non_string_raises[123]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[123]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-021",
+          "description": "Behavioral verification of property test_non_string_raises[123]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_non_string_raises[1.0]",
+              "requirement_id": "REQ-021",
+              "property_name": "test_non_string_raises[1.0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[1.0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[None]",
+              "requirement_id": "REQ-021",
+              "property_name": "test_non_string_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[bad3]",
+              "requirement_id": "REQ-021",
+              "property_name": "test_non_string_raises[bad3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[bad3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[123]",
+              "requirement_id": "REQ-021",
+              "property_name": "test_non_string_raises[123]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[123]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-022",
+          "description": "Behavioral verification of property test_non_string_raises[None]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_non_string_raises[1.0]",
+              "requirement_id": "REQ-022",
+              "property_name": "test_non_string_raises[1.0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[1.0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[None]",
+              "requirement_id": "REQ-022",
+              "property_name": "test_non_string_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[bad3]",
+              "requirement_id": "REQ-022",
+              "property_name": "test_non_string_raises[bad3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[bad3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[123]",
+              "requirement_id": "REQ-022",
+              "property_name": "test_non_string_raises[123]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[123]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-023",
+          "description": "Behavioral verification of property test_non_string_raises[bad3]",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_non_string_raises[1.0]",
+              "requirement_id": "REQ-023",
+              "property_name": "test_non_string_raises[1.0]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[1.0]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[None]",
+              "requirement_id": "REQ-023",
+              "property_name": "test_non_string_raises[None]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[None]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[bad3]",
+              "requirement_id": "REQ-023",
+              "property_name": "test_non_string_raises[bad3]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[bad3]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_non_string_raises[123]",
+              "requirement_id": "REQ-023",
+              "property_name": "test_non_string_raises[123]",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_non_string_raises[123]' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-024",
+          "description": "Behavioral verification of property test_numeric_core",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_numeric_core",
+              "requirement_id": "REQ-024",
+              "property_name": "test_numeric_core",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_numeric_core' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-025",
+          "description": "Behavioral verification of property test_numeric_identifier_lower_than_alphanumeric",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_numeric_identifier_lower_than_alphanumeric",
+              "requirement_id": "REQ-025",
+              "property_name": "test_numeric_identifier_lower_than_alphanumeric",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_numeric_identifier_lower_than_alphanumeric' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-026",
+          "description": "Behavioral verification of property test_numeric_identifiers_compared_numerically",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_numeric_identifiers_compared_numerically",
+              "requirement_id": "REQ-026",
+              "property_name": "test_numeric_identifiers_compared_numerically",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_numeric_identifiers_compared_numerically' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-027",
+          "description": "Behavioral verification of property test_prerelease_lower",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_prerelease_lower_than_release",
+              "requirement_id": "REQ-027",
+              "property_name": "test_prerelease_lower_than_release",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_prerelease_lower_than_release' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_prerelease_lower",
+              "requirement_id": "REQ-027",
+              "property_name": "test_prerelease_lower",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_prerelease_lower' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-028",
+          "description": "Behavioral verification of property test_prerelease_lower_than_release",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_prerelease_lower_than_release",
+              "requirement_id": "REQ-028",
+              "property_name": "test_prerelease_lower_than_release",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_prerelease_lower_than_release' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_prerelease_lower",
+              "requirement_id": "REQ-028",
+              "property_name": "test_prerelease_lower",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_prerelease_lower' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-029",
+          "description": "Behavioral verification of property test_shorter_prerelease_lower_when_prefix_equal",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_shorter_prerelease_lower_when_prefix_equal",
+              "requirement_id": "REQ-029",
+              "property_name": "test_shorter_prerelease_lower_when_prefix_equal",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_shorter_prerelease_lower_when_prefix_equal' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_prerelease_lower",
+              "requirement_id": "REQ-029",
+              "property_name": "test_prerelease_lower",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_prerelease_lower' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-030",
+          "description": "Behavioral verification of property test_sort",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_sort_versions_invalid_raises",
+              "requirement_id": "REQ-030",
+              "property_name": "test_sort_versions_invalid_raises",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_invalid_raises' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort_versions_empty",
+              "requirement_id": "REQ-030",
+              "property_name": "test_sort_versions_empty",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_empty' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort_versions_stable_for_equal_precedence",
+              "requirement_id": "REQ-030",
+              "property_name": "test_sort_versions_stable_for_equal_precedence",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_stable_for_equal_precedence' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort_versions_full_chain_shuffled",
+              "requirement_id": "REQ-030",
+              "property_name": "test_sort_versions_full_chain_shuffled",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_full_chain_shuffled' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort_versions_returns_new_list",
+              "requirement_id": "REQ-030",
+              "property_name": "test_sort_versions_returns_new_list",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_returns_new_list' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort",
+              "requirement_id": "REQ-030",
+              "property_name": "test_sort",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort_versions_ascending",
+              "requirement_id": "REQ-030",
+              "property_name": "test_sort_versions_ascending",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_ascending' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-031",
+          "description": "Behavioral verification of property test_sort_versions_ascending",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_sort",
+              "requirement_id": "REQ-031",
+              "property_name": "test_sort",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort_versions_ascending",
+              "requirement_id": "REQ-031",
+              "property_name": "test_sort_versions_ascending",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_ascending' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-032",
+          "description": "Behavioral verification of property test_sort_versions_empty",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_sort_versions_empty",
+              "requirement_id": "REQ-032",
+              "property_name": "test_sort_versions_empty",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_empty' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort",
+              "requirement_id": "REQ-032",
+              "property_name": "test_sort",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-033",
+          "description": "Behavioral verification of property test_sort_versions_full_chain_shuffled",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_sort_versions_full_chain_shuffled",
+              "requirement_id": "REQ-033",
+              "property_name": "test_sort_versions_full_chain_shuffled",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_full_chain_shuffled' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort",
+              "requirement_id": "REQ-033",
+              "property_name": "test_sort",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-034",
+          "description": "Behavioral verification of property test_sort_versions_invalid_raises",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_sort_versions_invalid_raises",
+              "requirement_id": "REQ-034",
+              "property_name": "test_sort_versions_invalid_raises",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_invalid_raises' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort",
+              "requirement_id": "REQ-034",
+              "property_name": "test_sort",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-035",
+          "description": "Behavioral verification of property test_sort_versions_returns_new_list",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_sort_versions_returns_new_list",
+              "requirement_id": "REQ-035",
+              "property_name": "test_sort_versions_returns_new_list",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_returns_new_list' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort",
+              "requirement_id": "REQ-035",
+              "property_name": "test_sort",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-036",
+          "description": "Behavioral verification of property test_sort_versions_stable_for_equal_precedence",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_sort_versions_stable_for_equal_precedence",
+              "requirement_id": "REQ-036",
+              "property_name": "test_sort_versions_stable_for_equal_precedence",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort_versions_stable_for_equal_precedence' passed ground-truth execution.",
+              "status": "VERIFIED"
+            },
+            {
+              "property_id": "PROP-test_sort",
+              "requirement_id": "REQ-036",
+              "property_name": "test_sort",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_sort' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-037",
+          "description": "Behavioral verification of property test_spec_prerelease_ordering_chain",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_spec_prerelease_ordering_chain",
+              "requirement_id": "REQ-037",
+              "property_name": "test_spec_prerelease_ordering_chain",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_spec_prerelease_ordering_chain' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        }
+      ],
+      "summary": {
+        "total_requirements": 37,
+        "verified_count": 37,
+        "partially_verified_count": 0,
+        "unverified_count": 0,
+        "conflicting_count": 0,
+        "critical_coverage_pct": 100.0,
+        "important_coverage_pct": 100.0,
+        "overall_coverage_pct": 100.0,
+        "specification_escape_rate_pct": 0.0,
+        "critical_unverified_ids": []
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "COVER-001",
+      "category": "coverage",
+      "severity": "low",
+      "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: semver.compare, semver.sort_versions",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+    },
+    {
+      "id": "STATIC-001",
+      "category": "static_analysis",
+      "severity": "low",
+      "description": "linter reported 4 issue(s) (advisory; does not affect the decision)",
+      "property": "linter",
+      "observed": "semver.py:20:9: TRY004 Prefer `TypeError` exception for invalid type | test_semver_spec.py:1:1: I001 [*] Import block is un-sorted or un-formatted | test_semver_spec.py:38:19: RUF007 Prefer `itertools.pairwise()` over `zip()` when iterating over successive pairs",
+      "expected": null,
+      "suggested_focus": "Optional clean-up; correctness is decided by tests."
+    }
+  ],
+  "provenance": {
+    "workspace_path": "C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\ws2\\T1_semver__B__r1",
+    "workspace_hash": "12f553745f1e29daa0be56a6c8a1aeb3bc1f75792bdce78cdd771cda1c69dab7",
+    "judge_version": "v1.0.1",
+    "timestamp": "2026-10-28T23:20:25Z",
+    "evidence_level": 2,
+    "total_tests": 37,
+    "passed_tests": 37,
+    "failed_tests": 0
+  },
+  "blocking_issues": [],
+  "insufficient_notes": [
+    "WARNING: Linter reported 4 issue(s). Advisory only; it does not affect the decision."
+  ],
+  "next_actions": [
+    {
+      "step": 1,
+      "action": "done",
+      "detail": "PASS: all tests passed, including 21 independent test(s) fixed before the implementation. Report success with numeric_score 94.0."
+    }
+  ],
+  "loop": {
+    "iteration": 2,
+    "iterations_since_pass": 0,
+    "previous_decision": "PASS",
+    "regressions": [],
+    "newly_passing": [],
+    "progress": false,
+    "stuck": false,
+    "stuck_reason": null,
+    "max_iterations": 5
+  },
+  "runtime": {
+    "duration_seconds": 5.431,
+    "judge_version": "v1.0.1"
+  }
+}

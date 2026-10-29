@@ -1,0 +1,11 @@
+{
+ "freezes": [
+  {
+   "time": "2026-10-28T23:18:20Z",
+   "tests": {
+    "test_visible.py": "import pytest\nfrom wrap import wrap_text, display_width\n\ndef test_basic():\n    assert wrap_text(\"the quick brown fox\", 10) == [\"the quick\", \"brown fox\"]\n\ndef test_empty_and_collapse():\n    assert wrap_text(\"   \", 5) == []\n    assert wrap_text(\"a   b\", 5) == [\"a b\"]\n\ndef test_width_and_errors():\n    assert display_width(\"abc\") == 3\n    with pytest.raises(ValueError):\n        wrap_text(\"x\", 0)\n"
+   },
+   "sources": {}
+  }
+ ]
+}

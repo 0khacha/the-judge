@@ -1,0 +1,11 @@
+{
+ "freezes": [
+  {
+   "time": "2026-10-28T23:17:32Z",
+   "tests": {
+    "test_visible.py": "import pytest\nfrom store.inventory import Inventory, OutOfStock\nfrom store.orders import OrderBook\n\ndef test_place_and_cancel():\n    inv = Inventory()\n    inv.add(\"a\", 5)\n    ob = OrderBook(inv)\n    ob.place(\"o1\", {\"a\": 2})\n    assert inv.available(\"a\") == 3 and inv.stock(\"a\") == 5\n    ob.cancel(\"o1\")\n    assert inv.available(\"a\") == 5\n    assert ob.status(\"o1\") == \"cancelled\"\n\ndef test_fulfill():\n    inv = Inventory()\n    inv.add(\"a\", 5)\n    ob = OrderBook(inv)\n    ob.place(\"o1\", {\"a\": 2})\n    ob.fulfill(\"o1\")\n    assert inv.stock(\"a\") == 3 and inv.available(\"a\") == 3\n\ndef test_out_of_stock():\n    inv = Inventory()\n    inv.add(\"a\", 1)\n    with pytest.raises(OutOfStock):\n        OrderBook(inv).place(\"o1\", {\"a\": 2})\n"
+   },
+   "sources": {}
+  }
+ ]
+}

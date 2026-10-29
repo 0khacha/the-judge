@@ -1,0 +1,36 @@
+{
+ "runs": [
+  {
+   "iteration": 1,
+   "time": "2026-10-28T23:18:59Z",
+   "decision": "PASS",
+   "passed": [
+    "test_blank_line_after_record_is_kept",
+    "test_blank_line_is_record_with_empty_field",
+    "test_crlf_separates_records",
+    "test_doubled_quote_inside_quoted_field",
+    "test_empty_quoted_field",
+    "test_empty_text_gives_no_records",
+    "test_final_crlf_does_not_add_record",
+    "test_final_lf_does_not_add_record",
+    "test_quote_in_middle_of_unquoted_field_is_literal",
+    "test_quoted_comma_and_escape",
+    "test_quoted_field_keeps_commas",
+    "test_quoted_field_keeps_lf_and_crlf",
+    "test_quoted_field_with_closing_quote_then_comma_and_newline",
+    "test_simple",
+    "test_text_after_closing_quote_raises",
+    "test_trailing_comma_gives_trailing_empty_field",
+    "test_unterminated_quote_raises",
+    "test_unterminated_quote_with_escaped_quote_raises",
+    "test_whitespace_preserved"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  }
+ ]
+}

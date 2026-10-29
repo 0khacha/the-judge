@@ -1,0 +1,35 @@
+Froze 33 test(s) into .judge/frozen.json:
+  test_evaluator.py::test_binary_minus_followed_by_unary
+  test_evaluator.py::test_complex_result_raises_eval_error
+  test_evaluator.py::test_division_by_zero_raises_eval_error
+  test_evaluator.py::test_eval_error_is_same_class
+  test_evaluator.py::test_float_literals
+  test_evaluator.py::test_function_call_is_not_supported
+  test_evaluator.py::test_invalid_syntax_raises_eval_error
+  test_evaluator.py::test_left_associative_sub_and_div
+  test_evaluator.py::test_numbers_and_basic_ops
+  test_evaluator.py::test_only_eval_error_escapes_for_bad_input
+  test_evaluator.py::test_overflow_raises_eval_error
+  test_evaluator.py::test_parentheses
+  test_evaluator.py::test_power_basic
+  test_evaluator.py::test_power_binds_tighter_than_mul
+  test_evaluator.py::test_power_exponent_with_unary_and_right_assoc
+  test_evaluator.py::test_power_is_right_associative
+  test_evaluator.py::test_power_with_negative_exponent
+  test_evaluator.py::test_power_with_variables
+  test_evaluator.py::test_precedence_mul_over_add
+  test_evaluator.py::test_repeated_unary
+  test_evaluator.py::test_true_division_returns_float_value
+  test_evaluator.py::test_unary_minus
+  test_evaluator.py::test_unary_minus_looser_than_power
+  test_evaluator.py::test_unary_plus
+  test_evaluator.py::test_unary_with_variables
+  test_evaluator.py::test_undefined_variable_raises_eval_error
+  test_evaluator.py::test_variables
+  test_evaluator.py::test_variables_none_is_empty
+  test_evaluator.py::test_whitespace_is_ignored
+  test_evaluator.py::test_zero_power_zero_is_one
+  test_visible.py::test_basic
+  test_visible.py::test_error
+  test_visible.py::test_vars
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

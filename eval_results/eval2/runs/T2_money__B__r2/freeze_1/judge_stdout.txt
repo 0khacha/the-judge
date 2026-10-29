@@ -1,0 +1,30 @@
+Froze 28 test(s) into .judge/frozen.json:
+  test_money.py::test_allocate_all_zero_weights_raises
+  test_money.py::test_allocate_empty_weights_raises
+  test_money.py::test_allocate_examples_from_visible_tests
+  test_money.py::test_allocate_large_numbers_exact
+  test_money.py::test_allocate_largest_remainder_distributes_leftover
+  test_money.py::test_allocate_leftover_goes_to_largest_remainders
+  test_money.py::test_allocate_negative_total_raises
+  test_money.py::test_allocate_negative_weight_raises
+  test_money.py::test_allocate_returns_list_of_ints
+  test_money.py::test_allocate_single_weight_gets_everything
+  test_money.py::test_allocate_sum_always_equals_total
+  test_money.py::test_allocate_tie_broken_by_lowest_index
+  test_money.py::test_allocate_total_zero
+  test_money.py::test_allocate_zero_weight_gets_zero
+  test_money.py::test_basic_values
+  test_money.py::test_fewer_than_two_fraction_digits_are_padded
+  test_money.py::test_invalid_strings_raise
+  test_money.py::test_large_values_exact_no_float_error
+  test_money.py::test_non_string_raises
+  test_money.py::test_optional_plus_sign
+  test_money.py::test_rounding_carries_into_integer_part
+  test_money.py::test_rounding_down_below_half
+  test_money.py::test_rounding_half_up_away_from_zero
+  test_money.py::test_surrounding_whitespace_allowed
+  test_money.py::test_tiny_value_rounds_to_zero
+  test_money.py::test_trailing_and_leading_dot_allowed
+  test_visible.py::test_allocate
+  test_visible.py::test_to_cents
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

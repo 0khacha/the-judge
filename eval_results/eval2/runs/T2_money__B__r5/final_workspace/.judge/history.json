@@ -1,0 +1,61 @@
+{
+ "runs": [
+  {
+   "iteration": 1,
+   "time": "2026-10-29T13:07:44Z",
+   "decision": "PASS",
+   "passed": [
+    "test_allocate",
+    "test_allocate_all_zero_weights_raises",
+    "test_allocate_basic",
+    "test_allocate_each_share_within_one_of_exact",
+    "test_allocate_empty_weights_raises",
+    "test_allocate_largest_fraction_wins",
+    "test_allocate_largest_remainder_handout",
+    "test_allocate_negative_total_raises",
+    "test_allocate_negative_weight_raises",
+    "test_allocate_single_weight",
+    "test_allocate_sums_to_total_and_nonnegative",
+    "test_allocate_zero_total",
+    "test_allocate_zero_weight_gets_nothing",
+    "test_to_cents",
+    "test_to_cents_basic",
+    "test_to_cents_invalid_strings_raise[   ]",
+    "test_to_cents_invalid_strings_raise[$5]",
+    "test_to_cents_invalid_strings_raise[+-1]",
+    "test_to_cents_invalid_strings_raise[+]",
+    "test_to_cents_invalid_strings_raise[--1]",
+    "test_to_cents_invalid_strings_raise[-]",
+    "test_to_cents_invalid_strings_raise[.]",
+    "test_to_cents_invalid_strings_raise[0x10]",
+    "test_to_cents_invalid_strings_raise[1 2]",
+    "test_to_cents_invalid_strings_raise[1,000]",
+    "test_to_cents_invalid_strings_raise[1.2.3]",
+    "test_to_cents_invalid_strings_raise[1E-2]",
+    "test_to_cents_invalid_strings_raise[1a]",
+    "test_to_cents_invalid_strings_raise[1e3]",
+    "test_to_cents_invalid_strings_raise[]",
+    "test_to_cents_invalid_strings_raise[abc]",
+    "test_to_cents_invalid_strings_raise[inf]",
+    "test_to_cents_invalid_strings_raise[nan]",
+    "test_to_cents_large_values_exact",
+    "test_to_cents_non_string_raises[1.5_0]",
+    "test_to_cents_non_string_raises[1.5_1]",
+    "test_to_cents_non_string_raises[12]",
+    "test_to_cents_non_string_raises[1]",
+    "test_to_cents_non_string_raises[None]",
+    "test_to_cents_non_string_raises[bad4]",
+    "test_to_cents_rounding_half_up_magnitude",
+    "test_to_cents_sign_and_bare_dots",
+    "test_to_cents_tiny_values_round_to_zero",
+    "test_to_cents_whitespace"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  }
+ ]
+}

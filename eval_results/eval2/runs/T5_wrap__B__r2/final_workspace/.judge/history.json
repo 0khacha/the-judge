@@ -1,0 +1,44 @@
+{
+ "runs": [
+  {
+   "iteration": 1,
+   "time": "2026-10-28T23:27:04Z",
+   "decision": "PASS",
+   "passed": [
+    "test_basic",
+    "test_blank_and_empty_return_empty_list",
+    "test_display_width_ascii_and_empty",
+    "test_display_width_precomposed_is_one",
+    "test_display_width_wide_and_fullwidth",
+    "test_display_width_zero_width",
+    "test_empty_and_collapse",
+    "test_final_piece_does_not_join_if_no_room",
+    "test_final_piece_is_joinable",
+    "test_greedy_fill",
+    "test_line_fits_exactly",
+    "test_long_word_after_text_starts_on_new_line",
+    "test_long_word_hard_split",
+    "test_non_int_width_raises[1.5]",
+    "test_non_int_width_raises[5]",
+    "test_non_int_width_raises[None]",
+    "test_single_wide_char_alone_on_line",
+    "test_whitespace_is_collapsed",
+    "test_wide_char_never_dropped",
+    "test_wide_chars_split_by_width",
+    "test_width_and_errors",
+    "test_width_below_one_raises[-1]",
+    "test_width_below_one_raises[0]",
+    "test_word_exactly_width_is_not_split",
+    "test_word_that_does_not_fit_starts_new_line",
+    "test_zero_width_combining_not_separated",
+    "test_zero_width_stays_with_preceding_char"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  }
+ ]
+}

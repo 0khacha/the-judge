@@ -1,0 +1,178 @@
+{
+ "decision": "PASS",
+ "numeric_score": 98.5,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_simple",
+    "description": "Verified behavior in test_simple",
+    "status": "pass",
+    "evidence_ref": "test_simple",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_quoted_comma_and_escape",
+    "description": "Verified behavior in test_quoted_comma_and_escape",
+    "status": "pass",
+    "evidence_ref": "test_quoted_comma_and_escape",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": [
+    {
+     "module": "csvparse",
+     "symbol": "parse_csv",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    }
+   ]
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_quoted_comma_and_escape",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_quoted_comma_and_escape",
+       "requirement_id": "REQ-001",
+       "property_name": "test_quoted_comma_and_escape",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_quoted_comma_and_escape' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_simple",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_simple",
+       "requirement_id": "REQ-002",
+       "property_name": "test_simple",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_simple' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 2,
+    "verified_count": 2,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "COVER-001",
+   "category": "coverage",
+   "severity": "low",
+   "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: csvparse.parse_csv",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 1 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "test_visible.py:1:1: I001 [*] Import block is un-sorted or un-formatted | Found 1 error. | [*] 1 fixable with the `--fix` option.",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval2\\judge_accuracy\\T6_csv__reference\\workspace",
+  "workspace_hash": "d1048d8606c10b947c07f342d4616f1becfd4176f1cbbfbd83b6913fa11624ac",
+  "judge_version": "v1.0.1",
+  "timestamp": "2026-10-28T23:19:04Z",
+  "evidence_level": 2,
+  "total_tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 1 issue(s). Advisory only; it does not affect the decision."
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "done",
+   "detail": "PASS: all tests passed, including 2 independent test(s) fixed before the implementation. Report success with numeric_score 98.5."
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 8.187,
+  "judge_version": "v1.0.1"
+ }
+}

@@ -1,0 +1,1 @@
+{"task": "T6_csv", "multi_file": false, "trap": false, "what_wrong_1_gets_wrong": "splits into lines first so quoted fields containing newlines break", "what_wrong_2_gets_wrong": "CRLF terminators leave a stray CR in fields and a trailing newline yields an extra empty record"}

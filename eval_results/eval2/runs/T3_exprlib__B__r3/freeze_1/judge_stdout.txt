@@ -1,0 +1,23 @@
+Froze 21 test(s) into .judge/frozen.json:
+  test_evaluator.py::test_arithmetic
+  test_evaluator.py::test_division_by_zero_float_raises
+  test_evaluator.py::test_division_by_zero_raises
+  test_evaluator.py::test_error_is_eval_error_not_raw_exception
+  test_evaluator.py::test_eval_error_is_same_class
+  test_evaluator.py::test_exponentiation
+  test_evaluator.py::test_float_overflow_raises_eval_error
+  test_evaluator.py::test_function_call_syntax_raises
+  test_evaluator.py::test_huge_int_float_overflow_raises_eval_error
+  test_evaluator.py::test_invalid_syntax_raises
+  test_evaluator.py::test_unary
+  test_evaluator.py::test_undefined_variable_raises
+  test_evaluator.py::test_variable_used_twice_and_in_power
+  test_evaluator.py::test_variables
+  test_evaluator.py::test_variables_default_none
+  test_evaluator.py::test_whitespace_is_ignored
+  test_evaluator.py::test_zero_float_to_negative_power_raises
+  test_evaluator.py::test_zero_to_negative_power_raises
+  test_visible.py::test_basic
+  test_visible.py::test_error
+  test_visible.py::test_vars
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

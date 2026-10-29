@@ -1,0 +1,11 @@
+{
+ "freezes": [
+  {
+   "time": "2026-10-28T23:15:24Z",
+   "tests": {
+    "test_visible.py": "from semver import compare, sort_versions\n\ndef test_numeric_core():\n    assert compare(\"1.2.3\", \"1.10.0\") == -1\n    assert compare(\"2.0.0\", \"1.9.9\") == 1\n\ndef test_prerelease_lower():\n    assert compare(\"1.0.0-alpha\", \"1.0.0\") == -1\n    assert compare(\"1.0.0\", \"1.0.0\") == 0\n\ndef test_sort():\n    assert sort_versions([\"1.10.0\", \"1.2.0\", \"1.0.0-rc\"]) == [\"1.0.0-rc\", \"1.2.0\", \"1.10.0\"]\n"
+   },
+   "sources": {}
+  }
+ ]
+}

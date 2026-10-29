@@ -1,0 +1,28 @@
+Froze 26 test(s) into .judge/frozen.json:
+  test_spec.py::test_blank_line_in_middle_is_single_empty_field
+  test_spec.py::test_crlf_terminators
+  test_spec.py::test_doubled_quote_is_literal_quote
+  test_spec.py::test_empty_quoted_field
+  test_spec.py::test_empty_text_is_no_records
+  test_spec.py::test_final_crlf_no_extra_record
+  test_spec.py::test_final_terminator_no_extra_record
+  test_spec.py::test_leading_comma
+  test_spec.py::test_mixed_terminators_in_sequence
+  test_spec.py::test_only_terminator_is_one_empty_record
+  test_spec.py::test_quote_in_middle_of_unquoted_field_is_literal
+  test_spec.py::test_quoted_field_followed_by_crlf
+  test_spec.py::test_quoted_field_followed_by_terminator_at_eof
+  test_spec.py::test_quoted_field_with_comma_newline_crlf_kept
+  test_spec.py::test_quoted_then_quote_raises
+  test_spec.py::test_simple_lf
+  test_spec.py::test_single_field_no_terminator
+  test_spec.py::test_space_after_closing_quote_raises
+  test_spec.py::test_text_after_closing_quote_raises
+  test_spec.py::test_trailing_comma_gives_trailing_empty_field
+  test_spec.py::test_unterminated_quote_raises
+  test_spec.py::test_unterminated_quote_with_doubled_quote_raises
+  test_spec.py::test_whitespace_before_quote_makes_field_unquoted
+  test_spec.py::test_whitespace_preserved
+  test_visible.py::test_quoted_comma_and_escape
+  test_visible.py::test_simple
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

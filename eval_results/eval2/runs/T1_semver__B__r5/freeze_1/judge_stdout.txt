@@ -1,0 +1,28 @@
+Froze 26 test(s) into .judge/frozen.json:
+  test_semver_spec.py::test_alphanumeric_identifiers_lexical_ascii
+  test_semver_spec.py::test_build_metadata_does_not_break_core_order
+  test_semver_spec.py::test_build_metadata_ignored
+  test_semver_spec.py::test_build_metadata_ignored_with_prerelease
+  test_semver_spec.py::test_equal_versions
+  test_semver_spec.py::test_fewer_identifiers_lower_when_prefix_equal
+  test_semver_spec.py::test_identical_prerelease_equal
+  test_semver_spec.py::test_invalid_version_raises_value_error
+  test_semver_spec.py::test_major_dominates
+  test_semver_spec.py::test_major_minor_patch_numeric_not_lexical
+  test_semver_spec.py::test_non_string_raises_value_error
+  test_semver_spec.py::test_numeric_identifier_lower_than_alphanumeric
+  test_semver_spec.py::test_numeric_identifiers_compared_numerically
+  test_semver_spec.py::test_prerelease_compared_only_after_core
+  test_semver_spec.py::test_prerelease_lower_than_release
+  test_semver_spec.py::test_return_values_are_ints_in_set
+  test_semver_spec.py::test_sort_versions_basic_example
+  test_semver_spec.py::test_sort_versions_empty_and_single
+  test_semver_spec.py::test_sort_versions_full_precedence_ordering
+  test_semver_spec.py::test_sort_versions_invalid_entry_raises_value_error
+  test_semver_spec.py::test_sort_versions_returns_new_list
+  test_semver_spec.py::test_sort_versions_stable_for_equal_precedence
+  test_semver_spec.py::test_spec_example_ordering
+  test_visible.py::test_numeric_core
+  test_visible.py::test_prerelease_lower
+  test_visible.py::test_sort
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

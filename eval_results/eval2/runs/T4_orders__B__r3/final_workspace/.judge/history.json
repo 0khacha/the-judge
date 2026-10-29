@@ -1,0 +1,78 @@
+{
+ "runs": [
+  {
+   "iteration": 1,
+   "time": "2026-10-28T23:31:53Z",
+   "decision": "PASS",
+   "passed": [
+    "test_add_rejects_non_positive",
+    "test_cancel_after_fulfill_raises_value_error",
+    "test_cancel_twice_raises_value_error",
+    "test_cancel_unknown_raises_key_error",
+    "test_commit_more_than_reserved_raises",
+    "test_commit_reduces_stock_and_reserved",
+    "test_duplicate_id_raises_in_any_status",
+    "test_empty_lines_raises",
+    "test_failed_place_id_can_be_reused",
+    "test_fulfill",
+    "test_fulfill_after_cancel_raises_value_error",
+    "test_fulfill_unknown_raises_key_error",
+    "test_line_qty_non_positive_raises",
+    "test_multi_line_cancel_releases_all_lines",
+    "test_multi_line_fulfill_commits_all_lines",
+    "test_out_of_stock",
+    "test_place_and_cancel",
+    "test_place_is_all_or_nothing",
+    "test_release_more_than_reserved_raises",
+    "test_reservations_of_other_orders_are_respected",
+    "test_reserve_more_than_available_raises_out_of_stock",
+    "test_reserve_rejects_non_positive",
+    "test_status_unknown_raises_key_error",
+    "test_unknown_sku_is_zero"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  },
+  {
+   "iteration": 2,
+   "time": "2026-10-28T23:32:41Z",
+   "decision": "PASS",
+   "passed": [
+    "test_add_rejects_non_positive",
+    "test_cancel_after_fulfill_raises_value_error",
+    "test_cancel_twice_raises_value_error",
+    "test_cancel_unknown_raises_key_error",
+    "test_commit_more_than_reserved_raises",
+    "test_commit_reduces_stock_and_reserved",
+    "test_duplicate_id_raises_in_any_status",
+    "test_empty_lines_raises",
+    "test_failed_place_id_can_be_reused",
+    "test_fulfill",
+    "test_fulfill_after_cancel_raises_value_error",
+    "test_fulfill_unknown_raises_key_error",
+    "test_line_qty_non_positive_raises",
+    "test_multi_line_cancel_releases_all_lines",
+    "test_multi_line_fulfill_commits_all_lines",
+    "test_out_of_stock",
+    "test_place_and_cancel",
+    "test_place_is_all_or_nothing",
+    "test_release_more_than_reserved_raises",
+    "test_reservations_of_other_orders_are_respected",
+    "test_reserve_more_than_available_raises_out_of_stock",
+    "test_reserve_rejects_non_positive",
+    "test_status_unknown_raises_key_error",
+    "test_unknown_sku_is_zero"
+   ],
+   "failed": [],
+   "signature": [
+    "PASS",
+    [],
+    []
+   ]
+  }
+ ]
+}

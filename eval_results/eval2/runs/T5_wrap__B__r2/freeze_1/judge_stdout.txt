@@ -1,0 +1,26 @@
+Froze 24 test(s) into .judge/frozen.json:
+  test_visible.py::test_basic
+  test_visible.py::test_empty_and_collapse
+  test_visible.py::test_width_and_errors
+  test_wrap.py::test_blank_and_empty_return_empty_list
+  test_wrap.py::test_display_width_ascii_and_empty
+  test_wrap.py::test_display_width_precomposed_is_one
+  test_wrap.py::test_display_width_wide_and_fullwidth
+  test_wrap.py::test_display_width_zero_width
+  test_wrap.py::test_final_piece_does_not_join_if_no_room
+  test_wrap.py::test_final_piece_is_joinable
+  test_wrap.py::test_greedy_fill
+  test_wrap.py::test_line_fits_exactly
+  test_wrap.py::test_long_word_after_text_starts_on_new_line
+  test_wrap.py::test_long_word_hard_split
+  test_wrap.py::test_non_int_width_raises
+  test_wrap.py::test_single_wide_char_alone_on_line
+  test_wrap.py::test_whitespace_is_collapsed
+  test_wrap.py::test_wide_char_never_dropped
+  test_wrap.py::test_wide_chars_split_by_width
+  test_wrap.py::test_width_below_one_raises
+  test_wrap.py::test_word_exactly_width_is_not_split
+  test_wrap.py::test_word_that_does_not_fit_starts_new_line
+  test_wrap.py::test_zero_width_combining_not_separated
+  test_wrap.py::test_zero_width_stays_with_preceding_char
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.

@@ -1,0 +1,32 @@
+Froze 30 test(s) into .judge/frozen.json:
+  test_spec.py::test_hard_split_final_piece_can_take_following_word
+  test_spec.py::test_hard_split_final_piece_does_not_join_when_too_wide
+  test_spec.py::test_hard_split_flushes_current_line_before_long_word
+  test_spec.py::test_hard_split_long_word
+  test_spec.py::test_invalid_width_raises_value_error
+  test_spec.py::test_lines_respect_width_on_ordinary_text
+  test_spec.py::test_single_wide_char_wider_than_width_placed_alone
+  test_spec.py::test_wide_char_among_narrow_chars_width_one
+  test_spec.py::test_width_cjk_wide_chars_are_two
+  test_spec.py::test_width_combining_sequence
+  test_spec.py::test_width_empty
+  test_spec.py::test_width_lone_combining_mark_is_zero
+  test_spec.py::test_width_mixed_wide_and_narrow
+  test_spec.py::test_width_plain_ascii
+  test_spec.py::test_width_precomposed_latin_is_one
+  test_spec.py::test_width_variation_selector_is_zero
+  test_spec.py::test_width_zero_width_joiner_is_zero
+  test_spec.py::test_width_zero_width_space_is_zero
+  test_spec.py::test_wrap_collapses_whitespace_runs
+  test_spec.py::test_wrap_empty_and_blank_returns_empty_list
+  test_spec.py::test_wrap_exact_fit_single_line
+  test_spec.py::test_wrap_greedy_fill_line_breaks
+  test_spec.py::test_wrap_width_one_each_word_own_line
+  test_spec.py::test_wrap_word_equal_to_width_gets_own_line
+  test_spec.py::test_wrap_word_with_wide_char_joins_when_it_fits
+  test_spec.py::test_zero_width_mark_at_piece_boundary_attaches_to_previous
+  test_spec.py::test_zero_width_mark_stays_with_preceding_char
+  test_visible.py::test_basic
+  test_visible.py::test_empty_and_collapse
+  test_visible.py::test_width_and_errors
+They count as independent evidence once an implementation file changes after this freeze. Do not weaken or delete them.
