@@ -1,4 +1,18 @@
-# the-judge-verify 1.0.2 build (not published)
+# the-judge-verify 1.0.2
+
+## Release build (for PyPI)
+
+Rebuilt from commit `62afcf7` after the README was updated with the evaluation 2-4
+results. Code is byte-identical to the evaluated build below; only the README text in
+METADATA (and its RECORD line) differs. `twine check --strict` PASSED; clean-venv
+install, `judge --version`, freeze and verify checked.
+
+| File | SHA-256 |
+|---|---|
+| the_judge_verify-1.0.2-py3-none-any.whl | 08396209fa9ccc0236a01b6a9f764caecc93ba753ca32480a27da53d6f6f2ca8 |
+| the_judge_verify-1.0.2.tar.gz | c4a7337acf83cee1d8c2d7ba3843f62f0d5b473dc4d62727215dcdacef899a77 |
+
+## Evaluated build (evaluations 3 and 4; not published)
 
 Built from commit `1a3bfa1` with `python -m build`; `twine check --strict` PASSED for both.
 
