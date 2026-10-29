@@ -1,0 +1,52 @@
+{
+ "pilot": [
+  {
+   "task": "C1_duration",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "C2_ratelimit",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "C3_csv",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "C4_semver",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "C5_invoice",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "C6_cron",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "C7_wrap",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "C8_template",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  },
+  {
+   "task": "C9_workflow",
+   "pilot_mean": 1.0,
+   "pilot_fully_correct": 2
+  }
+ ],
+ "qualifying": [],
+ "selected": [],
+ "verdict": "insufficient headroom"
+}

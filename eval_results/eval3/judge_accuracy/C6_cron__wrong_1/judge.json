@@ -1,0 +1,468 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_every_15",
+    "description": "Verified behavior in test_every_15",
+    "status": "pass",
+    "evidence_ref": "test_every_15",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_weekday_morning",
+    "description": "Verified behavior in test_weekday_morning",
+    "status": "pass",
+    "evidence_ref": "test_weekday_morning",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_next_runs",
+    "description": "Verified behavior in test_next_runs",
+    "status": "pass",
+    "evidence_ref": "test_next_runs",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": [
+    {
+     "module": "cron",
+     "symbol": "next_run",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    },
+    {
+     "module": "cron",
+     "symbol": "next_runs",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    }
+   ]
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 16,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14",
+    "R15",
+    "R16"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_every_15",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_every_15",
+       "requirement_id": "REQ-001",
+       "property_name": "test_every_15",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_every_15' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_next_runs",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_next_runs",
+       "requirement_id": "REQ-002",
+       "property_name": "test_next_runs",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_next_runs' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_weekday_morning",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_weekday_morning",
+       "requirement_id": "REQ-003",
+       "property_name": "test_weekday_morning",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_weekday_morning' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 3,
+    "verified_count": 3,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: `next_run(expr, after) -> datetime`",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: `next_runs(expr, after, count) -> list[datetime]`",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: `*` : every value of the field's range;",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: `N` : a single value;",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: `A-B` : an inclusive range (`A <= B`, otherwise invalid);",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: any of the above forms `*`, `A-B` followed by `/S` : every S-th value starting at the start of the range (`*/15` in minutes = 0,15,30,45; `*/2` in day-of-month = 1,3,5,...; `10-30/10` = 10,20,30). `N/S` (single value with a step) means `N-max/S` where max is the top of the field's range (`5/20` in minutes = 5,25,45). `S` must be an integer >= 1.",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: Numbers are plain decimal digits (leading zeros allowed: `05`). Any out-of-range value or malformed item raises `ValueError`.",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: Month and day-of-week fields also accept three-letter English names, case-insensitive: `jan`..`dec`, `sun`..`sat`. Names may be used as single values and as range ends (`mon-fri`, `jan-mar`, `JUL`), also in lists. In the day-of-week field a range may end in 7 (`5-7` = Fri, Sat, Sun). Names with steps are fine (`mon-fri/2` = mon, wed, fri).",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R9",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R9 (TASK.md) has no passing test that names it: A wrong number of fields raises `ValueError`.",
+   "property": "R9",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R9 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R10",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R10 (TASK.md) has no passing test that names it: if BOTH the day-of-month field and the day-of-week field are \"restricted\", the day matches if EITHER of them matches (OR);",
+   "property": "R10",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R10 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R11",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R11 (TASK.md) has no passing test that names it: otherwise it must match BOTH (AND).",
+   "property": "R11",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R11 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R12",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R12 (TASK.md) has no passing test that names it: `after` must be a `datetime.datetime` (else `TypeError`) and must be naive (tzinfo `None`, else `ValueError`).",
+   "property": "R12",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R12 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R13",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R13 (TASK.md) has no passing test that names it: Returns the earliest datetime strictly later than `after` that matches the expression, with seconds and microseconds equal to 0. So with `after = 10:00:00` and `* * * * *` the answer is 10:01; with `after = 10:15:30` and `*/15 * * * *` the answer is 10:30.",
+   "property": "R13",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R13 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R14",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R14 (TASK.md) has no passing test that names it: Months are real calendar months (31st skipped in short months, Feb 29 only in leap years, 2100 is not a leap year).",
+   "property": "R14",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R14 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R15",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R15 (TASK.md) has no passing test that names it: If the expression has no match within 3660 days (about ten years) after `after` (for example `0 0 30 2 *`), raise `ValueError`.",
+   "property": "R15",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R15 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R16",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R16 (TASK.md) has no passing test that names it: The expression is validated even when it would never match. Errors are raised before any searching.",
+   "property": "R16",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R16 in a comment or its docstring."
+  },
+  {
+   "id": "COVER-001",
+   "category": "coverage",
+   "severity": "low",
+   "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: cron.next_run, cron.next_runs",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 3 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "cron.py:23:26: UP031 Use format specifiers instead of percent format | cron.py:25:26: UP031 Use format specifiers instead of percent format | cron.py:40:34: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 3 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 16 of 16 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval3\\judge_accuracy\\C6_cron__wrong_1\\workspace",
+  "workspace_hash": "e4ae50d24a9ad8730a84113e16dc4524f08be1cb81b5fb8322af8cb3c2af808c",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T15:33:22Z",
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 3 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 16 of 16 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"`next_run(expr, after) -> datetime`\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"`next_runs(expr, after, count) -> list[datetime]`\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"`*` : every value of the field's range;\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"`N` : a single value;\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"`A-B` : an inclusive range (`A <= B`, otherwise invalid);\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"any of the above forms `*`, `A-B` followed by `/S` : every S-th value starting at the start of the range (`*/15` in minutes = 0,15,30,45; `*/2` in day-of-month = 1,3,5,...; `10-30/10` = 10,20,30). `N/S` (single value with a step) means `N-max/S` where max is the top of the field's range (`5/20` in minutes = 5,25,45). `S` must be an integer >= 1.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"Numbers are plain decimal digits (leading zeros allowed: `05`). Any out-of-range value or malformed item raises `ValueError`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"Month and day-of-week fields also accept three-letter English names, case-insensitive: `jan`..`dec`, `sun`..`sat`. Names may be used as single values and as range ends (`mon-fri`, `jan-mar`, `JUL`), also in lists. In the day-of-week field a range may end in 7 (`5-7` = Fri, Sat, Sun). Names with steps are fine (`mon-fri/2` = mon, wed, fri).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 13.101,
+  "judge_version": "v1.0.2"
+ }
+}

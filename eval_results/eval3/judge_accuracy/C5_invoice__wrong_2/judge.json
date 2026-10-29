@@ -1,0 +1,423 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_round_div",
+    "description": "Verified behavior in test_round_div",
+    "status": "pass",
+    "evidence_ref": "test_round_div",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_format",
+    "description": "Verified behavior in test_format",
+    "status": "pass",
+    "evidence_ref": "test_format",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_simple_invoice",
+    "description": "Verified behavior in test_simple_invoice",
+    "status": "pass",
+    "evidence_ref": "test_simple_invoice",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": []
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 14,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_format",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_format",
+       "requirement_id": "REQ-001",
+       "property_name": "test_format",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_format' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_round_div",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_round_div",
+       "requirement_id": "REQ-002",
+       "property_name": "test_round_div",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_round_div' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_simple_invoice",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_simple_invoice",
+       "requirement_id": "REQ-003",
+       "property_name": "test_simple_invoice",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_simple_invoice' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 3,
+    "verified_count": 3,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: `round_div(n, d) -> int`: integer division of `n` by `d` (int `d` > 0, otherwise `ValueError`), rounded to the nearest integer, with exact halves rounded AWAY from zero: `round_div(5, 2) == 3`, `round_div(-5, 2) == -3`, `round_div(7, 5) == 1`, `round_div(-7, 5) == -1`, `round_div(0, 3) == 0`.",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: `format_money(cents, symbol=\"$\") -> str`: `123456` -> `\"$1,234.56\"`, `5` -> `\"$0.05\"`, `0` -> `\"$0.00\"`, `100` -> `\"$1.00\"`, `123456789` -> `\"$1,234,567.89\"`. Negative amounts put the sign first: `-123456` -> `\"-$1,234.56\"`, `-5` -> `\"-$0.05\"`. `cents` must be an `int` (not bool), else `TypeError`. The symbol is used as given.",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: Validation (all raise `ValueError`, and a failed call must leave the invoice completely unchanged): `sku` a non-blank `str`; `qty` a non-zero `int` (negative quantities are returns/credits); `unit_price_cents` an `int` >= 0; `tax_rate_bp` an `int` >= 0 (basis points, 825 = 8.25%); `discount_pct` an `int` from 0 to 100. `bool` is never accepted for the int parameters.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: Lines with the same `(sku, unit_price_cents, tax_rate_bp, discount_pct)` are merged into one line by adding the quantities. A line whose merged quantity becomes 0 is removed. Lines with the same sku but any different value stay separate. Line order is the order of first appearance (a removed line that is added again goes to the end).",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: `gross = qty * unit_price`",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: `discount = round_div(gross * discount_pct, 100)` (so it has the sign of `gross`)",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: `net = gross - discount`",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: `tax = round_div(net * tax_rate_bp, 10000)` computed per line on the discounted net, not on the gross, and not per rate group.",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R9",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R9 (TASK.md) has no passing test that names it: `subtotal`: sum of the lines' `net`;",
+   "property": "R9",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R9 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R10",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R10 (TASK.md) has no passing test that names it: `discount_total`: sum of the lines' `discount`;",
+   "property": "R10",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R10 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R11",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R11 (TASK.md) has no passing test that names it: `tax_by_rate`: dict `{tax_rate_bp: sum of line taxes}` containing every rate that occurs in a line (including 0), with keys in ascending order;",
+   "property": "R11",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R11 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R12",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R12 (TASK.md) has no passing test that names it: `tax_total`: sum of line taxes;",
+   "property": "R12",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R12 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R13",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R13 (TASK.md) has no passing test that names it: `rounding_adjustment` and `total`: `before = subtotal + tax_total`. Without `cash_rounding`, adjustment is 0 and `total == before`. With `cash_rounding=True` the total is rounded to the nearest multiple of 5 cents (`round_div(before, 5) * 5`, so exact halves cannot occur and negatives are symmetric) and `rounding_adjustment = total - before`.",
+   "property": "R13",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R13 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R14",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R14 (TASK.md) has no passing test that names it: An empty invoice gives zeros everywhere and `tax_by_rate == {}`.",
+   "property": "R14",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R14 in a comment or its docstring."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 9 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "invoice\\__init__.py:1:1: I001 [*] Import block is un-sorted or un-formatted | invoice\\invoice.py:1:1: I001 [*] Import block is un-sorted or un-formatted | invoice\\invoice.py:40:37: E741 Ambiguous variable name: `l`",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 9 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 14 of 14 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval3\\judge_accuracy\\C5_invoice__wrong_2\\workspace",
+  "workspace_hash": "afcc50e11f3e74964842d9e28117cc46ccdfa884c4cff678c3d25b6efa9c3d74",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T15:32:42Z",
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 9 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 14 of 14 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"`round_div(n, d) -> int`: integer division of `n` by `d` (int `d` > 0, otherwise `ValueError`), rounded to the nearest integer, with exact halves rounded AWAY from zero: `round_div(5, 2) == 3`, `round_div(-5, 2) == -3`, `round_div(7, 5) == 1`, `round_div(-7, 5) == -1`, `round_div(0, 3) == 0`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"`format_money(cents, symbol=\"$\") -> str`: `123456` -> `\"$1,234.56\"`, `5` -> `\"$0.05\"`, `0` -> `\"$0.00\"`, `100` -> `\"$1.00\"`, `123456789` -> `\"$1,234,567.89\"`. Negative amounts put the sign first: `-123456` -> `\"-$1,234.56\"`, `-5` -> `\"-$0.05\"`. `cents` must be an `int` (not bool), else `TypeError`. The symbol is used as given.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"Validation (all raise `ValueError`, and a failed call must leave the invoice completely unchanged): `sku` a non-blank `str`; `qty` a non-zero `int` (negative quantities are returns/credits); `unit_price_cents` an `int` >= 0; `tax_rate_bp` an `int` >= 0 (basis points, 825 = 8.25%); `discount_pct` an `int` from 0 to 100. `bool` is never accepted for the int parameters.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"Lines with the same `(sku, unit_price_cents, tax_rate_bp, discount_pct)` are merged into one line by adding the quantities. A line whose merged quantity becomes 0 is removed. Lines with the same sku but any different value stay separate. Line order is the order of first appearance (a removed line that is added again goes to the end).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"`gross = qty * unit_price`\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"`discount = round_div(gross * discount_pct, 100)` (so it has the sign of `gross`)\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"`net = gross - discount`\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"`tax = round_div(net * tax_rate_bp, 10000)` computed per line on the discounted net, not on the gross, and not per rate group.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 11.72,
+  "judge_version": "v1.0.2"
+ }
+}

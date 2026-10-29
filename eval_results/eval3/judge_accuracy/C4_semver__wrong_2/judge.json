@@ -1,0 +1,592 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_parse_and_order",
+    "description": "Verified behavior in test_parse_and_order",
+    "status": "pass",
+    "evidence_ref": "test_parse_and_order",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_satisfies",
+    "description": "Verified behavior in test_satisfies",
+    "status": "pass",
+    "evidence_ref": "test_satisfies",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_helpers",
+    "description": "Verified behavior in test_helpers",
+    "status": "pass",
+    "evidence_ref": "test_helpers",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": [
+    {
+     "module": "semver",
+     "symbol": "Version",
+     "kind": "expiration",
+     "reason": "no keyword trigger matched; this probe runs only for a class whose __init__ has a parameter named ttl/ttl_seconds/expire/expiry, with a writer (put/set/write/store/add/store_session/insert) and a reader (get/read/lookup/fetch/fetch_session), in a module whose clock is time.time/time.monotonic"
+    },
+    {
+     "module": "semver",
+     "symbol": "Version",
+     "kind": "capacity_limit",
+     "reason": "no keyword trigger matched; this probe runs only for a class whose __init__ has a parameter named capacity/max_size/limit/bound, an insert method (push/add/enqueue/consume/put/write) and __len__ or a reader"
+    },
+    {
+     "module": "semver",
+     "symbol": "Version",
+     "kind": "rollback_isolation",
+     "reason": "no keyword trigger matched; this probe runs only for a class with begin/start/checkpoint/savepoint, rollback/revert/abort/undo, set/put/write and get/read methods"
+    },
+    {
+     "module": "semver",
+     "symbol": "parse",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    },
+    {
+     "module": "semver",
+     "symbol": "compare",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    },
+    {
+     "module": "semver",
+     "symbol": "satisfies",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    },
+    {
+     "module": "semver",
+     "symbol": "max_satisfying",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    },
+    {
+     "module": "semver",
+     "symbol": "sort_versions",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    }
+   ]
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 24,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14",
+    "R15",
+    "R16",
+    "R17",
+    "R18",
+    "R19",
+    "R20",
+    "R21",
+    "R22",
+    "R23",
+    "R24"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_helpers",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_helpers",
+       "requirement_id": "REQ-001",
+       "property_name": "test_helpers",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_helpers' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_parse_and_order",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_parse_and_order",
+       "requirement_id": "REQ-002",
+       "property_name": "test_parse_and_order",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_parse_and_order' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_satisfies",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_satisfies",
+       "requirement_id": "REQ-003",
+       "property_name": "test_satisfies",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_satisfies' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 3,
+    "verified_count": 3,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: Syntax: `MAJOR.MINOR.PATCH`, optionally `-PRERELEASE`, optionally `+BUILD`. One optional leading `v` is accepted (`v1.2.3`). The whole string must match (a trailing newline or any extra text is invalid).",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: MAJOR, MINOR, PATCH are non-negative integers without leading zeros (`0` is fine, `01` is not).",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: PRERELEASE and BUILD are dot-separated, non-empty identifiers made of `[0-9A-Za-z-]`. A purely numeric prerelease identifier must not have leading zeros (`1.0.0-01` is invalid, `1.0.0-0a` and `1.0.0-0` are valid). Build identifiers may have leading zeros.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: Invalid input raises `ValueError`; a non-`str` argument raises `TypeError`.",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: A `Version` has attributes `major`, `minor`, `patch` (ints), `prerelease` and `build` (tuples of strings). `str(v)` is the canonical text without any `v`: `1.2.3-alpha.1+b5`.",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: Compare major, minor, patch numerically (`1.10.0 > 1.9.0`).",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: A version with a prerelease is lower than the same version without one.",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: Two prereleases compare identifier by identifier: numeric identifiers compare numerically; alphanumeric identifiers compare by plain ASCII order (so `Alpha < alpha`); a numeric identifier is lower than an alphanumeric one; if all shared identifiers are equal, the one with fewer identifiers is lower. So `1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0`.",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R9",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R9 (TASK.md) has no passing test that names it: Build metadata is ignored: `1.0.0+a == 1.0.0+b`, they have equal hashes and neither is `<` the other.",
+   "property": "R9",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R9 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R10",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R10 (TASK.md) has no passing test that names it: `Version` supports `==`, `!=`, `<`, `<=`, `>`, `>=` against other `Version`s and is hashable.",
+   "property": "R10",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R10 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R11",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R11 (TASK.md) has no passing test that names it: `compare(a, b)` takes two version strings and returns -1, 0 or 1.",
+   "property": "R11",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R11 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R12",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R12 (TASK.md) has no passing test that names it: A range is one or more sets separated by `||`; a version satisfies the range if it satisfies any set. Surrounding whitespace around each set is ignored. A set is whitespace-separated comparators that must ALL hold. An empty (or whitespace-only) set means \"any version\" (like `*`).",
+   "property": "R12",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R12 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R13",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R13 (TASK.md) has no passing test that names it: Comparators, each token written without internal spaces (`>= 1.0.0` is invalid, `>=1.0.0` is valid):",
+   "property": "R13",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R13 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R14",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R14 (TASK.md) has no passing test that names it: `*`, `x`, `X`: any version.",
+   "property": "R14",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R14 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R15",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R15 (TASK.md) has no passing test that names it: An exact full version `1.2.3` or `=1.2.3` (equality ignoring build metadata).",
+   "property": "R15",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R15 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R16",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R16 (TASK.md) has no passing test that names it: `>`, `>=`, `<`, `<=` followed by a full version.",
+   "property": "R16",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R16 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R17",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R17 (TASK.md) has no passing test that names it: Partial versions: `1` or `1.x` or `1.*` means `>=1.0.0 <2.0.0`; `1.2` or `1.2.x` or `1.2.*` means `>=1.2.0 <1.3.0`. After a wildcard no further number may follow (`1.x.3` is invalid).",
+   "property": "R17",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R17 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R18",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R18 (TASK.md) has no passing test that names it: Caret `^` followed by a full version: `^1.2.3` = `>=1.2.3 <2.0.0`; if major is 0, `^0.2.3` = `>=0.2.3 <0.3.0`; if major and minor are 0, `^0.0.3` = `>=0.0.3 <0.0.4`. A prerelease on the base version is kept in the lower bound (`^1.2.3-beta.2` = `>=1.2.3-beta.2 <2.0.0`).",
+   "property": "R18",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R18 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R19",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R19 (TASK.md) has no passing test that names it: Tilde `~` followed by a full version, `major.minor` or `major`: `~1.2.3` and `~1.2` = `>=1.2.x <1.3.0` (the lower bound uses the given patch/prerelease, or 0); `~1` = `>=1.0.0 <2.0.0`.",
+   "property": "R19",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R19 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R20",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R20 (TASK.md) has no passing test that names it: A leading `v` is accepted on versions inside comparators. Anything else raises `ValueError`.",
+   "property": "R20",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R20 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R21",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R21 (TASK.md) has no passing test that names it: Prerelease rule: a version that has a prerelease can satisfy a set only if at least one comparator of that set was written with a prerelease on the SAME major.minor.patch (e.g. `>=1.2.3-beta.2` allows `1.2.3-beta.4`, but `^1.2.3` does not allow `1.2.4-beta` or `2.0.0-alpha`, and `*` / `1.x` never allow a prerelease version). Versions without a prerelease are not affected by this rule. The rule is evaluated per set.",
+   "property": "R21",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R21 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R22",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R22 (TASK.md) has no passing test that names it: Build metadata of the tested version is ignored for comparisons.",
+   "property": "R22",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R22 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R23",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R23 (TASK.md) has no passing test that names it: `max_satisfying(versions, range_text)`: the highest version string from the list that satisfies the range, returned exactly as given in the list, or `None`. If two entries are equal in precedence the first one wins. Invalid entries raise `ValueError`.",
+   "property": "R23",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R23 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R24",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R24 (TASK.md) has no passing test that names it: `sort_versions(versions, reverse=False)`: new list of the original strings in ascending (or descending) precedence order; the sort is stable, so entries equal in precedence keep their input order in both directions. Invalid entries raise `ValueError`.",
+   "property": "R24",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R24 in a comment or its docstring."
+  },
+  {
+   "id": "COVER-001",
+   "category": "coverage",
+   "severity": "low",
+   "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: semver.Version, semver.compare, semver.max_satisfying, semver.parse, semver.satisfies, semver.sort_versions",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 10 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "semver.py:7:5: UP031 Use format specifiers instead of percent format | semver.py:64:13: UP031 Use format specifiers instead of percent format | semver.py:72:16: UP031 Use format specifiers instead of percent format",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 10 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 24 of 24 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval3\\judge_accuracy\\C4_semver__wrong_2\\workspace",
+  "workspace_hash": "cd3db70b6f35a9f7762d537f6ddc3bd7f29148ddd616af5e291a8c04b0518877",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T15:31:55Z",
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 10 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 24 of 24 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"Syntax: `MAJOR.MINOR.PATCH`, optionally `-PRERELEASE`, optionally `+BUILD`. One optional leading `v` is accepted (`v1.2.3`). The whole string must match (a trailing newline or any extra text is invalid).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"MAJOR, MINOR, PATCH are non-negative integers without leading zeros (`0` is fine, `01` is not).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"PRERELEASE and BUILD are dot-separated, non-empty identifiers made of `[0-9A-Za-z-]`. A purely numeric prerelease identifier must not have leading zeros (`1.0.0-01` is invalid, `1.0.0-0a` and `1.0.0-0` are valid). Build identifiers may have leading zeros.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"Invalid input raises `ValueError`; a non-`str` argument raises `TypeError`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"A `Version` has attributes `major`, `minor`, `patch` (ints), `prerelease` and `build` (tuples of strings). `str(v)` is the canonical text without any `v`: `1.2.3-alpha.1+b5`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"Compare major, minor, patch numerically (`1.10.0 > 1.9.0`).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"A version with a prerelease is lower than the same version without one.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"Two prereleases compare identifier by identifier: numeric identifiers compare numerically; alphanumeric identifiers compare by plain ASCII order (so `Alpha < alpha`); a numeric identifier is lower than an alphanumeric one; if all shared identifiers are equal, the one with fewer identifiers is lower. So `1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 11.478,
+  "judge_version": "v1.0.2"
+ }
+}

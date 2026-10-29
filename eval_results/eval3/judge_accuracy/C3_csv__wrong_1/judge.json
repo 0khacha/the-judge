@@ -1,0 +1,475 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_simple",
+    "description": "Verified behavior in test_simple",
+    "status": "pass",
+    "evidence_ref": "test_simple",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_quoted",
+    "description": "Verified behavior in test_quoted",
+    "status": "pass",
+    "evidence_ref": "test_quoted",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_dicts",
+    "description": "Verified behavior in test_dicts",
+    "status": "pass",
+    "evidence_ref": "test_dicts",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": [
+    {
+     "module": "csvparse",
+     "symbol": "CsvError",
+     "kind": "expiration",
+     "reason": "no keyword trigger matched; this probe runs only for a class whose __init__ has a parameter named ttl/ttl_seconds/expire/expiry, with a writer (put/set/write/store/add/store_session/insert) and a reader (get/read/lookup/fetch/fetch_session), in a module whose clock is time.time/time.monotonic"
+    },
+    {
+     "module": "csvparse",
+     "symbol": "CsvError",
+     "kind": "capacity_limit",
+     "reason": "no keyword trigger matched; this probe runs only for a class whose __init__ has a parameter named capacity/max_size/limit/bound, an insert method (push/add/enqueue/consume/put/write) and __len__ or a reader"
+    },
+    {
+     "module": "csvparse",
+     "symbol": "CsvError",
+     "kind": "rollback_isolation",
+     "reason": "no keyword trigger matched; this probe runs only for a class with begin/start/checkpoint/savepoint, rollback/revert/abort/undo, set/put/write and get/read methods"
+    },
+    {
+     "module": "csvparse",
+     "symbol": "parse_csv",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    },
+    {
+     "module": "csvparse",
+     "symbol": "parse_csv_dicts",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    }
+   ]
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 15,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14",
+    "R15"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_dicts",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_dicts",
+       "requirement_id": "REQ-001",
+       "property_name": "test_dicts",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_dicts' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_quoted",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_quoted",
+       "requirement_id": "REQ-002",
+       "property_name": "test_quoted",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_quoted' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_simple",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_simple",
+       "requirement_id": "REQ-003",
+       "property_name": "test_simple",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_simple' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 3,
+    "verified_count": 3,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: `delimiter` must be a single character that is not `\"`, `\\r` or `\\n`; otherwise `ValueError` (plain, not `CsvError`).",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: A leading BOM (U+FEFF) is removed.",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: Record separators are `\\n`, `\\r\\n` or `\\r` (they may be mixed in one document). A final separator at the end of the text does not create an extra record. Empty text gives `[]`.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: A completely empty line (nothing between two separators, outside quotes) is skipped and produces no record. A line containing only spaces is NOT empty: it is a record with one field of spaces. A line that is just `\"\"` is a record with one empty field.",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: An empty field is the empty string, including a trailing one: `a,b,` -> `[\"a\",\"b\",\"\"]`.",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: Whitespace is never stripped; fields keep leading/trailing spaces.",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: A field that starts with `\"` is quoted. Inside it the delimiter and line breaks are literal text, and `\"\"` stands for one `\"`. Line breaks inside quotes are kept exactly as written (`\\r\\n` stays `\\r\\n`).",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: A `\"` in the middle of an unquoted field is an ordinary character (`ab\"c` is the field `ab\"c`).",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R9",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R9 (TASK.md) has no passing test that names it: After the closing quote of a quoted field only a delimiter, a record separator or the end of the text may follow; anything else raises `CsvError` whose `line` is the line number where the offending character is.",
+   "property": "R9",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R9 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R10",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R10 (TASK.md) has no passing test that names it: A quoted field that is never closed raises `CsvError` whose `line` is the line where that quoted field STARTED. (`\"abc\"\"` is unterminated: the last two quotes are an escaped quote.)",
+   "property": "R10",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R10 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R11",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R11 (TASK.md) has no passing test that names it: Line numbers start at 1 and increase by one for every `\\n`, `\\r\\n` or lone `\\r` in the text, including those inside quoted fields and skipped empty lines (a BOM does not count as anything).",
+   "property": "R11",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R11 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R12",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R12 (TASK.md) has no passing test that names it: No records at all, or only a header, gives `[]`.",
+   "property": "R12",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R12 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R13",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R13 (TASK.md) has no passing test that names it: An empty header name (after stripping) or a duplicate header name raises `CsvError`.",
+   "property": "R13",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R13 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R14",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R14 (TASK.md) has no passing test that names it: A data record shorter than the header is padded with `\"\"`; a longer one raises `CsvError`.",
+   "property": "R14",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R14 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R15",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R15 (TASK.md) has no passing test that names it: Errors from `parse_csv` propagate unchanged.",
+   "property": "R15",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R15 in a comment or its docstring."
+  },
+  {
+   "id": "COVER-001",
+   "category": "coverage",
+   "severity": "low",
+   "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: csvparse.CsvError, csvparse.parse_csv, csvparse.parse_csv_dicts",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 3 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "csvparse.py:3:26: UP031 Use format specifiers instead of percent format | test_visible.py:1:1: I001 [*] Import block is un-sorted or un-formatted | test_visible.py:1:50: F401 [*] `csvparse.CsvError` imported but unused",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 3 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 15 of 15 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval3\\judge_accuracy\\C3_csv__wrong_1\\workspace",
+  "workspace_hash": "5ec1f9960575cb01719b3dc97953ab2179f4a4120e43e1b073cb432c7357c251",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T15:30:39Z",
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 3 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 15 of 15 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"`delimiter` must be a single character that is not `\"`, `\\r` or `\\n`; otherwise `ValueError` (plain, not `CsvError`).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"A leading BOM (U+FEFF) is removed.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"Record separators are `\\n`, `\\r\\n` or `\\r` (they may be mixed in one document). A final separator at the end of the text does not create an extra record. Empty text gives `[]`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"A completely empty line (nothing between two separators, outside quotes) is skipped and produces no record. A line containing only spaces is NOT empty: it is a record with one field of spaces. A line that is just `\"\"` is a record with one empty field.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"An empty field is the empty string, including a trailing one: `a,b,` -> `[\"a\",\"b\",\"\"]`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"Whitespace is never stripped; fields keep leading/trailing spaces.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"A field that starts with `\"` is quoted. Inside it the delimiter and line breaks are literal text, and `\"\"` stands for one `\"`. Line breaks inside quotes are kept exactly as written (`\\r\\n` stays `\\r\\n`).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"A `\"` in the middle of an unquoted field is an ordinary character (`ab\"c` is the field `ab\"c`).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 12.124,
+  "judge_version": "v1.0.2"
+ }
+}

@@ -1,0 +1,1 @@
+{"task": "C1_duration", "requirements": 14, "multi_file": false, "traps": ["half-up rounding not banker's (0.5s->1, 2.5s->3)", "strict descending unit order / no duplicates", "fraction only in last component", "ASCII digits only", "no whitespace between number and unit", "max_units counts non-zero components only", "format_duration rejects bool/float"]}

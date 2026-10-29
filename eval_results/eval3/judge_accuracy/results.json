@@ -1,0 +1,164 @@
+[
+ {
+  "task": "C1_duration",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C1_duration",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C1_duration",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C2_ratelimit",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C2_ratelimit",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C2_ratelimit",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C3_csv",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C3_csv",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C3_csv",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C4_semver",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C4_semver",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C4_semver",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C5_invoice",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C5_invoice",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C5_invoice",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C6_cron",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C6_cron",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C6_cron",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C7_wrap",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C7_wrap",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C7_wrap",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C8_template",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C8_template",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C8_template",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C9_workflow",
+  "solution": "reference",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C9_workflow",
+  "solution": "wrong_1",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ },
+ {
+  "task": "C9_workflow",
+  "solution": "wrong_2",
+  "decision": "ABSTAIN",
+  "next": "cover_requirement"
+ }
+]

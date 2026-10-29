@@ -1,0 +1,413 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 65.0,
+ "trust_profile": {
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_simple",
+    "description": "Verified behavior in test_simple",
+    "status": "pass",
+    "evidence_ref": "test_simple",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_paragraphs",
+    "description": "Verified behavior in test_paragraphs",
+    "status": "pass",
+    "evidence_ref": "test_paragraphs",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_width",
+    "description": "Verified behavior in test_width",
+    "status": "pass",
+    "evidence_ref": "test_width",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_2",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": [
+    {
+     "module": "wrap",
+     "symbol": "display_width",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    },
+    {
+     "module": "wrap",
+     "symbol": "wrap_text",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    }
+   ]
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "requirements_checklist": {
+   "total": 11,
+   "covered": [],
+   "uncovered": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10",
+    "R11"
+   ]
+  },
+  "mutation": {
+   "ran": false
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_paragraphs",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_paragraphs",
+       "requirement_id": "REQ-001",
+       "property_name": "test_paragraphs",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_paragraphs' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_simple",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_simple",
+       "requirement_id": "REQ-002",
+       "property_name": "test_simple",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_simple' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-003",
+     "description": "Behavioral verification of property test_width",
+     "category": "functional",
+     "priority": "important",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_width",
+       "requirement_id": "REQ-003",
+       "property_name": "test_width",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_width' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 3,
+    "verified_count": 3,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "REQ-R1",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R1 (TASK.md) has no passing test that names it: characters whose `unicodedata.east_asian_width` is `\"W\"` or `\"F\"` count 2;",
+   "property": "R1",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R1 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R2",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R2 (TASK.md) has no passing test that names it: characters whose `unicodedata.category` is `\"Mn\"` or `\"Me\"` (combining marks) count 0.",
+   "property": "R2",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R2 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R3",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R3 (TASK.md) has no passing test that names it: Line endings: `\\r\\n` and lone `\\r` are treated as `\\n`.",
+   "property": "R3",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R3 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R4",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R4 (TASK.md) has no passing test that names it: Paragraphs: a blank line (empty or only spaces/tabs) separates paragraphs. Any number of blank lines is one separator. Output paragraphs are joined by exactly one blank line (`\"\\n\\n\"`). Leading/trailing blank lines are dropped. Text with no words (including `\"\"`) gives `\"\"`.",
+   "property": "R4",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R4 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R5",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R5 (TASK.md) has no passing test that names it: Inside a paragraph the \"whitespace\" characters are ONLY space, tab and newline. Runs of them collapse to a single break opportunity and are rendered as one space; leading/trailing whitespace of a paragraph is dropped. Other characters, including the no-break space U+00A0 and the ideographic space U+3000, are ordinary word characters and are kept unchanged (so `str.split()` is not suitable).",
+   "property": "R5",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R5 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R6",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R6 (TASK.md) has no passing test that names it: Greedy filling: words are added to the current line, separated by one space, as long as the line's display width stays <= the available width. Lines never end with spaces.",
+   "property": "R6",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R6 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R7",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R7 (TASK.md) has no passing test that names it: Indentation: the first line of every paragraph is prefixed with `indent`, all other lines of the paragraph with `subsequent_indent`. Indent counts toward the width: available width = `width - display_width(prefix)`.",
+   "property": "R7",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R7 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R8",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R8 (TASK.md) has no passing test that names it: If `width - display_width(indent) < 2` or `width - display_width(subsequent_indent) < 2` raise `ValueError` (at least 2 columns must remain for text).",
+   "property": "R8",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R8 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R9",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R9 (TASK.md) has no passing test that names it: Hyphen breaks: a word may also be broken right after a `-` when the characters immediately before and after that hyphen are both alphanumeric (`str.isalnum()`). The hyphen stays at the end of the first part and the next part continues the line with no space between. So `well-known` can wrap as `well-` / `known`, but `a--b`, `-x` and `x-` have no break points.",
+   "property": "R9",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R9 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R10",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R10 (TASK.md) has no passing test that names it: Long chunks: a chunk (a word, or a part of a word after splitting at hyphens) whose display width exceeds the available width is hard-broken. It first starts on a fresh line (unless the current line is empty), then is split character by character so each piece fits the available width; the last piece stays as the current line so later words may follow it on the same line. A character is never split across lines, a 2-column character that does not fit moves to the next line, and a zero-width character always stays on the line of the preceding character (even if that makes the line exactly full).",
+   "property": "R10",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R10 in a comment or its docstring."
+  },
+  {
+   "id": "REQ-R11",
+   "category": "requirements",
+   "severity": "medium",
+   "description": "R11 (TASK.md) has no passing test that names it: The `indent` is used for the first output line of each paragraph, whichever kind of break produced the lines.",
+   "property": "R11",
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add a test that checks this rule and mentions R11 in a comment or its docstring."
+  },
+  {
+   "id": "COVER-001",
+   "category": "coverage",
+   "severity": "low",
+   "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: wrap.display_width, wrap.wrap_text",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+  },
+  {
+   "id": "STATIC-001",
+   "category": "static_analysis",
+   "severity": "low",
+   "description": "linter reported 2 issue(s) (advisory; does not affect the decision)",
+   "property": "linter",
+   "observed": "test_visible.py:1:1: I001 [*] Import block is un-sorted or un-formatted | wrap.py:1:8: F401 [*] `re` imported but unused | Found 2 errors.",
+   "expected": null,
+   "suggested_focus": "Optional clean-up; correctness is decided by tests."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "WARNING: Linter reported 2 issue(s). Advisory only; it does not affect the decision.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "(Uncovered Requirements) 11 of 11 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\projects\\the-judge\\eval_results\\eval3\\judge_accuracy\\C7_wrap__wrong_2\\workspace",
+  "workspace_hash": "1eebf3e120e98973cc7f6f39b8677ae823325bec62050accdbfbfa28b9384773",
+  "judge_version": "v1.0.2",
+  "timestamp": "2026-10-29T15:34:17Z",
+  "evidence_level": 2,
+  "total_tests": 3,
+  "passed_tests": 3,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "WARNING: Linter reported 2 issue(s). Advisory only; it does not affect the decision.",
+  "(Uncovered Requirements) 11 of 11 rules of the specification have no passing test that names them: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11"
+ ],
+ "next_actions": [
+  {
+   "step": 1,
+   "action": "cover_requirement",
+   "detail": "R1 (TASK.md): \"characters whose `unicodedata.east_asian_width` is `\"W\"` or `\"F\"` count 2;\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R1 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 2,
+   "action": "cover_requirement",
+   "detail": "R2 (TASK.md): \"characters whose `unicodedata.category` is `\"Mn\"` or `\"Me\"` (combining marks) count 0.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R2 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 3,
+   "action": "cover_requirement",
+   "detail": "R3 (TASK.md): \"Line endings: `\\r\\n` and lone `\\r` are treated as `\\n`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R3 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 4,
+   "action": "cover_requirement",
+   "detail": "R4 (TASK.md): \"Paragraphs: a blank line (empty or only spaces/tabs) separates paragraphs. Any number of blank lines is one separator. Output paragraphs are joined by exactly one blank line (`\"\\n\\n\"`). Leading/trailing blank lines are dropped. Text with no words (including `\"\"`) gives `\"\"`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R4 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 5,
+   "action": "cover_requirement",
+   "detail": "R5 (TASK.md): \"Inside a paragraph the \"whitespace\" characters are ONLY space, tab and newline. Runs of them collapse to a single break opportunity and are rendered as one space; leading/trailing whitespace of a paragraph is dropped. Other characters, including the no-break space U+00A0 and the ideographic space U+3000, are ordinary word characters and are kept unchanged (so `str.split()` is not suitable).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R5 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 6,
+   "action": "cover_requirement",
+   "detail": "R6 (TASK.md): \"Greedy filling: words are added to the current line, separated by one space, as long as the line's display width stays <= the available width. Lines never end with spaces.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R6 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 7,
+   "action": "cover_requirement",
+   "detail": "R7 (TASK.md): \"Indentation: the first line of every paragraph is prefixed with `indent`, all other lines of the paragraph with `subsequent_indent`. Indent counts toward the width: available width = `width - display_width(prefix)`.\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R7 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 8,
+   "action": "cover_requirement",
+   "detail": "R8 (TASK.md): \"If `width - display_width(indent) < 2` or `width - display_width(subsequent_indent) < 2` raise `ValueError` (at least 2 columns must remain for text).\" has no passing test.",
+   "guidance": "Write a test that checks exactly this rule, including its edge cases, and put R8 in a comment or the docstring of the test. Take the expected results from the rule, not from the code. If the test fails, fix the code."
+  },
+  {
+   "step": 9,
+   "action": "re_verify",
+   "detail": "Verify again after the step(s) above.",
+   "command": "judge verify . --json"
+  }
+ ],
+ "loop": null,
+ "runtime": {
+  "duration_seconds": 8.019,
+  "judge_version": "v1.0.2"
+ }
+}

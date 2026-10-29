@@ -1,0 +1,168 @@
+{
+ "python": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/venv_102/Scripts/python.exe",
+ "judge": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/venv_102/Scripts/judge.exe",
+ "runs": [
+  {
+   "id": "C1_duration__A__r1",
+   "task": "C1_duration",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C1_duration__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C1_duration__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C1_duration__A__r2",
+   "task": "C1_duration",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C1_duration__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C1_duration__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "C2_ratelimit__A__r1",
+   "task": "C2_ratelimit",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C2_ratelimit__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C2_ratelimit__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C2_ratelimit__A__r2",
+   "task": "C2_ratelimit",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C2_ratelimit__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C2_ratelimit__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "C3_csv__A__r1",
+   "task": "C3_csv",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C3_csv__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C3_csv__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C3_csv__A__r2",
+   "task": "C3_csv",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C3_csv__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C3_csv__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "C4_semver__A__r1",
+   "task": "C4_semver",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C4_semver__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C4_semver__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C4_semver__A__r2",
+   "task": "C4_semver",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C4_semver__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C4_semver__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "C5_invoice__A__r1",
+   "task": "C5_invoice",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C5_invoice__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C5_invoice__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C5_invoice__A__r2",
+   "task": "C5_invoice",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C5_invoice__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C5_invoice__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "C6_cron__A__r1",
+   "task": "C6_cron",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C6_cron__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C6_cron__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C6_cron__A__r2",
+   "task": "C6_cron",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C6_cron__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C6_cron__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "C7_wrap__A__r1",
+   "task": "C7_wrap",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C7_wrap__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C7_wrap__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C7_wrap__A__r2",
+   "task": "C7_wrap",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C7_wrap__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C7_wrap__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "C8_template__A__r1",
+   "task": "C8_template",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C8_template__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C8_template__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C8_template__A__r2",
+   "task": "C8_template",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C8_template__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C8_template__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "C9_workflow__A__r1",
+   "task": "C9_workflow",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C9_workflow__A__r1",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C9_workflow__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "C9_workflow__A__r2",
+   "task": "C9_workflow",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws3/C9_workflow__A__r2",
+   "log": "C:/projects/the-judge/eval_results/eval3/pilot/C9_workflow__A__r2",
+   "wrapper": null
+  }
+ ]
+}
