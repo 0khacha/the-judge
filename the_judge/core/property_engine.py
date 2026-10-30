@@ -1,4 +1,4 @@
-"""Structure-driven behavioral property inference engine for The Judge v4.0."""
+"""Structure-driven behavioral property inference engine."""
 
 import ast
 import os
@@ -56,7 +56,7 @@ class PropertyCandidate:
 
 
 class StructurePropertyEngine:
-    """Structure-driven behavioral property inference engine for The Judge v4.0."""
+    """Structure-driven behavioral property inference engine."""
 
     def __init__(self, seed: int = 48127):
         self.seed = seed

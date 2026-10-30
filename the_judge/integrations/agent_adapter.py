@@ -1,5 +1,6 @@
 from typing import Any, Optional
 
+from the_judge._version import __version__
 from the_judge.api import verify
 from the_judge.core.decision import VerificationResult
 
@@ -55,7 +56,7 @@ class AgentAdapter:
             "insufficient_notes": result.insufficient_notes,
             "runtime": {
                 "duration_seconds": round(result.runtime_seconds, 3),
-                "judge_version": "v4.0",
+                "judge_version": f"v{__version__}",
             },
         }
 

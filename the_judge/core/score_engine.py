@@ -39,7 +39,19 @@ def evaluate(
             "environment that runs The Judge."
         )
 
-    no_tests = bool(test_suite.get("no_tests_collected")) and not runner_error
+    timed_out = bool(test_suite.get("timed_out")) and not runner_error
+    if timed_out:
+        insufficient_evidence_notes.append(
+            "ABSTAIN Level 0 (Timeout): the test run timed out after "
+            f"{test_suite.get('timeout_seconds')} s and was stopped, so no result was "
+            "recorded. If the suite is just slow, verify again with a larger limit "
+            "(`judge verify . --timeout 900`); otherwise look for an infinite loop or a "
+            "blocking call (network, input()) in the code under test."
+        )
+    # The run did not complete: nothing it would have reported can count as missing.
+    incomplete = bool(runner_error) or timed_out
+
+    no_tests = bool(test_suite.get("no_tests_collected")) and not incomplete
     if no_tests:
         insufficient_evidence_notes.append(
             "ABSTAIN Level 0 (No Tests): pytest collected no tests in this workspace, so no "
@@ -48,8 +60,8 @@ def evaluate(
         )
 
     # --- Hard Gate 1: Test failures in evidence ---
-    if runner_error or no_tests:
-        pass  # nothing ran; reported above, not a test failure
+    if incomplete or no_tests:
+        pass  # nothing ran to completion; reported above, not a test failure
     elif test_suite.get("exit_code", 0) != 0 or len(failed_test_names) > 0:
         failed_str = ", ".join(failed_test_names) if failed_test_names else "non-zero exit code"
         blocking_issues.append(f"Test suite failure: {failed_str}")
@@ -145,7 +157,7 @@ def evaluate(
         )
     }
     unexecuted_expected = [t for t in expected_challenges if t not in all_executed_tests]
-    if unexecuted_expected and not missing_challenges and not runner_error:
+    if unexecuted_expected and not missing_challenges and not incomplete:
         unexec_str = ", ".join(sorted(unexecuted_expected))
         blocking_issues.append(
             f"COLLECTION TAMPERING DETECTED: Expected challenge test(s) were deselect or bypassed during collection: {unexec_str}"
@@ -264,7 +276,7 @@ def evaluate(
     ]
 
     if total_tests == 0:
-        if not (no_tests or runner_error):  # those already explain why nothing ran
+        if not (no_tests or incomplete):  # those already explain why nothing ran
             insufficient_evidence_notes.append(
                 "ABSTAIN Level 0: No executable unit tests were run to verify implementation."
             )
@@ -487,11 +499,11 @@ def evaluate(
     cm = evidence.get("challenge_manifest", {})
     challenge_integ = "FAILED" if cm.get("file_tampered") else "VERIFIED"
 
-    coll_tampered = bool(cm.get("missing_challenges")) or bool(unexecuted_expected)
+    coll_tampered = bool(cm.get("missing_challenges")) or (bool(unexecuted_expected) and not incomplete)
     collection_integ = "FAILED" if coll_tampered else "VERIFIED"
 
     execution_integ = (
-        "NOT_RUN" if (runner_error or no_tests)
+        "NOT_RUN" if (incomplete or no_tests)
         else "FAILED" if test_suite.get("exit_code", 0) != 0 else "VERIFIED"
     )
 
@@ -598,7 +610,7 @@ def explain_verdict(report: dict[str, Any]) -> str:
     """Generate human-readable audit explanation chain for a score engine evaluation report."""
     lines = []
     lines.append("======================================================================")
-    lines.append("  THE JUDGE EXPLAIN REPORT (v4.0 Production Trust Profile)")
+    lines.append("  THE JUDGE EXPLAIN REPORT (Trust Profile)")
     lines.append("======================================================================")
     lines.append(f"DECISION: {report['verdict']}")
     lines.append(f"Weighted Score: {report['numeric_score']} / 100")

@@ -34,7 +34,7 @@ pip install the-judge-verify
 cd /path/to/your/project
 judge verify .
 
-# Continuous improvement mode
+# Improvement review (read-only; --apply lets it edit files)
 judge improve .
 ```
 
@@ -103,7 +103,7 @@ judge init vscode
 ```bash
 judge verify .                 # Verify workspace
 judge verify . --json          # Machine-readable output
-judge improve .                # Continuous improvement mode
+judge improve .                # Read-only review (--apply: edit files)
 judge contract .              # Show requirement coverage
 judge watch .                 # Auto-verify on file changes
 judge demo                    # Interactive demo
@@ -288,7 +288,9 @@ Create `judge.json` for critical requirements:
 judge improve .
 ```
 
-Runs multiple rounds until high quality is achieved.
+By default this is a read-only review: one round of evaluation and critique, with the
+findings listed as suggestions; no file is changed. `judge improve . --apply` lets the
+built-in improver edit files between rounds (it never writes tests).
 
 ### 4. Integrate with CI/CD
 

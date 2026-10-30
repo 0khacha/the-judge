@@ -10,6 +10,7 @@ Real vacuous tests must still be caught.
 """
 
 from audit_helpers import judge, write
+
 from the_judge.api import freeze
 from the_judge.core.evidence import _detect_vacuous_tests
 

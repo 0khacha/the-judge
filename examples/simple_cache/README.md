@@ -45,7 +45,9 @@ Contract Coverage:
 judge improve .
 ```
 
-This will run multiple rounds of evaluation and improvement until the code reaches a quality score of 90+.
+By default this is a read-only review: one round of evaluation and critique, with the
+findings listed as suggestions; no file is changed. `judge improve . --apply` lets the
+built-in improver edit files between rounds (it never writes tests).
 
 ## Python API
 

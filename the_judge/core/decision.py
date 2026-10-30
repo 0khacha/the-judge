@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
+from the_judge._version import __version__
+
 
 @dataclass
 class Finding:
@@ -54,6 +56,6 @@ class VerificationResult:
             "loop": self.loop,
             "runtime": {
                 "duration_seconds": round(self.runtime_seconds, 3),
-                "judge_version": "v1.0.2",
+                "judge_version": f"v{__version__}",
             },
         }

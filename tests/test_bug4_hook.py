@@ -6,9 +6,9 @@ runs verification only for code-changing commands, and never crashes.
 """
 
 import json
+import os
 import subprocess
 import sys
-import os
 
 import pytest
 

@@ -9,16 +9,17 @@ NOT by a fixed round schedule.
 Priority order:
   1. CRITICAL failures (evidence-backed or contradicted)
   2. Evidence-backed test failures
-  3. Contradicted claims
-  4. High-impact observed weaknesses
-  5. Missing evidence for domain
-  6. Unverified assumptions
-  7. Code quality / docstrings / type annotations
+  3. High-impact observed weaknesses
+  4. Code quality / docstrings / type annotations
 
 This means:
-  - If round 1 has a CONTRADICTED claim, that is fixed first.
   - If round 2 has a failing test, that is fixed before font improvements.
   - Visual/aesthetic improvements happen only after correctness issues are resolved.
+
+It edits files in place, so it only runs when the user opts in
+(`judge improve --apply` / `improve(apply=True)`). It never writes tests:
+a test written by the verifier is not independent evidence, and the
+placeholder tests it used to generate passed regardless of the code.
 """
 
 import ast
@@ -51,19 +52,9 @@ class AutoImprover:
 
         critique = feedback.get("critique", {})
         priority_findings = critique.get("improvement_priority", [])
-        decision = feedback.get("decision", "")
         is_visual = feedback.get("is_visual", False)
-        feedback.get("round_number", 1)
 
-        py_files, web_files, has_tests = self._scan_workspace()
-
-        # ------------------------------------------------------------------
-        # Priority 0: If ABSTAIN and no tests exist → synthesise tests first
-        # ------------------------------------------------------------------
-        if decision == "ABSTAIN" and not has_tests:
-            created = self._synthesize_basic_test(py_files)
-            if created:
-                changes_made.append(f"Synthesised initial test suite: {created}")
+        py_files, web_files, _ = self._scan_workspace()
 
         # ------------------------------------------------------------------
         # Priority 1–3: Address top critique findings in evidence order
@@ -94,25 +85,9 @@ class AutoImprover:
                     addressed_ids.add(fid)
                     continue
 
-            # Contradicted claim → add evidence (test) for the claim
-            if ev_level == "contradicted":
-                change = self._add_evidence_for_claim(py_files, finding)
-                if change:
-                    changes_made.append(change)
-                    addressed_ids.add(fid)
-                    continue
-
             # Observed: no error handling → add error handling
             if ev_level == "observed" and "silent" in finding.get("description", "").lower():
                 change = self._fix_silent_exception(py_files, finding)
-                if change:
-                    changes_made.append(change)
-                    addressed_ids.add(fid)
-                    continue
-
-            # Observed: missing tests → synthesise
-            if ev_level == "observed" and "no test" in finding.get("description", "").lower():
-                change = self._add_missing_test(py_files, finding)
                 if change:
                     changes_made.append(change)
                     addressed_ids.add(fid)
@@ -209,7 +184,8 @@ class AutoImprover:
             rel = os.path.relpath(fpath, self.workspace)
             if rel in desc or os.path.basename(fpath) in desc:
                 try:
-                    content = open(fpath, encoding="utf-8").read()
+                    with open(fpath, encoding="utf-8") as fh:
+                        content = fh.read()
                     # Try to parse — if it fails we at least add a comment noting the issue
                     ast.parse(content)
                 except SyntaxError as e:
@@ -235,26 +211,25 @@ class AutoImprover:
         # boundary checks to the most likely functions.
         for py_file in py_files:
             try:
-                content = open(py_file, encoding="utf-8").read()
+                with open(py_file, encoding="utf-8") as fh:
+                    content = fh.read()
                 tree = ast.parse(content)
                 modified = False
 
                 for node in ast.walk(tree):
-                    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                        # Add basic None-guard if function has no guard and finding mentions None
-                        if (
-                            "none" in desc.lower()
-                            or "empty" in desc.lower()
-                            or "null" in desc.lower()
-                        ):
-                            if not any(
-                                "None" in ast.dump(child)
-                                for child in ast.walk(node)
-                                if isinstance(child, ast.Compare)
-                            ):
-                                content = self._insert_none_guard(content, node)
-                                modified = True
-                                break
+                    # Add basic None-guard if function has no guard and finding mentions None
+                    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and (
+                        "none" in desc.lower()
+                        or "empty" in desc.lower()
+                        or "null" in desc.lower()
+                    ) and not any(
+                        "None" in ast.dump(child)
+                        for child in ast.walk(node)
+                        if isinstance(child, ast.Compare)
+                    ):
+                        content = self._insert_none_guard(content, node)
+                        modified = True
+                        break
 
                 if modified:
                     with open(py_file, "w", encoding="utf-8") as f:
@@ -286,136 +261,6 @@ class AutoImprover:
         lines.insert(first_body_line, guard_line)
         return "".join(lines)
 
-    def _add_evidence_for_claim(
-        self, py_files: list[str], finding: dict[str, Any]
-    ) -> Optional[str]:
-        """For a CONTRADICTED finding, add a test that provides evidence for the claim."""
-        claim = finding.get("agent_claim", "") or ""
-        desc = finding.get("description", "")
-
-        test_workspace = os.path.dirname(py_files[0]) if py_files else self.workspace
-        test_path = os.path.join(test_workspace, "test_evidence_for_claim.py")
-
-        if os.path.exists(test_path):
-            return None
-
-        module_names = [os.path.splitext(os.path.basename(f))[0] for f in py_files[:2]]
-        imports = "\n".join(
-            f"try:\n    import {m}\nexcept ImportError:\n    {m} = None" for m in module_names
-        )
-
-        test_content = f'''"""Evidence test generated to address contradicted claim.
-Claim: {claim[:200]}
-Context: {desc[:200]}
-
-This test provides a starting point for verifying the claim.
-Expand it with the specific evidence needed.
-"""
-{imports}
-
-def test_claim_verification():
-    """Verify the claim described in CONTRADICTED finding."""
-    # TODO: Replace with specific assertion that verifies: {claim[:100]}
-    # This is a placeholder. Implement the actual verification.
-    assert True, "Implement this test to verify the claim with evidence."
-'''
-        try:
-            with open(test_path, "w", encoding="utf-8") as f:
-                f.write(test_content)
-            return f"Created evidence test for contradicted claim: {os.path.basename(test_path)}"
-        except Exception:
-            return None
-
-    def _add_missing_test(self, py_files: list[str], finding: dict[str, Any]) -> Optional[str]:
-        """Add a targeted test for an identified coverage gap."""
-        desc = finding.get("description", "")
-        finding.get("suggested_action", "")
-
-        if not py_files:
-            return None
-
-        target = py_files[0]
-        module_name = os.path.splitext(os.path.basename(target))[0]
-
-        # Determine what kind of test to add
-        test_kind = "boundary"
-        if "none" in desc.lower() or "null" in desc.lower():
-            test_kind = "none_input"
-        elif "error" in desc.lower() or "exception" in desc.lower():
-            test_kind = "error_path"
-        elif "empty" in desc.lower():
-            test_kind = "empty_input"
-        elif "boundary" in desc.lower() or "edge" in desc.lower() or "limit" in desc.lower():
-            test_kind = "boundary"
-
-        test_path = os.path.join(os.path.dirname(target), f"test_{module_name}_{test_kind}.py")
-        if os.path.exists(test_path):
-            return None
-
-        test_templates = {
-            "none_input": f'''"""Test for None/null input handling — addresses observed coverage gap."""
-import pytest
-try:
-    from {module_name} import *
-except ImportError:
-    pass
-
-def test_{module_name}_rejects_none_input():
-    """Verify that None inputs are rejected with appropriate errors."""
-    # TODO: Replace with actual function call that should handle None
-    # Context: {desc[:120]}
-    with pytest.raises((TypeError, ValueError)):
-        raise TypeError("placeholder — implement with actual function call")
-''',
-            "error_path": f'''"""Test for error-path behavior — addresses observed coverage gap."""
-import pytest
-try:
-    from {module_name} import *
-except ImportError:
-    pass
-
-def test_{module_name}_handles_errors_correctly():
-    """Verify error-path behavior is correct."""
-    # TODO: Replace with actual error-triggering scenario
-    # Context: {desc[:120]}
-    with pytest.raises(Exception):
-        raise RuntimeError("placeholder — implement with actual error case")
-''',
-            "empty_input": f'''"""Test for empty input handling — addresses observed coverage gap."""
-import pytest
-try:
-    from {module_name} import *
-except ImportError:
-    pass
-
-def test_{module_name}_handles_empty_input():
-    """Verify behavior with empty inputs."""
-    # TODO: Replace with actual function call using empty input
-    # Context: {desc[:120]}
-    assert True, "placeholder — implement with actual empty-input assertion"
-''',
-            "boundary": f'''"""Boundary/edge-case tests — addresses observed coverage gap."""
-import pytest
-try:
-    from {module_name} import *
-except ImportError:
-    pass
-
-def test_{module_name}_boundary_values():
-    """Verify behavior at boundary and edge-case values."""
-    # TODO: Replace with actual boundary assertions
-    # Context: {desc[:120]}
-    assert True, "placeholder — implement with actual boundary assertions"
-''',
-        }
-
-        try:
-            with open(test_path, "w", encoding="utf-8") as f:
-                f.write(test_templates.get(test_kind, test_templates["boundary"]))
-            return f"Added {test_kind} test stub: {os.path.basename(test_path)}"
-        except Exception:
-            return None
-
     def _fix_silent_exception(self, py_files: list[str], finding: dict[str, Any]) -> Optional[str]:
         """Convert silent except: pass blocks to logging handlers."""
         finding.get("description", "")
@@ -426,7 +271,8 @@ def test_{module_name}_boundary_values():
             if not any(rel in r or os.path.basename(fpath) in r for r in refs):
                 continue
             try:
-                content = open(fpath, encoding="utf-8").read()
+                with open(fpath, encoding="utf-8") as fh:
+                    content = fh.read()
                 # Replace `except Exception:\n    pass` with logging
                 new_content = re.sub(
                     r"([ \t]*)(except\s+(?:Exception\s+as\s+\w+|Exception\s*|):\s*\n)([ \t]*)pass\s*\n",
@@ -527,14 +373,14 @@ def test_{module_name}_boundary_values():
                         modified = True
 
                     # Add font if typography critique
-                    if "typography" in desc or "font" in desc:
-                        if "google" not in content.lower() and "</head>" in content:
-                            content = content.replace(
-                                "</head>",
-                                '  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">\n</head>',
-                                1,
-                            )
-                            modified = True
+                    if (("typography" in desc or "font" in desc)
+                            and "google" not in content.lower() and "</head>" in content):
+                        content = content.replace(
+                            "</head>",
+                            '  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">\n</head>',
+                            1,
+                        )
+                        modified = True
 
                     # Fix password field type
                     if (
@@ -560,66 +406,6 @@ def test_{module_name}_boundary_values():
         return False
 
     # -----------------------------------------------------------------------
-    # Test Synthesis
-    # -----------------------------------------------------------------------
-
-    def _synthesize_basic_test(self, target_files: list[str]) -> Optional[str]:
-        """Synthesise an executable pytest suite for unverified workspace modules."""
-        if not target_files:
-            test_path = (
-                os.path.join(self.workspace, "test_workspace.py")
-                if os.path.isdir(self.workspace)
-                else os.path.join(os.path.dirname(self.workspace), "test_workspace.py")
-            )
-            with open(test_path, "w", encoding="utf-8") as f:
-                f.write(
-                    '"""Synthesised verification test suite."""\n\ndef test_workspace_load():\n    assert True\n'
-                )
-            return os.path.basename(test_path)
-
-        first = target_files[0]
-        module_name = os.path.splitext(os.path.basename(first))[0]
-        test_path = os.path.join(os.path.dirname(first), f"test_{module_name}.py")
-
-        try:
-            content = open(first, encoding="utf-8").read()
-            tree = ast.parse(content)
-            functions = [
-                n.name
-                for n in ast.walk(tree)
-                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
-                and not n.name.startswith("_")
-            ]
-            classes = [n.name for n in ast.walk(tree) if isinstance(n, ast.ClassDef)]
-
-            lines = [
-                '"""Synthesised verification test suite for behavioral properties."""',
-                "import pytest",
-                f"from {module_name} import *",
-                "",
-            ]
-
-            if functions:
-                for func in functions[:4]:
-                    lines += [f"def test_{func}_callable():", f"    assert callable({func})", ""]
-            elif classes:
-                for cls in classes[:4]:
-                    lines += [
-                        f"def test_{cls}_instantiation():",
-                        f"    obj = {cls}()",
-                        "    assert obj is not None",
-                        "",
-                    ]
-            else:
-                lines += [f"def test_{module_name}_imported():", "    assert True", ""]
-
-            with open(test_path, "w", encoding="utf-8") as f:
-                f.write("\n".join(lines))
-            return os.path.basename(test_path)
-        except Exception:
-            return None
-
-    # -----------------------------------------------------------------------
     # Task Spec Creation
     # -----------------------------------------------------------------------
 
@@ -628,7 +414,7 @@ def test_{module_name}_boundary_values():
 
         spec = {
             "name": os.path.basename(self.workspace),
-            "version": "1.0.2",
+            "version": "1.0",
             "requirements": [
                 {
                     "id": "REQ-001",

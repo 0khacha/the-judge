@@ -3,6 +3,7 @@ import shutil
 import tempfile
 import time
 
+from the_judge._version import __version__
 from the_judge.integrations.agent_adapter import AgentAdapter
 
 BUGGY_CACHE_CODE = '''"""LRU Cache with TTL - Initial AI Agent Implementation (Buggy Boundary Condition)."""
@@ -92,9 +93,9 @@ def test_cache_capacity():
 
 
 def run_demo() -> None:
-    """Run interactive 60-second public demonstration of The Judge v1.0.2 verification layer."""
+    """Run interactive 60-second public demonstration of The Judge verification layer."""
     print("=" * 68)
-    print("  THE JUDGE v1.0.2 — INDEPENDENT VERIFICATION LAYER DEMO")
+    print(f"  THE JUDGE v{__version__} — INDEPENDENT VERIFICATION LAYER DEMO")
     print("  Scenario: Real-Time Coding-Agent Verification & Auto-Repair Loop")
     print("=" * 68)
     print()

@@ -7,15 +7,15 @@ drop the package itself; `python -m build` builds the wheel from the sdist, so t
 wheel would then be empty.
 """
 
-import os
 import subprocess
 import sys
 import tarfile
 import zipfile
 
 import pytest
+from audit_helpers import repo_root
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO = repo_root()
 GENERATED = ("PKG-INFO", "setup.cfg", "the_judge_verify.egg-info/")
 REQUIRED = ("the_judge/__init__.py", "the_judge/api.py", "the_judge/core/sandbox.py",
             "the_judge/integrations/cli.py", "judge/__init__.py")

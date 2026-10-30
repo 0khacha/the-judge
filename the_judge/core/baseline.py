@@ -18,7 +18,7 @@ import shutil
 import subprocess
 from typing import Any, Optional
 
-from .test_discovery import discover_workspace_tests, read_pytest_config
+from .test_discovery import collects, discover_workspace_tests, read_pytest_config
 
 _SKIP_MARKERS = ("skip", "skipif", "xfail")
 
@@ -31,6 +31,9 @@ def _git(cwd: str, *args: str) -> Optional[str]:
     try:
         proc = subprocess.run(
             ["git", *args], cwd=cwd, capture_output=True, text=True,
+            # git prints file contents (`git show`) as stored, i.e. UTF-8 source, not in
+            # the locale code page; decoding them as cp1252 garbled non-ASCII asserts.
+            encoding="utf-8", errors="replace",
             stdin=subprocess.DEVNULL, timeout=30,
         )
     except (OSError, subprocess.TimeoutExpired):
@@ -111,9 +114,12 @@ def compare_tests_to_baseline(abs_dir: str, ref: Optional[str] = None) -> dict[s
 
     patterns = read_pytest_config(abs_dir)["python_files"]
     listing = _git(top, "ls-tree", "-r", "--name-only", commit.strip(), "--", prefix or ".") or ""
+    # Only files pytest would collect: tracked test_*.py outside testpaths or under
+    # norecursedirs (fixtures, corpora) are never run, so they cannot be "removed".
     baseline_files = [
         p for p in listing.splitlines()
         if p.endswith(".py") and any(fnmatch.fnmatch(p.rsplit("/", 1)[-1], pat) for pat in patterns)
+        and collects(abs_dir, p[len(prefix):])
     ]
 
     current: dict[str, dict[str, Any]] = {}

@@ -41,7 +41,7 @@ def extract_requirements(text: str, source: str = "TASK.md", start: int = 1) -> 
             current["text"] += " " + line.strip()       # wrapped continuation line
         else:
             current = None
-    out = []
+    out: list[dict[str, Any]] = []
     for item in reqs:
         if len(item["text"]) >= MIN_LENGTH:
             out.append({"id": f"R{start + len(out)}", "text": item["text"], "source": source})
@@ -104,7 +104,8 @@ def check(reqs: list[dict[str, Any]], test_sources: dict[str, str],
     passed_base = {p.split("[", 1)[0] for p in passed}
     failed_base = {f.split("[", 1)[0] for f in failed}
     cover = covered_ids(test_sources)
-    covered, uncovered = [], []
+    covered: list[str] = []
+    uncovered: list[str] = []
     for req in reqs:
         tests = [t for t in cover.get(req["id"], []) if t in passed_base and t not in failed_base]
         (covered if tests else uncovered).append(req["id"])

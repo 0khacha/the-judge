@@ -304,7 +304,8 @@ class CritiqueEngine:
                     py_count += 1
                     fpath = os.path.join(root, fname)
                     try:
-                        content = open(fpath, encoding="utf-8", errors="ignore").read(4096).lower()
+                        with open(fpath, encoding="utf-8", errors="ignore") as fh:
+                            content = fh.read(4096).lower()
                         if any(kw in content for kw in ("argparse", "click", "typer", "__main__")):
                             has_cli = True
                         if any(
@@ -353,7 +354,8 @@ class CritiqueEngine:
             return ProjectDomain.DATA_SCIENCE
         if ext == ".py":
             try:
-                content = open(filepath, encoding="utf-8", errors="ignore").read(4096).lower()
+                with open(filepath, encoding="utf-8", errors="ignore") as fh:
+                    content = fh.read(4096).lower()
                 if any(k in content for k in ("argparse", "click", "__main__")):
                     return ProjectDomain.CLI_SCRIPT
                 if any(k in content for k in ("pandas", "sklearn", "torch")):
@@ -401,8 +403,8 @@ class CritiqueEngine:
         py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
         source_cache: dict[str, str] = {}
         for fpath in py_files:
-            with contextlib.suppress(Exception):
-                source_cache[fpath] = open(fpath, encoding="utf-8", errors="ignore").read()
+            with contextlib.suppress(Exception), open(fpath, encoding="utf-8", errors="ignore") as fh:
+                source_cache[fpath] = fh.read()
 
         # --- Q1 / Q9: What is wrong? Evidence-backed test failures -----------
         findings.extend(self._findings_from_test_failures(ground_truth, next_id))
@@ -630,7 +632,8 @@ class CritiqueEngine:
             py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
             for fpath in py_files:
                 try:
-                    content = open(fpath, encoding="utf-8", errors="ignore").read()
+                    with open(fpath, encoding="utf-8", errors="ignore") as fh:
+                        content = fh.read()
                     rel = os.path.relpath(fpath, workspace)
                     findings.extend(self._analyse_python_file(content, rel, obs_id, domain))
                 except Exception:
@@ -640,7 +643,8 @@ class CritiqueEngine:
             html_files = self._collect_source_files(workspace, (".html", ".htm"))
             for fpath in html_files:
                 try:
-                    content = open(fpath, encoding="utf-8", errors="ignore").read()
+                    with open(fpath, encoding="utf-8", errors="ignore") as fh:
+                        content = fh.read()
                     rel = os.path.relpath(fpath, workspace)
                     findings.extend(self._analyse_html_file(content, rel, obs_id))
                 except Exception:
@@ -895,7 +899,8 @@ class CritiqueEngine:
             py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
             for fpath in py_files:
                 try:
-                    content = open(fpath, encoding="utf-8", errors="ignore").read(8192).lower()
+                    with open(fpath, encoding="utf-8", errors="ignore") as fh:
+                        content = fh.read(8192).lower()
                     if (
                         "threading" in content
                         or "asyncio" in content

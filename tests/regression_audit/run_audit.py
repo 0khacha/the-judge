@@ -43,7 +43,6 @@ import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Optional
 
 AUDIT_DIR = Path(__file__).resolve().parent
 TASKS_DIR = AUDIT_DIR / "tasks"
@@ -58,13 +57,13 @@ class Row:
     truth: str                # "correct" or "wrong" (hidden test result)
     passes_visible: bool
     git_baseline: bool
-    decision: Optional[str]   # PASS / FAIL / ABSTAIN / ERROR / None
+    decision: str | None   # PASS / FAIL / ABSTAIN / ERROR / None
     score: float
     blocking: list
     error: str = ""
 
 
-def _pytest(dirpath: Path, extra_env: Optional[dict] = None) -> bool:
+def _pytest(dirpath: Path, extra_env: dict | None = None) -> bool:
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", PYTHONPATH=str(dirpath))
     if extra_env:
         env.update(extra_env)
@@ -153,7 +152,7 @@ def _judge_env(no_tools: bool) -> dict:
     return env
 
 
-def _run_judge(ws: Path, judge_src: Optional[str], no_tools: bool) -> tuple:
+def _run_judge(ws: Path, judge_src: str | None, no_tools: bool) -> tuple:
     src = judge_src or str(REPO_ROOT)
     launcher = (
         "import sys; sys.path.insert(0, sys.argv.pop(1)); "
@@ -193,7 +192,7 @@ def _evaluate(task_dir: Path, entry: dict, judge_src, no_tools, use_git: bool) -
                use_git and has_baseline, decision, score, blocking, err)
 
 
-def _jobs(task_filter: Optional[str]):
+def _jobs(task_filter: str | None):
     for task_dir in sorted(p for p in TASKS_DIR.iterdir() if p.is_dir()):
         if task_filter and task_filter not in task_dir.name:
             continue

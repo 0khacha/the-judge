@@ -1,7 +1,6 @@
 import os
 
 import pytest
-
 from safe_paths import safe_join
 
 

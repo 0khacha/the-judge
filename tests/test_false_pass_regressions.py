@@ -9,7 +9,6 @@ These tests ensure that the following scenarios never silently produce DECISION:
 
 import ast
 import os
-import sys
 import tempfile
 import textwrap
 
@@ -340,8 +339,8 @@ class TestP3CollectionTamperingNoContract:
         )
 
         # Directly test the evidence capture manifest
-        from the_judge.core.property_engine import generate_property_tests
         from the_judge.core.behavior_engine import BehaviorEngine
+        from the_judge.core.property_engine import generate_property_tests
 
         # Simulate what capture_evidence does when building expected_challenges
         abs_dir = os.path.abspath(workspace)
@@ -370,9 +369,9 @@ class TestP3CollectionTamperingNoContract:
             try:
                 tree = _ast.parse(content, filename=vt)
                 for node in _ast.walk(tree):
-                    if isinstance(node, _ast.FunctionDef) and node.name.startswith("test_"):
-                        if node.name not in expected_challenges:
-                            expected_challenges.append(node.name)
+                    if (isinstance(node, _ast.FunctionDef) and node.name.startswith("test_")
+                            and node.name not in expected_challenges):
+                        expected_challenges.append(node.name)
             except Exception:
                 pass
 

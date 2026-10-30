@@ -4,8 +4,9 @@ import time
 from pathlib import Path
 from typing import Any, Optional
 
+from the_judge._version import __version__
 from the_judge.core.decision import Finding, VerificationResult
-from the_judge.core.evidence import capture_evidence
+from the_judge.core.evidence import DEFAULT_TEST_TIMEOUT, capture_evidence
 from the_judge.core.score_engine import evaluate
 
 
@@ -84,6 +85,7 @@ def verify(
     record_history: bool = False,
     mutation: bool = True,
     requirements: bool = True,
+    timeout: int = DEFAULT_TEST_TIMEOUT,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
     and adversarial integrity gates.
@@ -109,6 +111,8 @@ def verify(
             the verdict is ABSTAIN and next_actions names the uncaught ones.
         requirements: every rule of TASK.md / SPEC.md / REQUIREMENTS.md must be named
             (R1, R2, ...) by a passing test, else ABSTAIN (see core/checklist.py).
+        timeout: seconds the sandboxed test run may take; a run stopped at the limit
+            is ABSTAIN with a timeout note (default DEFAULT_TEST_TIMEOUT).
 
     Returns:
         VerificationResult containing structured decision, findings, trust profile, and provenance.
@@ -120,7 +124,8 @@ def verify(
     ground_truth = (
         _ground_truth
         if _ground_truth is not None
-        else capture_evidence(workspace_path, task_spec=task_spec, baseline=baseline)
+        else capture_evidence(workspace_path, task_spec=task_spec, baseline=baseline,
+                              timeout=timeout)
     )
 
     # 2. Build Agent Findings / Claims
@@ -135,19 +140,16 @@ def verify(
         r_id = req.get("id", "").lower().replace("-", "_")
         if r_id and r_id in t_lower:
             return True
-        for prop in req.get("properties", []):
-            if prop.lower() in t_lower:
-                return True
-        return False
+        return any(prop.lower() in t_lower for prop in req.get("properties", []))
 
     if task_spec and "requirements" in task_spec:
         for idx, req in enumerate(task_spec.get("requirements", []), 1):
             req_id = req.get("id", f"REQ-{idx:03d}")
             req_desc = req.get("description", "")
-            
+
             matched_failed = [t for t in failed_tests if _matches_requirement(req, t)]
             matched_passed = [t for t in passed_tests if _matches_requirement(req, t)]
-            
+
             if matched_failed:
                 req_status = "fail"
                 ev_ref = matched_failed[0]
@@ -157,7 +159,7 @@ def verify(
             else:
                 req_status = "unverified"
                 ev_ref = ""
-                
+
             req_list.append(
                 {
                     "id": req_id,
@@ -483,7 +485,7 @@ def verify(
     provenance = {
         "workspace_path": workspace_path,
         "workspace_hash": workspace_hash,
-        "judge_version": "v1.0.2",
+        "judge_version": f"v{__version__}",
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "evidence_level": ev_cov.get("evidence_level", 0),
         "total_tests": ev_cov.get("total_tests", 0),
@@ -526,7 +528,8 @@ def freeze(workspace: str) -> dict[str, Any]:
     they can be covered before the implementation is written.
     """
     from the_judge.core import checklist
-    from the_judge.core.independence import _current_tests, _load, freeze as do_freeze
+    from the_judge.core.independence import _current_tests, _load
+    from the_judge.core.independence import freeze as do_freeze
 
     result = do_freeze(workspace)
     abs_dir = os.path.abspath(workspace)
@@ -550,6 +553,7 @@ def improve(
     task_spec: Optional[dict[str, Any]] = None,
     quality_evaluator: Optional[Any] = None,
     require_evidence_sufficiency: bool = True,
+    apply: bool = False,
 ) -> dict[str, Any]:
     """Run the adversarial improvement loop on the target workspace.
 
@@ -573,13 +577,18 @@ def improve(
 
     Args:
         workspace: Path to workspace directory or file.
-        repair_func: Custom agent improvement callback. Defaults to built-in AutoImprover.
+        repair_func: Custom agent improvement callback. Without one, the call is a
+            single read-only review round unless ``apply`` is True.
         max_rounds: Maximum improvement rounds (default: 5).
         target_score: Target quality score (0.0 to 100.0, default: 90.0).
         task_spec: Task specification contract (optional).
         quality_evaluator: Custom quality evaluation function (optional).
         require_evidence_sufficiency: If True (default), loop continues if evidence
             is "insufficient" even when score target is met.
+        apply: Only used without ``repair_func``. If True, the built-in AutoImprover
+            edits files in the workspace between rounds. If False (default), nothing
+            is modified: one round is evaluated, the outcome is "REVIEW_ONLY" unless
+            it already passes, and ``suggestions`` lists the open critique findings.
 
     Returns:
         Dict containing multi-round history, audit trail, score progression,
@@ -588,6 +597,7 @@ def improve(
     from the_judge.integrations.auto_improver import AutoImprover
     from the_judge.integrations.repair_loop import AgentRepairLoop
 
+    review_only = repair_func is None and not apply
     if repair_func is None:
         improver = AutoImprover(workspace)
 
@@ -595,16 +605,28 @@ def improve(
             return improver.improve_workspace(feedback)
 
     loop = AgentRepairLoop(
-        max_rounds=max_rounds,
+        max_rounds=1 if review_only else max_rounds,
         quality_threshold=target_score,
         quality_evaluator=quality_evaluator,
         require_evidence_sufficiency=require_evidence_sufficiency,
     )
-    return loop.run_repair_loop(
+    result = loop.run_repair_loop(
         workspace=workspace,
         agent_repair_func=repair_func,
         task_spec=task_spec,
     )
+    if review_only:
+        history = result.get("history") or [{}]
+        critique_dict = history[-1].get("critique") or {}
+        result["suggestions"] = critique_dict.get("improvement_priority", [])
+        if result.get("outcome") != "PASS":
+            result["outcome"] = "REVIEW_ONLY"
+            result["reason"] = (
+                "Read-only review: the workspace was not modified. Act on the suggestions, "
+                "pass a repair_func, or use apply=True (CLI: --apply) to let the built-in "
+                "improver edit files."
+            )
+    return result
 
 
 def _compute_workspace_hash(workspace_path: str) -> str:

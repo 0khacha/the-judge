@@ -63,6 +63,10 @@ action per uncaught bug. Tests you add for them do not need to be frozen. Write 
 from the specification, not from what the code currently returns -- that is how they
 find bugs. `--no-mutation` skips this step.
 
+Time limit: the sandboxed test run may take 300 s. A run stopped at the limit is ABSTAIN
+with a `raise_timeout` action; raise it with `--timeout N` only if the suite is
+legitimately slow -- a hang in the code under test is a bug to fix.
+
 ### Adaptive Evaluation Engine
 
 The Judge automatically adapts its evaluation method based on workspace classification:
@@ -130,7 +134,8 @@ Follow `next_actions` in order; `findings[]` holds the details. `loop` compares 
 ### Quick reference
 
 ```bash
-judge improve .                # Continuous multi-round improvement engine (Build -> Evaluate -> Improve)
+judge improve .                # Read-only review: critique + suggestions, changes no files
+judge improve . --apply        # Let the built-in improver edit files between rounds
 judge verify .                 # Human-readable evaluation report
 judge verify . --json          # Machine-readable JSON for agents
 judge freeze .                 # Freeze the current tests (do this before implementing)

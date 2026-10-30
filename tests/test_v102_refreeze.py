@@ -9,6 +9,7 @@ implementation; a test changed after the code still is not.
 """
 
 from audit_helpers import judge, write
+
 from the_judge.api import freeze
 from the_judge.core.independence import classify
 

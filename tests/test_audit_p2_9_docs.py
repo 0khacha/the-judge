@@ -13,8 +13,9 @@ import re
 import subprocess
 
 import pytest
+from audit_helpers import repo_root
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO = repo_root()
 GIT_INSTALL = "git+https://github.com/0khacha/the-judge.git"
 # `pip install [flags such as --upgrade / -U] the-judge[extras]`, i.e. the other package.
 PYPI_INSTALL = re.compile(

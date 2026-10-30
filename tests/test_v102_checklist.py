@@ -8,6 +8,7 @@ can write those tests before the implementation, where they count as independent
 """
 
 from audit_helpers import write
+
 from the_judge.api import freeze, verify
 from the_judge.core.checklist import covered_ids, extract_requirements
 

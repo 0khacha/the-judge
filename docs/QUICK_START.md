@@ -62,10 +62,13 @@ Action: fix and re-verify.
 For projects that need iterative refinement:
 
 ```bash
-judge improve .
+judge improve .            # read-only review
+judge improve . --apply    # let the built-in improver edit files
 ```
 
-This runs multiple rounds of evaluation and improvement until your code reaches high quality.
+By default this is a read-only review: one round of evaluation and critique, with the
+findings listed as suggestions; no file is changed. `judge improve . --apply` lets the
+built-in improver edit files between rounds (it never writes tests).
 
 ## Decision Types
 

@@ -14,7 +14,6 @@ import json
 import os
 import sys
 
-
 # Patterns that indicate a code-changing or test-related command
 _CODE_PATTERNS = (
     "pytest", "python -m pytest", "py -m pytest",
@@ -42,15 +41,15 @@ def _is_code_changing_command(command: str) -> bool:
             return True
 
     # Writing to files (echo/cat/tee redirection)
-    if ">" in command and any(ext in command for ext in _CODE_EXTENSIONS):
-        return True
-
-    return False
+    return bool(">" in command and any(ext in command for ext in _CODE_EXTENSIONS))
 
 
 def run_hook() -> int:
     """Main hook entry point. Returns exit code (0 or 1)."""
     try:
+        from the_judge.integrations.cli import use_utf8_output
+
+        use_utf8_output()
         raw = sys.stdin.read()
         if not raw.strip():
             return 0
@@ -89,8 +88,8 @@ def run_hook() -> int:
                     file=sys.stderr,
                 )
                 for finding in result.findings:
-                    desc = finding.get("description", "")
-                    focus = finding.get("suggested_focus", "")
+                    desc = finding.description
+                    focus = finding.suggested_focus
                     print(f"  - {desc}", file=sys.stderr)
                     if focus:
                         print(f"    Focus: {focus}", file=sys.stderr)

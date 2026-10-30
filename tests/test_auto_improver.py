@@ -18,7 +18,8 @@ def test_auto_improver_basic():
         res = improver.improve_workspace({"decision": "ABSTAIN", "findings": []})
 
         assert res["improved"] is True
-        assert any("test" in change.lower() for change in res["changes"])
+        # The improver never writes tests: they would not be independent evidence.
+        assert not [f for f in os.listdir(temp_dir) if f.startswith("test_")]
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 

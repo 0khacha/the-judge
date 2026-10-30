@@ -28,6 +28,7 @@ import time
 from collections.abc import Mapping
 from typing import Any, Callable, Optional, Union
 
+from the_judge._version import __version__
 from the_judge.api import verify
 from the_judge.core.decision import VerificationResult
 from the_judge.core.evidence import capture_evidence
@@ -236,7 +237,7 @@ class AgentRepairLoop:
                 "round_number": round_idx,
                 "workspace_hash": verification_result.provenance.get("workspace_hash", ""),
                 "implementation_hash": implementation_hash,
-                "judge_version": "v4.0",
+                "judge_version": f"v{__version__}",
                 "is_visual": is_visual,
                 "target_visual_file": target_visual_file if is_visual else None,
                 "screenshot": current_screenshot,
@@ -427,9 +428,9 @@ class AgentRepairLoop:
             return False, "quality evaluator has not passed"
 
         # Condition 6: Evidence sufficiency (optional enforcement)
-        if self.require_evidence_sufficiency:
-            if critique_result.evidence_sufficiency.level == "insufficient":
-                return False, "evidence is insufficient — independent verification required"
+        if (self.require_evidence_sufficiency
+                and critique_result.evidence_sufficiency.level == "insufficient"):
+            return False, "evidence is insufficient — independent verification required"
 
         return True, "all_conditions_met"
 

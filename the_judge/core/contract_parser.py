@@ -5,7 +5,7 @@ AMBIGUOUS_KEYWORDS = ["fast", "robust", "secure", "efficient", "optimal", "scala
 
 
 class ContractParser:
-    """Natural Language Contract Parser & Requirement Extractor for The Judge v4.2."""
+    """Natural Language Contract Parser & Requirement Extractor."""
 
     def parse_natural_language_spec(self, spec_text: str) -> dict[str, Any]:
         """Parses natural language task specifications into explicit and inferred requirement candidates.

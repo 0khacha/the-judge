@@ -125,9 +125,9 @@ class _Mutator(ast.NodeTransformer):
 
     def visit_Constant(self, node: ast.Constant) -> ast.AST:
         value = node.value
-        if isinstance(value, int) and not isinstance(value, bool):
-            if self._site(node, f"{value} -> {value + 1}"):
-                return ast.copy_location(ast.Constant(value=value + 1), node)
+        if (isinstance(value, int) and not isinstance(value, bool)
+                and self._site(node, f"{value} -> {value + 1}")):
+            return ast.copy_location(ast.Constant(value=value + 1), node)
         return node
 
 

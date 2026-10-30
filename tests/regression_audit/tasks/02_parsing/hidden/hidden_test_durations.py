@@ -1,5 +1,4 @@
 import pytest
-
 from durations import parse_duration
 
 

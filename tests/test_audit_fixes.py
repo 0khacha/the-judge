@@ -12,13 +12,10 @@ Tests for:
 
 import inspect
 
-import pytest
-
 from the_judge.api import verify
 from the_judge.core.evidence import parse_pytest_output
 from the_judge.core.sandbox import SandboxRunner
 from the_judge.core.score_engine import evaluate
-
 
 # ---------------------------------------------------------------------------
 # P0 — Requirement↔evidence mapping
@@ -83,7 +80,7 @@ class TestRequirementEvidenceMapping:
                 }
             },
         }
-        result = verify(
+        verify(
             workspace=".",
             task_spec=task_spec,
             _ground_truth=ground_truth,
@@ -319,7 +316,6 @@ class TestResultParsing:
 
 class TestSandboxIsolation:
     def test_sandbox_temp_dir_is_outside_workspace(self, tmp_path):
-        import os
         workspace = str(tmp_path)
         # P2-8: the subprocess cwd is the workspace (neutral, like a normal pytest
         # run); what must be outside the workspace is where tests are collected.
@@ -348,7 +344,7 @@ class TestSandboxIsolation:
         workspace = str(tmp_path)
         with open(os.path.join(workspace, "conftest.py"), "w") as f:
             f.write("def pytest_collection_modifyitems(session, config, items):\n    items.clear()\n")
-            
+
         test_code = "def test_actually_runs():\n    pass\n"
         res = SandboxRunner.execute_in_anonymous_sandbox(workspace, [("test_real.py", test_code)])
         assert "test_actually_runs" in res["passed"]
@@ -356,33 +352,34 @@ class TestSandboxIsolation:
 
 class TestProvenanceStructural:
     def test_structural_provenance_rejects_target_sneaky_test(self, tmp_path):
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import MagicMock, patch
+
         from the_judge.core.evidence import capture_evidence
-        
+
         with patch("the_judge.core.evidence.generate_property_tests") as mock_gen_props, \
              patch("the_judge.core.evidence.BehaviorEngine") as mock_beh_eng_cls, \
              patch("the_judge.core.evidence.SandboxRunner.execute_in_anonymous_sandbox") as mock_sandbox, \
              patch("the_judge.core.evidence.run_command") as mock_run_cmd, \
              patch("os.listdir") as mock_listdir, \
              patch("builtins.open") as mock_open:
-            
+
             # Setup mock for property tests
             mock_cand = MagicMock()
             mock_cand.challenge_code = "def test_prop_judge_1():\n    pass\n"
             mock_cand.confidence = "HIGH"
             mock_gen_props.return_value = [mock_cand]
-            
+
             # Setup mock for behavior engine
             mock_beh_eng = MagicMock()
             mock_beh_eng_cls.return_value = mock_beh_eng
             mock_probe = MagicMock()
             mock_probe.executable_code = "def test_behavior_judge_2():\n    pass\n"
             mock_beh_eng.generate_behavioral_probes.return_value = [mock_probe]
-            
+
             # Mock workspace dir visible tests
             mock_listdir.return_value = ["test_workspace.py"]
             mock_open.return_value.__enter__.return_value.read.return_value = "def test_behavior_sneaky():\n    pass\n"
-            
+
             # Setup mock for sandbox
             mock_sandbox.return_value = {
                 "passed": ["test_prop_judge_1", "test_behavior_judge_2", "test_behavior_sneaky"],
@@ -392,18 +389,18 @@ class TestProvenanceStructural:
                 "stderr": "",
                 "file_tampered": False
             }
-            
+
             # Setup mock for run_command (type checking and linting)
             mock_run_cmd.return_value = {"exit_code": 0, "stdout": "", "stderr": ""}
-            
+
             evidence = capture_evidence(str(tmp_path))
-            
+
             provenance = evidence["test_provenance"]
-            
+
             # test_prop_judge_1 and test_behavior_judge_2 should be judge_challenge_test
             assert provenance["test_prop_judge_1"]["source"] == "judge_challenge_test"
             assert provenance["test_behavior_judge_2"]["source"] == "judge_challenge_test"
-            
+
             # test_behavior_sneaky should NOT be judge_challenge_test, despite "behavior_" in its name
             assert provenance["test_behavior_sneaky"]["source"] == "public_visible_test"
 
@@ -419,11 +416,11 @@ class TestDiscoveryIsolation:
         """Verify that discover_callables() does NOT execute code (no SystemExit)."""
         malicious = tmp_path / "malicious.py"
         malicious.write_text("import sys\nsys.exit('pwned')\n")
-        
+
         from the_judge.core.behavior_engine import BehaviorEngine
         engine = BehaviorEngine()
         result = engine.discover_callables(str(tmp_path))
-        
+
         # Should succeed and return empty or ignore
         assert len(result) == 0
 
@@ -431,15 +428,15 @@ class TestDiscoveryIsolation:
         """Verify the Judge's sys.path is not modified after discover_callables() returns."""
         modifying = tmp_path / "modifier.py"
         modifying.write_text("import sys\nsys.path.append('evil_path')\n")
-        
+
         from the_judge.core.behavior_engine import BehaviorEngine
         engine = BehaviorEngine()
-        
+
         import sys
         old_path = list(sys.path)
-        
+
         engine.discover_callables(str(tmp_path))
-        
+
         assert sys.path == old_path
 
     def test_discovery_extracts_metadata(self, tmp_path):
@@ -458,18 +455,18 @@ class MyClass:
         from the_judge.core.behavior_engine import BehaviorEngine
         engine = BehaviorEngine()
         result = engine.discover_callables(str(tmp_path))
-        
+
         assert len(result) == 2
-        
+
         funcs = [r for r in result if r['type'] == 'function']
         classes = [r for r in result if r['type'] == 'class']
-        
+
         assert len(funcs) == 1
         assert funcs[0]['name'] == 'my_func'
         assert len(funcs[0]['parameters']) == 2
         assert funcs[0]['parameters'][0].name == 'a'
         assert funcs[0]['parameters'][0].annotation == 'int'
-        
+
         assert len(classes) == 1
         assert classes[0]['name'] == 'MyClass'
         assert 'my_method' in classes[0]['methods']

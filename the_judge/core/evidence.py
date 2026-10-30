@@ -1,4 +1,4 @@
-"""Ground Truth Evidence Extractor for The Judge v4.0."""
+"""Ground Truth Evidence Extractor."""
 
 import ast as _ast_module
 import json
@@ -12,19 +12,20 @@ import uuid
 from typing import Any, Optional
 
 from .baseline import compare_tests_to_baseline
+from .behavior_engine import BehaviorEngine
 from .hardcoding import detect as detect_hardcoding
 from .independence import classify as classify_independence
 from .independence import source_files as implementation_files
-from .behavior_engine import BehaviorEngine
 from .property_engine import generate_property_tests, untriggered_probes
 from .sandbox import SandboxRunner
 from .test_discovery import (
+    data_files,
     discover_workspace_tests,
     import_roots,
+    read_pytest_config,
     support_files,
     workspace_module_names,
 )
-
 
 
 def test_base_name(name: str) -> str:
@@ -100,13 +101,12 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
             for alias in node.names:
                 if alias.name.split(".")[0] in workspace_modules:
                     imported_names.add(alias.asname or alias.name.split(".")[0])
-        elif isinstance(node, _ast_module.ImportFrom):
-            if node.module and any(
-                node.module == m or node.module.startswith(m + ".")
-                for m in workspace_modules
-            ):
-                for alias in node.names:
-                    imported_names.add(alias.asname or alias.name)
+        elif isinstance(node, _ast_module.ImportFrom) and node.module and any(
+            node.module == m or node.module.startswith(m + ".")
+            for m in workspace_modules
+        ):
+            for alias in node.names:
+                imported_names.add(alias.asname or alias.name)
 
     # All names that could reference target code
     target_names = workspace_modules | imported_names
@@ -183,6 +183,7 @@ def run_command(cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None) 
             stdin=subprocess.DEVNULL,
             capture_output=True,
             text=True,
+            errors="replace",
             timeout=60,
         )
         return {
@@ -268,10 +269,12 @@ def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> dict[str, A
                     xml_str += line + "\n"
                 if in_xml and line.strip() == "</testsuites>":
                     break
-            
+
             tree = ET.fromstring(xml_str)
             for testcase in tree.findall('.//testcase'):
                 name = testcase.get('name')
+                if not name:
+                    continue
                 if testcase.find('failure') is not None or testcase.find('error') is not None:
                     if name not in failed_tests:
                         failed_tests.append(name)
@@ -280,7 +283,7 @@ def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> dict[str, A
                         passed_tests.append(name)
         except Exception:
             pass
-            
+
     if not passed_tests and not failed_tests:
         for line in combined.splitlines():
             line = line.strip()
@@ -307,16 +310,22 @@ def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> dict[str, A
     }
 
 
+# Seconds the sandboxed pytest run (workspace tests + probes) may take.
+DEFAULT_TEST_TIMEOUT = 300
+
+
 def capture_evidence(
     workspace_dir: str,
     output_file: Optional[str] = None,
     task_spec: Optional[dict[str, Any]] = None,
     baseline: Optional[str] = None,
+    timeout: int = DEFAULT_TEST_TIMEOUT,
 ) -> dict[str, Any]:
     """Capture ground truth evidence from workspace_dir.
 
     baseline: git ref the workspace tests are compared against for tampering
         (default HEAD when the workspace is a git repository).
+    timeout: seconds the sandboxed test run may take before it is stopped.
     """
     abs_dir = os.path.abspath(workspace_dir)
     # Resolve the baseline first so an unusable explicit --baseline fails fast.
@@ -371,9 +380,9 @@ def capture_evidence(
         try:
             tree = _ast.parse(content, filename=vt)
             for node in _ast.walk(tree):
-                if isinstance(node, _ast.FunctionDef) and node.name.startswith("test_"):
-                    if node.name not in expected_challenges:
-                        expected_challenges.append(node.name)
+                if (isinstance(node, _ast.FunctionDef) and node.name.startswith("test_")
+                        and node.name not in expected_challenges):
+                    expected_challenges.append(node.name)
         except Exception:
             pass  # Unparseable file — skip manifest tracking for it
 
@@ -382,9 +391,12 @@ def capture_evidence(
         abs_dir,
         test_scripts=test_scripts,
         pytest_args=["-vv"],
-        timeout=30,
+        timeout=timeout,
         support_files=support,
         import_roots=import_roots(abs_dir),
+        data_files=[(os.path.join(suite_dir, rel), os.path.join(abs_dir, rel))
+                    for rel in data_files(abs_dir, visible_tests)],
+        norecursedirs=read_pytest_config(abs_dir)["norecursedirs"],
     )
 
     passed_tests = sandbox_res["passed"]
@@ -397,14 +409,18 @@ def capture_evidence(
     # function name, so a function counts as executed when any case of it ran.
     all_executed = {test_base_name(t) for t in (*passed_tests, *failed_tests, *skipped_tests)}
     runner_error = sandbox_res.get("runner_error")
-    # Nothing ran at all when the runner failed to start: nothing is "missing".
-    missing_challenges = [] if runner_error else [
+    timed_out = bool(sandbox_res.get("timed_out"))
+    # Nothing ran at all when the runner failed to start, and a run stopped at the time
+    # limit never reported its results: in neither case is a test "missing".
+    missing_challenges = [] if runner_error or timed_out else [
         ch for ch in expected_challenges if ch not in all_executed
     ]
 
     test_suite_data = {
         "exit_code": sandbox_res["exit_code"],
         "runner_error": runner_error,
+        "timed_out": timed_out,
+        "timeout_seconds": timeout,
         # Assertion message per failing test (what was expected vs. observed).
         "errors": sandbox_res.get("failure_messages", {}),
         # Tests that raised but were reported as passed by some plugin/conftest.

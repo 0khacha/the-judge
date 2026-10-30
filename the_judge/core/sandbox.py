@@ -1,4 +1,4 @@
-"""Trusted Sandbox & Execution Subprocess Isolation Protocol for The Judge v4.0.
+"""Trusted Sandbox & Execution Subprocess Isolation Protocol.
 
 Establishes a strict trust boundary between:
   TRUSTED: Judge controller, Evidence engine, Score engine, Evaluator
@@ -14,6 +14,10 @@ import tempfile
 import uuid
 from typing import Any, Optional
 
+# pytest's own norecursedirs default, kept when workspace patterns are added.
+_PYTEST_DEFAULT_NORECURSE = [
+    "*.egg", ".*", "_darcs", "build", "CVS", "dist", "node_modules", "venv", "{arch}",
+]
 
 # Appended to the sandbox's root conftest. A test phase that raised (other than
 # pytest.skip) can never legitimately be reported as passed; if a plugin or workspace
@@ -110,6 +114,9 @@ class SandboxRunner:
                 stdin=subprocess.DEVNULL,
                 capture_output=True,
                 text=True,
+                # Target output may hold bytes the locale code page cannot decode; never
+                # let that lose the captured output.
+                errors="replace",
                 timeout=timeout,
             )
             return {
@@ -145,6 +152,8 @@ class SandboxRunner:
         timeout: int = 30,
         support_files: Optional[list[tuple[str, str]]] = None,
         import_roots: Optional[list[str]] = None,
+        data_files: Optional[list[tuple[str, str]]] = None,
+        norecursedirs: Optional[list[str]] = None,
     ) -> dict[str, Any]:
         """Execute test scripts in an anonymous, randomized temporary directory.
 
@@ -154,6 +163,10 @@ class SandboxRunner:
         support_files: (relative path, source) written verbatim (conftest.py,
             helper modules, __init__.py) so relocated tests keep their imports.
         import_roots: directories put on PYTHONPATH (default: task_dir).
+        data_files: (relative path, source path) copied byte for byte (test fixtures).
+            Tests may legitimately write to them, so they are not tamper-checked.
+        norecursedirs: the workspace's norecursedirs patterns, added to pytest's
+            defaults so data directories copied with data_files are not collected.
         """
         abs_task_dir = os.path.abspath(task_dir)
 
@@ -178,6 +191,12 @@ class SandboxRunner:
                 )
 
             import hashlib
+
+            for name, src in data_files or []:
+                filepath = os.path.join(temp_dir, os.path.normpath(name))
+                os.makedirs(os.path.dirname(filepath), exist_ok=True)
+                with contextlib.suppress(OSError):
+                    shutil.copyfile(src, filepath)
 
             initial_hashes: dict[str, str] = {}
             created_files = []
@@ -222,6 +241,9 @@ class SandboxRunner:
             ini_path = os.path.join(temp_dir, "pytest.ini")
             with open(ini_path, "w", encoding="utf-8") as f:
                 f.write("[pytest]\n")
+                if norecursedirs:
+                    f.write("norecursedirs = " + " ".join(
+                        _PYTEST_DEFAULT_NORECURSE + list(norecursedirs)) + "\n")
             junitxml_path = os.path.join(temp_dir, "junit.xml")
             cmd = [
                 sys.executable, "-m", "pytest", "-vv", "-p", "no:cacheprovider",

@@ -79,6 +79,9 @@ write those tests.
 - As a gate it is accurate: 1.0.2 gave PASS to none of 36 wrong solutions, never a
   false FAIL, and no agent weakened a frozen test. The price is strictness: correct code
   gets ABSTAIN until each spec rule has a test, and a verify takes 10-20 s longer.
+  Outside that benchmark, 1.0.2 could give a false FAIL on correct projects whose tests
+  read fixtures via `__file__`, take over 30 s, or sit outside `testpaths`; these are
+  fixed on `main` (see [CHANGELOG](https://github.com/0khacha/the-judge/blob/main/CHANGELOG.md)).
 
 See [Known limitations](#known-limitations).
 
@@ -142,7 +145,8 @@ Action: fix and re-verify.
 </tr>
 </table>
 
-*Reproduce (requires browser): `judge improve examples/alex_morgan_portfolio/`*
+*Reproduce (requires browser): `judge improve examples/alex_morgan_portfolio/ --apply`.
+`judge improve` without `--apply` is a read-only review and changes no files.*
 
 ## The rules
 
@@ -350,6 +354,13 @@ function, multi-input variance, and state isolation.
   is not detected.
 - **Tampering outside git and freeze is invisible.** Without a freeze snapshot or a git
   baseline, a weakened-but-still-meaningful assertion cannot be noticed.
+- **What the sandbox copies.** Tests run from a temporary copy of the test files, their
+  conftest/helper modules, everything else under the test directories, and the
+  project's other non-Python files, at most 5 MB per file and 50 MB in total (files
+  near the tests first). It is not a git checkout and holds no implementation `.py`
+  copies, so tests that run `git` or read source files via `__file__` see a
+  difference. The run may take 300 s (`--timeout`); a run stopped at the limit is
+  ABSTAIN.
 - **The sandbox is not a security boundary.** Tests run in a separate process with a
   temporary collection directory and a reduced environment, but hostile code can still
   detect it, read files or use the network.

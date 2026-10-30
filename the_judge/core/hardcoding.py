@@ -72,7 +72,8 @@ def _cond_literals(test: ast.AST) -> Optional[tuple]:
     """Literals compared for equality in an if-condition, in source order."""
     if isinstance(test, ast.BoolOp) and isinstance(test.op, ast.And):
         parts = [_cond_literals(v) for v in test.values]
-        return None if any(p is None for p in parts) else tuple(x for p in parts for x in p)
+        known = [p for p in parts if p is not None]
+        return None if len(known) < len(parts) else tuple(x for p in known for x in p)
     if isinstance(test, ast.Compare) and len(test.ops) == 1 and isinstance(test.ops[0], ast.Eq):
         for side in (test.comparators[0], test.left):
             value = _literal(side)

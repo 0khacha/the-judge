@@ -5,17 +5,34 @@ import os
 import sys
 from typing import Any, Optional
 
+from the_judge._version import __version__
 from the_judge.api import verify
+from the_judge.core.evidence import DEFAULT_TEST_TIMEOUT
 from the_judge.integrations.demo import run_demo
 
 
+def use_utf8_output() -> None:
+    """Write UTF-8 to stdout/stderr whatever the locale code page.
+
+    A piped stdout on Windows defaults to the ANSI code page (cp1252), which cannot
+    encode text that reaches the report from user code (test failure messages, file
+    names), so printing it raised UnicodeEncodeError and crashed the command.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        encoding = (getattr(stream, "encoding", None) or "").lower().replace("-", "")
+        if encoding != "utf8" and hasattr(stream, "reconfigure"):
+            with contextlib.suppress(Exception):
+                stream.reconfigure(encoding="utf-8", errors="replace")
+
+
 def main(args_list=None) -> int:
-    """Main CLI entrypoint for The Judge v1.0.2."""
+    """Main CLI entrypoint for The Judge."""
+    use_utf8_output()
     parser = argparse.ArgumentParser(
         prog="judge",
-        description="The Judge v1.0.2 -- Adversarial Verification & Improvement Engine",
+        description=f"The Judge v{__version__} -- Adversarial Verification & Improvement Engine",
     )
-    parser.add_argument("--version", action="version", version="The Judge v1.0.2")
+    parser.add_argument("--version", action="version", version=f"The Judge v{__version__}")
     subparsers = parser.add_subparsers(dest="command", help="Available subcommands")
 
     # verify command
@@ -35,6 +52,12 @@ def main(args_list=None) -> int:
         "--no-history",
         action="store_true",
         help="Do not record this run in .judge/history.json (no regression/stuck tracking)",
+    )
+    verify_parser.add_argument(
+        "--timeout",
+        type=int,
+        default=None,
+        help=f"Seconds the sandboxed test run may take (default: {DEFAULT_TEST_TIMEOUT})",
     )
     verify_parser.add_argument(
         "--no-mutation",
@@ -118,6 +141,11 @@ def main(args_list=None) -> int:
     )
     improve_parser.add_argument(
         "--json", action="store_true", help="Output machine-readable JSON history"
+    )
+    improve_parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="Let the built-in improver edit files in the workspace (default: read-only review)",
     )
     improve_parser.add_argument(
         "--no-report",
@@ -241,6 +269,7 @@ def main(args_list=None) -> int:
             record_history=not getattr(args, "no_history", False),
             mutation=not getattr(args, "no_mutation", False),
             requirements=not getattr(args, "no_requirements", False),
+            **({"timeout": args.timeout} if getattr(args, "timeout", None) else {}),
         )
     except Exception as e:
         if is_json:
@@ -342,6 +371,7 @@ def _run_improve_command(args) -> int:
     target_score = getattr(args, "target_score", 90.0)
     is_json = getattr(args, "json", False)
     no_report = getattr(args, "no_report", False)
+    apply = getattr(args, "apply", False)
 
     ve = VisualEngine(workspace)
     is_visual, target_file = ve.is_visual_workspace()
@@ -357,7 +387,11 @@ def _run_improve_command(args) -> int:
         else:
             print(f"Classification   : {domain_label} -- tests, static analysis, behavioral checks")
         print(f"Target Workspace : {os.path.abspath(workspace)}")
-        print(f"Max Rounds       : {max_rounds}")
+        if apply:
+            print(f"Max Rounds       : {max_rounds}")
+            print("Mode             : APPLY -- the built-in improver edits workspace files")
+        else:
+            print("Mode             : READ-ONLY review (use --apply to let it edit files)")
         print(f"Quality Target   : {target_score} / 100.0")
         print("Stop Requires    : score>=threshold AND no blockers AND sufficient evidence")
         print()
@@ -365,7 +399,9 @@ def _run_improve_command(args) -> int:
     old_argv = list(sys.argv)
     try:
         sys.argv = [sys.argv[0]]
-        result = improve(workspace=workspace, max_rounds=max_rounds, target_score=target_score)
+        result = improve(
+            workspace=workspace, max_rounds=max_rounds, target_score=target_score, apply=apply
+        )
     except Exception as e:
         if is_json:
             print(json.dumps({"error": str(e), "outcome": "ERROR"}, indent=2))
@@ -526,6 +562,13 @@ def _run_improve_command(args) -> int:
         last_critique = last.get("critique", {})
         remaining = last_critique.get("findings", []) if isinstance(last_critique, dict) else []
         blockers = [f for f in remaining if f.get("is_blocker")]
+        suggestions = result.get("suggestions") or []
+        if suggestions:
+            print("Suggestions (most important first):")
+            for i, f in enumerate(suggestions[:8], 1):
+                ev = f.get("evidence_level", "").upper().replace("_", " ")
+                sev = f.get("severity", "").upper()
+                print(f"  {i}. [{ev}][{sev}] {f.get('description', '')[:100]}")
         if blockers:
             print(f"Blockers: {len(blockers)} unresolved")
             for b in blockers[:3]:
@@ -731,7 +774,7 @@ def _run_contract_command(
         print(json.dumps(spec_cov, indent=2))
     else:
         print("=" * 68)
-        print("THE JUDGE v1.0.2 -- Requirement Specification Contract Report")
+        print(f"THE JUDGE v{__version__} -- Requirement Specification Contract Report")
         print("=" * 68)
         print(f"Workspace: {os.path.abspath(workspace_path)}")
         print()
@@ -772,7 +815,7 @@ def _run_contract_command(
 
 def _print_human_readable_result(workspace_path: str, result: Any) -> None:
     print("=" * 68)
-    print("THE JUDGE v1.0.2 -- Verification Report")
+    print(f"THE JUDGE v{__version__} -- Verification Report")
     print("=" * 68)
     print(f"Workspace: {os.path.abspath(workspace_path)}")
     print()

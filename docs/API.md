@@ -27,6 +27,12 @@ print(result.findings)        # List[Finding]
 - `workspace` (str): Path to directory or Python file to verify
 - `task_spec` (Optional[Dict]): Task specification contract (see [Contracts](#contracts))
 - `previous_evidence` (Optional[Dict]): Previous evidence for regression tracking
+- `baseline` (Optional[str]): git ref the tests are compared against for tampering (default `HEAD`)
+- `record_history` (bool): Record the run in `.judge/history.json` (default False; the CLI enables it)
+- `mutation` (bool): Plant small bugs before PASS (default True; CLI `--no-mutation`)
+- `requirements` (bool): Require a passing test per spec rule R1..Rn (default True)
+- `timeout` (int): Seconds the sandboxed test run may take (default 300; CLI `--timeout`).
+  A run stopped at the limit is ABSTAIN with a timeout note, never FAIL.
 
 **Returns:** `VerificationResult`
 
@@ -46,12 +52,16 @@ result = improve(
     target_score=90.0,
     task_spec=None,
     quality_evaluator=None,
-    require_evidence_sufficiency=True
+    require_evidence_sufficiency=True,
+    apply=False,
 )
 
-print(result["final_decision"])
-print(result["rounds"])
-print(result["score_progression"])
+print(result["outcome"])         # PASS, REVIEW_ONLY, MAX_ROUNDS_EXCEEDED, ABORTED, ...
+print(result["final_decision"])  # PASS / FAIL / ABSTAIN of the last round
+print(result["total_rounds"])
+for r in result["history"]:
+    print(r["round_number"], r["numeric_score"])
+print(result.get("suggestions"))  # REVIEW_ONLY: open critique findings, most important first
 ```
 
 **Parameters:**
@@ -63,6 +73,8 @@ print(result["score_progression"])
 - `task_spec` (Optional[Dict]): Task contract
 - `quality_evaluator` (Optional[Callable]): Custom quality evaluator
 - `require_evidence_sufficiency` (bool): Continue if evidence insufficient (default: True)
+- `apply` (bool): Without `repair_func`, let the built-in `AutoImprover` edit files between
+  rounds. Default False: one read-only round, outcome `REVIEW_ONLY` unless it already passes.
 
 **Returns:** Dict with multi-round history and final verdict
 
@@ -176,7 +188,9 @@ prompt = adapter.format_agent_prompt_feedback(feedback)
 
 ### `AutoImprover`
 
-Built-in automatic improvement engine.
+Built-in heuristic improver used by `improve(apply=True)` / `judge improve --apply`.
+It edits files in place (syntax fixes, silent `except` handlers, docstrings, HTML meta
+tags) and never writes tests.
 
 ```python
 from the_judge.integrations import AutoImprover

@@ -7,11 +7,9 @@ been removed, so generate_behavioral_probes() returns no probes. The remaining,
 keyword-triggered probes live in property_engine.
 """
 
-import importlib.util
 import inspect
 import os
 import random
-import sys
 from dataclasses import dataclass
 from typing import Any
 
@@ -109,7 +107,7 @@ class BehaviorEngine:
             mod_name = fname[:-3]
             fpath = os.path.join(abs_target, fname)
             try:
-                with open(fpath, "r", encoding="utf-8") as f:
+                with open(fpath, encoding="utf-8") as f:
                     source = f.read()
                 tree = ast.parse(source)
             except Exception:
@@ -121,7 +119,7 @@ class BehaviorEngine:
                     for arg in node.args.args:
                         ann_str = ast.unparse(arg.annotation) if arg.annotation else inspect.Parameter.empty
                         params.append(DummyParam(arg.arg, ann_str))
-                    
+
                     ret_ann = ast.unparse(node.returns) if node.returns else inspect.Parameter.empty
 
                     discovered.append(
@@ -140,7 +138,7 @@ class BehaviorEngine:
                     for item in node.body:
                         if isinstance(item, ast.FunctionDef) and not item.name.startswith("_"):
                             methods.append(item.name)
-                    
+
                     discovered.append(
                         {
                             "type": "class",

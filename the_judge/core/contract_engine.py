@@ -26,7 +26,7 @@ class RequirementCoverage:
 
 
 class ContractEngine:
-    """Contract-Aware Verification & Specification Coverage Engine for The Judge v4.2."""
+    """Contract-Aware Verification & Specification Coverage Engine."""
 
     def __init__(self, task_spec: Optional[dict[str, Any]] = None):
         self.task_spec = task_spec or {}
