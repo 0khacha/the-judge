@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "the-judge",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Independent verifier for Claude's code: tests first, freeze them, implement, and a Stop hook sends the work back with exact next actions until The Judge says PASS.",
   "author": {
     "name": "0khacha"
