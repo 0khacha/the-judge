@@ -1,43 +1,25 @@
-# Empirical Evaluation Summary: The Judge
+# Evaluation
 
-The Judge has been evaluated across multiple iterations of adversarial attack suites, real-world AI coding tasks, and contract-aware verification benchmarks.
+The Judge's claims are tested in pre-registered evaluations with Claude Haiku as the
+coding agent. Each has its protocol hashed before any task existed, plus raw data and a
+report: [eval_results/](../eval_results/README.md).
 
-## 1. Adversarial Robustness Benchmark (v3.2)
+Summary:
 
-- **Total Adversarial Attacks Tested**: 48
-- **False PASS Rate**: 0.0%
-- **Precision**: 100.0%
-- **Recall**: 100.0%
-- **Detection Rate**: 100.0%
-- **Abstention Rate**: 18.8%
-- **Sandbox Leakage Rate**: 0.0%
+- **Does it make an agent's code more correct?** Not shown. On every benchmark tried
+  (small tasks, harder tasks with 41-149 hidden tests, change requests in existing
+  projects with hidden regression tests), the agent without the judge already passed
+  all hidden tests in 65 of 66 runs, leaving nothing to improve.
+- **Is it accurate as a gate?** 1.0.1 gave PASS to 10 of 12 wrong solutions
+  (evaluation 2). 1.0.2, with the requirements checklist and mutation feedback, gave
+  PASS to none in 45 checks (evaluations 3-4) and never gave a false FAIL there. No
+  agent weakened a frozen test.
+- **Cost.** Correct code gets ABSTAIN until each spec rule has a test, and mutation adds
+  10-20 s per verify on a small project.
 
-### Attack Vectors Defeated
-1. Test Collection Hijacking (pytest hooks, conftest interception, import redirection)
-2. Execution Evasion (synthesized test evasion, seed detection, call counter spoofing)
-3. TOCTOU & Symlink Attacks (atomic replacements, directory swapping)
-4. Environment Mutation & Process Boundary Tampering
+Earlier documents in this repository cited "v3.2/v4.x" benchmark numbers. They came
+from a simulated benchmark, have been removed, and should not be relied on.
 
----
-
-## 2. Real-World AI Agent Evaluation (v4.1)
-
-Evaluating 12 realistic software engineering tasks across Python backend, security, and data engineering:
-
-| Condition | Success Rate | False PASS Rate | Avg Rounds |
-| :--- | :---: | :---: | :---: |
-| **Control** (Agent Alone) | 0.0% (0/12) | N/A | 1.0 |
-| **Treatment** (Agent + The Judge v4.0) | 33.3% (4/12) | 66.7% (8/12) | 2.1 |
-
-### Key Forensic Insight
-While The Judge improved ground-truth success by **+33.3 percentage points**, 8/12 tasks produced false PASS decisions because behavioral property synthesis alone cannot verify requirements omitted from its evaluation specification.
-
----
-
-## 3. Contract-Aware Verification (v4.2)
-
-- **Total Benchmark Tasks**: 20
-- **Ground Truth Implementations Passed**: 95.0%
-- **v4.2 False PASS Rate**: 5.0% (1/20)
-- **v4.2 ABSTAIN Rate**: 25.0% (5/20)
-- **Hard Gate 9 Enforcement**: Successfully converts unverified critical requirements into `ABSTAIN` decisions rather than manufacturing false PASS confidence.
+`tests/regression_audit/` is a labelled corpus (correct and incorrect solutions per task)
+for checking that changes to the judge do not make it less discriminating:
+`python tests/regression_audit/run_audit.py`.

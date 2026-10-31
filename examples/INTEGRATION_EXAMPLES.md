@@ -100,12 +100,14 @@ def custom_quality_check(workspace, verification):
 result = improve(
     workspace=".",
     quality_evaluator=custom_quality_check,
+    agent_command="claude -p --permission-mode acceptEdits",  # who makes the changes
     target_score=90.0,
-    max_rounds=5
+    max_rounds=5,
 )
 
-print(f"Final score: {result['final_score']}")
-print(f"Rounds: {len(result['rounds'])}")
+print(f"Outcome: {result['outcome']} ({result['final_decision']})")
+print(f"Final score: {result['quality']['score']}")
+print(f"Rounds: {result['total_rounds']}")
 ```
 
 ## Example 4: GitHub Actions Integration
@@ -166,26 +168,20 @@ git commit -m "Add new feature"
 from the_judge import improve
 
 def smart_repair(workspace, feedback):
-    """Custom repair logic."""
-    verification = feedback["verification"]
-    findings = verification.findings
-    
+    """Custom repair logic: act on the judge's next actions, most important first."""
     changes = []
-    
-    for finding in findings:
-        if finding.category == "behavior":
-            # Fix behavioral issues
-            fix_behavior(finding)
-            changes.append(finding.id)
-        
-        elif finding.category == "security":
-            # Fix security issues
-            fix_security(finding)
-            changes.append(finding.id)
-    
+
+    for action in feedback["next_actions"]:
+        if action["action"] in ("fix_code", "fix_regression"):
+            fix_failing_test(workspace, action["test"], action["detail"])
+            changes.append(action["test"])
+        elif action["action"] == "add_test":
+            add_test_from_spec(workspace, action["detail"])  # e.g. "cache.py:45: '>' -> '>='"
+            changes.append(action["detail"])
+
     return {
-        "changed": len(changes) > 0,
-        "description": f"Fixed {len(changes)} issues: {', '.join(changes)}"
+        "improved": len(changes) > 0,
+        "summary": f"Handled {len(changes)} action(s): {', '.join(changes)}",
     }
 
 result = improve(
@@ -227,7 +223,8 @@ def visual_quality_evaluator(workspace, verification):
 result = improve(
     workspace="./website",
     quality_evaluator=visual_quality_evaluator,
-    target_score=95.0
+    agent_command="auto",  # a known coding agent on PATH makes the changes
+    target_score=95.0,
 )
 ```
 

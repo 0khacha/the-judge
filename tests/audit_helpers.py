@@ -7,6 +7,19 @@ import subprocess
 CORPUS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "regression_audit", "tasks")
 
 
+def repo_root():
+    """The repository checkout these tests belong to.
+
+    Normally the parent of tests/. When the tests run from a copy that is not a git
+    checkout (The Judge's own sandbox, which runs from the workspace), the working
+    directory is the checkout.
+    """
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if os.path.exists(os.path.join(here, ".git")):
+        return here
+    return os.getcwd()
+
+
 def corpus_workspace(dest, task, variant="correct", tests_subdir=None, git_baseline=False,
                      frozen=False):
     """Copy a corpus variant plus its visible tests into dest and return the path.

@@ -1,4 +1,3 @@
-from .behavior_engine import BehaviorEngine, ValueGenerator
 from .critique_engine import (
     CritiqueEngine,
     CritiqueFinding,
@@ -17,8 +16,6 @@ from .score_engine import evaluate, explain_verdict
 
 __all__ = [
     "SandboxRunner",
-    "BehaviorEngine",
-    "ValueGenerator",
     "StructurePropertyEngine",
     "capture_evidence",
     "evaluate",

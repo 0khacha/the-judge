@@ -11,9 +11,9 @@ import re
 import subprocess
 import sys
 
-from audit_helpers import corpus_workspace
+from audit_helpers import corpus_workspace, repo_root
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO = repo_root()
 
 
 def test_pytest_is_a_runtime_dependency():

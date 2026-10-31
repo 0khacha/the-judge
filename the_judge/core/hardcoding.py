@@ -14,7 +14,7 @@ parametrize arguments or variables are not analysed; see README "Known limitatio
 
 import ast
 import os
-from typing import Any, Optional
+from typing import Any
 
 _MISSING = object()
 
@@ -33,7 +33,7 @@ def _norm(value: Any) -> Any:
     return value
 
 
-def _call_args(call: ast.Call) -> Optional[tuple]:
+def _call_args(call: ast.Call) -> tuple | None:
     if call.keywords:
         return None
     args = tuple(_literal(a) for a in call.args)
@@ -68,11 +68,12 @@ def literal_assertions(test_sources: dict[str, str], names: set[str]) -> list[tu
     return found
 
 
-def _cond_literals(test: ast.AST) -> Optional[tuple]:
+def _cond_literals(test: ast.AST) -> tuple | None:
     """Literals compared for equality in an if-condition, in source order."""
     if isinstance(test, ast.BoolOp) and isinstance(test.op, ast.And):
         parts = [_cond_literals(v) for v in test.values]
-        return None if any(p is None for p in parts) else tuple(x for p in parts for x in p)
+        known = [p for p in parts if p is not None]
+        return None if len(known) < len(parts) else tuple(x for p in known for x in p)
     if isinstance(test, ast.Compare) and len(test.ops) == 1 and isinstance(test.ops[0], ast.Eq):
         for side in (test.comparators[0], test.left):
             value = _literal(side)
@@ -91,7 +92,7 @@ def literal_tables(impl_sources: dict[str, str]) -> list[tuple[Any, Any]]:
             continue
         for node in ast.walk(tree):
             if isinstance(node, ast.Dict):
-                for k, v in zip(node.keys, node.values):
+                for k, v in zip(node.keys, node.values, strict=True):
                     key, value = (_literal(k) if k is not None else _MISSING), _literal(v)
                     if key is not _MISSING and value is not _MISSING:
                         pairs.append((key, value))

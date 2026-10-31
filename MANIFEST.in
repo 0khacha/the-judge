@@ -12,12 +12,8 @@ include THREAT_MODEL.md
 include pyproject.toml
 include .editorconfig
 
-# Include assets
-recursive-include assets *
-
-# Include examples and benchmarks
+# Include examples
 recursive-include examples *.py *.json *.md
-recursive-include benchmark *.py *.json *.md
 
 # Exclude unnecessary files
 exclude .gitignore
@@ -34,9 +30,5 @@ recursive-exclude .pytest_cache *
 
 # Local, git-ignored output must never be published with the sdist
 # (recursive-include above picks up anything on disk).
-prune benchmark/baselines
-prune benchmark/benchmark_abc/results
-prune dist_phase5
-exclude benchmark/LEVEL2_*.md
 global-exclude AGENT_STATE.md AGENT_CONTEXT.md
 prune examples/*/_judge_visual

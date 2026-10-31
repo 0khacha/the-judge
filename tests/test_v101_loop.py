@@ -9,6 +9,7 @@ import json
 import os
 
 from audit_helpers import write
+
 from the_judge.api import freeze, verify
 
 TESTS = '''

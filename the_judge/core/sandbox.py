@@ -1,4 +1,4 @@
-"""Trusted Sandbox & Execution Subprocess Isolation Protocol for The Judge v4.0.
+"""Trusted Sandbox & Execution Subprocess Isolation Protocol.
 
 Establishes a strict trust boundary between:
   TRUSTED: Judge controller, Evidence engine, Score engine, Evaluator
@@ -12,8 +12,44 @@ import subprocess
 import sys
 import tempfile
 import uuid
-from typing import Any, Optional
+from typing import Any
 
+# Longest failure message kept per test (head and tail, see shorten()).
+MAX_FAILURE_MESSAGE = 2000
+
+
+def shorten(text: str, limit: int) -> str:
+    """Cut text to at most limit characters, keeping its start and its end.
+
+    The end of a long failure message (a build log, a traceback) is usually where the
+    actual error is, so a plain head cut loses exactly the useful part.
+    """
+    if len(text) <= limit:
+        return text
+    marker = "\n[...]\n"
+    head = (limit - len(marker)) // 4
+    return text[:head] + marker + text[-(limit - len(marker) - head):]
+
+
+# pytest >= 9.2 cuts a long JUnit ``message`` attribute and ends it with this note; the
+# full report (traceback with the "E   " error lines) is in the element text.
+_TRUNCATED_MESSAGE = "full report in element text"
+
+
+def failure_message(message: str | None, text: str | None) -> str:
+    """The failure message of a JUnit <failure>/<error>, complete even when pytest cut it."""
+    if message and _TRUNCATED_MESSAGE not in message:
+        return message
+    error_lines = [line[1:].strip() for line in (text or "").splitlines() if line.startswith("E ")]
+    if error_lines:
+        return "\n".join(error_lines)
+    return text or message or ""
+
+
+# pytest's own norecursedirs default, kept when workspace patterns are added.
+_PYTEST_DEFAULT_NORECURSE = [
+    "*.egg", ".*", "_darcs", "build", "CVS", "dist", "node_modules", "venv", "{arch}",
+]
 
 # Appended to the sandbox's root conftest. A test phase that raised (other than
 # pytest.skip) can never legitimately be reported as passed; if a plugin or workspace
@@ -43,7 +79,7 @@ class SandboxRunner:
     """Isolated subprocess runner for executing untrusted target code and tests."""
 
     @staticmethod
-    def sanitize_environment(extra_env: Optional[dict[str, str]] = None) -> dict[str, str]:
+    def sanitize_environment(extra_env: dict[str, str] | None = None) -> dict[str, str]:
         """Construct a clean, sanitized environment dictionary without Judge indicators."""
         clean_env: dict[str, str] = {}
 
@@ -95,7 +131,7 @@ class SandboxRunner:
 
     @classmethod
     def run_cmd(
-        cls, cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None, timeout: int = 30
+        cls, cmd: list[str], cwd: str, env: dict[str, str] | None = None, timeout: int = 30
     ) -> dict[str, Any]:
         """Run command in subprocess with environment sanitization."""
         clean_env = cls.sanitize_environment(env)
@@ -110,6 +146,9 @@ class SandboxRunner:
                 stdin=subprocess.DEVNULL,
                 capture_output=True,
                 text=True,
+                # Target output may hold bytes the locale code page cannot decode; never
+                # let that lose the captured output.
+                errors="replace",
                 timeout=timeout,
             )
             return {
@@ -141,10 +180,12 @@ class SandboxRunner:
         cls,
         task_dir: str,
         test_scripts: list[tuple[str, str]],
-        pytest_args: Optional[list[str]] = None,
+        pytest_args: list[str] | None = None,
         timeout: int = 30,
-        support_files: Optional[list[tuple[str, str]]] = None,
-        import_roots: Optional[list[str]] = None,
+        support_files: list[tuple[str, str]] | None = None,
+        import_roots: list[str] | None = None,
+        data_files: list[tuple[str, str]] | None = None,
+        norecursedirs: list[str] | None = None,
     ) -> dict[str, Any]:
         """Execute test scripts in an anonymous, randomized temporary directory.
 
@@ -154,6 +195,10 @@ class SandboxRunner:
         support_files: (relative path, source) written verbatim (conftest.py,
             helper modules, __init__.py) so relocated tests keep their imports.
         import_roots: directories put on PYTHONPATH (default: task_dir).
+        data_files: (relative path, source path) copied byte for byte (test fixtures).
+            Tests may legitimately write to them, so they are not tamper-checked.
+        norecursedirs: the workspace's norecursedirs patterns, added to pytest's
+            defaults so data directories copied with data_files are not collected.
         """
         abs_task_dir = os.path.abspath(task_dir)
 
@@ -178,6 +223,12 @@ class SandboxRunner:
                 )
 
             import hashlib
+
+            for name, src in data_files or []:
+                filepath = os.path.join(temp_dir, os.path.normpath(name))
+                os.makedirs(os.path.dirname(filepath), exist_ok=True)
+                with contextlib.suppress(OSError):
+                    shutil.copyfile(src, filepath)
 
             initial_hashes: dict[str, str] = {}
             created_files = []
@@ -222,6 +273,9 @@ class SandboxRunner:
             ini_path = os.path.join(temp_dir, "pytest.ini")
             with open(ini_path, "w", encoding="utf-8") as f:
                 f.write("[pytest]\n")
+                if norecursedirs:
+                    f.write("norecursedirs = " + " ".join(
+                        _PYTEST_DEFAULT_NORECURSE + list(norecursedirs)) + "\n")
             junitxml_path = os.path.join(temp_dir, "junit.xml")
             cmd = [
                 sys.executable, "-m", "pytest", "-vv", "-p", "no:cacheprovider",
@@ -268,7 +322,9 @@ class SandboxRunner:
                             problem = testcase.find('error')
                         if problem is not None:
                             failed_tests.append(name)
-                            failure_messages[name] = (problem.get('message') or problem.text or "")[:500]
+                            failure_messages[name] = shorten(
+                                failure_message(problem.get('message'), problem.text),
+                                MAX_FAILURE_MESSAGE)
                         elif testcase.find('skipped') is not None:
                             skipped_tests.append(name)
                         else:
@@ -322,26 +378,3 @@ class SandboxRunner:
             }
         finally:
             shutil.rmtree(temp_dir, ignore_errors=True)
-
-    @classmethod
-    def execute_fresh_process_probe(
-        cls, task_dir: str, probe_code: str, timeout: int = 10
-    ) -> dict[str, Any]:
-        """Execute a single probe script in a completely fresh isolated Python process instance."""
-        abs_task_dir = os.path.abspath(task_dir)
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", delete=False, dir=abs_task_dir
-        ) as f:
-            f.write(probe_code)
-            temp_path = f.name
-
-        try:
-            env = {"PYTHONPATH": abs_task_dir + os.pathsep + os.environ.get("PYTHONPATH", "")}
-            cmd = [sys.executable, temp_path]
-            res = cls.run_cmd(cmd, cwd=abs_task_dir, env=env, timeout=timeout)
-            return res
-        finally:
-            if os.path.exists(temp_path):
-                with contextlib.suppress(Exception):
-                    os.remove(temp_path)

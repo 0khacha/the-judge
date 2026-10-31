@@ -7,9 +7,6 @@ These tests verify that the Judge does not return PASS for workspaces with:
 """
 
 import os
-import textwrap
-
-import pytest
 
 from the_judge.api import verify
 from the_judge.core.score_engine import evaluate
@@ -173,8 +170,9 @@ class TestBug1FalsePass:
 
     def test_probe_skips_on_type_error(self):
         """Probes must use pytest.skip, not return, when they do not apply."""
-        import tempfile
         import shutil
+        import tempfile
+
         from the_judge.core.property_engine import generate_property_tests
 
         tmp = tempfile.mkdtemp()
@@ -209,17 +207,17 @@ class TestBug1FalsePass:
         idempotent; a predicate may be constant on invented inputs) and therefore
         failed correct code.
         """
-        import tempfile
         import shutil
-        from the_judge.core.behavior_engine import BehaviorEngine
+        import tempfile
+
+        from the_judge.core.property_engine import generate_property_tests
 
         tmp = tempfile.mkdtemp()
         try:
             with open(os.path.join(tmp, "m.py"), "w") as f:
                 f.write("def add(a: int, b: int) -> int: return a + b\n")
-            engine = BehaviorEngine()
-            probes = engine.generate_behavioral_probes(tmp)
-            assert [p for p in probes if p.target_symbol == "add"] == []
+            probes = generate_property_tests(tmp)
+            assert [p for p in probes if p.source_symbol.endswith("add")] == []
         finally:
             shutil.rmtree(tmp)
 

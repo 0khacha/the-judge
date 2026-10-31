@@ -27,6 +27,12 @@ print(result.findings)        # List[Finding]
 - `workspace` (str): Path to directory or Python file to verify
 - `task_spec` (Optional[Dict]): Task specification contract (see [Contracts](#contracts))
 - `previous_evidence` (Optional[Dict]): Previous evidence for regression tracking
+- `baseline` (Optional[str]): git ref the tests are compared against for tampering (default `HEAD`)
+- `record_history` (bool): Record the run in `.judge/history.json` (default False; the CLI enables it)
+- `mutation` (bool): Plant small bugs before PASS (default True; CLI `--no-mutation`)
+- `requirements` (bool): Require a passing test per spec rule R1..Rn (default True)
+- `timeout` (int): Seconds the sandboxed test run may take (default 300; CLI `--timeout`).
+  A run stopped at the limit is ABSTAIN with a timeout note, never FAIL.
 
 **Returns:** `VerificationResult`
 
@@ -34,7 +40,9 @@ print(result.findings)        # List[Finding]
 
 ### `improve()`
 
-Run continuous improvement loop until code reaches quality threshold.
+Review the workspace, or run a repair loop (a coding agent or your callback makes the
+changes, the judge re-verifies) until the verdict is PASS and the score reaches
+`target_score`.
 
 ```python
 from the_judge import improve
@@ -46,23 +54,41 @@ result = improve(
     target_score=90.0,
     task_spec=None,
     quality_evaluator=None,
-    require_evidence_sufficiency=True
+    require_evidence_sufficiency=True,
+    agent_command=None,     # e.g. "claude -p --permission-mode acceptEdits", or "auto"
+    agent_timeout=None,     # seconds per agent round (default 1800)
+    on_agent_round=None,    # callback(dict) with each round's prompt and agent output
 )
 
-print(result["final_decision"])
-print(result["rounds"])
-print(result["score_progression"])
+print(result["outcome"])         # PASS, REVIEW_ONLY, MAX_ROUNDS_EXCEEDED, ABORTED, ...
+print(result["final_decision"])  # PASS / FAIL / ABSTAIN of the last round
+print(result["total_rounds"])
+for r in result["history"]:
+    print(r["round_number"], r["numeric_score"])
+print(result["next_actions"])     # next actions of the last verification
+print(result["suggestions"])      # open critique findings, most important first
 ```
 
 **Parameters:**
 
 - `workspace` (str): Path to workspace
-- `repair_func` (Optional[Callable]): Custom repair function
+- `repair_func` (Optional[Callable]): `(workspace, feedback) -> bool | {"improved": bool,
+  "summary": str}`. `feedback` holds `decision`, `next_actions`, `findings`, `critique`.
 - `max_rounds` (int): Maximum improvement rounds (default: 5)
 - `target_score` (float): Target quality score 0-100 (default: 90.0)
 - `task_spec` (Optional[Dict]): Task contract
 - `quality_evaluator` (Optional[Callable]): Custom quality evaluator
 - `require_evidence_sufficiency` (bool): Continue if evidence insufficient (default: True)
+- `agent_command` (Optional[str]): shell command of a coding agent, run in the workspace
+  each round. The prompt (verdict, next actions, rules) goes on stdin, or into a file
+  whose path replaces `{prompt_file}`. `"auto"` picks a known agent on PATH.
+- `agent_timeout`, `on_agent_round`: see above.
+- `apply`: removed in 1.1.0; `True` raises `ValueError` (use `agent_command`).
+
+Without `repair_func` and `agent_command`, the call is one read-only round: nothing is
+modified and the outcome is `REVIEW_ONLY` unless it already passes. The loop ends with
+`PASS`, `MAX_ROUNDS_EXCEEDED`, `ABORTED` (the agent or callback reported failure) or
+`NO_MEANINGFUL_IMPROVEMENT` (it changed nothing).
 
 **Returns:** Dict with multi-round history and final verdict
 
@@ -111,6 +137,8 @@ class VerificationResult:
     blocking_issues: List[str]       # Critical issues
     insufficient_notes: List[str]    # Evidence gaps
     runtime_seconds: float           # Execution time
+    next_actions: List[Dict]         # Numbered steps: {"step", "action", "detail", ...}
+    loop: Optional[Dict]             # Iteration, regressions, stuck (CLI / record_history)
 ```
 
 ### `Finding`
@@ -140,9 +168,8 @@ Multi-round repair loop for autonomous improvement.
 from the_judge.integrations import AgentRepairLoop
 
 def my_repair_func(workspace, feedback):
-    # Your repair logic
-    # feedback contains: verification result, findings, critique
-    return {"changed": True, "description": "Fixed issues"}
+    # Your repair logic: act on feedback["next_actions"], ["findings"], ["critique"]
+    return {"improved": True, "summary": "Fixed the boundary check"}
 
 loop = AgentRepairLoop(
     max_rounds=5,
@@ -172,23 +199,6 @@ feedback = adapter.verify_workspace(".")
 
 # Format for agent prompt
 prompt = adapter.format_agent_prompt_feedback(feedback)
-```
-
-### `AutoImprover`
-
-Built-in automatic improvement engine.
-
-```python
-from the_judge.integrations import AutoImprover
-
-improver = AutoImprover(workspace=".")
-
-feedback = {
-    "verification": verify_result,
-    "critique": critique_result
-}
-
-result = improver.improve_workspace(feedback)
 ```
 
 ---

@@ -1,7 +1,6 @@
 from decimal import Decimal
 
 import pytest
-
 from pricing import apply_discount
 
 

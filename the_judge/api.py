@@ -2,17 +2,19 @@ import hashlib
 import os
 import time
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
+from the_judge._version import __version__
 from the_judge.core.decision import Finding, VerificationResult
-from the_judge.core.evidence import capture_evidence
+from the_judge.core.evidence import DEFAULT_TEST_TIMEOUT, capture_evidence
+from the_judge.core.sandbox import shorten
 from the_judge.core.score_engine import evaluate
 
 
 def critique(
     workspace: str,
-    task_spec: Optional[dict[str, Any]] = None,
-    previous_round: Optional[dict[str, Any]] = None,
+    task_spec: dict[str, Any] | None = None,
+    previous_round: dict[str, Any] | None = None,
 ) -> Any:
     """Run an independent adversarial critique of the workspace.
 
@@ -76,14 +78,15 @@ def critique(
 
 def verify(
     workspace: str,
-    task_spec: Optional[dict[str, Any]] = None,
-    previous_evidence: Optional[dict[str, Any]] = None,
-    agent_claims: Optional[dict[str, Any]] = None,
-    _ground_truth: Optional[dict[str, Any]] = None,
-    baseline: Optional[str] = None,
+    task_spec: dict[str, Any] | None = None,
+    previous_evidence: dict[str, Any] | None = None,
+    agent_claims: dict[str, Any] | None = None,
+    _ground_truth: dict[str, Any] | None = None,
+    baseline: str | None = None,
     record_history: bool = False,
     mutation: bool = True,
     requirements: bool = True,
+    timeout: int = DEFAULT_TEST_TIMEOUT,
 ) -> VerificationResult:
     """Verify code within a workspace against behavioral contracts, dynamic property checks,
     and adversarial integrity gates.
@@ -109,6 +112,8 @@ def verify(
             the verdict is ABSTAIN and next_actions names the uncaught ones.
         requirements: every rule of TASK.md / SPEC.md / REQUIREMENTS.md must be named
             (R1, R2, ...) by a passing test, else ABSTAIN (see core/checklist.py).
+        timeout: seconds the sandboxed test run may take; a run stopped at the limit
+            is ABSTAIN with a timeout note (default DEFAULT_TEST_TIMEOUT).
 
     Returns:
         VerificationResult containing structured decision, findings, trust profile, and provenance.
@@ -120,7 +125,8 @@ def verify(
     ground_truth = (
         _ground_truth
         if _ground_truth is not None
-        else capture_evidence(workspace_path, task_spec=task_spec, baseline=baseline)
+        else capture_evidence(workspace_path, task_spec=task_spec, baseline=baseline,
+                              timeout=timeout)
     )
 
     # 2. Build Agent Findings / Claims
@@ -135,19 +141,16 @@ def verify(
         r_id = req.get("id", "").lower().replace("-", "_")
         if r_id and r_id in t_lower:
             return True
-        for prop in req.get("properties", []):
-            if prop.lower() in t_lower:
-                return True
-        return False
+        return any(prop.lower() in t_lower for prop in req.get("properties", []))
 
     if task_spec and "requirements" in task_spec:
         for idx, req in enumerate(task_spec.get("requirements", []), 1):
             req_id = req.get("id", f"REQ-{idx:03d}")
             req_desc = req.get("description", "")
-            
+
             matched_failed = [t for t in failed_tests if _matches_requirement(req, t)]
             matched_passed = [t for t in passed_tests if _matches_requirement(req, t)]
-            
+
             if matched_failed:
                 req_status = "fail"
                 ev_ref = matched_failed[0]
@@ -157,7 +160,7 @@ def verify(
             else:
                 req_status = "unverified"
                 ev_ref = ""
-                
+
             req_list.append(
                 {
                     "id": req_id,
@@ -272,7 +275,7 @@ def verify(
                 severity="high",
                 description=f"Behavioral test failed: {f_test}",
                 property_name=f_test.replace("test_", ""),
-                observed=err_msg[:200] if isinstance(err_msg, str) else str(err_msg),
+                observed=shorten(err_msg, 600) if isinstance(err_msg, str) else str(err_msg),
                 expected="Test passes with return value matching observable spec.",
                 suggested_focus=f"Review state transitions and boundary logic tested in {f_test}.",
             )
@@ -483,7 +486,7 @@ def verify(
     provenance = {
         "workspace_path": workspace_path,
         "workspace_hash": workspace_hash,
-        "judge_version": "v1.0.2",
+        "judge_version": f"v{__version__}",
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "evidence_level": ev_cov.get("evidence_level", 0),
         "total_tests": ev_cov.get("total_tests", 0),
@@ -526,7 +529,8 @@ def freeze(workspace: str) -> dict[str, Any]:
     they can be covered before the implementation is written.
     """
     from the_judge.core import checklist
-    from the_judge.core.independence import _current_tests, _load, freeze as do_freeze
+    from the_judge.core.independence import _current_tests, _load
+    from the_judge.core.independence import freeze as do_freeze
 
     result = do_freeze(workspace)
     abs_dir = os.path.abspath(workspace)
@@ -544,12 +548,16 @@ def verify_workspace(workspace_dir: str) -> VerificationResult:
 
 def improve(
     workspace: str,
-    repair_func: Optional[Any] = None,
+    repair_func: Any | None = None,
     max_rounds: int = 5,
     target_score: float = 90.0,
-    task_spec: Optional[dict[str, Any]] = None,
-    quality_evaluator: Optional[Any] = None,
+    task_spec: dict[str, Any] | None = None,
+    quality_evaluator: Any | None = None,
     require_evidence_sufficiency: bool = True,
+    agent_command: str | None = None,
+    agent_timeout: int | None = None,
+    on_agent_round: Any | None = None,
+    apply: bool = False,
 ) -> dict[str, Any]:
     """Run the adversarial improvement loop on the target workspace.
 
@@ -573,38 +581,82 @@ def improve(
 
     Args:
         workspace: Path to workspace directory or file.
-        repair_func: Custom agent improvement callback. Defaults to built-in AutoImprover.
+        repair_func: Custom improvement callback ``(workspace, feedback) -> bool | dict``.
         max_rounds: Maximum improvement rounds (default: 5).
         target_score: Target quality score (0.0 to 100.0, default: 90.0).
         task_spec: Task specification contract (optional).
         quality_evaluator: Custom quality evaluation function (optional).
         require_evidence_sufficiency: If True (default), loop continues if evidence
             is "insufficient" even when score target is met.
+        agent_command: Shell command of a coding agent that makes the changes, e.g.
+            ``"claude -p --permission-mode acceptEdits"`` (prompt on stdin) or a command
+            containing ``{prompt_file}``; ``"auto"`` picks a known agent on PATH. Each
+            round the agent gets the verdict's next_actions and the critique as a prompt.
+        agent_timeout: Seconds one agent round may take (default 1800).
+        on_agent_round: Optional callback receiving each agent round's prompt and output.
+        apply: Removed (the built-in heuristic improver could not fix
+            behaviour); passing True raises ValueError pointing to ``agent_command``.
+
+    Without ``repair_func`` and ``agent_command`` the call is a read-only review: one
+    round is evaluated, nothing is modified, the outcome is "REVIEW_ONLY" unless it
+    already passes, and ``next_actions`` / ``suggestions`` say what to do.
 
     Returns:
         Dict containing multi-round history, audit trail, score progression,
-        critique findings per round, and final verdict.
+        critique findings per round, the final verdict and its next_actions.
     """
-    from the_judge.integrations.auto_improver import AutoImprover
     from the_judge.integrations.repair_loop import AgentRepairLoop
 
-    if repair_func is None:
-        improver = AutoImprover(workspace)
+    if apply:
+        raise ValueError(
+            "improve(apply=True) was removed: the built-in improver could only make "
+            "cosmetic edits. Pass agent_command (CLI: judge improve --agent) to let a coding "
+            "agent act on the findings, or repair_func for your own callback."
+        )
+    if repair_func is not None and agent_command is not None:
+        raise ValueError("pass either repair_func or agent_command, not both")
 
-        def repair_func(ws, feedback):
-            return improver.improve_workspace(feedback)
+    review_only = repair_func is None and agent_command is None
+    if agent_command is not None:
+        from the_judge.integrations.agent_runner import (
+            DEFAULT_AGENT_TIMEOUT,
+            make_agent_repair,
+            resolve_agent_command,
+        )
+
+        repair_func = make_agent_repair(
+            resolve_agent_command(agent_command),
+            timeout=agent_timeout or DEFAULT_AGENT_TIMEOUT,
+            on_round=on_agent_round,
+        )
+    elif repair_func is None:
+
+        def repair_func(_workspace, _feedback):
+            return False  # review only: max_rounds is 1, so this is never called
 
     loop = AgentRepairLoop(
-        max_rounds=max_rounds,
+        max_rounds=1 if review_only else max_rounds,
         quality_threshold=target_score,
         quality_evaluator=quality_evaluator,
         require_evidence_sufficiency=require_evidence_sufficiency,
     )
-    return loop.run_repair_loop(
+    result = loop.run_repair_loop(
         workspace=workspace,
         agent_repair_func=repair_func,
         task_spec=task_spec,
     )
+    history = result.get("history") or [{}]
+    last_round = history[-1]
+    critique_dict = last_round.get("critique") or {}
+    result["next_actions"] = last_round.get("next_actions", [])
+    result["suggestions"] = critique_dict.get("improvement_priority", [])
+    if review_only and result.get("outcome") != "PASS":
+        result["outcome"] = "REVIEW_ONLY"
+        result["reason"] = (
+            "Read-only review: the workspace was not modified. Follow next_actions, or let a "
+            "coding agent do it: agent_command (CLI: judge improve --agent)."
+        )
+    return result
 
 
 def _compute_workspace_hash(workspace_path: str) -> str:

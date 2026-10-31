@@ -1,0 +1,809 @@
+[
+ {
+  "id": "T1_query_parser__A__r1",
+  "task": "T1_query_parser",
+  "cond": "A",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 14,
+  "hidden_total": 14,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34252,
+  "tool_uses": 5,
+  "wall_s": 40.2,
+  "agent_files": [
+   "TASK.md",
+   "querystring.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T1_query_parser__A__r2",
+  "task": "T1_query_parser",
+  "cond": "A",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 14,
+  "hidden_total": 14,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34530,
+  "tool_uses": 5,
+  "wall_s": 146.4,
+  "agent_files": [
+   "TASK.md",
+   "querystring.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T1_query_parser__A__r3",
+  "task": "T1_query_parser",
+  "cond": "A",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 14,
+  "hidden_total": 14,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 35219,
+  "tool_uses": 6,
+  "wall_s": 90.7,
+  "agent_files": [
+   "TASK.md",
+   "querystring.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T1_query_parser__B__r1",
+  "task": "T1_query_parser",
+  "cond": "B",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 14,
+  "hidden_total": 14,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 39790,
+  "tool_uses": 8,
+  "wall_s": 127.5,
+  "agent_files": [
+   "TASK.md",
+   "querystring.py",
+   "test_extra.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T1_query_parser__B__r2",
+  "task": "T1_query_parser",
+  "cond": "B",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 14,
+  "hidden_total": 14,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 39175,
+  "tool_uses": 6,
+  "wall_s": 193.1,
+  "agent_files": [
+   "TASK.md",
+   "querystring.py",
+   "test_edge.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T1_query_parser__B__r3",
+  "task": "T1_query_parser",
+  "cond": "B",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 14,
+  "hidden_total": 14,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 39985,
+  "tool_uses": 7,
+  "wall_s": 123.0,
+  "agent_files": [
+   "TASK.md",
+   "querystring.py",
+   "test_edge.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T2_rate_limiter__A__r1",
+  "task": "T2_rate_limiter",
+  "cond": "A",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 9,
+  "hidden_total": 9,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34295,
+  "tool_uses": 5,
+  "wall_s": 38.7,
+  "agent_files": [
+   "TASK.md",
+   "ratelimit.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T2_rate_limiter__A__r2",
+  "task": "T2_rate_limiter",
+  "cond": "A",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 9,
+  "hidden_total": 9,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34633,
+  "tool_uses": 6,
+  "wall_s": 154.0,
+  "agent_files": [
+   "TASK.md",
+   "ratelimit.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T2_rate_limiter__A__r3",
+  "task": "T2_rate_limiter",
+  "cond": "A",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 9,
+  "hidden_total": 9,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34314,
+  "tool_uses": 5,
+  "wall_s": 63.1,
+  "agent_files": [
+   "TASK.md",
+   "ratelimit.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T2_rate_limiter__B__r1",
+  "task": "T2_rate_limiter",
+  "cond": "B",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 9,
+  "hidden_total": 9,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 40058,
+  "tool_uses": 8,
+  "wall_s": 121.1,
+  "agent_files": [
+   "TASK.md",
+   "ratelimit.py",
+   "test_own.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T2_rate_limiter__B__r2",
+  "task": "T2_rate_limiter",
+  "cond": "B",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 9,
+  "hidden_total": 9,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 3,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 40153,
+  "tool_uses": 7,
+  "wall_s": 176.9,
+  "agent_files": [
+   "TASK.md",
+   "ratelimit.py",
+   "test_own.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T2_rate_limiter__B__r3",
+  "task": "T2_rate_limiter",
+  "cond": "B",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 9,
+  "hidden_total": 9,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 3,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 40890,
+  "tool_uses": 9,
+  "wall_s": 141.3,
+  "agent_files": [
+   "TASK.md",
+   "ratelimit.py",
+   "test_behavior.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T3_slugify__A__r1",
+  "task": "T3_slugify",
+  "cond": "A",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 20,
+  "hidden_total": 20,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34454,
+  "tool_uses": 6,
+  "wall_s": 104.0,
+  "agent_files": [
+   "TASK.md",
+   "slug.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T3_slugify__A__r2",
+  "task": "T3_slugify",
+  "cond": "A",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 20,
+  "hidden_total": 20,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34427,
+  "tool_uses": 6,
+  "wall_s": 160.9,
+  "agent_files": [
+   "TASK.md",
+   "slug.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T3_slugify__A__r3",
+  "task": "T3_slugify",
+  "cond": "A",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 20,
+  "hidden_total": 20,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34403,
+  "tool_uses": 5,
+  "wall_s": 82.1,
+  "agent_files": [
+   "TASK.md",
+   "slug.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T3_slugify__B__r1",
+  "task": "T3_slugify",
+  "cond": "B",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 20,
+  "hidden_total": 20,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 39116,
+  "tool_uses": 7,
+  "wall_s": 98.0,
+  "agent_files": [
+   "TASK.md",
+   "slug.py",
+   "test_extra.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T3_slugify__B__r2",
+  "task": "T3_slugify",
+  "cond": "B",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 20,
+  "hidden_total": 20,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 38100,
+  "tool_uses": 6,
+  "wall_s": 196.7,
+  "agent_files": [
+   "TASK.md",
+   "slug.py",
+   "test_extra.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T3_slugify__B__r3",
+  "task": "T3_slugify",
+  "cond": "B",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 20,
+  "hidden_total": 20,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 38443,
+  "tool_uses": 6,
+  "wall_s": 131.0,
+  "agent_files": [
+   "TASK.md",
+   "slug.py",
+   "test_extra.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T4_parallel_map__A__r1",
+  "task": "T4_parallel_map",
+  "cond": "A",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 8,
+  "hidden_total": 8,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34297,
+  "tool_uses": 5,
+  "wall_s": 59.0,
+  "agent_files": [
+   "TASK.md",
+   "pmap.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T4_parallel_map__A__r2",
+  "task": "T4_parallel_map",
+  "cond": "A",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 8,
+  "hidden_total": 8,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34229,
+  "tool_uses": 5,
+  "wall_s": 108.9,
+  "agent_files": [
+   "TASK.md",
+   "pmap.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T4_parallel_map__A__r3",
+  "task": "T4_parallel_map",
+  "cond": "A",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 8,
+  "hidden_total": 8,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34005,
+  "tool_uses": 4,
+  "wall_s": 44.9,
+  "agent_files": [
+   "TASK.md",
+   "pmap.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T4_parallel_map__B__r1",
+  "task": "T4_parallel_map",
+  "cond": "B",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 8,
+  "hidden_total": 8,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 38463,
+  "tool_uses": 6,
+  "wall_s": 100.2,
+  "agent_files": [
+   "TASK.md",
+   "pmap.py",
+   "test_extra.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T4_parallel_map__B__r2",
+  "task": "T4_parallel_map",
+  "cond": "B",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 8,
+  "hidden_total": 8,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 39043,
+  "tool_uses": 7,
+  "wall_s": 178.9,
+  "agent_files": [
+   "TASK.md",
+   "pmap.py",
+   "test_extra.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T4_parallel_map__B__r3",
+  "task": "T4_parallel_map",
+  "cond": "B",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 8,
+  "hidden_total": 8,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 2,
+  "judge_decisions": [
+   "ABSTAIN",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 39717,
+  "tool_uses": 8,
+  "wall_s": 141.0,
+  "agent_files": [
+   "TASK.md",
+   "pmap.py",
+   "test_pmap_extra.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T5_split_bill__A__r1",
+  "task": "T5_split_bill",
+  "cond": "A",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 13,
+  "hidden_total": 13,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34122,
+  "tool_uses": 6,
+  "wall_s": 120.1,
+  "agent_files": [
+   "TASK.md",
+   "bill.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T5_split_bill__A__r2",
+  "task": "T5_split_bill",
+  "cond": "A",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 13,
+  "hidden_total": 13,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 34190,
+  "tool_uses": 6,
+  "wall_s": 175.8,
+  "agent_files": [
+   "TASK.md",
+   "bill.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T5_split_bill__A__r3",
+  "task": "T5_split_bill",
+  "cond": "A",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 13,
+  "hidden_total": 13,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 0,
+  "judge_decisions": [],
+  "hidden_rate_per_iteration": [],
+  "regressions": 0,
+  "tokens": 33972,
+  "tool_uses": 5,
+  "wall_s": 48.4,
+  "agent_files": [
+   "TASK.md",
+   "bill.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T5_split_bill__B__r1",
+  "task": "T5_split_bill",
+  "cond": "B",
+  "run": 1,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 13,
+  "hidden_total": 13,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 3,
+  "judge_decisions": [
+   "ABSTAIN",
+   "FAIL",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 40888,
+  "tool_uses": 10,
+  "wall_s": 148.6,
+  "agent_files": [
+   "TASK.md",
+   "bill.py",
+   "test_bill_extra.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T5_split_bill__B__r2",
+  "task": "T5_split_bill",
+  "cond": "B",
+  "run": 2,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 13,
+  "hidden_total": 13,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 3,
+  "judge_decisions": [
+   "ABSTAIN",
+   "FAIL",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 40159,
+  "tool_uses": 9,
+  "wall_s": 228.2,
+  "agent_files": [
+   "TASK.md",
+   "bill.py",
+   "test_split_bill_props.py",
+   "test_visible.py"
+  ]
+ },
+ {
+  "id": "T5_split_bill__B__r3",
+  "task": "T5_split_bill",
+  "cond": "B",
+  "run": 3,
+  "hidden_pass_rate": 1.0,
+  "hidden_passed": 13,
+  "hidden_total": 13,
+  "hidden_failing": [],
+  "visible_pass": true,
+  "judge_iterations": 4,
+  "judge_decisions": [
+   "ABSTAIN",
+   "FAIL",
+   "FAIL",
+   "ABSTAIN"
+  ],
+  "hidden_rate_per_iteration": [
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "regressions": 0,
+  "tokens": 41188,
+  "tool_uses": 9,
+  "wall_s": 162.5,
+  "agent_files": [
+   "TASK.md",
+   "bill.py",
+   "test_bill_extra.py",
+   "test_visible.py"
+  ]
+ }
+]

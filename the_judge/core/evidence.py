@@ -1,4 +1,4 @@
-"""Ground Truth Evidence Extractor for The Judge v4.0."""
+"""Ground Truth Evidence Extractor."""
 
 import ast as _ast_module
 import json
@@ -9,22 +9,22 @@ import subprocess
 import tempfile
 import time
 import uuid
-from typing import Any, Optional
+from typing import Any
 
 from .baseline import compare_tests_to_baseline
 from .hardcoding import detect as detect_hardcoding
 from .independence import classify as classify_independence
 from .independence import source_files as implementation_files
-from .behavior_engine import BehaviorEngine
 from .property_engine import generate_property_tests, untriggered_probes
 from .sandbox import SandboxRunner
 from .test_discovery import (
+    data_files,
     discover_workspace_tests,
     import_roots,
+    read_pytest_config,
     support_files,
     workspace_module_names,
 )
-
 
 
 def test_base_name(name: str) -> str:
@@ -100,13 +100,12 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
             for alias in node.names:
                 if alias.name.split(".")[0] in workspace_modules:
                     imported_names.add(alias.asname or alias.name.split(".")[0])
-        elif isinstance(node, _ast_module.ImportFrom):
-            if node.module and any(
-                node.module == m or node.module.startswith(m + ".")
-                for m in workspace_modules
-            ):
-                for alias in node.names:
-                    imported_names.add(alias.asname or alias.name)
+        elif isinstance(node, _ast_module.ImportFrom) and node.module and any(
+            node.module == m or node.module.startswith(m + ".")
+            for m in workspace_modules
+        ):
+            for alias in node.names:
+                imported_names.add(alias.asname or alias.name)
 
     # All names that could reference target code
     target_names = workspace_modules | imported_names
@@ -173,7 +172,7 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
     return vacuous
 
 
-def run_command(cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None) -> dict[str, Any]:
+def run_command(cmd: list[str], cwd: str, env: dict[str, str] | None = None) -> dict[str, Any]:
     """Execute a subprocess command and return exit code, stdout, stderr."""
     try:
         proc = subprocess.run(
@@ -183,6 +182,7 @@ def run_command(cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None) 
             stdin=subprocess.DEVNULL,
             capture_output=True,
             text=True,
+            errors="replace",
             timeout=60,
         )
         return {
@@ -248,84 +248,29 @@ def _run_linter(abs_dir: str) -> dict[str, Any]:
     }
 
 
-def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> dict[str, Any]:
-    """Parse pytest output to extract passed and failed test names."""
-    passed_tests: list[str] = []
-    failed_tests: list[str] = []
-
-    combined = stdout + "\n" + stderr
-
-    if "<?xml version=" in stdout or "<?xml version=" in stderr:
-        try:
-            import xml.etree.ElementTree as ET
-            # find xml content
-            xml_str = ""
-            in_xml = False
-            for line in combined.splitlines():
-                if line.startswith("<?xml"):
-                    in_xml = True
-                if in_xml:
-                    xml_str += line + "\n"
-                if in_xml and line.strip() == "</testsuites>":
-                    break
-            
-            tree = ET.fromstring(xml_str)
-            for testcase in tree.findall('.//testcase'):
-                name = testcase.get('name')
-                if testcase.find('failure') is not None or testcase.find('error') is not None:
-                    if name not in failed_tests:
-                        failed_tests.append(name)
-                else:
-                    if name not in passed_tests:
-                        passed_tests.append(name)
-        except Exception:
-            pass
-            
-    if not passed_tests and not failed_tests:
-        for line in combined.splitlines():
-            line = line.strip()
-            if " PASSED" in line or line.endswith(" PASSED"):
-                raw_name = line.split(" PASSED")[0].split()[-1]
-                test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-                if test_name and test_name not in passed_tests:
-                    passed_tests.append(test_name)
-            elif " FAILED" in line or line.endswith(" FAILED"):
-                raw_name = line.split(" FAILED")[0].split()[-1]
-                test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-                if test_name and test_name not in failed_tests:
-                    failed_tests.append(test_name)
-
-    total_tests = len(passed_tests) + len(failed_tests)
-
-    return {
-        "exit_code": exit_code,
-        "total_tests": total_tests,
-        "passed_tests": passed_tests,
-        "failed_tests": failed_tests,
-        "raw_stdout": stdout[:4096],
-        "raw_stderr": stderr[:4096],
-    }
+# Seconds the sandboxed pytest run (workspace tests + probes) may take.
+DEFAULT_TEST_TIMEOUT = 300
 
 
 def capture_evidence(
     workspace_dir: str,
-    output_file: Optional[str] = None,
-    task_spec: Optional[dict[str, Any]] = None,
-    baseline: Optional[str] = None,
+    output_file: str | None = None,
+    task_spec: dict[str, Any] | None = None,
+    baseline: str | None = None,
+    timeout: int = DEFAULT_TEST_TIMEOUT,
 ) -> dict[str, Any]:
     """Capture ground truth evidence from workspace_dir.
 
     baseline: git ref the workspace tests are compared against for tampering
         (default HEAD when the workspace is a git repository).
+    timeout: seconds the sandboxed test run may take before it is stopped.
     """
     abs_dir = os.path.abspath(workspace_dir)
     # Resolve the baseline first so an unusable explicit --baseline fails fast.
     test_tampering = compare_tests_to_baseline(abs_dir, baseline)
 
-    # 1. Synthesize property tests & black-box probes
+    # 1. Synthesize the keyword-triggered judge probes
     candidates = generate_property_tests(abs_dir, task_spec=task_spec)
-    beh_engine = BehaviorEngine(seed=98765)
-    probes = beh_engine.generate_behavioral_probes(abs_dir)
 
     test_scripts: list[tuple[str, str]] = []
 
@@ -336,14 +281,6 @@ def capture_evidence(
         filename = f"_synthesized_property_tests_{idx}.py"
         test_scripts.append((filename, cand.challenge_code))
         for line in cand.challenge_code.splitlines():
-            if line.strip().startswith("def test_"):
-                fn_name = line.strip().split("(")[0].replace("def ", "").strip()
-                expected_challenges.append(fn_name)
-
-    for idx, probe in enumerate(probes):
-        filename = f"_synthesized_probe_{idx}.py"
-        test_scripts.append((filename, probe.executable_code))
-        for line in probe.executable_code.splitlines():
             if line.strip().startswith("def test_"):
                 fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 expected_challenges.append(fn_name)
@@ -371,9 +308,9 @@ def capture_evidence(
         try:
             tree = _ast.parse(content, filename=vt)
             for node in _ast.walk(tree):
-                if isinstance(node, _ast.FunctionDef) and node.name.startswith("test_"):
-                    if node.name not in expected_challenges:
-                        expected_challenges.append(node.name)
+                if (isinstance(node, _ast.FunctionDef) and node.name.startswith("test_")
+                        and node.name not in expected_challenges):
+                    expected_challenges.append(node.name)
         except Exception:
             pass  # Unparseable file — skip manifest tracking for it
 
@@ -382,9 +319,12 @@ def capture_evidence(
         abs_dir,
         test_scripts=test_scripts,
         pytest_args=["-vv"],
-        timeout=30,
+        timeout=timeout,
         support_files=support,
         import_roots=import_roots(abs_dir),
+        data_files=[(os.path.join(suite_dir, rel), os.path.join(abs_dir, rel))
+                    for rel in data_files(abs_dir, visible_tests)],
+        norecursedirs=read_pytest_config(abs_dir)["norecursedirs"],
     )
 
     passed_tests = sandbox_res["passed"]
@@ -397,14 +337,18 @@ def capture_evidence(
     # function name, so a function counts as executed when any case of it ran.
     all_executed = {test_base_name(t) for t in (*passed_tests, *failed_tests, *skipped_tests)}
     runner_error = sandbox_res.get("runner_error")
-    # Nothing ran at all when the runner failed to start: nothing is "missing".
-    missing_challenges = [] if runner_error else [
+    timed_out = bool(sandbox_res.get("timed_out"))
+    # Nothing ran at all when the runner failed to start, and a run stopped at the time
+    # limit never reported its results: in neither case is a test "missing".
+    missing_challenges = [] if runner_error or timed_out else [
         ch for ch in expected_challenges if ch not in all_executed
     ]
 
     test_suite_data = {
         "exit_code": sandbox_res["exit_code"],
         "runner_error": runner_error,
+        "timed_out": timed_out,
+        "timeout_seconds": timeout,
         # Assertion message per failing test (what was expected vs. observed).
         "errors": sandbox_res.get("failure_messages", {}),
         # Tests that raised but were reported as passed by some plugin/conftest.
@@ -437,11 +381,6 @@ def capture_evidence(
             if line.strip().startswith("def test_"):
                 fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 candidate_conf[fn_name] = cand.confidence
-                judge_authored_tests.add(fn_name)
-    for probe in probes:
-        for line in probe.executable_code.splitlines():
-            if line.strip().startswith("def test_"):
-                fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 judge_authored_tests.add(fn_name)
 
     test_provenance: dict[str, dict[str, Any]] = {}

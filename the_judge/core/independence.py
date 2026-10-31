@@ -21,7 +21,7 @@ import hashlib
 import json
 import os
 import time
-from typing import Any, Optional
+from typing import Any
 
 from .baseline import _test_functions
 from .test_discovery import EXCLUDED_DIRS, discover_workspace_tests
@@ -85,7 +85,7 @@ def freeze(abs_dir: str) -> dict[str, Any]:
             "freeze_count": len(data["freezes"]), "path": f"{FREEZE_DIR}/{FREEZE_FILE}"}
 
 
-def _compare(frozen: dict[str, Any], now: Optional[dict[str, Any]]) -> str:
+def _compare(frozen: dict[str, Any], now: dict[str, Any] | None) -> str:
     """'same' | 'strengthened' | 'weakened' | 'deleted'."""
     if now is None:
         return "deleted"
@@ -96,7 +96,7 @@ def _compare(frozen: dict[str, Any], now: Optional[dict[str, Any]]) -> str:
     return "same" if now["asserts"] == frozen["asserts"] else "strengthened"
 
 
-def classify(abs_dir: str, baseline: Optional[dict[str, Any]] = None) -> dict[str, Any]:
+def classify(abs_dir: str, baseline: dict[str, Any] | None = None) -> dict[str, Any]:
     """Which current tests are independent, which frozen tests were tampered with.
 
     baseline: the result of baseline.compare_tests_to_baseline (git), or None.

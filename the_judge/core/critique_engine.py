@@ -24,7 +24,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Evidence & Finding Types
@@ -101,7 +101,7 @@ class CritiqueFinding:
     resolution: FindingResolution = FindingResolution.OPEN
     evidence_refs: list[str] = field(default_factory=list)
     suggested_action: str = ""
-    agent_claim: Optional[str] = None  # The claim being contradicted (CONTRADICTED only)
+    agent_claim: str | None = None  # The claim being contradicted (CONTRADICTED only)
 
     def is_blocker(self) -> bool:
         """Return True when this finding must be resolved before the loop may stop.
@@ -180,13 +180,6 @@ class CritiqueResult:
     def get_open_findings(self) -> list[CritiqueFinding]:
         return [f for f in self.findings if f.resolution == FindingResolution.OPEN]
 
-    def get_open_by_severity(self, severity: FindingSeverity) -> list[CritiqueFinding]:
-        return [
-            f
-            for f in self.findings
-            if f.resolution == FindingResolution.OPEN and f.severity == severity
-        ]
-
     def to_dict(self) -> dict[str, Any]:
         open_count = len(self.get_open_findings())
         blocker_count = sum(1 for f in self.findings if f.is_blocker())
@@ -252,20 +245,6 @@ class CritiqueEngine:
     CONTRADICTED + CRITICAL always blocks the loop. See CritiqueFinding.is_blocker().
     """
 
-    SKEPTICAL_QUESTIONS: list[str] = [
-        "What is wrong with this work?",
-        "What is weak?",
-        "What is missing?",
-        "What has not been demonstrated?",
-        "What assumptions are being made?",
-        "What could fail in practice?",
-        "What would a skeptical expert challenge?",
-        "What claims are unsupported?",
-        "What evidence contradicts the agent?",
-        "What should be tested next?",
-        "What improvement would have the highest impact?",
-    ]
-
     # Reuse the module-level constant (avoids duplicating the frozenset)
     _IGNORED_DIRS = _IGNORED_DIRS
 
@@ -304,7 +283,8 @@ class CritiqueEngine:
                     py_count += 1
                     fpath = os.path.join(root, fname)
                     try:
-                        content = open(fpath, encoding="utf-8", errors="ignore").read(4096).lower()
+                        with open(fpath, encoding="utf-8", errors="ignore") as fh:
+                            content = fh.read(4096).lower()
                         if any(kw in content for kw in ("argparse", "click", "typer", "__main__")):
                             has_cli = True
                         if any(
@@ -353,7 +333,8 @@ class CritiqueEngine:
             return ProjectDomain.DATA_SCIENCE
         if ext == ".py":
             try:
-                content = open(filepath, encoding="utf-8", errors="ignore").read(4096).lower()
+                with open(filepath, encoding="utf-8", errors="ignore") as fh:
+                    content = fh.read(4096).lower()
                 if any(k in content for k in ("argparse", "click", "__main__")):
                     return ProjectDomain.CLI_SCRIPT
                 if any(k in content for k in ("pandas", "sklearn", "torch")):
@@ -371,7 +352,7 @@ class CritiqueEngine:
         workspace: str,
         verification_result: Any,
         ground_truth: dict[str, Any],
-        previous_round: Optional[dict[str, Any]] = None,
+        previous_round: dict[str, Any] | None = None,
     ) -> CritiqueResult:
         """Run a full independent adversarial critique of the workspace.
 
@@ -401,8 +382,8 @@ class CritiqueEngine:
         py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
         source_cache: dict[str, str] = {}
         for fpath in py_files:
-            with contextlib.suppress(Exception):
-                source_cache[fpath] = open(fpath, encoding="utf-8", errors="ignore").read()
+            with contextlib.suppress(Exception), open(fpath, encoding="utf-8", errors="ignore") as fh:
+                source_cache[fpath] = fh.read()
 
         # --- Q1 / Q9: What is wrong? Evidence-backed test failures -----------
         findings.extend(self._findings_from_test_failures(ground_truth, next_id))
@@ -606,7 +587,7 @@ class CritiqueEngine:
         self,
         workspace: str,
         domain: ProjectDomain,
-        source_cache: Optional[dict[str, str]] = None,
+        source_cache: dict[str, str] | None = None,
     ) -> list[CritiqueFinding]:
         """Scan source files for directly observable weaknesses.
 
@@ -630,7 +611,8 @@ class CritiqueEngine:
             py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
             for fpath in py_files:
                 try:
-                    content = open(fpath, encoding="utf-8", errors="ignore").read()
+                    with open(fpath, encoding="utf-8", errors="ignore") as fh:
+                        content = fh.read()
                     rel = os.path.relpath(fpath, workspace)
                     findings.extend(self._analyse_python_file(content, rel, obs_id, domain))
                 except Exception:
@@ -640,7 +622,8 @@ class CritiqueEngine:
             html_files = self._collect_source_files(workspace, (".html", ".htm"))
             for fpath in html_files:
                 try:
-                    content = open(fpath, encoding="utf-8", errors="ignore").read()
+                    with open(fpath, encoding="utf-8", errors="ignore") as fh:
+                        content = fh.read()
                     rel = os.path.relpath(fpath, workspace)
                     findings.extend(self._analyse_html_file(content, rel, obs_id))
                 except Exception:
@@ -841,7 +824,7 @@ class CritiqueEngine:
         workspace: str,
         ground_truth: dict[str, Any],
         domain: ProjectDomain,
-        source_cache: Optional[dict[str, str]] = None,
+        source_cache: dict[str, str] | None = None,
     ) -> list[str]:
         """Find assumptions embedded in code that have not been tested."""
         assumptions: list[str] = []
@@ -895,7 +878,8 @@ class CritiqueEngine:
             py_files = self._collect_source_files(workspace, (".py",), exclude_tests=True)
             for fpath in py_files:
                 try:
-                    content = open(fpath, encoding="utf-8", errors="ignore").read(8192).lower()
+                    with open(fpath, encoding="utf-8", errors="ignore") as fh:
+                        content = fh.read(8192).lower()
                     if (
                         "threading" in content
                         or "asyncio" in content
@@ -963,10 +947,20 @@ class CritiqueEngine:
                         "zero",
                         "empty",
                         "overflow",
+                        "exact",
+                        "negative",
+                        "invalid",
+                        "expire",
                     )
                 )
             ]
-            if not boundary_tests:
+            # Mutation testing is stronger evidence than test names: when the planted
+            # boundary bugs (`<` -> `<=`, ...) were caught, the limits are tested.
+            mutation = ground_truth.get("mutation") or {}
+            boundaries_proven = bool(
+                mutation.get("ran") and mutation.get("score", 0.0) >= mutation.get("threshold", 1.0)
+            )
+            if not boundary_tests and not boundaries_proven:
                 missing.append(
                     "No boundary or edge-case tests — behaviour at limits and extremes is unverified."
                 )

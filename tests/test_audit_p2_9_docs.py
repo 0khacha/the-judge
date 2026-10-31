@@ -13,8 +13,9 @@ import re
 import subprocess
 
 import pytest
+from audit_helpers import repo_root
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO = repo_root()
 GIT_INSTALL = "git+https://github.com/0khacha/the-judge.git"
 # `pip install [flags such as --upgrade / -U] the-judge[extras]`, i.e. the other package.
 PYPI_INSTALL = re.compile(
@@ -25,7 +26,10 @@ PYPI_INSTALL = re.compile(
 def _tracked(*suffixes):
     out = subprocess.run(["git", "ls-files"], cwd=REPO, capture_output=True, text=True,
                          stdin=subprocess.DEVNULL, check=True).stdout.split()
-    return [p for p in out if p.endswith(suffixes) and not p.startswith("tests/")]
+    # eval_results/ holds archived evidence (e.g. the README as published at the time of
+    # an evaluation); it documents history and must not be rewritten to match today.
+    return [p for p in out if p.endswith(suffixes)
+            and not p.startswith(("tests/", "eval_results/"))]
 
 
 def _read(rel):
@@ -77,28 +81,6 @@ def test_readme_has_no_relative_links_or_images():
                 if not re.match(r"(https?://|mailto:|#)", a or b)]
     assert relative == []
     assert "https://raw.githubusercontent.com/0khacha/the-judge/main/logo.svg" in readme
-
-
-@pytest.mark.parametrize("rel", [
-    "benchmark/results/agent/report/agent_benchmark_report.md",
-    "benchmark/THE_JUDGE_AGENT_BENCHMARK_REPORT.md",
-])
-def test_simulated_agent_benchmark_is_labelled_simulated(rel):
-    text = _read(rel)
-    assert "SIMULATED" in text
-    for claim in ("Real Coding-Agent", "Real Token Overhead", "(Real Tokens)", "Real Agents"):
-        assert claim not in text, claim
-
-
-def test_report_generator_labels_non_real_runs_as_simulated():
-    import sys
-
-    sys.path.insert(0, REPO)
-    from benchmark.agent.agent_report_generator import generate_agent_report
-
-    text = generate_agent_report({}, [], {}, {"mode": "test"})
-    first = text.splitlines()[0]
-    assert "SIMULATED" in first and "Real" not in first
 
 
 def test_no_dangling_references_to_missing_audit_documents():

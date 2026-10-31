@@ -5,8 +5,8 @@
 The final message must derive from the actual last decision.
 """
 
-import io
 import contextlib
+import io
 
 from the_judge.integrations.demo import run_demo
 

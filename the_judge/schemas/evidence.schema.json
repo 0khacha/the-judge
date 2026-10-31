@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "TheJudgeGroundTruthEvidence",
-  "description": "Ground truth evidence Schema for The Judge v4.0.",
+  "description": "Ground truth evidence Schema.",
   "type": "object",
   "required": ["test_suite", "challenge_manifest"],
   "properties": {

@@ -12,13 +12,9 @@ Tests for:
 
 import inspect
 
-import pytest
-
 from the_judge.api import verify
-from the_judge.core.evidence import parse_pytest_output
 from the_judge.core.sandbox import SandboxRunner
 from the_judge.core.score_engine import evaluate
-
 
 # ---------------------------------------------------------------------------
 # P0 — Requirement↔evidence mapping
@@ -83,7 +79,7 @@ class TestRequirementEvidenceMapping:
                 }
             },
         }
-        result = verify(
+        verify(
             workspace=".",
             task_spec=task_spec,
             _ground_truth=ground_truth,
@@ -288,38 +284,8 @@ class TestDeadGates:
         assert any(n.startswith("INFO:") and "Linter" in n for n in report["insufficient_evidence_notes"])
 
 
-class TestResultParsing:
-    def test_junitxml_parsing_identifies_passed_and_failed_tests(self):
-        xml_output = """<?xml version="1.0" encoding="utf-8"?>
-<testsuites>
-  <testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.010">
-    <testcase classname="test_foo" name="test_pass" time="0.001" />
-    <testcase classname="test_foo" name="test_fail" time="0.001">
-      <failure message="assert False">...</failure>
-    </testcase>
-  </testsuite>
-</testsuites>"""
-        res = parse_pytest_output(xml_output, "", 1)
-        assert "test_pass" in res["passed_tests"]
-        assert "test_fail" in res["failed_tests"]
-        assert len(res["passed_tests"]) == 1
-        assert len(res["failed_tests"]) == 1
-
-    def test_target_printing_passed_does_not_create_phantom_tests(self):
-        xml_output = """<?xml version="1.0" encoding="utf-8"?>
-<testsuites>
-  <testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.010">
-    <testcase classname="test_foo" name="test_real" time="0.001" />
-  </testsuite>
-</testsuites>"""
-        stdout_with_trick = xml_output + "\nFAKE_TEST PASSED"
-        res = parse_pytest_output(stdout_with_trick, "", 0)
-        assert "test_real" in res["passed_tests"]
-        assert "FAKE_TEST" not in res["passed_tests"]
-
 class TestSandboxIsolation:
     def test_sandbox_temp_dir_is_outside_workspace(self, tmp_path):
-        import os
         workspace = str(tmp_path)
         # P2-8: the subprocess cwd is the workspace (neutral, like a normal pytest
         # run); what must be outside the workspace is where tests are collected.
@@ -348,7 +314,7 @@ class TestSandboxIsolation:
         workspace = str(tmp_path)
         with open(os.path.join(workspace, "conftest.py"), "w") as f:
             f.write("def pytest_collection_modifyitems(session, config, items):\n    items.clear()\n")
-            
+
         test_code = "def test_actually_runs():\n    pass\n"
         res = SandboxRunner.execute_in_anonymous_sandbox(workspace, [("test_real.py", test_code)])
         assert "test_actually_runs" in res["passed"]
@@ -356,120 +322,46 @@ class TestSandboxIsolation:
 
 class TestProvenanceStructural:
     def test_structural_provenance_rejects_target_sneaky_test(self, tmp_path):
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import MagicMock, patch
+
         from the_judge.core.evidence import capture_evidence
-        
+
         with patch("the_judge.core.evidence.generate_property_tests") as mock_gen_props, \
-             patch("the_judge.core.evidence.BehaviorEngine") as mock_beh_eng_cls, \
+\
              patch("the_judge.core.evidence.SandboxRunner.execute_in_anonymous_sandbox") as mock_sandbox, \
              patch("the_judge.core.evidence.run_command") as mock_run_cmd, \
              patch("os.listdir") as mock_listdir, \
              patch("builtins.open") as mock_open:
-            
+
             # Setup mock for property tests
             mock_cand = MagicMock()
             mock_cand.challenge_code = "def test_prop_judge_1():\n    pass\n"
             mock_cand.confidence = "HIGH"
             mock_gen_props.return_value = [mock_cand]
-            
-            # Setup mock for behavior engine
-            mock_beh_eng = MagicMock()
-            mock_beh_eng_cls.return_value = mock_beh_eng
-            mock_probe = MagicMock()
-            mock_probe.executable_code = "def test_behavior_judge_2():\n    pass\n"
-            mock_beh_eng.generate_behavioral_probes.return_value = [mock_probe]
-            
+
             # Mock workspace dir visible tests
             mock_listdir.return_value = ["test_workspace.py"]
             mock_open.return_value.__enter__.return_value.read.return_value = "def test_behavior_sneaky():\n    pass\n"
-            
+
             # Setup mock for sandbox
             mock_sandbox.return_value = {
-                "passed": ["test_prop_judge_1", "test_behavior_judge_2", "test_behavior_sneaky"],
+                "passed": ["test_prop_judge_1", "test_behavior_sneaky"],
                 "failed": [],
                 "exit_code": 0,
                 "stdout": "",
                 "stderr": "",
                 "file_tampered": False
             }
-            
+
             # Setup mock for run_command (type checking and linting)
             mock_run_cmd.return_value = {"exit_code": 0, "stdout": "", "stderr": ""}
-            
+
             evidence = capture_evidence(str(tmp_path))
-            
+
             provenance = evidence["test_provenance"]
-            
-            # test_prop_judge_1 and test_behavior_judge_2 should be judge_challenge_test
+
+            # test_prop_judge_1 was synthesized by the judge
             assert provenance["test_prop_judge_1"]["source"] == "judge_challenge_test"
-            assert provenance["test_behavior_judge_2"]["source"] == "judge_challenge_test"
-            
+
             # test_behavior_sneaky should NOT be judge_challenge_test, despite "behavior_" in its name
             assert provenance["test_behavior_sneaky"]["source"] == "public_visible_test"
-
-
-# ---------------------------------------------------------------------------
-# P1 — Target code executes inside the Judge process during discovery
-# ---------------------------------------------------------------------------
-
-class TestDiscoveryIsolation:
-    """Ensure that target module discovery does not execute untrusted code."""
-
-    def test_discovery_does_not_execute_code_or_crash(self, tmp_path):
-        """Verify that discover_callables() does NOT execute code (no SystemExit)."""
-        malicious = tmp_path / "malicious.py"
-        malicious.write_text("import sys\nsys.exit('pwned')\n")
-        
-        from the_judge.core.behavior_engine import BehaviorEngine
-        engine = BehaviorEngine()
-        result = engine.discover_callables(str(tmp_path))
-        
-        # Should succeed and return empty or ignore
-        assert len(result) == 0
-
-    def test_discovery_does_not_modify_sys_path(self, tmp_path):
-        """Verify the Judge's sys.path is not modified after discover_callables() returns."""
-        modifying = tmp_path / "modifier.py"
-        modifying.write_text("import sys\nsys.path.append('evil_path')\n")
-        
-        from the_judge.core.behavior_engine import BehaviorEngine
-        engine = BehaviorEngine()
-        
-        import sys
-        old_path = list(sys.path)
-        
-        engine.discover_callables(str(tmp_path))
-        
-        assert sys.path == old_path
-
-    def test_discovery_extracts_metadata(self, tmp_path):
-        """Verify that discovered metadata contains the correct function names and parameter info."""
-        target = tmp_path / "target.py"
-        target.write_text('''
-def my_func(a: int, b: str) -> bool:
-    return True
-
-class MyClass:
-    def __init__(self, x):
-        pass
-    def my_method(self):
-        pass
-''')
-        from the_judge.core.behavior_engine import BehaviorEngine
-        engine = BehaviorEngine()
-        result = engine.discover_callables(str(tmp_path))
-        
-        assert len(result) == 2
-        
-        funcs = [r for r in result if r['type'] == 'function']
-        classes = [r for r in result if r['type'] == 'class']
-        
-        assert len(funcs) == 1
-        assert funcs[0]['name'] == 'my_func'
-        assert len(funcs[0]['parameters']) == 2
-        assert funcs[0]['parameters'][0].name == 'a'
-        assert funcs[0]['parameters'][0].annotation == 'int'
-        
-        assert len(classes) == 1
-        assert classes[0]['name'] == 'MyClass'
-        assert 'my_method' in classes[0]['methods']

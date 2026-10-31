@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
+
+from the_judge._version import __version__
 
 
 @dataclass
@@ -8,10 +10,10 @@ class Finding:
     category: str  # "behavior", "collection", "type_check", "security", "regression"
     severity: str  # "blocking", "high", "medium", "low"
     description: str
-    property_name: Optional[str] = None
-    observed: Optional[str] = None
-    expected: Optional[str] = None
-    suggested_focus: Optional[str] = None
+    property_name: str | None = None
+    observed: str | None = None
+    expected: str | None = None
+    suggested_focus: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -39,7 +41,7 @@ class VerificationResult:
     # Numbered, machine-readable steps telling the agent what to do next.
     next_actions: list[dict[str, Any]] = field(default_factory=list)
     # Iteration bookkeeping when verification history is recorded (CLI default).
-    loop: Optional[dict[str, Any]] = None
+    loop: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -54,6 +56,6 @@ class VerificationResult:
             "loop": self.loop,
             "runtime": {
                 "duration_seconds": round(self.runtime_seconds, 3),
-                "judge_version": "v1.0.2",
+                "judge_version": f"v{__version__}",
             },
         }

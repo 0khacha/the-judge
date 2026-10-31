@@ -1,0 +1,144 @@
+{
+ "decision": "ABSTAIN",
+ "numeric_score": 60.0,
+ "trust_profile": {
+  "evidence_level": 0,
+  "total_tests": 0,
+  "passed_tests": 0,
+  "failed_tests": 0,
+  "requirement_checks": [],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": [
+    {
+     "module": "bill",
+     "symbol": "split_bill",
+     "kind": "idempotency",
+     "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+    }
+   ]
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "FAILED",
+   "execution_integrity": "FAILED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "FAILED"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "NOT_CHECKED"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "FAILED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "FAILED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Functional contract implementation",
+     "category": "functional",
+     "priority": "critical",
+     "status": "UNVERIFIED",
+     "mapped_properties": [],
+     "unverified_reason": "No test or probe was found that exercises REQ-001."
+    }
+   ],
+   "summary": {
+    "total_requirements": 1,
+    "verified_count": 0,
+    "partially_verified_count": 0,
+    "unverified_count": 1,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 0.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 0.0,
+    "specification_escape_rate_pct": 100.0,
+    "critical_unverified_ids": [
+     "REQ-001"
+    ]
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "COVER-001",
+   "category": "coverage",
+   "severity": "low",
+   "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: bill.split_bill",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+  },
+  {
+   "id": "EVID-001",
+   "category": "collection",
+   "severity": "medium",
+   "description": "ABSTAIN Level 0 (Test Runner): no test could run because pytest could not be started (C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\venv_nopytest\\Scripts\\python.exe -m pytest did not run: C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\venv_nopytest\\Scripts\\python.exe: No module named pytest). Install it with `pip install pytest` in the environment that runs The Judge.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-002",
+   "category": "collection",
+   "severity": "medium",
+   "description": "ABSTAIN Level 2 (Coverage-Aware Gate): Critical requirement(s) [REQ-001] remain UNVERIFIED or CONFLICTING.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  },
+  {
+   "id": "EVID-003",
+   "category": "collection",
+   "severity": "medium",
+   "description": "ABSTAIN Level 0: No executable unit tests were run to verify implementation.",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\judge_acc_out\\env_no_pytest\\workspace",
+  "workspace_hash": "6479de3f04209ce160007a2a7295874928f9faa2c0080c8feefd77a2622a9e73",
+  "judge_version": "v1.0.0",
+  "timestamp": "2026-10-28T20:57:55Z",
+  "evidence_level": 0,
+  "total_tests": 0,
+  "passed_tests": 0,
+  "failed_tests": 0
+ },
+ "blocking_issues": [],
+ "insufficient_notes": [
+  "ABSTAIN Level 0 (Test Runner): no test could run because pytest could not be started (C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\venv_nopytest\\Scripts\\python.exe -m pytest did not run: C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\venv_nopytest\\Scripts\\python.exe: No module named pytest). Install it with `pip install pytest` in the environment that runs The Judge.",
+  "ABSTAIN Level 2 (Coverage-Aware Gate): Critical requirement(s) [REQ-001] remain UNVERIFIED or CONFLICTING.",
+  "ABSTAIN Level 0: No executable unit tests were run to verify implementation."
+ ],
+ "runtime": {
+  "duration_seconds": 7.277,
+  "judge_version": "v1.0.0"
+ }
+}

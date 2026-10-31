@@ -1,0 +1,14 @@
+{
+  "name": "the-judge",
+  "description": "The Judge: an independent verifier that keeps Claude's code honest (tests first, mutation testing, PASS/FAIL/ABSTAIN with next actions).",
+  "owner": {
+    "name": "0khacha"
+  },
+  "plugins": [
+    {
+      "name": "the-judge",
+      "source": "./plugin",
+      "description": "Independent verifier for Claude's code: a Stop hook re-verifies every change and sends the work back with exact next actions until PASS."
+    }
+  ]
+}

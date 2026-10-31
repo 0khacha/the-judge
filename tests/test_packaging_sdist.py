@@ -1,34 +1,54 @@
 """Published distributions must contain the package and only files tracked by git.
 
 MANIFEST.in's recursive-include patterns pick up whatever is on disk, so local,
-git-ignored files (benchmark scratch results, private reports) would otherwise be
+git-ignored files (scratch results, private reports) would otherwise be
 published to PyPI with the sdist. Conversely, an over-broad exclude can silently
 drop the package itself; `python -m build` builds the wheel from the sdist, so the
 wheel would then be empty.
 """
 
+import glob
 import os
+import shutil
 import subprocess
 import sys
 import tarfile
+import time
 import zipfile
 
 import pytest
+from audit_helpers import repo_root
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO = repo_root()
 GENERATED = ("PKG-INFO", "setup.cfg", "the_judge_verify.egg-info/")
 REQUIRED = ("the_judge/__init__.py", "the_judge/api.py", "the_judge/core/sandbox.py",
-            "the_judge/integrations/cli.py", "judge/__init__.py")
+            "the_judge/integrations/cli.py", "the_judge/integrations/agent_runner.py",
+            "the_judge/hook.py")
 
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
     pytest.importorskip("build")
     out = tmp_path_factory.mktemp("dist")
-    proc = subprocess.run(
-        [sys.executable, "-m", "build", "--no-isolation", "--outdir", str(out), REPO],
-        capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=900,
-    )
+    # setuptools assembles the sdist in a release directory inside the checkout
+    # (the_judge_verify-<version>) and deletes it afterwards; on Windows a scanner
+    # (antivirus, indexer) can briefly hold one of its new files open, failing the
+    # build and leaving the directory half deleted. Retry only that failure, after
+    # removing the leftover release directory.
+    for attempt in range(3):
+        for leftover in glob.glob(os.path.join(REPO, "the_judge_verify-*")):
+            if os.path.isdir(leftover):
+                shutil.rmtree(leftover, ignore_errors=True)
+        proc = subprocess.run(
+            [sys.executable, "-m", "build", "--no-isolation", "--outdir", str(out), REPO],
+            capture_output=True, text=True, errors="replace", stdin=subprocess.DEVNULL,
+            timeout=900,
+        )
+        if proc.returncode == 0 or "the_judge_verify-" not in proc.stderr or attempt == 2:
+            break
+        time.sleep(5)
+        for built_file in out.iterdir():
+            built_file.unlink()
     assert proc.returncode == 0, proc.stderr[-2000:]
     (sdist,) = list(out.glob("*.tar.gz"))
     (wheel,) = list(out.glob("*.whl"))

@@ -1,0 +1,276 @@
+{
+ "python": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/venv_eval/Scripts/python.exe",
+ "real_judge": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/venv_eval/Scripts/judge.exe",
+ "runs": [
+  {
+   "id": "T1_query_parser__A__r1",
+   "task": "T1_query_parser",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T1_query_parser__A__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T1_query_parser__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "T1_query_parser__A__r2",
+   "task": "T1_query_parser",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T1_query_parser__A__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T1_query_parser__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "T1_query_parser__A__r3",
+   "task": "T1_query_parser",
+   "cond": "A",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T1_query_parser__A__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T1_query_parser__A__r3",
+   "wrapper": null
+  },
+  {
+   "id": "T1_query_parser__B__r1",
+   "task": "T1_query_parser",
+   "cond": "B",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T1_query_parser__B__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T1_query_parser__B__r1",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T1_query_parser__B__r1.py"
+  },
+  {
+   "id": "T1_query_parser__B__r2",
+   "task": "T1_query_parser",
+   "cond": "B",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T1_query_parser__B__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T1_query_parser__B__r2",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T1_query_parser__B__r2.py"
+  },
+  {
+   "id": "T1_query_parser__B__r3",
+   "task": "T1_query_parser",
+   "cond": "B",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T1_query_parser__B__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T1_query_parser__B__r3",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T1_query_parser__B__r3.py"
+  },
+  {
+   "id": "T2_rate_limiter__A__r1",
+   "task": "T2_rate_limiter",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T2_rate_limiter__A__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T2_rate_limiter__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "T2_rate_limiter__A__r2",
+   "task": "T2_rate_limiter",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T2_rate_limiter__A__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T2_rate_limiter__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "T2_rate_limiter__A__r3",
+   "task": "T2_rate_limiter",
+   "cond": "A",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T2_rate_limiter__A__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T2_rate_limiter__A__r3",
+   "wrapper": null
+  },
+  {
+   "id": "T2_rate_limiter__B__r1",
+   "task": "T2_rate_limiter",
+   "cond": "B",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T2_rate_limiter__B__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T2_rate_limiter__B__r1",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T2_rate_limiter__B__r1.py"
+  },
+  {
+   "id": "T2_rate_limiter__B__r2",
+   "task": "T2_rate_limiter",
+   "cond": "B",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T2_rate_limiter__B__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T2_rate_limiter__B__r2",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T2_rate_limiter__B__r2.py"
+  },
+  {
+   "id": "T2_rate_limiter__B__r3",
+   "task": "T2_rate_limiter",
+   "cond": "B",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T2_rate_limiter__B__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T2_rate_limiter__B__r3",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T2_rate_limiter__B__r3.py"
+  },
+  {
+   "id": "T3_slugify__A__r1",
+   "task": "T3_slugify",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T3_slugify__A__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T3_slugify__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "T3_slugify__A__r2",
+   "task": "T3_slugify",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T3_slugify__A__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T3_slugify__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "T3_slugify__A__r3",
+   "task": "T3_slugify",
+   "cond": "A",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T3_slugify__A__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T3_slugify__A__r3",
+   "wrapper": null
+  },
+  {
+   "id": "T3_slugify__B__r1",
+   "task": "T3_slugify",
+   "cond": "B",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T3_slugify__B__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T3_slugify__B__r1",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T3_slugify__B__r1.py"
+  },
+  {
+   "id": "T3_slugify__B__r2",
+   "task": "T3_slugify",
+   "cond": "B",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T3_slugify__B__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T3_slugify__B__r2",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T3_slugify__B__r2.py"
+  },
+  {
+   "id": "T3_slugify__B__r3",
+   "task": "T3_slugify",
+   "cond": "B",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T3_slugify__B__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T3_slugify__B__r3",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T3_slugify__B__r3.py"
+  },
+  {
+   "id": "T4_parallel_map__A__r1",
+   "task": "T4_parallel_map",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T4_parallel_map__A__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T4_parallel_map__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "T4_parallel_map__A__r2",
+   "task": "T4_parallel_map",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T4_parallel_map__A__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T4_parallel_map__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "T4_parallel_map__A__r3",
+   "task": "T4_parallel_map",
+   "cond": "A",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T4_parallel_map__A__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T4_parallel_map__A__r3",
+   "wrapper": null
+  },
+  {
+   "id": "T4_parallel_map__B__r1",
+   "task": "T4_parallel_map",
+   "cond": "B",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T4_parallel_map__B__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T4_parallel_map__B__r1",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T4_parallel_map__B__r1.py"
+  },
+  {
+   "id": "T4_parallel_map__B__r2",
+   "task": "T4_parallel_map",
+   "cond": "B",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T4_parallel_map__B__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T4_parallel_map__B__r2",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T4_parallel_map__B__r2.py"
+  },
+  {
+   "id": "T4_parallel_map__B__r3",
+   "task": "T4_parallel_map",
+   "cond": "B",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T4_parallel_map__B__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T4_parallel_map__B__r3",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T4_parallel_map__B__r3.py"
+  },
+  {
+   "id": "T5_split_bill__A__r1",
+   "task": "T5_split_bill",
+   "cond": "A",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T5_split_bill__A__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T5_split_bill__A__r1",
+   "wrapper": null
+  },
+  {
+   "id": "T5_split_bill__A__r2",
+   "task": "T5_split_bill",
+   "cond": "A",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T5_split_bill__A__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T5_split_bill__A__r2",
+   "wrapper": null
+  },
+  {
+   "id": "T5_split_bill__A__r3",
+   "task": "T5_split_bill",
+   "cond": "A",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T5_split_bill__A__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T5_split_bill__A__r3",
+   "wrapper": null
+  },
+  {
+   "id": "T5_split_bill__B__r1",
+   "task": "T5_split_bill",
+   "cond": "B",
+   "run": 1,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T5_split_bill__B__r1",
+   "log": "C:/projects/the-judge/eval_results/runs/T5_split_bill__B__r1",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T5_split_bill__B__r1.py"
+  },
+  {
+   "id": "T5_split_bill__B__r2",
+   "task": "T5_split_bill",
+   "cond": "B",
+   "run": 2,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T5_split_bill__B__r2",
+   "log": "C:/projects/the-judge/eval_results/runs/T5_split_bill__B__r2",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T5_split_bill__B__r2.py"
+  },
+  {
+   "id": "T5_split_bill__B__r3",
+   "task": "T5_split_bill",
+   "cond": "B",
+   "run": 3,
+   "workspace": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/ws/T5_split_bill__B__r3",
+   "log": "C:/projects/the-judge/eval_results/runs/T5_split_bill__B__r3",
+   "wrapper": "C:/Users/moham/AppData/Local/Temp/claude/C--projects-the-judge/6207043a-0e2e-4938-b71c-7d30fd1878fc/scratchpad/eval_tools/judge_T5_split_bill__B__r3.py"
+  }
+ ]
+}

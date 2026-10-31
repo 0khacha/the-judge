@@ -31,7 +31,7 @@ class _Steps:
 
 
 def build(decision: str, eval_output: dict[str, Any], evidence: dict[str, Any],
-          loop: dict[str, Any] = None) -> list[dict[str, Any]]:
+          loop: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     steps = _Steps()
     notes = eval_output.get("insufficient_evidence_notes", [])
     blocking = eval_output.get("blocking_issues", [])
@@ -96,6 +96,11 @@ def build(decision: str, eval_output: dict[str, Any], evidence: dict[str, Any],
     if "(Test Runner)" in text:
         steps.add("install_pytest", "pytest could not be started, so no test ran.",
                   command="pip install pytest")
+    if "(Timeout)" in text:
+        steps.add("raise_timeout", next(n for n in notes if "(Timeout)" in n),
+                  command="judge verify . --json --timeout 900",
+                  guidance="Raise the limit only if the suite is legitimately slow; a hang "
+                           "in the code under test is a bug to fix instead.")
     if "(No Tests)" in text:
         steps.add("write_tests", "No tests were collected. Write test_*.py files with test_* "
                   "functions that assert the behaviour the task specifies (normal cases, edge "

@@ -23,7 +23,7 @@ import sys
 import tempfile
 import threading
 import time
-from typing import Any, Optional
+from typing import Any
 
 from .independence import source_files
 from .sandbox import SandboxRunner
@@ -125,9 +125,9 @@ class _Mutator(ast.NodeTransformer):
 
     def visit_Constant(self, node: ast.Constant) -> ast.AST:
         value = node.value
-        if isinstance(value, int) and not isinstance(value, bool):
-            if self._site(node, f"{value} -> {value + 1}"):
-                return ast.copy_location(ast.Constant(value=value + 1), node)
+        if (isinstance(value, int) and not isinstance(value, bool)
+                and self._site(node, f"{value} -> {value + 1}")):
+            return ast.copy_location(ast.Constant(value=value + 1), node)
         return node
 
 
@@ -302,7 +302,7 @@ def run_mutation(abs_dir: str, max_mutants: int = MAX_MUTANTS,
     return result
 
 
-def summary(result: Optional[dict[str, Any]]) -> dict[str, Any]:
+def summary(result: dict[str, Any] | None) -> dict[str, Any]:
     if not result:
         return {"ran": False}
     return {k: result[k] for k in ("ran", "skipped_reason", "total", "killed", "score", "threshold")}

@@ -1,10 +1,10 @@
-"""Structure-driven behavioral property inference engine for The Judge v4.0."""
+"""Structure-driven behavioral property inference engine."""
 
 import ast
 import os
 import random
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 # Shared helpers emitted at the top of every generated probe. Probes invent their
 # inputs, so an exception raised on those inputs means "probe not applicable" (skip),
@@ -56,7 +56,7 @@ class PropertyCandidate:
 
 
 class StructurePropertyEngine:
-    """Structure-driven behavioral property inference engine for The Judge v4.0."""
+    """Structure-driven behavioral property inference engine."""
 
     def __init__(self, seed: int = 48127):
         self.seed = seed
@@ -474,7 +474,7 @@ def _probe_target_files(abs_target: str) -> list[str]:
 
 
 def generate_property_tests(
-    task_dir: str, task_spec: Optional[dict[str, Any]] = None
+    task_dir: str, task_spec: dict[str, Any] | None = None
 ) -> list[PropertyCandidate]:
     abs_target = os.path.abspath(task_dir)
     engine = StructurePropertyEngine(seed=48127)

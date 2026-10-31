@@ -1,116 +1,90 @@
-# The Judge v4.0 Architecture Specification
+# Architecture
 
-## Overview
-
-The Judge v4.0 is structured as an **adversarial, evidence-gated verification layer**. Its primary architecture separates untrusted AI target execution from trusted verification and scoring.
+The Judge separates **untrusted** work (the agent's code and tests, run in a subprocess)
+from **trusted** judgement (evidence, scoring, next actions, in the judge's own
+process). An agent never sees how the verdict is computed, only what to do next.
 
 ```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        AI CODING AGENT                                 │
-│  (Generates or modifies implementation code in untrusted workspace)   │
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │
-                                   ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                       THE JUDGE PUBLIC API                             │
-│                     the_judge.verify(workspace)                        │
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │
-         ┌─────────────────────────┼─────────────────────────┐
-         ▼                         ▼                         ▼
-┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
-│ BehaviorEngine  │       │ PropertyEngine  │       │  SandboxRunner  │
-│ Black-box probes│       │ AST Inference   │       │ Isolated Subproc│
-└────────┬────────┘       └────────┬────────┘       └────────┬────────┘
-         │                         │                         │
-         └─────────────────────────┼─────────────────────────┘
-                                   │
-                                   ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                      GROUND TRUTH EVIDENCE                             │
-│                  capture_evidence(workspace_dir)                       │
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │
-                                   ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                      SCORE & TRUST PROFILE ENGINE                      │
-│                                                                        │
-│   Hard Gates 1–8:                                                      │
-│   - Gate 1: Test Suite Failures                                        │
-│   - Gate 2: Type Checker Errors                                        │
-│   - Gate 3: Blocking Security Notes                                   │
-│   - Gate 4: Requirement Failures                                       │
-│   - Gate 5: Discrepancy Gate (Claim vs Ground Truth)                   │
-│   - Gate 6: Multi-Round Regression Protection                          │
-│   - Gate 7: Test Collection & Challenge Tampering Gate                 │
-│   - Gate 8: Verification Denial / ABSTAIN Manipulation Gate            │
-│                                                                        │
-│   5-Dimension Trust Profile Engine:                                   │
-│   1. Environment Isolation (Process, FS, Env, Import, Cross-run)       │
-│   2. Evidence Integrity (Challenge, Collection, Execution, Result)    │
-│   3. Behavioral Coverage (Boundary, Perturbation, State, Semantic)     │
-│   4. Adversarial Robustness (Known, Adaptive, Temporal, Evasion)       │
-│   5. Abstention Correctness (Insufficient, Conflicting, Denial)        │
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │
-                                   ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                      VERIFICATION RESULT                               │
-│                   PASS  │  FAIL  │  ABSTAIN                            │
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │
-                                   ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                        AGENT ADAPTER LAYER                             │
-│            Formats structured findings (no hidden source code)          │
-└────────────────────────────────────────────────────────────────────────┘
+ agent / user ──► judge verify . ─────────────────────────────────────────────┐
+                    │                                                         │
+                    ▼                                                         │
+   capture_evidence (core/evidence.py)                                        │
+     ├─ test_discovery   which files pytest would collect                     │
+     ├─ property_engine  keyword-triggered judge probes (rollback, ttl, ...)  │
+     ├─ sandbox          tests + probes in a subprocess, collected from a     │
+     │                   temp dir, with hooks that catch rewritten results    │
+     ├─ baseline         tests weakened since the git baseline?               │
+     ├─ independence     tests unchanged since `judge freeze`, code changed   │
+     ├─ hardcoding       implementation that just returns the expected values │
+     └─ mypy / ruff      advisory only                                        │
+                    │                                                         │
+                    ▼                                                         │
+   score_engine      hard gates (failures, tampering, regressions) + score    │
+   contract_engine   judge.json requirements: VERIFIED only by a named test   │
+   checklist         TASK/SPEC/REQUIREMENTS.md rules R1..Rn need a test       │
+   mutation          before PASS: plant bugs, rerun, ≥85% must be caught      │
+   history           .judge/history.json: regressions, stuck detection        │
+                    │                                                         │
+                    ▼                                                         │
+   VerificationResult: PASS | FAIL | ABSTAIN, score, findings, next_actions ◄─┘
 ```
 
----
+## Who calls the verifier
 
-## Directory & Package Structure
+| Caller | Module | What happens with the verdict |
+|---|---|---|
+| `judge verify` | `integrations/cli.py` | Report or JSON; exit code 0 PASS, 1 FAIL, 2 ABSTAIN, 3 error. |
+| Claude Code Stop hook | `hook.py` | Not PASS: the turn is sent back to Claude with the next actions. |
+| `judge improve --agent` | `integrations/repair_loop.py`, `agent_runner.py` | Next actions become the agent's prompt; re-verify after each round. |
+| `judge improve` | same, one round | Read-only review with next actions and critique. |
+| git hooks, `judge watch`, VS Code tasks | `hooks.py`, `watcher.py`, `ide.py` | Block the commit / print the verdict. |
+
+The critique (`core/critique_engine.py`) is a second opinion used by `improve`. It
+classifies weaknesses by evidence level and never changes the verdict.
+
+## Package layout
 
 ```text
 the_judge/
+├── api.py                 verify(), freeze(), improve(), critique()
+├── hook.py                Claude Code Stop hook
 ├── core/
-│   ├── sandbox.py             # Anonymous subprocess sandbox execution environment
-│   ├── behavior_engine.py     # Stateful black-box behavioral probe generator
-│   ├── property_engine.py     # Structure-driven AST behavioral property inference
-│   ├── evidence.py            # Subprocess evidence capture & manifest tracking
-│   ├── score_engine.py        # Deterministic score engine & Hard Gates 1-8
-│   └── decision.py            # VerificationResult & Finding dataclass models
-│
+│   ├── evidence.py        evidence capture (orchestrates the modules below)
+│   ├── sandbox.py         subprocess isolation and result-rewrite detection
+│   ├── test_discovery.py  pytest-compatible test discovery
+│   ├── property_engine.py keyword-triggered judge probes
+│   ├── baseline.py        tampering relative to git
+│   ├── independence.py    judge freeze and independent evidence
+│   ├── hardcoding.py      hard-coded expected outputs
+│   ├── checklist.py       spec rules R1..Rn
+│   ├── contract_engine.py judge.json requirement coverage
+│   ├── mutation.py        mutation feedback
+│   ├── score_engine.py    hard gates, score, verdict
+│   ├── next_actions.py    numbered next actions
+│   ├── history.py         iteration history, regressions, stuck
+│   ├── critique_engine.py independent critique (improve)
+│   ├── visual_engine.py   screenshots for visual projects
+│   └── decision.py        VerificationResult, Finding
 ├── integrations/
-│   ├── agent_adapter.py       # Actionable feedback transformer for AI agents
-│   ├── repair_loop.py         # Multi-round repair orchestrator & regression tracker
-│   ├── cli.py                 # Terminal human-readable & JSON interface
-│   └── demo.py                # 60-second interactive demonstration mode
-│
-├── schemas/
-│   ├── task.schema.json       # Task specification contract schema
-│   ├── result.schema.json     # VerificationResult JSON schema
-│   └── evidence.schema.json   # Ground truth evidence schema
-│
-└── api.py                     # Public entrypoints: verify() and verify_workspace()
+│   ├── cli.py             the `judge` command
+│   ├── repair_loop.py     multi-round loop (AgentRepairLoop)
+│   ├── agent_runner.py    runs a coding agent for --agent
+│   ├── agent_adapter.py   result -> agent feedback
+│   ├── audit_trail.py, progress_report.py   per-round record and HTML report
+│   ├── hooks.py, ide.py, watcher.py, demo.py
+└── schemas/               JSON schemas for task, evidence and result
 ```
 
----
+Outside the package: `plugin/` (Claude Code plugin: hook config, skill, commands),
+`.claude-plugin/marketplace.json`, `examples/`, `eval_results/` (pre-registered
+evaluations), `tests/` (including `tests/regression_audit`, a labelled corpus).
 
-## Hard Gates 1–8 Specification
+## Invariants
 
-1. **Gate 1 (Test Suite Failure)**: Triggers `FAIL` if any executable test fails or process returns non-zero exit code.
-2. **Gate 2 (Type Checker)**: Triggers `FAIL` if type checking fails with unhandled type errors.
-3. **Gate 3 (Blocking Security)**: Triggers `FAIL` if security analysis reveals blocking vulnerabilities.
-4. **Gate 4 (Requirement Failure)**: Triggers `FAIL` if explicit task spec requirements evaluate to fail status.
-5. **Gate 5 (Discrepancy Check)**: Triggers `FAIL` if agent claims `PASS` on a requirement that failed in ground truth execution.
-6. **Gate 6 (Multi-Round Regression Protection)**: Triggers `FAIL` if a previously passing test in Round *N-1* fails in Round *N*.
-7. **Gate 7 (Challenge Tampering & Collection Gate)**: Triggers `FAIL` if target code modifies challenge test files or evades test collection.
-8. **Gate 8 (Verification Denial Gate)**: Triggers `FAIL` if target code attempts to obscure execution or force invalid `ABSTAIN`.
-
----
-
-## Trust Boundary Invariants
-
-- **Untrusted Workspace**: Target code and test files written by the AI agent are treated as strictly untrusted.
-- **Anonymous Execution**: Challenge tests run in randomly named temporary files in isolated sandboxes to prevent test name detection.
-- **Environment Sanitization**: Target subprocesses run with sanitized `sys.argv`, cleared debug environment variables, and isolated import paths.
+- **Static analysis never decides.** mypy and ruff findings are advisory.
+- **PASS needs independent evidence**: a passing, non-vacuous test unchanged since
+  `judge freeze` or the last commit, with the implementation changed afterwards.
+- **Weakened evidence is FAIL**: a frozen or committed test deleted, skipped or
+  weakened, or a test result rewritten by a hook.
+- **The sandbox is isolation, not security.** See [SECURITY.md](../SECURITY.md) and
+  [THREAT_MODEL.md](../THREAT_MODEL.md).

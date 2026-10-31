@@ -14,18 +14,20 @@ makes sure no rule is forgotten.
 import ast
 import os
 import re
-from typing import Any, Optional
+from typing import Any
 
 SPEC_FILES = ("TASK.md", "SPEC.md", "REQUIREMENTS.md")
 MIN_LENGTH = 15
 _ITEM = re.compile(r"^(\s*)(?:[-*+]|\d+[.)])\s+(.*\S)\s*$")
 _ID = re.compile(r"\bR(\d+)\b")
+# A rule the spec already labels with its own id: "R4: ...", "**R4.** ...".
+_OWN_LABEL = re.compile(r"^\**R(\d+)\**\s*[:.)-]\s*\**\s*")
 
 
 def extract_requirements(text: str, source: str = "TASK.md", start: int = 1) -> list[dict[str, Any]]:
     reqs: list[dict[str, Any]] = []
     in_code = False
-    current: Optional[dict[str, Any]] = None
+    current: dict[str, Any] | None = None
     for line in text.splitlines():
         if line.lstrip().startswith(("```", "~~~")):
             in_code = not in_code
@@ -41,10 +43,15 @@ def extract_requirements(text: str, source: str = "TASK.md", start: int = 1) -> 
             current["text"] += " " + line.strip()       # wrapped continuation line
         else:
             current = None
-    out = []
+    out: list[dict[str, Any]] = []
     for item in reqs:
         if len(item["text"]) >= MIN_LENGTH:
-            out.append({"id": f"R{start + len(out)}", "text": item["text"], "source": source})
+            rid = f"R{start + len(out)}"
+            text = item["text"]
+            label = _OWN_LABEL.match(text)
+            if label and f"R{label.group(1)}" == rid:
+                text = text[label.end():]  # the spec already labels the rule with its id
+            out.append({"id": rid, "text": text, "source": source})
     return out
 
 
@@ -66,7 +73,7 @@ def requirements_from(spec: dict[str, str]) -> list[dict[str, Any]]:
     return reqs
 
 
-def requirements(abs_dir: str, freezes: Optional[list[dict[str, Any]]] = None) -> list[dict[str, Any]]:
+def requirements(abs_dir: str, freezes: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
     """Rules of the earliest frozen spec, else of the current spec files."""
     for snap in freezes or []:
         if snap.get("spec"):
@@ -104,14 +111,15 @@ def check(reqs: list[dict[str, Any]], test_sources: dict[str, str],
     passed_base = {p.split("[", 1)[0] for p in passed}
     failed_base = {f.split("[", 1)[0] for f in failed}
     cover = covered_ids(test_sources)
-    covered, uncovered = [], []
+    covered: list[str] = []
+    uncovered: list[str] = []
     for req in reqs:
         tests = [t for t in cover.get(req["id"], []) if t in passed_base and t not in failed_base]
         (covered if tests else uncovered).append(req["id"])
     return {"requirements": reqs, "covered": covered, "uncovered": uncovered, "tests": cover}
 
 
-def summary(info: Optional[dict[str, Any]]) -> dict[str, Any]:
+def summary(info: dict[str, Any] | None) -> dict[str, Any]:
     if not info:
         return {"total": 0, "covered": [], "uncovered": []}
     return {"total": len(info["requirements"]), "covered": info["covered"], "uncovered": info["uncovered"]}

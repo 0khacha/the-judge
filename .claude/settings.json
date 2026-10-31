@@ -1,12 +1,12 @@
 {
   "hooks": {
-    "PostToolUse": [
+    "Stop": [
       {
-        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "python -m the_judge.hook"
+            "command": "python -m the_judge.hook",
+            "timeout": 900
           }
         ]
       }

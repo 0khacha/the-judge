@@ -3,23 +3,8 @@ import os
 import tempfile
 
 from the_judge.core.contract_engine import ContractEngine
-from the_judge.core.contract_parser import ContractParser
 from the_judge.core.score_engine import evaluate
 from the_judge.integrations.cli import main as cli_main
-
-
-def test_contract_parser_basic():
-    parser = ContractParser()
-    spec_text = (
-        "The HTTP client must retry 5xx responses up to 3 times. Fast responses are optimal."
-    )
-    res = parser.parse_natural_language_spec(spec_text)
-
-    reqs = res["parsed_requirements"]
-    assert len(reqs) >= 1
-    assert any("retry" in r["description"].lower() for r in reqs)
-    # Ambiguity detection for 'fast'
-    assert len(res["ambiguities"]) >= 1
 
 
 def test_contract_engine_evaluation():

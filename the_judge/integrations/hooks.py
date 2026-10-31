@@ -6,7 +6,6 @@ Installs / uninstalls pre-commit and pre-push hooks that run
 
 import os
 import stat
-from typing import Optional
 
 PRE_COMMIT_TEMPLATE = """#!/bin/sh
 # The Judge -- pre-commit verification hook
@@ -59,7 +58,7 @@ fi
 HOOK_MARKER = "# Installed by: judge hook"
 
 
-def _find_git_dir(workspace: str) -> Optional[str]:
+def _find_git_dir(workspace: str) -> str | None:
     """Walk up from workspace to find .git directory."""
     current = os.path.abspath(workspace)
     while True:
@@ -120,7 +119,7 @@ def install_hook(workspace: str, hook_type: str = "pre-commit") -> str:
     return hook_path
 
 
-def uninstall_hook(workspace: str, hook_type: str = "pre-commit") -> Optional[str]:
+def uninstall_hook(workspace: str, hook_type: str = "pre-commit") -> str | None:
     """Remove a Judge-installed git hook.
 
     Args:

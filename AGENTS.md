@@ -63,6 +63,10 @@ action per uncaught bug. Tests you add for them do not need to be frozen. Write 
 from the specification, not from what the code currently returns -- that is how they
 find bugs. `--no-mutation` skips this step.
 
+Time limit: the sandboxed test run may take 300 s. A run stopped at the limit is ABSTAIN
+with a `raise_timeout` action; raise it with `--timeout N` only if the suite is
+legitimately slow -- a hang in the code under test is a bug to fix.
+
 ### Adaptive Evaluation Engine
 
 The Judge automatically adapts its evaluation method based on workspace classification:
@@ -130,7 +134,7 @@ Follow `next_actions` in order; `findings[]` holds the details. `loop` compares 
 ### Quick reference
 
 ```bash
-judge improve .                # Continuous multi-round improvement engine (Build -> Evaluate -> Improve)
+judge improve .                # Read-only review: verdict, next actions, critique; changes no files
 judge verify .                 # Human-readable evaluation report
 judge verify . --json          # Machine-readable JSON for agents
 judge freeze .                 # Freeze the current tests (do this before implementing)
@@ -146,7 +150,8 @@ judge init vscode             # Generate VS Code tasks
 
 ```
 the_judge/
-  api.py                 # Entry point: verify()
+  api.py                 # Entry points: verify(), freeze(), improve(), critique()
+  hook.py                # Claude Code Stop hook (judge hook run)
   core/
     sandbox.py           # Subprocess isolation
     evidence.py          # Evidence capture
@@ -158,6 +163,7 @@ the_judge/
     cli.py               # CLI driver (judge command)
     agent_adapter.py     # Agent feedback formatter
     repair_loop.py       # Multi-round repair loop
+    agent_runner.py      # Runs a coding agent for judge improve --agent
     hooks.py             # Git hook management
     ide.py               # VS Code integration
     watcher.py           # File watcher mode

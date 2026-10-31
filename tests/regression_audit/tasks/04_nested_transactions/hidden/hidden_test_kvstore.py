@@ -1,5 +1,4 @@
 import pytest
-
 from kvstore import KVStore
 
 

@@ -1,0 +1,184 @@
+{
+ "decision": "FAIL",
+ "numeric_score": 40.0,
+ "trust_profile": {
+  "evidence_level": 1,
+  "total_tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0,
+  "requirement_checks": [
+   {
+    "id": "REQ-test_limit_reached",
+    "description": "Verified behavior in test_limit_reached",
+    "status": "pass",
+    "evidence_ref": "test_limit_reached",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_1",
+    "verification": "sufficient"
+   },
+   {
+    "id": "REQ-test_keys_independent",
+    "description": "Verified behavior in test_keys_independent",
+    "status": "pass",
+    "evidence_ref": "test_keys_independent",
+    "evidence_source": "public_visible_test",
+    "independence_level": "externally_verified",
+    "evidence_strength": "level_1",
+    "verification": "sufficient"
+   }
+  ],
+  "probe_coverage": {
+   "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+   "ran": [],
+   "not_run": [
+    {
+     "module": "ratelimit",
+     "symbol": "RateLimiter",
+     "kind": "expiration",
+     "reason": "no keyword trigger matched; this probe runs only for a class whose __init__ has a parameter named ttl/ttl_seconds/expire/expiry, with a writer (put/set/write/store/add/store_session/insert) and a reader (get/read/lookup/fetch/fetch_session), in a module whose clock is time.time/time.monotonic"
+    },
+    {
+     "module": "ratelimit",
+     "symbol": "RateLimiter",
+     "kind": "capacity_limit",
+     "reason": "no keyword trigger matched; this probe runs only for a class whose __init__ has a parameter named capacity/max_size/limit/bound, an insert method (push/add/enqueue/consume/put/write) and __len__ or a reader"
+    },
+    {
+     "module": "ratelimit",
+     "symbol": "RateLimiter",
+     "kind": "rollback_isolation",
+     "reason": "no keyword trigger matched; this probe runs only for a class with begin/start/checkpoint/savepoint, rollback/revert/abort/undo, set/put/write and get/read methods"
+    }
+   ]
+  },
+  "evidence_integrity_subdimensions": {
+   "challenge_integrity": "VERIFIED",
+   "collection_integrity": "VERIFIED",
+   "execution_integrity": "VERIFIED",
+   "result_integrity": "VERIFIED",
+   "evidence_independence": "PARTIAL"
+  },
+  "environment_isolation_subdimensions": {
+   "process_isolation": "VERIFIED",
+   "filesystem_isolation": "PARTIAL",
+   "environment_isolation": "VERIFIED",
+   "import_isolation": "PARTIAL",
+   "cross_run_isolation": "VERIFIED"
+  },
+  "behavioral_coverage_subdimensions": {
+   "boundary_coverage": "NOT_CHECKED",
+   "perturbation_coverage": "NOT_CHECKED",
+   "state_coverage": "NOT_CHECKED",
+   "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+  },
+  "adversarial_robustness_subdimensions": {
+   "known_attack_resistance": "CHECKED",
+   "adaptive_attack_resistance": "NOT_ASSESSED",
+   "temporal_attack_resistance": "NOT_ASSESSED",
+   "evasion_resistance": "CHECKED"
+  },
+  "abstention_correctness_subdimensions": {
+   "insufficient_evidence": "VERIFIED",
+   "conflicting_evidence": "VERIFIED",
+   "synthesis_failure": "VERIFIED",
+   "verification_denial": "VERIFIED"
+  },
+  "specification_coverage": {
+   "requirements": [
+    {
+     "id": "REQ-001",
+     "description": "Behavioral verification of property test_keys_independent",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_keys_independent",
+       "requirement_id": "REQ-001",
+       "property_name": "test_keys_independent",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_keys_independent' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    },
+    {
+     "id": "REQ-002",
+     "description": "Behavioral verification of property test_limit_reached",
+     "category": "functional",
+     "priority": "critical",
+     "status": "VERIFIED",
+     "mapped_properties": [
+      {
+       "property_id": "PROP-test_limit_reached",
+       "requirement_id": "REQ-002",
+       "property_name": "test_limit_reached",
+       "provenance": "contract_derived",
+       "confidence": "MEDIUM",
+       "justification": "Behavioral test 'test_limit_reached' passed ground-truth execution.",
+       "status": "VERIFIED"
+      }
+     ],
+     "unverified_reason": null
+    }
+   ],
+   "summary": {
+    "total_requirements": 2,
+    "verified_count": 2,
+    "partially_verified_count": 0,
+    "unverified_count": 0,
+    "conflicting_count": 0,
+    "critical_coverage_pct": 100.0,
+    "important_coverage_pct": 100.0,
+    "overall_coverage_pct": 100.0,
+    "specification_escape_rate_pct": 0.0,
+    "critical_unverified_ids": []
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "GATE-001",
+   "category": "type_check",
+   "severity": "high",
+   "description": "Type checker failed with 1 error(s)",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Review type annotations and resolve static type checking errors."
+  },
+  {
+   "id": "COVER-001",
+   "category": "coverage",
+   "severity": "low",
+   "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: ratelimit.RateLimiter",
+   "property": null,
+   "observed": null,
+   "expected": null,
+   "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+  }
+ ],
+ "provenance": {
+  "workspace_path": "C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\judge_acc_out\\broken_T2_rate_limiter\\workspace",
+  "workspace_hash": "e7b53f8b75f0810e915db3799e3573bf000e9f416572cab6de829eacda90ecb9",
+  "judge_version": "v1.0.0",
+  "timestamp": "2026-10-28T20:56:16Z",
+  "evidence_level": 1,
+  "total_tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0
+ },
+ "blocking_issues": [
+  "Type checker failed with 1 error(s)"
+ ],
+ "insufficient_notes": [
+  "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification."
+ ],
+ "runtime": {
+  "duration_seconds": 7.385,
+  "judge_version": "v1.0.0"
+ }
+}

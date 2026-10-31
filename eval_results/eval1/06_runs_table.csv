@@ -1,0 +1,31 @@
+task,cond,run,hidden_passed,hidden_total,hidden_pass_rate,visible_pass,judge_iterations,judge_decisions,regressions,tokens,tool_uses,wall_s
+T1_query_parser,A,1,14,14,1.0,True,0,,0,34252,5,40.2
+T1_query_parser,A,2,14,14,1.0,True,0,,0,34530,5,146.4
+T1_query_parser,A,3,14,14,1.0,True,0,,0,35219,6,90.7
+T1_query_parser,B,1,14,14,1.0,True,2,ABSTAIN ABSTAIN,0,39790,8,127.5
+T1_query_parser,B,2,14,14,1.0,True,2,ABSTAIN ABSTAIN,0,39175,6,193.1
+T1_query_parser,B,3,14,14,1.0,True,2,ABSTAIN ABSTAIN,0,39985,7,123.0
+T2_rate_limiter,A,1,9,9,1.0,True,0,,0,34295,5,38.7
+T2_rate_limiter,A,2,9,9,1.0,True,0,,0,34633,6,154.0
+T2_rate_limiter,A,3,9,9,1.0,True,0,,0,34314,5,63.1
+T2_rate_limiter,B,1,9,9,1.0,True,2,ABSTAIN ABSTAIN,0,40058,8,121.1
+T2_rate_limiter,B,2,9,9,1.0,True,3,ABSTAIN ABSTAIN ABSTAIN,0,40153,7,176.9
+T2_rate_limiter,B,3,9,9,1.0,True,3,ABSTAIN ABSTAIN ABSTAIN,0,40890,9,141.3
+T3_slugify,A,1,20,20,1.0,True,0,,0,34454,6,104.0
+T3_slugify,A,2,20,20,1.0,True,0,,0,34427,6,160.9
+T3_slugify,A,3,20,20,1.0,True,0,,0,34403,5,82.1
+T3_slugify,B,1,20,20,1.0,True,2,ABSTAIN ABSTAIN,0,39116,7,98.0
+T3_slugify,B,2,20,20,1.0,True,2,ABSTAIN ABSTAIN,0,38100,6,196.7
+T3_slugify,B,3,20,20,1.0,True,2,ABSTAIN ABSTAIN,0,38443,6,131.0
+T4_parallel_map,A,1,8,8,1.0,True,0,,0,34297,5,59.0
+T4_parallel_map,A,2,8,8,1.0,True,0,,0,34229,5,108.9
+T4_parallel_map,A,3,8,8,1.0,True,0,,0,34005,4,44.9
+T4_parallel_map,B,1,8,8,1.0,True,2,ABSTAIN ABSTAIN,0,38463,6,100.2
+T4_parallel_map,B,2,8,8,1.0,True,2,ABSTAIN ABSTAIN,0,39043,7,178.9
+T4_parallel_map,B,3,8,8,1.0,True,2,ABSTAIN ABSTAIN,0,39717,8,141.0
+T5_split_bill,A,1,13,13,1.0,True,0,,0,34122,6,120.1
+T5_split_bill,A,2,13,13,1.0,True,0,,0,34190,6,175.8
+T5_split_bill,A,3,13,13,1.0,True,0,,0,33972,5,48.4
+T5_split_bill,B,1,13,13,1.0,True,3,ABSTAIN FAIL ABSTAIN,0,40888,10,148.6
+T5_split_bill,B,2,13,13,1.0,True,3,ABSTAIN FAIL ABSTAIN,0,40159,9,228.2
+T5_split_bill,B,3,13,13,1.0,True,4,ABSTAIN FAIL FAIL ABSTAIN,0,41188,9,162.5

@@ -4,8 +4,8 @@ decides correctness."""
 import shutil
 
 import pytest
-
 from audit_helpers import judge, write
+
 from the_judge.core.score_engine import evaluate
 
 

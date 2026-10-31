@@ -41,7 +41,40 @@ pip uninstall the-judge-verify
 <details>
 <summary><strong>Claude Code</strong></summary>
 
-### Install
+### Install (plugin)
+
+```bash
+pip install the-judge-verify
+```
+
+Then, in Claude Code:
+
+```text
+/plugin install the-judge --marketplace 0khacha/the-judge
+```
+
+(Before Claude Code 2.1.275: `/plugin marketplace add 0khacha/the-judge`, then
+`/plugin install the-judge@the-judge`.)
+
+The plugin adds:
+
+- **A Stop hook.** When Claude finishes a turn in a project that uses The Judge (it has
+  a `.judge/` folder, created by `judge freeze`) and the code changed since the last
+  check, the judge verifies it. Unless the verdict is PASS, the turn is sent back to
+  Claude with the judge's numbered next actions, so it keeps fixing until PASS. It stops
+  when nothing changed or the judge reports the loop as stuck. Projects without
+  `.judge/` are never touched; `THE_JUDGE_HOOK=always` / `off` overrides this.
+- **The `judge-loop` skill.** It teaches Claude the protocol: tests first, freeze,
+  implement, verify, follow `next_actions`.
+- **Commands:** `/the-judge:verify`, `/the-judge:freeze`, `/the-judge:improve`.
+
+### Use
+
+Ask Claude to implement something "test-first with the judge", or run
+`/the-judge:freeze` after the tests are written. From then on every turn that changes
+code ends with a verification.
+
+### Without the plugin
 
 Copy/paste into your Claude Code prompt:
 
@@ -52,26 +85,10 @@ for the verification-repair loop protocol. After every critical code change,
 run `judge verify . --json` and act on the findings.
 ```
 
-Or add the `AGENTS.md` to your project root:
+Or add the hook to a project by hand, in `.claude/settings.json`:
 
-```bash
-curl -o AGENTS.md https://raw.githubusercontent.com/0khacha/the-judge/main/AGENTS.md
-```
-
-Claude Code auto-discovers `AGENTS.md` and follows the verification protocol.
-
-### Verify
-
-Ask Claude Code to run `judge verify .` and check for structured findings.
-
-### Always-on
-
-Add to your project's `AGENTS.md` or `~/.claude/CLAUDE.md`:
-
-```markdown
-## Verification
-
-After every code change, run `judge verify . --json`. If FAIL, fix the findings and re-verify. Never claim code works without a PASS from The Judge.
+```json
+{"hooks": {"Stop": [{"hooks": [{"type": "command", "command": "judge hook run", "timeout": 900}]}]}}
 ```
 
 </details>
@@ -266,10 +283,13 @@ prompt = adapter.format_agent_prompt_feedback(feedback)
 ### Repair loop
 
 ```python
-from the_judge.integrations.repair_loop import AgentRepairLoop
+from the_judge import improve
 
-loop = AgentRepairLoop(max_rounds=5)
-result = loop.run_repair_loop(".", agent_repair_func=my_repair_fn)
+# Let a coding agent fix what the judge finds, re-verifying after each round.
+result = improve(".", agent_command="claude -p --permission-mode acceptEdits")
+
+# Or your own callback: (workspace, feedback) -> bool
+result = improve(".", repair_func=my_repair_fn)
 ```
 
 </details>

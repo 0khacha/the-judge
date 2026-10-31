@@ -1,0 +1,373 @@
+{
+  "decision": "ABSTAIN",
+  "numeric_score": 65.0,
+  "trust_profile": {
+    "evidence_level": 1,
+    "total_tests": 9,
+    "passed_tests": 9,
+    "failed_tests": 0,
+    "requirement_checks": [
+      {
+        "id": "REQ-test_leading_q_and_empty",
+        "description": "Verified behavior in test_leading_q_and_empty",
+        "status": "pass",
+        "evidence_ref": "test_leading_q_and_empty",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_first_equals",
+        "description": "Verified behavior in test_first_equals",
+        "status": "pass",
+        "evidence_ref": "test_first_equals",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_no_equals",
+        "description": "Verified behavior in test_no_equals",
+        "status": "pass",
+        "evidence_ref": "test_no_equals",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_percent",
+        "description": "Verified behavior in test_percent",
+        "status": "pass",
+        "evidence_ref": "test_percent",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid_escape",
+        "description": "Verified behavior in test_invalid_escape",
+        "status": "pass",
+        "evidence_ref": "test_invalid_escape",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_order",
+        "description": "Verified behavior in test_order",
+        "status": "pass",
+        "evidence_ref": "test_order",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_simple",
+        "description": "Verified behavior in test_simple",
+        "status": "pass",
+        "evidence_ref": "test_simple",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_repeated_key",
+        "description": "Verified behavior in test_repeated_key",
+        "status": "pass",
+        "evidence_ref": "test_repeated_key",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_plus_is_space",
+        "description": "Verified behavior in test_plus_is_space",
+        "status": "pass",
+        "evidence_ref": "test_plus_is_space",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      }
+    ],
+    "probe_coverage": {
+      "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+      "ran": [],
+      "not_run": [
+        {
+          "module": "querystring",
+          "symbol": "parse_query",
+          "kind": "idempotency",
+          "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+        }
+      ]
+    },
+    "evidence_integrity_subdimensions": {
+      "challenge_integrity": "VERIFIED",
+      "collection_integrity": "VERIFIED",
+      "execution_integrity": "VERIFIED",
+      "result_integrity": "VERIFIED",
+      "evidence_independence": "PARTIAL"
+    },
+    "environment_isolation_subdimensions": {
+      "process_isolation": "VERIFIED",
+      "filesystem_isolation": "PARTIAL",
+      "environment_isolation": "VERIFIED",
+      "import_isolation": "PARTIAL",
+      "cross_run_isolation": "VERIFIED"
+    },
+    "behavioral_coverage_subdimensions": {
+      "boundary_coverage": "NOT_CHECKED",
+      "perturbation_coverage": "NOT_CHECKED",
+      "state_coverage": "NOT_CHECKED",
+      "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+    },
+    "adversarial_robustness_subdimensions": {
+      "known_attack_resistance": "CHECKED",
+      "adaptive_attack_resistance": "NOT_ASSESSED",
+      "temporal_attack_resistance": "NOT_ASSESSED",
+      "evasion_resistance": "CHECKED"
+    },
+    "abstention_correctness_subdimensions": {
+      "insufficient_evidence": "VERIFIED",
+      "conflicting_evidence": "VERIFIED",
+      "synthesis_failure": "VERIFIED",
+      "verification_denial": "VERIFIED"
+    },
+    "specification_coverage": {
+      "requirements": [
+        {
+          "id": "REQ-001",
+          "description": "Behavioral verification of property test_first_equals",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_first_equals",
+              "requirement_id": "REQ-001",
+              "property_name": "test_first_equals",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_first_equals' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-002",
+          "description": "Behavioral verification of property test_invalid_escape",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid_escape",
+              "requirement_id": "REQ-002",
+              "property_name": "test_invalid_escape",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid_escape' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-003",
+          "description": "Behavioral verification of property test_leading_q_and_empty",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_leading_q_and_empty",
+              "requirement_id": "REQ-003",
+              "property_name": "test_leading_q_and_empty",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_leading_q_and_empty' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-004",
+          "description": "Behavioral verification of property test_no_equals",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_no_equals",
+              "requirement_id": "REQ-004",
+              "property_name": "test_no_equals",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_no_equals' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-005",
+          "description": "Behavioral verification of property test_order",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_order",
+              "requirement_id": "REQ-005",
+              "property_name": "test_order",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_order' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-006",
+          "description": "Behavioral verification of property test_percent",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_percent",
+              "requirement_id": "REQ-006",
+              "property_name": "test_percent",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_percent' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-007",
+          "description": "Behavioral verification of property test_plus_is_space",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_plus_is_space",
+              "requirement_id": "REQ-007",
+              "property_name": "test_plus_is_space",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_plus_is_space' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-008",
+          "description": "Behavioral verification of property test_repeated_key",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_repeated_key",
+              "requirement_id": "REQ-008",
+              "property_name": "test_repeated_key",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_repeated_key' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-009",
+          "description": "Behavioral verification of property test_simple",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_simple",
+              "requirement_id": "REQ-009",
+              "property_name": "test_simple",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_simple' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        }
+      ],
+      "summary": {
+        "total_requirements": 9,
+        "verified_count": 9,
+        "partially_verified_count": 0,
+        "unverified_count": 0,
+        "conflicting_count": 0,
+        "critical_coverage_pct": 100.0,
+        "important_coverage_pct": 100.0,
+        "overall_coverage_pct": 100.0,
+        "specification_escape_rate_pct": 0.0,
+        "critical_unverified_ids": []
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "COVER-001",
+      "category": "coverage",
+      "severity": "low",
+      "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: querystring.parse_query",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+    },
+    {
+      "id": "EVID-001",
+      "category": "collection",
+      "severity": "medium",
+      "description": "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification.",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+    }
+  ],
+  "provenance": {
+    "workspace_path": "C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\ws\\T1_query_parser__B__r2",
+    "workspace_hash": "a6f8cea4baccca04c779078dd044b754870621fd2d79bedfedb21df372deb070",
+    "judge_version": "v1.0.0",
+    "timestamp": "2026-10-28T20:57:23Z",
+    "evidence_level": 1,
+    "total_tests": 9,
+    "passed_tests": 9,
+    "failed_tests": 0
+  },
+  "blocking_issues": [],
+  "insufficient_notes": [
+    "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification."
+  ],
+  "runtime": {
+    "duration_seconds": 5.619,
+    "judge_version": "v1.0.0"
+  }
+}
