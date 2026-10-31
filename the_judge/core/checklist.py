@@ -14,7 +14,7 @@ makes sure no rule is forgotten.
 import ast
 import os
 import re
-from typing import Any, Optional
+from typing import Any
 
 SPEC_FILES = ("TASK.md", "SPEC.md", "REQUIREMENTS.md")
 MIN_LENGTH = 15
@@ -27,7 +27,7 @@ _OWN_LABEL = re.compile(r"^\**R(\d+)\**\s*[:.)-]\s*\**\s*")
 def extract_requirements(text: str, source: str = "TASK.md", start: int = 1) -> list[dict[str, Any]]:
     reqs: list[dict[str, Any]] = []
     in_code = False
-    current: Optional[dict[str, Any]] = None
+    current: dict[str, Any] | None = None
     for line in text.splitlines():
         if line.lstrip().startswith(("```", "~~~")):
             in_code = not in_code
@@ -73,7 +73,7 @@ def requirements_from(spec: dict[str, str]) -> list[dict[str, Any]]:
     return reqs
 
 
-def requirements(abs_dir: str, freezes: Optional[list[dict[str, Any]]] = None) -> list[dict[str, Any]]:
+def requirements(abs_dir: str, freezes: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
     """Rules of the earliest frozen spec, else of the current spec files."""
     for snap in freezes or []:
         if snap.get("spec"):
@@ -119,7 +119,7 @@ def check(reqs: list[dict[str, Any]], test_sources: dict[str, str],
     return {"requirements": reqs, "covered": covered, "uncovered": uncovered, "tests": cover}
 
 
-def summary(info: Optional[dict[str, Any]]) -> dict[str, Any]:
+def summary(info: dict[str, Any] | None) -> dict[str, Any]:
     if not info:
         return {"total": 0, "covered": [], "uncovered": []}
     return {"total": len(info["requirements"]), "covered": info["covered"], "uncovered": info["uncovered"]}

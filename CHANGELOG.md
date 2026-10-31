@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   them, a stub, a correct solution (PASS) and an off-by-one one (FAIL). CI runs it.
 
 ### Changed
+- **Python 3.10 or newer is required.** Python 3.9 reached end of life in October 2025
+  and is no longer available on CI runners, so support could not be tested.
 - **`judge improve` is read-only by default.** Without `--agent` or a repair callback
   it runs one evaluation round, changes no files, and returns outcome `REVIEW_ONLY` with
   `next_actions` and the critique in `suggestions`.

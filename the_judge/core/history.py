@@ -10,7 +10,7 @@ happened since the last PASS.
 import json
 import os
 import time
-from typing import Any, Optional
+from typing import Any
 
 HISTORY_DIR = ".judge"
 HISTORY_FILE = "history.json"
@@ -30,7 +30,7 @@ def load(abs_dir: str) -> list[dict[str, Any]]:
         return []
 
 
-def previous(abs_dir: str) -> Optional[dict[str, Any]]:
+def previous(abs_dir: str) -> dict[str, Any] | None:
     runs = load(abs_dir)
     return runs[-1] if runs else None
 

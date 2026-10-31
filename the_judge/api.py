@@ -2,7 +2,7 @@ import hashlib
 import os
 import time
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from the_judge._version import __version__
 from the_judge.core.decision import Finding, VerificationResult
@@ -13,8 +13,8 @@ from the_judge.core.score_engine import evaluate
 
 def critique(
     workspace: str,
-    task_spec: Optional[dict[str, Any]] = None,
-    previous_round: Optional[dict[str, Any]] = None,
+    task_spec: dict[str, Any] | None = None,
+    previous_round: dict[str, Any] | None = None,
 ) -> Any:
     """Run an independent adversarial critique of the workspace.
 
@@ -78,11 +78,11 @@ def critique(
 
 def verify(
     workspace: str,
-    task_spec: Optional[dict[str, Any]] = None,
-    previous_evidence: Optional[dict[str, Any]] = None,
-    agent_claims: Optional[dict[str, Any]] = None,
-    _ground_truth: Optional[dict[str, Any]] = None,
-    baseline: Optional[str] = None,
+    task_spec: dict[str, Any] | None = None,
+    previous_evidence: dict[str, Any] | None = None,
+    agent_claims: dict[str, Any] | None = None,
+    _ground_truth: dict[str, Any] | None = None,
+    baseline: str | None = None,
     record_history: bool = False,
     mutation: bool = True,
     requirements: bool = True,
@@ -548,15 +548,15 @@ def verify_workspace(workspace_dir: str) -> VerificationResult:
 
 def improve(
     workspace: str,
-    repair_func: Optional[Any] = None,
+    repair_func: Any | None = None,
     max_rounds: int = 5,
     target_score: float = 90.0,
-    task_spec: Optional[dict[str, Any]] = None,
-    quality_evaluator: Optional[Any] = None,
+    task_spec: dict[str, Any] | None = None,
+    quality_evaluator: Any | None = None,
     require_evidence_sufficiency: bool = True,
-    agent_command: Optional[str] = None,
-    agent_timeout: Optional[int] = None,
-    on_agent_round: Optional[Any] = None,
+    agent_command: str | None = None,
+    agent_timeout: int | None = None,
+    on_agent_round: Any | None = None,
     apply: bool = False,
 ) -> dict[str, Any]:
     """Run the adversarial improvement loop on the target workspace.

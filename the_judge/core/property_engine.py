@@ -4,7 +4,7 @@ import ast
 import os
 import random
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 # Shared helpers emitted at the top of every generated probe. Probes invent their
 # inputs, so an exception raised on those inputs means "probe not applicable" (skip),
@@ -474,7 +474,7 @@ def _probe_target_files(abs_target: str) -> list[str]:
 
 
 def generate_property_tests(
-    task_dir: str, task_spec: Optional[dict[str, Any]] = None
+    task_dir: str, task_spec: dict[str, Any] | None = None
 ) -> list[PropertyCandidate]:
     abs_target = os.path.abspath(task_dir)
     engine = StructurePropertyEngine(seed=48127)

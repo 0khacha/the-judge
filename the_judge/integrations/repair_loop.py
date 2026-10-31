@@ -25,8 +25,8 @@ can prioritise the most consequential, evidence-backed weaknesses first.
 import hashlib
 import os
 import time
-from collections.abc import Mapping
-from typing import Any, Callable, Optional, Union
+from collections.abc import Callable, Mapping
+from typing import Any
 
 from the_judge._version import __version__
 from the_judge.api import verify
@@ -36,7 +36,7 @@ from the_judge.integrations.agent_adapter import AgentAdapter
 from the_judge.integrations.audit_trail import AuditTrail, RoundRecord
 
 QualityEvaluator = Callable[[str, dict[str, Any]], dict[str, Any]]
-RepairCallbackResult = Union[bool, Mapping[str, Any]]
+RepairCallbackResult = bool | Mapping[str, Any]
 
 
 class AgentRepairLoop:
@@ -103,10 +103,10 @@ class AgentRepairLoop:
 
     def __init__(
         self,
-        adapter: Optional[AgentAdapter] = None,
+        adapter: AgentAdapter | None = None,
         max_rounds: int = 5,
         quality_threshold: float = 90.0,
-        quality_evaluator: Optional[QualityEvaluator] = None,
+        quality_evaluator: QualityEvaluator | None = None,
         require_evidence_sufficiency: bool = True,
     ):
         if max_rounds < 1:
@@ -125,7 +125,7 @@ class AgentRepairLoop:
         self,
         workspace: str,
         agent_repair_func: Callable[[str, dict[str, Any]], RepairCallbackResult],
-        task_spec: Optional[dict[str, Any]] = None,
+        task_spec: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Run the adversarial improvement loop.
 
@@ -144,7 +144,7 @@ class AgentRepairLoop:
 
         self.rounds_history.clear()
         audit_trail = AuditTrail()
-        previous_evidence: Optional[dict[str, Any]] = None
+        previous_evidence: dict[str, Any] | None = None
         previous_critique_findings: list[dict[str, Any]] = []
         previous_score: float = 0.0
 
@@ -157,7 +157,7 @@ class AgentRepairLoop:
             if os.path.isdir(workspace)
             else os.path.join(os.path.dirname(workspace), "_judge_visual")
         )
-        previous_screenshot: Optional[str] = None
+        previous_screenshot: str | None = None
 
         for round_idx in range(1, self.max_rounds + 1):
             # ----------------------------------------------------------
@@ -208,7 +208,7 @@ class AgentRepairLoop:
             # ----------------------------------------------------------
             # 5. Visual evidence (conditional — only for visual projects)
             # ----------------------------------------------------------
-            current_screenshot: Optional[str] = None
+            current_screenshot: str | None = None
             visual_eval: dict[str, Any] = {"is_visual": False}
 
             if is_visual and target_visual_file:
@@ -619,7 +619,7 @@ class AgentRepairLoop:
         raise TypeError("each quality weakness must be a string or mapping with a description")
 
     @staticmethod
-    def _normalise_repair_result(result: RepairCallbackResult) -> tuple[bool, Optional[str]]:
+    def _normalise_repair_result(result: RepairCallbackResult) -> tuple[bool, str | None]:
         if isinstance(result, Mapping):
             summary = result.get("summary")
             return bool(result.get("improved", False)), str(summary) if summary else None

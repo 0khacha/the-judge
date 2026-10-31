@@ -7,7 +7,7 @@ Zero external dependencies -- uses os.stat polling.
 import contextlib
 import os
 import time
-from typing import Callable, Optional
+from collections.abc import Callable
 
 
 def _collect_py_files(directory: str) -> dict[str, float]:
@@ -48,7 +48,7 @@ def _detect_changes(old_state: dict[str, float], new_state: dict[str, float]) ->
 def watch_workspace(
     workspace: str,
     debounce_seconds: float = 2.0,
-    on_change: Optional[Callable[[set[str]], None]] = None,
+    on_change: Callable[[set[str]], None] | None = None,
 ) -> None:
     """Watch a workspace directory and re-verify on .py file changes.
 

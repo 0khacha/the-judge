@@ -4,7 +4,7 @@ Each action is {"step", "action", "detail"} plus, where useful, "test", "command
 "guidance". The first action is always the most important one.
 """
 
-from typing import Any, Optional
+from typing import Any
 
 VERIFY = "judge verify . --json"
 FREEZE = "judge freeze ."
@@ -31,7 +31,7 @@ class _Steps:
 
 
 def build(decision: str, eval_output: dict[str, Any], evidence: dict[str, Any],
-          loop: Optional[dict[str, Any]] = None) -> list[dict[str, Any]]:
+          loop: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     steps = _Steps()
     notes = eval_output.get("insufficient_evidence_notes", [])
     blocking = eval_output.get("blocking_issues", [])

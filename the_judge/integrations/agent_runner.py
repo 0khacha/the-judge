@@ -16,7 +16,8 @@ import os
 import shutil
 import subprocess
 import tempfile
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 AUTO = "auto"
 DEFAULT_AGENT_TIMEOUT = 1800  # seconds per agent round
@@ -40,7 +41,7 @@ RULES = """Rules (from the verification-repair protocol in AGENTS.md):
 - Make the changes, then stop. The Judge re-verifies after you finish."""
 
 
-def resolve_agent_command(command: Optional[str]) -> str:
+def resolve_agent_command(command: str | None) -> str:
     """Return the shell command to run, detecting a known agent for ``auto``.
 
     Raises ValueError when ``auto`` is requested and no known agent is on PATH.
@@ -122,7 +123,7 @@ def run_agent(command: str, prompt: str, workspace: str,
     """Run the agent command once in ``workspace`` and return its outcome."""
     cwd = workspace if os.path.isdir(workspace) else os.path.dirname(os.path.abspath(workspace))
     prompt_path = None
-    stdin_text: Optional[str] = prompt
+    stdin_text: str | None = prompt
     if "{prompt_file}" in command:
         fd, prompt_path = tempfile.mkstemp(prefix="judge_prompt_", suffix=".md")
         with os.fdopen(fd, "w", encoding="utf-8") as fh:
@@ -153,7 +154,7 @@ def run_agent(command: str, prompt: str, workspace: str,
 def make_agent_repair(
     command: str,
     timeout: int = DEFAULT_AGENT_TIMEOUT,
-    on_round: Optional[Callable[[dict[str, Any]], None]] = None,
+    on_round: Callable[[dict[str, Any]], None] | None = None,
 ) -> Callable[[str, dict[str, Any]], dict[str, Any]]:
     """Return a repair callback for AgentRepairLoop that delegates to ``command``."""
 

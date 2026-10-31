@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 import time
 import uuid
-from typing import Any, Optional
+from typing import Any
 
 from .baseline import compare_tests_to_baseline
 from .hardcoding import detect as detect_hardcoding
@@ -172,7 +172,7 @@ def _detect_vacuous_tests(source_code: str, workspace_modules: set[str]) -> set[
     return vacuous
 
 
-def run_command(cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None) -> dict[str, Any]:
+def run_command(cmd: list[str], cwd: str, env: dict[str, str] | None = None) -> dict[str, Any]:
     """Execute a subprocess command and return exit code, stdout, stderr."""
     try:
         proc = subprocess.run(
@@ -254,9 +254,9 @@ DEFAULT_TEST_TIMEOUT = 300
 
 def capture_evidence(
     workspace_dir: str,
-    output_file: Optional[str] = None,
-    task_spec: Optional[dict[str, Any]] = None,
-    baseline: Optional[str] = None,
+    output_file: str | None = None,
+    task_spec: dict[str, Any] | None = None,
+    baseline: str | None = None,
     timeout: int = DEFAULT_TEST_TIMEOUT,
 ) -> dict[str, Any]:
     """Capture ground truth evidence from workspace_dir.

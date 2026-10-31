@@ -12,7 +12,7 @@
 </p>
 <p align="center">
   <a href="https://github.com/0khacha/the-judge/blob/main/LICENSE"><img src="https://img.shields.io/github/license/0khacha/the-judge?style=flat" alt="License"></a>
-  <img src="https://img.shields.io/badge/python-3.9%2B-blue?style=flat" alt="Python 3.9+">
+  <img src="https://img.shields.io/badge/python-3.10%2B-blue?style=flat" alt="Python 3.10+">
 </p>
 
 ## Install
@@ -394,7 +394,7 @@ function, multi-input variance, and state isolation.
 
 ## Project Status
 
-**Status**: v1.1.0 · MIT License · Python 3.9+
+**Status**: v1.1.0 · MIT License · Python 3.10+
 
 ## Contributing
 

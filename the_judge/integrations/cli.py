@@ -3,7 +3,7 @@ import contextlib
 import json
 import os
 import sys
-from typing import Any, Optional
+from typing import Any
 
 from the_judge._version import __version__
 from the_judge.api import verify
@@ -282,7 +282,7 @@ def main(args_list=None) -> int:
     return 0 if verif_result.decision == "PASS" else (1 if verif_result.decision == "FAIL" else 2)
 
 
-def _find_task_spec(workspace: str, explicit: Optional[str]) -> Optional[str]:
+def _find_task_spec(workspace: str, explicit: str | None) -> str | None:
     """Return the task contract path: the explicit one, else a conventional file."""
     if explicit:
         return explicit
@@ -294,7 +294,7 @@ def _find_task_spec(workspace: str, explicit: Optional[str]) -> Optional[str]:
     return None
 
 
-def _load_task_spec(path: Optional[str]) -> Optional[dict[str, Any]]:
+def _load_task_spec(path: str | None) -> dict[str, Any] | None:
     """Load a judge.json / judge.yaml contract; None when absent or unreadable."""
     if not path or not os.path.exists(path):
         return None
@@ -332,7 +332,7 @@ def _run_hook_command(args) -> int:
             return 1
 
     elif args.hook_action == "uninstall":
-        removed: Optional[str] = uninstall_hook(workspace, hook_type)
+        removed: str | None = uninstall_hook(workspace, hook_type)
         if removed:
             print(f"Removed {hook_type} hook from {removed}")
         else:
@@ -732,7 +732,7 @@ def _print_critique_result(workspace_path: str, result: Any) -> None:
 
 
 def _run_contract_command(
-    workspace_path: str, is_json: bool, task_spec_path: Optional[str] = None
+    workspace_path: str, is_json: bool, task_spec_path: str | None = None
 ) -> None:
     task_spec_dict = None
     if task_spec_path and os.path.exists(task_spec_path):

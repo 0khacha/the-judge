@@ -1,10 +1,10 @@
-from typing import Any, Optional
+from typing import Any
 
 
 def evaluate(
     findings: dict[str, Any],
     evidence: dict[str, Any],
-    previous_evidence: Optional[dict[str, Any]] = None,
+    previous_evidence: dict[str, Any] | None = None,
     agent_claims_provided: bool = False,
 ) -> dict[str, Any]:
     """Evaluate agent findings against ground truth evidence using strict hard gates.

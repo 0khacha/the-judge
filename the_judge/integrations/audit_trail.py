@@ -19,7 +19,7 @@ But rather:
 import json
 import os
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass
@@ -68,11 +68,11 @@ class RoundRecord:
 
     # --- Loop decision ----------------------------------------------------
     loop_decision: str = "continue"  # "continue" | "stop" | "abort"
-    stop_reason: Optional[str] = None
+    stop_reason: str | None = None
 
     # --- Visual evidence (conditional) -----------------------------------
-    screenshot_path: Optional[str] = None
-    visual_score: Optional[float] = None
+    screenshot_path: str | None = None
+    visual_score: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {

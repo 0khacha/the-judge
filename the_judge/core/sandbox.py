@@ -12,7 +12,7 @@ import subprocess
 import sys
 import tempfile
 import uuid
-from typing import Any, Optional
+from typing import Any
 
 # Longest failure message kept per test (head and tail, see shorten()).
 MAX_FAILURE_MESSAGE = 2000
@@ -36,7 +36,7 @@ def shorten(text: str, limit: int) -> str:
 _TRUNCATED_MESSAGE = "full report in element text"
 
 
-def failure_message(message: Optional[str], text: Optional[str]) -> str:
+def failure_message(message: str | None, text: str | None) -> str:
     """The failure message of a JUnit <failure>/<error>, complete even when pytest cut it."""
     if message and _TRUNCATED_MESSAGE not in message:
         return message
@@ -79,7 +79,7 @@ class SandboxRunner:
     """Isolated subprocess runner for executing untrusted target code and tests."""
 
     @staticmethod
-    def sanitize_environment(extra_env: Optional[dict[str, str]] = None) -> dict[str, str]:
+    def sanitize_environment(extra_env: dict[str, str] | None = None) -> dict[str, str]:
         """Construct a clean, sanitized environment dictionary without Judge indicators."""
         clean_env: dict[str, str] = {}
 
@@ -131,7 +131,7 @@ class SandboxRunner:
 
     @classmethod
     def run_cmd(
-        cls, cmd: list[str], cwd: str, env: Optional[dict[str, str]] = None, timeout: int = 30
+        cls, cmd: list[str], cwd: str, env: dict[str, str] | None = None, timeout: int = 30
     ) -> dict[str, Any]:
         """Run command in subprocess with environment sanitization."""
         clean_env = cls.sanitize_environment(env)
@@ -180,12 +180,12 @@ class SandboxRunner:
         cls,
         task_dir: str,
         test_scripts: list[tuple[str, str]],
-        pytest_args: Optional[list[str]] = None,
+        pytest_args: list[str] | None = None,
         timeout: int = 30,
-        support_files: Optional[list[tuple[str, str]]] = None,
-        import_roots: Optional[list[str]] = None,
-        data_files: Optional[list[tuple[str, str]]] = None,
-        norecursedirs: Optional[list[str]] = None,
+        support_files: list[tuple[str, str]] | None = None,
+        import_roots: list[str] | None = None,
+        data_files: list[tuple[str, str]] | None = None,
+        norecursedirs: list[str] | None = None,
     ) -> dict[str, Any]:
         """Execute test scripts in an anonymous, randomized temporary directory.
 

@@ -24,7 +24,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Evidence & Finding Types
@@ -101,7 +101,7 @@ class CritiqueFinding:
     resolution: FindingResolution = FindingResolution.OPEN
     evidence_refs: list[str] = field(default_factory=list)
     suggested_action: str = ""
-    agent_claim: Optional[str] = None  # The claim being contradicted (CONTRADICTED only)
+    agent_claim: str | None = None  # The claim being contradicted (CONTRADICTED only)
 
     def is_blocker(self) -> bool:
         """Return True when this finding must be resolved before the loop may stop.
@@ -352,7 +352,7 @@ class CritiqueEngine:
         workspace: str,
         verification_result: Any,
         ground_truth: dict[str, Any],
-        previous_round: Optional[dict[str, Any]] = None,
+        previous_round: dict[str, Any] | None = None,
     ) -> CritiqueResult:
         """Run a full independent adversarial critique of the workspace.
 
@@ -587,7 +587,7 @@ class CritiqueEngine:
         self,
         workspace: str,
         domain: ProjectDomain,
-        source_cache: Optional[dict[str, str]] = None,
+        source_cache: dict[str, str] | None = None,
     ) -> list[CritiqueFinding]:
         """Scan source files for directly observable weaknesses.
 
@@ -824,7 +824,7 @@ class CritiqueEngine:
         workspace: str,
         ground_truth: dict[str, Any],
         domain: ProjectDomain,
-        source_cache: Optional[dict[str, str]] = None,
+        source_cache: dict[str, str] | None = None,
     ) -> list[str]:
         """Find assumptions embedded in code that have not been tested."""
         assumptions: list[str] = []

@@ -12,7 +12,7 @@ import fnmatch
 import glob
 import os
 import re
-from typing import Any, Optional
+from typing import Any
 
 DEFAULT_PYTHON_FILES = ["test_*.py", "*_test.py"]
 
@@ -55,7 +55,7 @@ def read_pytest_config(abs_dir: str) -> dict[str, Any]:
 
     Follows pytest's precedence: pytest.ini, pyproject.toml, tox.ini, setup.cfg.
     """
-    options: Optional[dict[str, Any]] = None
+    options: dict[str, Any] | None = None
     ini_path = os.path.join(abs_dir, "pytest.ini")
     toml_path = os.path.join(abs_dir, "pyproject.toml")
     if os.path.isfile(ini_path):
@@ -85,7 +85,7 @@ def read_pytest_config(abs_dir: str) -> dict[str, Any]:
     }
 
 
-def _ini_section(path: str, section: str) -> Optional[dict[str, Any]]:
+def _ini_section(path: str, section: str) -> dict[str, Any] | None:
     parser = configparser.ConfigParser(interpolation=None)
     try:
         parser.read(path, encoding="utf-8")

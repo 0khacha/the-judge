@@ -1,6 +1,6 @@
 import os
 import subprocess
-from typing import Any, Optional
+from typing import Any
 
 
 class VisualEngine:
@@ -73,7 +73,7 @@ class VisualEngine:
 
     def capture_screenshot(
         self, target_file: str, round_num: int, output_dir: str
-    ) -> Optional[str]:
+    ) -> str | None:
         """Capture screenshot of visual target for the current round."""
         os.makedirs(output_dir, exist_ok=True)
         screenshot_filename = f"round_{round_num}_visual.png"
@@ -92,8 +92,8 @@ class VisualEngine:
     def evaluate_visual_aspects(
         self,
         target_file: str,
-        current_screenshot: Optional[str],
-        previous_screenshot: Optional[str],
+        current_screenshot: str | None,
+        previous_screenshot: str | None,
     ) -> dict[str, Any]:
         """Analyze visual layout, contrast, hierarchy, and aesthetics across rounds."""
         score = 60.0

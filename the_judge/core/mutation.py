@@ -23,7 +23,7 @@ import sys
 import tempfile
 import threading
 import time
-from typing import Any, Optional
+from typing import Any
 
 from .independence import source_files
 from .sandbox import SandboxRunner
@@ -302,7 +302,7 @@ def run_mutation(abs_dir: str, max_mutants: int = MAX_MUTANTS,
     return result
 
 
-def summary(result: Optional[dict[str, Any]]) -> dict[str, Any]:
+def summary(result: dict[str, Any] | None) -> dict[str, Any]:
     if not result:
         return {"ran": False}
     return {k: result[k] for k in ("ran", "skipped_reason", "total", "killed", "score", "threshold")}

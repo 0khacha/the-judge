@@ -24,7 +24,7 @@ import hashlib
 import json
 import os
 import sys
-from typing import Any, Optional
+from typing import Any
 
 STATE_FILE = "hook_state.json"
 _SOURCE_EXTENSIONS = (".py", ".pyi", ".json", ".toml", ".cfg", ".ini", ".md", ".txt",
@@ -85,7 +85,7 @@ def _reason(result: Any) -> str:
             "(or run `judge verify . --json` yourself).")
 
 
-def check(workspace: str) -> Optional[dict[str, Any]]:
+def check(workspace: str) -> dict[str, Any] | None:
     """Verify ``workspace`` if it changed; return the hook output, or None to allow."""
     if not _enabled(workspace):
         return None

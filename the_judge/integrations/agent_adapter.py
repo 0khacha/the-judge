@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from the_judge._version import __version__
 from the_judge.api import verify
@@ -19,8 +19,8 @@ class AgentAdapter:
     def verify_workspace(
         self,
         workspace: str,
-        task_spec: Optional[dict[str, Any]] = None,
-        previous_evidence: Optional[dict[str, Any]] = None,
+        task_spec: dict[str, Any] | None = None,
+        previous_evidence: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Run verification on target workspace and return structured agent findings.
 

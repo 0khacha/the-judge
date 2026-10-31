@@ -16,7 +16,7 @@ import fnmatch
 import os
 import shutil
 import subprocess
-from typing import Any, Optional
+from typing import Any
 
 from .test_discovery import collects, discover_workspace_tests, read_pytest_config
 
@@ -27,7 +27,7 @@ class BaselineError(ValueError):
     """Raised when an explicitly requested baseline ref cannot be used."""
 
 
-def _git(cwd: str, *args: str) -> Optional[str]:
+def _git(cwd: str, *args: str) -> str | None:
     try:
         proc = subprocess.run(
             ["git", *args], cwd=cwd, capture_output=True, text=True,
@@ -88,7 +88,7 @@ def _test_functions(source: str) -> dict[str, dict[str, Any]]:
     return out
 
 
-def compare_tests_to_baseline(abs_dir: str, ref: Optional[str] = None) -> dict[str, Any]:
+def compare_tests_to_baseline(abs_dir: str, ref: str | None = None) -> dict[str, Any]:
     """Return {"ref", "checked", "issues": [{"kind", "file", "test", "detail"}]}.
 
     ref=None means HEAD; when the workspace is not a git repository (or has no

@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass
@@ -22,13 +22,13 @@ class RequirementCoverage:
     priority: str  # "critical", "important", "optional"
     status: str  # "VERIFIED", "PARTIALLY_VERIFIED", "UNVERIFIED", "CONFLICTING"
     mapped_properties: list[PropertyMapping] = field(default_factory=list)
-    unverified_reason: Optional[str] = None
+    unverified_reason: str | None = None
 
 
 class ContractEngine:
     """Contract-Aware Verification & Specification Coverage Engine."""
 
-    def __init__(self, task_spec: Optional[dict[str, Any]] = None):
+    def __init__(self, task_spec: dict[str, Any] | None = None):
         self.task_spec = task_spec or {}
 
     def evaluate_contract_coverage(
