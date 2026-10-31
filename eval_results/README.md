@@ -13,5 +13,5 @@ already passed the hidden tests. As a gate, 1.0.1 gave PASS to 10 of 12 wrong so
 | 3 | Same, on harder tasks (stopped at the pilot: no headroom) | 1.0.2 | [REPORT3.md](REPORT3.md) | [PROTOCOL3.md](PROTOCOL3.md) | [eval3/](eval3/) |
 | 4 | Change requests in existing codebases (stopped at the pilot) | 1.0.2 | [REPORT4.md](REPORT4.md) | [PROTOCOL4.md](PROTOCOL4.md) | [eval4/](eval4/) |
 
-Release build records: [RELEASE_1.0.1.md](RELEASE_1.0.1.md), [RELEASE_1.0.2.md](RELEASE_1.0.2.md) (built, not published), [RELEASE_1.1.0.md](RELEASE_1.1.0.md) (published).
+Release build records: [RELEASE_1.0.1.md](RELEASE_1.0.1.md), [RELEASE_1.0.2.md](RELEASE_1.0.2.md) (built, not published), [RELEASE_1.1.0.md](RELEASE_1.1.0.md) and [RELEASE_1.1.1.md](RELEASE_1.1.1.md) (published).
 Each `PROTOCOL*.sha256` holds the protocol's hash, recorded before any task existed.
