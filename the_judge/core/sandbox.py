@@ -14,6 +14,23 @@ import tempfile
 import uuid
 from typing import Any, Optional
 
+# Longest failure message kept per test (head and tail, see shorten()).
+MAX_FAILURE_MESSAGE = 2000
+
+
+def shorten(text: str, limit: int) -> str:
+    """Cut text to at most limit characters, keeping its start and its end.
+
+    The end of a long failure message (a build log, a traceback) is usually where the
+    actual error is, so a plain head cut loses exactly the useful part.
+    """
+    if len(text) <= limit:
+        return text
+    marker = "\n[...]\n"
+    head = (limit - len(marker)) // 4
+    return text[:head] + marker + text[-(limit - len(marker) - head):]
+
+
 # pytest's own norecursedirs default, kept when workspace patterns are added.
 _PYTEST_DEFAULT_NORECURSE = [
     "*.egg", ".*", "_darcs", "build", "CVS", "dist", "node_modules", "venv", "{arch}",
@@ -290,7 +307,8 @@ class SandboxRunner:
                             problem = testcase.find('error')
                         if problem is not None:
                             failed_tests.append(name)
-                            failure_messages[name] = (problem.get('message') or problem.text or "")[:500]
+                            failure_messages[name] = shorten(
+                                problem.get('message') or problem.text or "", MAX_FAILURE_MESSAGE)
                         elif testcase.find('skipped') is not None:
                             skipped_tests.append(name)
                         else:

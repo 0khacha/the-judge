@@ -7,6 +7,7 @@ from typing import Any, Optional
 from the_judge._version import __version__
 from the_judge.core.decision import Finding, VerificationResult
 from the_judge.core.evidence import DEFAULT_TEST_TIMEOUT, capture_evidence
+from the_judge.core.sandbox import shorten
 from the_judge.core.score_engine import evaluate
 
 
@@ -274,7 +275,7 @@ def verify(
                 severity="high",
                 description=f"Behavioral test failed: {f_test}",
                 property_name=f_test.replace("test_", ""),
-                observed=err_msg[:200] if isinstance(err_msg, str) else str(err_msg),
+                observed=shorten(err_msg, 600) if isinstance(err_msg, str) else str(err_msg),
                 expected="Test passes with return value matching observable spec.",
                 suggested_focus=f"Review state transitions and boundary logic tested in {f_test}.",
             )
