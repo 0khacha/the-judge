@@ -1,7 +1,7 @@
 """Published distributions must contain the package and only files tracked by git.
 
 MANIFEST.in's recursive-include patterns pick up whatever is on disk, so local,
-git-ignored files (benchmark scratch results, private reports) would otherwise be
+git-ignored files (scratch results, private reports) would otherwise be
 published to PyPI with the sdist. Conversely, an over-broad exclude can silently
 drop the package itself; `python -m build` builds the wheel from the sdist, so the
 wheel would then be empty.
@@ -22,7 +22,8 @@ from audit_helpers import repo_root
 REPO = repo_root()
 GENERATED = ("PKG-INFO", "setup.cfg", "the_judge_verify.egg-info/")
 REQUIRED = ("the_judge/__init__.py", "the_judge/api.py", "the_judge/core/sandbox.py",
-            "the_judge/integrations/cli.py", "judge/__init__.py")
+            "the_judge/integrations/cli.py", "the_judge/integrations/agent_runner.py",
+            "the_judge/hook.py")
 
 
 @pytest.fixture(scope="module")

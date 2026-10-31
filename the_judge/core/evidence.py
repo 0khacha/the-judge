@@ -12,7 +12,6 @@ import uuid
 from typing import Any, Optional
 
 from .baseline import compare_tests_to_baseline
-from .behavior_engine import BehaviorEngine
 from .hardcoding import detect as detect_hardcoding
 from .independence import classify as classify_independence
 from .independence import source_files as implementation_files
@@ -249,67 +248,6 @@ def _run_linter(abs_dir: str) -> dict[str, Any]:
     }
 
 
-def parse_pytest_output(stdout: str, stderr: str, exit_code: int) -> dict[str, Any]:
-    """Parse pytest output to extract passed and failed test names."""
-    passed_tests: list[str] = []
-    failed_tests: list[str] = []
-
-    combined = stdout + "\n" + stderr
-
-    if "<?xml version=" in stdout or "<?xml version=" in stderr:
-        try:
-            import xml.etree.ElementTree as ET
-            # find xml content
-            xml_str = ""
-            in_xml = False
-            for line in combined.splitlines():
-                if line.startswith("<?xml"):
-                    in_xml = True
-                if in_xml:
-                    xml_str += line + "\n"
-                if in_xml and line.strip() == "</testsuites>":
-                    break
-
-            tree = ET.fromstring(xml_str)
-            for testcase in tree.findall('.//testcase'):
-                name = testcase.get('name')
-                if not name:
-                    continue
-                if testcase.find('failure') is not None or testcase.find('error') is not None:
-                    if name not in failed_tests:
-                        failed_tests.append(name)
-                else:
-                    if name not in passed_tests:
-                        passed_tests.append(name)
-        except Exception:
-            pass
-
-    if not passed_tests and not failed_tests:
-        for line in combined.splitlines():
-            line = line.strip()
-            if " PASSED" in line or line.endswith(" PASSED"):
-                raw_name = line.split(" PASSED")[0].split()[-1]
-                test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-                if test_name and test_name not in passed_tests:
-                    passed_tests.append(test_name)
-            elif " FAILED" in line or line.endswith(" FAILED"):
-                raw_name = line.split(" FAILED")[0].split()[-1]
-                test_name = raw_name.split("::")[-1] if "::" in raw_name else raw_name
-                if test_name and test_name not in failed_tests:
-                    failed_tests.append(test_name)
-
-    total_tests = len(passed_tests) + len(failed_tests)
-
-    return {
-        "exit_code": exit_code,
-        "total_tests": total_tests,
-        "passed_tests": passed_tests,
-        "failed_tests": failed_tests,
-        "raw_stdout": stdout[:4096],
-        "raw_stderr": stderr[:4096],
-    }
-
-
 # Seconds the sandboxed pytest run (workspace tests + probes) may take.
 DEFAULT_TEST_TIMEOUT = 300
 
@@ -331,10 +269,8 @@ def capture_evidence(
     # Resolve the baseline first so an unusable explicit --baseline fails fast.
     test_tampering = compare_tests_to_baseline(abs_dir, baseline)
 
-    # 1. Synthesize property tests & black-box probes
+    # 1. Synthesize the keyword-triggered judge probes
     candidates = generate_property_tests(abs_dir, task_spec=task_spec)
-    beh_engine = BehaviorEngine(seed=98765)
-    probes = beh_engine.generate_behavioral_probes(abs_dir)
 
     test_scripts: list[tuple[str, str]] = []
 
@@ -345,14 +281,6 @@ def capture_evidence(
         filename = f"_synthesized_property_tests_{idx}.py"
         test_scripts.append((filename, cand.challenge_code))
         for line in cand.challenge_code.splitlines():
-            if line.strip().startswith("def test_"):
-                fn_name = line.strip().split("(")[0].replace("def ", "").strip()
-                expected_challenges.append(fn_name)
-
-    for idx, probe in enumerate(probes):
-        filename = f"_synthesized_probe_{idx}.py"
-        test_scripts.append((filename, probe.executable_code))
-        for line in probe.executable_code.splitlines():
             if line.strip().startswith("def test_"):
                 fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 expected_challenges.append(fn_name)
@@ -453,11 +381,6 @@ def capture_evidence(
             if line.strip().startswith("def test_"):
                 fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 candidate_conf[fn_name] = cand.confidence
-                judge_authored_tests.add(fn_name)
-    for probe in probes:
-        for line in probe.executable_code.splitlines():
-            if line.strip().startswith("def test_"):
-                fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                 judge_authored_tests.add(fn_name)
 
     test_provenance: dict[str, dict[str, Any]] = {}

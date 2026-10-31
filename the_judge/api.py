@@ -554,6 +554,9 @@ def improve(
     task_spec: Optional[dict[str, Any]] = None,
     quality_evaluator: Optional[Any] = None,
     require_evidence_sufficiency: bool = True,
+    agent_command: Optional[str] = None,
+    agent_timeout: Optional[int] = None,
+    on_agent_round: Optional[Any] = None,
     apply: bool = False,
 ) -> dict[str, Any]:
     """Run the adversarial improvement loop on the target workspace.
@@ -578,32 +581,58 @@ def improve(
 
     Args:
         workspace: Path to workspace directory or file.
-        repair_func: Custom agent improvement callback. Without one, the call is a
-            single read-only review round unless ``apply`` is True.
+        repair_func: Custom improvement callback ``(workspace, feedback) -> bool | dict``.
         max_rounds: Maximum improvement rounds (default: 5).
         target_score: Target quality score (0.0 to 100.0, default: 90.0).
         task_spec: Task specification contract (optional).
         quality_evaluator: Custom quality evaluation function (optional).
         require_evidence_sufficiency: If True (default), loop continues if evidence
             is "insufficient" even when score target is met.
-        apply: Only used without ``repair_func``. If True, the built-in AutoImprover
-            edits files in the workspace between rounds. If False (default), nothing
-            is modified: one round is evaluated, the outcome is "REVIEW_ONLY" unless
-            it already passes, and ``suggestions`` lists the open critique findings.
+        agent_command: Shell command of a coding agent that makes the changes, e.g.
+            ``"claude -p --permission-mode acceptEdits"`` (prompt on stdin) or a command
+            containing ``{prompt_file}``; ``"auto"`` picks a known agent on PATH. Each
+            round the agent gets the verdict's next_actions and the critique as a prompt.
+        agent_timeout: Seconds one agent round may take (default 1800).
+        on_agent_round: Optional callback receiving each agent round's prompt and output.
+        apply: Removed (the built-in heuristic improver could not fix
+            behaviour); passing True raises ValueError pointing to ``agent_command``.
+
+    Without ``repair_func`` and ``agent_command`` the call is a read-only review: one
+    round is evaluated, nothing is modified, the outcome is "REVIEW_ONLY" unless it
+    already passes, and ``next_actions`` / ``suggestions`` say what to do.
 
     Returns:
         Dict containing multi-round history, audit trail, score progression,
-        critique findings per round, and final verdict.
+        critique findings per round, the final verdict and its next_actions.
     """
-    from the_judge.integrations.auto_improver import AutoImprover
     from the_judge.integrations.repair_loop import AgentRepairLoop
 
-    review_only = repair_func is None and not apply
-    if repair_func is None:
-        improver = AutoImprover(workspace)
+    if apply:
+        raise ValueError(
+            "improve(apply=True) was removed: the built-in improver could only make "
+            "cosmetic edits. Pass agent_command (CLI: judge improve --agent) to let a coding "
+            "agent act on the findings, or repair_func for your own callback."
+        )
+    if repair_func is not None and agent_command is not None:
+        raise ValueError("pass either repair_func or agent_command, not both")
 
-        def repair_func(ws, feedback):
-            return improver.improve_workspace(feedback)
+    review_only = repair_func is None and agent_command is None
+    if agent_command is not None:
+        from the_judge.integrations.agent_runner import (
+            DEFAULT_AGENT_TIMEOUT,
+            make_agent_repair,
+            resolve_agent_command,
+        )
+
+        repair_func = make_agent_repair(
+            resolve_agent_command(agent_command),
+            timeout=agent_timeout or DEFAULT_AGENT_TIMEOUT,
+            on_round=on_agent_round,
+        )
+    elif repair_func is None:
+
+        def repair_func(_workspace, _feedback):
+            return False  # review only: max_rounds is 1, so this is never called
 
     loop = AgentRepairLoop(
         max_rounds=1 if review_only else max_rounds,
@@ -616,17 +645,17 @@ def improve(
         agent_repair_func=repair_func,
         task_spec=task_spec,
     )
-    if review_only:
-        history = result.get("history") or [{}]
-        critique_dict = history[-1].get("critique") or {}
-        result["suggestions"] = critique_dict.get("improvement_priority", [])
-        if result.get("outcome") != "PASS":
-            result["outcome"] = "REVIEW_ONLY"
-            result["reason"] = (
-                "Read-only review: the workspace was not modified. Act on the suggestions, "
-                "pass a repair_func, or use apply=True (CLI: --apply) to let the built-in "
-                "improver edit files."
-            )
+    history = result.get("history") or [{}]
+    last_round = history[-1]
+    critique_dict = last_round.get("critique") or {}
+    result["next_actions"] = last_round.get("next_actions", [])
+    result["suggestions"] = critique_dict.get("improvement_priority", [])
+    if review_only and result.get("outcome") != "PASS":
+        result["outcome"] = "REVIEW_ONLY"
+        result["reason"] = (
+            "Read-only review: the workspace was not modified. Follow next_actions, or let a "
+            "coding agent do it: agent_command (CLI: judge improve --agent)."
+        )
     return result
 
 

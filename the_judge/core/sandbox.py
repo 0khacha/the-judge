@@ -362,26 +362,3 @@ class SandboxRunner:
             }
         finally:
             shutil.rmtree(temp_dir, ignore_errors=True)
-
-    @classmethod
-    def execute_fresh_process_probe(
-        cls, task_dir: str, probe_code: str, timeout: int = 10
-    ) -> dict[str, Any]:
-        """Execute a single probe script in a completely fresh isolated Python process instance."""
-        abs_task_dir = os.path.abspath(task_dir)
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", delete=False, dir=abs_task_dir
-        ) as f:
-            f.write(probe_code)
-            temp_path = f.name
-
-        try:
-            env = {"PYTHONPATH": abs_task_dir + os.pathsep + os.environ.get("PYTHONPATH", "")}
-            cmd = [sys.executable, temp_path]
-            res = cls.run_cmd(cmd, cwd=abs_task_dir, env=env, timeout=timeout)
-            return res
-        finally:
-            if os.path.exists(temp_path):
-                with contextlib.suppress(Exception):
-                    os.remove(temp_path)

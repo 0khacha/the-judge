@@ -180,13 +180,6 @@ class CritiqueResult:
     def get_open_findings(self) -> list[CritiqueFinding]:
         return [f for f in self.findings if f.resolution == FindingResolution.OPEN]
 
-    def get_open_by_severity(self, severity: FindingSeverity) -> list[CritiqueFinding]:
-        return [
-            f
-            for f in self.findings
-            if f.resolution == FindingResolution.OPEN and f.severity == severity
-        ]
-
     def to_dict(self) -> dict[str, Any]:
         open_count = len(self.get_open_findings())
         blocker_count = sum(1 for f in self.findings if f.is_blocker())
@@ -251,20 +244,6 @@ class CritiqueEngine:
     These are separate dimensions. EVIDENCE_BACKED + LOW does not block the loop.
     CONTRADICTED + CRITICAL always blocks the loop. See CritiqueFinding.is_blocker().
     """
-
-    SKEPTICAL_QUESTIONS: list[str] = [
-        "What is wrong with this work?",
-        "What is weak?",
-        "What is missing?",
-        "What has not been demonstrated?",
-        "What assumptions are being made?",
-        "What could fail in practice?",
-        "What would a skeptical expert challenge?",
-        "What claims are unsupported?",
-        "What evidence contradicts the agent?",
-        "What should be tested next?",
-        "What improvement would have the highest impact?",
-    ]
 
     # Reuse the module-level constant (avoids duplicating the frozenset)
     _IGNORED_DIRS = _IGNORED_DIRS
@@ -968,10 +947,20 @@ class CritiqueEngine:
                         "zero",
                         "empty",
                         "overflow",
+                        "exact",
+                        "negative",
+                        "invalid",
+                        "expire",
                     )
                 )
             ]
-            if not boundary_tests:
+            # Mutation testing is stronger evidence than test names: when the planted
+            # boundary bugs (`<` -> `<=`, ...) were caught, the limits are tested.
+            mutation = ground_truth.get("mutation") or {}
+            boundaries_proven = bool(
+                mutation.get("ran") and mutation.get("score", 0.0) >= mutation.get("threshold", 1.0)
+            )
+            if not boundary_tests and not boundaries_proven:
                 missing.append(
                     "No boundary or edge-case tests — behaviour at limits and extremes is unverified."
                 )

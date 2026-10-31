@@ -1,4 +1,4 @@
-.PHONY: help install dev-install test lint format clean build publish docs
+.PHONY: help install dev-install test lint format clean build verify demo plugin
 
 help:
 	@echo "The Judge - Development Commands"
@@ -13,6 +13,7 @@ help:
 	@echo "build         Build distribution packages"
 	@echo "verify        Run judge verify on the project itself"
 	@echo "demo          Run the interactive demo"
+	@echo "plugin        Validate the Claude Code plugin (needs the claude CLI)"
 	@echo ""
 
 install:
@@ -42,7 +43,7 @@ clean:
 	rm -rf .pytest_cache/
 	rm -rf .mypy_cache/
 	rm -rf .ruff_cache/
-	rm -rf htmlcov/
+	rm -rf htmlcov/ _judge_report/ .judge/
 	rm -rf .coverage
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
@@ -55,3 +56,7 @@ verify:
 
 demo:
 	judge demo
+
+plugin:
+	claude plugin validate .
+	claude plugin validate plugin

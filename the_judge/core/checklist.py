@@ -20,6 +20,8 @@ SPEC_FILES = ("TASK.md", "SPEC.md", "REQUIREMENTS.md")
 MIN_LENGTH = 15
 _ITEM = re.compile(r"^(\s*)(?:[-*+]|\d+[.)])\s+(.*\S)\s*$")
 _ID = re.compile(r"\bR(\d+)\b")
+# A rule the spec already labels with its own id: "R4: ...", "**R4.** ...".
+_OWN_LABEL = re.compile(r"^\**R(\d+)\**\s*[:.)-]\s*\**\s*")
 
 
 def extract_requirements(text: str, source: str = "TASK.md", start: int = 1) -> list[dict[str, Any]]:
@@ -44,7 +46,12 @@ def extract_requirements(text: str, source: str = "TASK.md", start: int = 1) -> 
     out: list[dict[str, Any]] = []
     for item in reqs:
         if len(item["text"]) >= MIN_LENGTH:
-            out.append({"id": f"R{start + len(out)}", "text": item["text"], "source": source})
+            rid = f"R{start + len(out)}"
+            text = item["text"]
+            label = _OWN_LABEL.match(text)
+            if label and f"R{label.group(1)}" == rid:
+                text = text[label.end():]  # the spec already labels the rule with its id
+            out.append({"id": rid, "text": text, "source": source})
     return out
 
 

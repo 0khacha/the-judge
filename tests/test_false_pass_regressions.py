@@ -117,7 +117,7 @@ class TestP1SwallowedExceptions:
         P1-5: the state-isolation probe (Cls() is not Cls()) could never fail on an
         ordinary class, so it was removed; nothing is generated for BadClass.
         """
-        from the_judge.core.behavior_engine import BehaviorEngine
+        from the_judge.core.property_engine import generate_property_tests
 
         workspace = _write_workspace(
             {
@@ -130,9 +130,8 @@ class TestP1SwallowedExceptions:
                 """
             }
         )
-        engine = BehaviorEngine()
-        probes = engine.generate_behavioral_probes(workspace)
-        assert [p for p in probes if p.property_kind == "state_isolation"] == []
+        probes = generate_property_tests(workspace)
+        assert [p for p in probes if p.kind == "state_isolation"] == []
 
 
 # ---------------------------------------------------------------------------
@@ -339,23 +338,15 @@ class TestP3CollectionTamperingNoContract:
         )
 
         # Directly test the evidence capture manifest
-        from the_judge.core.behavior_engine import BehaviorEngine
         from the_judge.core.property_engine import generate_property_tests
 
         # Simulate what capture_evidence does when building expected_challenges
         abs_dir = os.path.abspath(workspace)
         candidates = generate_property_tests(abs_dir)
-        beh_engine = BehaviorEngine()
-        probes = beh_engine.generate_behavioral_probes(abs_dir)
 
         expected_challenges = []
         for cand in candidates:
             for line in cand.challenge_code.splitlines():
-                if line.strip().startswith("def test_"):
-                    fn_name = line.strip().split("(")[0].replace("def ", "").strip()
-                    expected_challenges.append(fn_name)
-        for probe in probes:
-            for line in probe.executable_code.splitlines():
                 if line.strip().startswith("def test_"):
                     fn_name = line.strip().split("(")[0].replace("def ", "").strip()
                     expected_challenges.append(fn_name)
@@ -407,8 +398,8 @@ class TestP4ProbeScope:
                 """
             }
         )
-        from the_judge.core.behavior_engine import BehaviorEngine
+        from the_judge.core.property_engine import generate_property_tests
 
-        probes = BehaviorEngine().generate_behavioral_probes(workspace)
-        assert [p for p in probes if p.target_symbol == "add"] == []
+        probes = generate_property_tests(workspace)
+        assert [p for p in probes if p.source_symbol.endswith("add")] == []
 

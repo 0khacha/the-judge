@@ -115,7 +115,7 @@ def main(args_list=None) -> int:
         "--pre-push", action="store_true", help="Uninstall pre-push hook instead of pre-commit"
     )
     hook_uninstall.add_argument("workspace", nargs="?", default=".", help="Path to workspace")
-    hook_sub.add_parser("run", help="Run PostToolUse hook (reads JSON from stdin)")
+    hook_sub.add_parser("run", help="Run the Claude Code Stop hook (reads the event JSON from stdin)")
 
     # init command
     init_parser = subparsers.add_parser("init", help="Generate IDE integration files")
@@ -143,10 +143,27 @@ def main(args_list=None) -> int:
         "--json", action="store_true", help="Output machine-readable JSON history"
     )
     improve_parser.add_argument(
-        "--apply",
-        action="store_true",
-        help="Let the built-in improver edit files in the workspace (default: read-only review)",
+        "--agent",
+        nargs="?",
+        const="auto",
+        default=None,
+        metavar="CMD",
+        help="Let a coding agent make the changes each round, e.g. "
+        '--agent "claude -p --permission-mode acceptEdits" (prompt on stdin; use {prompt_file} '
+        "for agents that read a file). --agent alone picks a known agent on PATH. "
+        "Without it, improve is a read-only review.",
     )
+    improve_parser.add_argument(
+        "--agent-timeout",
+        type=int,
+        default=None,
+        help="Seconds one agent round may take (default: 1800)",
+    )
+    improve_parser.add_argument(
+        "--task-spec", type=str, default=None,
+        help="Path to a judge.json contract (default: judge.json in the workspace)",
+    )
+    improve_parser.add_argument("--apply", action="store_true", help=argparse.SUPPRESS)
     improve_parser.add_argument(
         "--no-report",
         action="store_true",
@@ -228,36 +245,13 @@ def main(args_list=None) -> int:
 
     workspace_path = getattr(args, "workspace", ".")
     is_json = getattr(args, "json", False)
-    task_spec_path = getattr(args, "task_spec", None)
-
-    # Auto-discover conventional task contract files if not specified
-    if not task_spec_path and os.path.isdir(workspace_path):
-        for candidate in ("judge.json", "judge.yaml", "task_spec.json"):
-            cp = os.path.join(workspace_path, candidate)
-            if os.path.exists(cp):
-                task_spec_path = cp
-                break
+    task_spec_path = _find_task_spec(workspace_path, getattr(args, "task_spec", None))
 
     if args.command == "contract":
         _run_contract_command(workspace_path, is_json, task_spec_path)
         return 0
 
-    task_spec_dict = None
-    if task_spec_path and os.path.exists(task_spec_path):
-        try:
-            with open(task_spec_path, encoding="utf-8") as f:
-                if task_spec_path.endswith((".yaml", ".yml")):
-                    # Simple inline YAML parser fallback if PyYAML not installed
-                    try:
-                        import yaml
-
-                        task_spec_dict = yaml.safe_load(f)
-                    except ImportError:
-                        task_spec_dict = json.load(f)
-                else:
-                    task_spec_dict = json.load(f)
-        except Exception:
-            task_spec_dict = None
+    task_spec_dict = _load_task_spec(task_spec_path)
 
     old_argv = list(sys.argv)
     try:
@@ -286,6 +280,36 @@ def main(args_list=None) -> int:
         _print_human_readable_result(workspace_path, verif_result)
 
     return 0 if verif_result.decision == "PASS" else (1 if verif_result.decision == "FAIL" else 2)
+
+
+def _find_task_spec(workspace: str, explicit: Optional[str]) -> Optional[str]:
+    """Return the task contract path: the explicit one, else a conventional file."""
+    if explicit:
+        return explicit
+    if os.path.isdir(workspace):
+        for candidate in ("judge.json", "judge.yaml", "task_spec.json"):
+            path = os.path.join(workspace, candidate)
+            if os.path.exists(path):
+                return path
+    return None
+
+
+def _load_task_spec(path: Optional[str]) -> Optional[dict[str, Any]]:
+    """Load a judge.json / judge.yaml contract; None when absent or unreadable."""
+    if not path or not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as f:
+            if path.endswith((".yaml", ".yml")):
+                try:
+                    import yaml
+
+                    return yaml.safe_load(f)
+                except ImportError:
+                    return json.load(f)
+            return json.load(f)
+    except Exception:
+        return None
 
 
 def _run_hook_command(args) -> int:
@@ -359,8 +383,11 @@ def _run_watch_command(args) -> int:
     return 0
 
 
+_EXIT_CODES = {"PASS": 0, "FAIL": 1, "ABSTAIN": 2}
+
+
 def _run_improve_command(args) -> int:
-    """Handle the 'judge improve' subcommand -- adversarial improvement loop."""
+    """Handle 'judge improve': a read-only review, or an agent-driven repair loop."""
     from the_judge.api import improve
     from the_judge.core.visual_engine import VisualEngine
     from the_judge.integrations.audit_trail import AuditTrail
@@ -371,119 +398,85 @@ def _run_improve_command(args) -> int:
     target_score = getattr(args, "target_score", 90.0)
     is_json = getattr(args, "json", False)
     no_report = getattr(args, "no_report", False)
-    apply = getattr(args, "apply", False)
+    agent = getattr(args, "agent", None)
+
+    if getattr(args, "apply", False):
+        print("judge improve --apply was removed: the built-in improver could only "
+              "make cosmetic edits. Use --agent to let a coding agent act on the findings, "
+              'e.g. judge improve . --agent "claude -p --permission-mode acceptEdits".',
+              file=sys.stderr)
+        return 3
+
+    agent_cmd = None
+    if agent is not None:
+        from the_judge.integrations.agent_runner import resolve_agent_command
+
+        try:
+            agent_cmd = resolve_agent_command(agent)
+        except ValueError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            return 3
 
     ve = VisualEngine(workspace)
-    is_visual, target_file = ve.is_visual_workspace()
+    is_visual, _target_file = ve.is_visual_workspace()
+    task_spec = _load_task_spec(_find_task_spec(workspace, getattr(args, "task_spec", None)))
+    log = sys.stderr if is_json else sys.stdout
 
     if not is_json:
         print("=" * 70)
-        print("THE JUDGE -- Adversarial Improvement Engine")
-        print("Loop: WORK -> EVIDENCE -> CRITIQUE -> IDENTIFY WEAKNESSES -> IMPROVE -> REPEAT")
+        print("THE JUDGE -- improve")
         print("=" * 70)
-        domain_label = "[VISUAL]" if is_visual else "[NON-VISUAL]"
-        if is_visual:
-            print(f"Classification   : {domain_label} -- screenshots captured as visual evidence")
+        print(f"Workspace : {os.path.abspath(workspace)}")
+        print("Project   : " + ("VISUAL (screenshots are evidence)" if is_visual
+                               else "NON-VISUAL (tests, mutation, static analysis)"))
+        if agent_cmd:
+            print(f"Mode      : agent loop, up to {max_rounds} round(s): {agent_cmd}")
         else:
-            print(f"Classification   : {domain_label} -- tests, static analysis, behavioral checks")
-        print(f"Target Workspace : {os.path.abspath(workspace)}")
-        if apply:
-            print(f"Max Rounds       : {max_rounds}")
-            print("Mode             : APPLY -- the built-in improver edits workspace files")
-        else:
-            print("Mode             : READ-ONLY review (use --apply to let it edit files)")
-        print(f"Quality Target   : {target_score} / 100.0")
-        print("Stop Requires    : score>=threshold AND no blockers AND sufficient evidence")
+            print("Mode      : review only, no files are changed (--agent to let an agent fix)")
+        print(f"Stops at  : verdict PASS and score >= {target_score}")
         print()
+
+    def on_agent_round(info: dict[str, Any]) -> None:
+        print(f"  agent: {info['summary']}", file=log, flush=True)
 
     old_argv = list(sys.argv)
     try:
         sys.argv = [sys.argv[0]]
         result = improve(
-            workspace=workspace, max_rounds=max_rounds, target_score=target_score, apply=apply
+            workspace=workspace, max_rounds=max_rounds, target_score=target_score,
+            task_spec=task_spec, agent_command=agent_cmd,
+            agent_timeout=getattr(args, "agent_timeout", None),
+            on_agent_round=on_agent_round if agent_cmd else None,
         )
     except Exception as e:
         if is_json:
             print(json.dumps({"error": str(e), "outcome": "ERROR"}, indent=2))
         else:
-            print(f"[IMPROVEMENT ENGINE ERROR] {e}")
+            print(f"[IMPROVE ERROR] {e}")
         return 3
     finally:
         sys.argv = old_argv
 
+    final_decision = result.get("final_decision", "ABSTAIN")
+    exit_code = _EXIT_CODES.get(final_decision, 2)
     if is_json:
-        print(json.dumps(result, indent=2))
-        return 0
+        print(json.dumps(result, indent=2, default=str))
+        return exit_code
 
     history = result.get("history", [])
-    screenshots_collected = []
-    total = result.get("total_rounds", max_rounds)
-
+    total = len(history) if not agent_cmd else max_rounds
     for round_item in history:
-        round_num = round_item.get("round_number", 1)
         dec = round_item.get("decision", "UNKNOWN")
         score = round_item.get("numeric_score", 0.0)
-        round_item.get("quality", {})
-        repair = round_item.get("repair", {})
-        screenshot = round_item.get("screenshot")
-        critique = round_item.get("critique", {})
-        ev_suf = (
-            critique.get("evidence_sufficiency", {}).get("level", "unknown")
-            if isinstance(critique.get("evidence_sufficiency"), dict)
-            else critique.get("evidence_sufficiency", "unknown")
-        )
-        has_blockers = critique.get("has_blockers", False)
-        skeptic = critique.get("skeptic_summary", "")
-        contradictions = critique.get("contradictions", [])
-        findings = critique.get("findings", [])
-
-        if screenshot:
-            screenshots_collected.append(screenshot)
-
-        print(f"[Round {round_num}/{total}] Critique & Refinement")
-        print(f"  Decision       : {dec}")
-        print(f"  Quality Score  : {score:.1f} / 100.0")
-        print(
-            f"  Evidence       : {ev_suf.upper()}{'  [!] BLOCKERS PRESENT' if has_blockers else ''}"
-        )
-
-        if skeptic:
-            print(f"  Critique       : {skeptic[:120]}{'...' if len(skeptic) > 120 else ''}")
-
-        if contradictions:
-            print(f"  Contradictions : {len(contradictions)} detected")
-            for c in contradictions[:2]:
-                print(f"    ? {c.get('description', '')[:100]}")
-
-        # Show top evidence-classified findings
-        top_findings = [
-            f
-            for f in findings
-            if f.get("is_blocker") or f.get("evidence_level") in ("evidence_backed", "contradicted")
-        ][:3]
-        if top_findings:
-            print("  Key Findings   :")
-            for f in top_findings:
-                ev = f.get("evidence_level", "").upper().replace("_", " ")
-                sev = f.get("severity", "").upper()
-                desc = f.get("description", "")[:90]
-                blocker = " [BLOCKER]" if f.get("is_blocker") else ""
-                print(f"    [{ev}][{sev}]{blocker} {desc}")
-
-        if screenshot:
-            rel = (
-                os.path.relpath(screenshot, os.path.abspath(workspace))
-                if os.path.isabs(screenshot)
-                else screenshot
-            )
-            print(f"  Screenshot     : {rel}")
-
-        if repair and repair.get("summary"):
-            print(f"  Action Taken   : {repair.get('summary')[:120]}")
-        print()
+        summary = (round_item.get("repair") or {}).get("summary")
+        print(f"[Round {round_item.get('round_number', 1)}/{total}] {dec}  score {score:.1f}")
+        if summary:
+            print(f"  agent: {summary[:160]}")
+        if round_item.get("screenshot"):
+            print(f"  screenshot: {round_item['screenshot']}")
+    print()
 
     outcome = result.get("outcome", "COMPLETED")
-
     # Generate progress report
     report_path = None
     if not no_report:
@@ -535,51 +528,30 @@ def _run_improve_command(args) -> int:
         except Exception:
             pass
 
+    first_score = history[0].get("numeric_score", 0.0) if history else 0.0
+    last_score = history[-1].get("numeric_score", 0.0) if history else 0.0
     print("=" * 70)
-    if outcome == "PASS":
-        initial_score = history[0].get("numeric_score", 0.0) if history else 0.0
-        final_score = result.get("quality", {}).get("score", 0.0)
-        diff = round(final_score - initial_score, 1)
-        diff_str = f"+{diff:.1f}" if diff >= 0 else f"{diff:.1f}"
-        print(f"SUCCESS: All stop conditions met in {result.get('total_rounds')} round(s).")
-        print(f"Score Progression : {initial_score:.1f} -> {final_score:.1f} ({diff_str} points)")
-        print("Evidence          : sufficient, no blockers, no contradictions")
-        if is_visual and screenshots_collected:
-            print(
-                f"Visual Evidence   : {len(screenshots_collected)} screenshot(s) in _judge_visual/"
-            )
-        if report_path:
-            rel_rep = os.path.relpath(report_path, os.path.abspath(workspace))
-            print(f"Progress Report   : {rel_rep}")
-        print("=" * 70)
-        return 0
-    else:
-        print(f"OUTCOME: {outcome}")
-        if result.get("reason"):
-            print(f"Reason  : {result.get('reason')}")
-        # Show remaining blockers if any
-        last = history[-1] if history else {}
-        last_critique = last.get("critique", {})
-        remaining = last_critique.get("findings", []) if isinstance(last_critique, dict) else []
-        blockers = [f for f in remaining if f.get("is_blocker")]
-        suggestions = result.get("suggestions") or []
-        if suggestions:
-            print("Suggestions (most important first):")
-            for i, f in enumerate(suggestions[:8], 1):
-                ev = f.get("evidence_level", "").upper().replace("_", " ")
-                sev = f.get("severity", "").upper()
-                print(f"  {i}. [{ev}][{sev}] {f.get('description', '')[:100]}")
-        if blockers:
-            print(f"Blockers: {len(blockers)} unresolved")
-            for b in blockers[:3]:
-                ev = b.get("evidence_level", "").upper().replace("_", " ")
-                sev = b.get("severity", "").upper()
-                print(f"  [{ev}][{sev}] {b.get('description', '')[:100]}")
-        if report_path:
-            rel_rep = os.path.relpath(report_path, os.path.abspath(workspace))
-            print(f"Progress Report : {rel_rep}")
-        print("=" * 70)
-        return 1
+    print(f"RESULT  : {final_decision}  score {last_score:.1f}"
+          + (f" (round 1: {first_score:.1f})" if len(history) > 1 else ""))
+    print(f"OUTCOME : {outcome}")
+    if result.get("reason"):
+        print(f"Reason  : {result['reason']}")
+
+    actions = [a for a in result.get("next_actions", []) if a.get("action") != "re_verify"]
+    if actions and final_decision != "PASS":
+        print("\nNext actions (from judge verify):")
+        for i, act in enumerate(actions[:8], 1):
+            print(f"  {i}. [{act.get('action')}] {act.get('detail', '')[:160]}")
+    suggestions = result.get("suggestions") or []
+    if suggestions:
+        print("\nCritique (lower priority):")
+        for f in suggestions[:5]:
+            sev = f.get("severity", "").upper()
+            print(f"  - [{sev}] {f.get('description', '')[:140]}")
+    if report_path:
+        print(f"\nReport  : {os.path.relpath(report_path, os.path.abspath(workspace))}")
+    print("=" * 70)
+    return exit_code
 
 
 def _run_critique_command(args) -> int:

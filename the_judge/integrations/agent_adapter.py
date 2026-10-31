@@ -54,6 +54,7 @@ class AgentAdapter:
             "provenance": result.provenance,
             "blocking_issues": result.blocking_issues,
             "insufficient_notes": result.insufficient_notes,
+            "next_actions": result.next_actions,
             "runtime": {
                 "duration_seconds": round(result.runtime_seconds, 3),
                 "judge_version": f"v{__version__}",

@@ -5,22 +5,70 @@ All notable changes to The Judge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] - Unreleased
+
+### Added
+- **Claude Code plugin** (`plugin/`, marketplace `.claude-plugin/marketplace.json`):
+  `/plugin install the-judge --marketplace 0khacha/the-judge`. It adds a Stop hook, the
+  `judge-loop` skill (the test-first protocol) and `/the-judge:verify`,
+  `/the-judge:freeze` and `/the-judge:improve`.
+- **Stop hook** (`judge hook run`, `python -m the_judge.hook`). At the end of a turn it
+  verifies the project if source/test/spec files changed since its last run. Unless the
+  verdict is PASS, it returns `{"decision": "block", "reason": <next actions>}`, so
+  Claude keeps fixing. It is opt-in per project (`.judge/` exists;
+  `THE_JUDGE_HOOK=always|off`), and it lets Claude stop when the judge reports the loop
+  as stuck.
+- **`judge improve --agent [CMD]`** / `improve(agent_command=...)`: each round a coding
+  agent (default: Claude Code, `claude -p`) gets the verdict's next actions as its
+  prompt, on stdin or via `{prompt_file}`, and the judge re-verifies after it finishes.
+  Ends on PASS, `--max-rounds`, an agent failure, or a round without changes
+  (`--agent-timeout`, default 1800 s).
+- `judge improve` prints the judge's next actions, loads `judge.json` like `verify`
+  (`--task-spec`), and exits with the verdict's code (0 PASS, 1 FAIL, 2 ABSTAIN). The
+  result dict has `next_actions`.
+- `examples/simple_cache` is a working walk-through: SPEC.md rules R1-R5, tests naming
+  them, a stub, a correct solution (PASS) and an off-by-one one (FAIL). CI runs it.
 
 ### Changed
-- **`judge improve` is read-only by default.** Without a repair callback it runs one
-  evaluation round, changes no files, and returns outcome `REVIEW_ONLY` with the open
-  critique findings in `suggestions`. `judge improve --apply` / `improve(apply=True)`
-  lets the built-in `AutoImprover` edit files as before.
+- **`judge improve` is read-only by default.** Without `--agent` or a repair callback
+  it runs one evaluation round, changes no files, and returns outcome `REVIEW_ONLY` with
+  `next_actions` and the critique in `suggestions`.
+- The PostToolUse hook that ran a full verification after any Bash command containing
+  `python`/`make`/... is replaced by the Stop hook. On FAIL it exited 1, which Claude
+  Code shows only to the user, so the agent never saw the findings.
+- The checklist drops a rule's own label from its text (`- R4: ...` is no longer shown
+  as `R4 (SPEC.md): R4: ...`).
+- The critique no longer claims "no boundary tests" when mutation testing showed that
+  the planted boundary bugs were caught.
 - The version is defined once (`the_judge/_version.py`); CLI, reports and JSON output
   (`judge_version`) read it from there. Some outputs previously said `v4.0`.
 
 ### Removed
-- `AutoImprover` no longer writes tests. The tests it generated (`assert callable(f)`,
-  `assert True`, `pytest.raises` around a bare `raise`) passed regardless of the code
-  and were counted as independent evidence.
+- **`AutoImprover`, `judge improve --apply`, `improve(apply=True)`.** It inserted
+  `if any(p is None ...): raise ValueError` guards into arbitrary functions, stamped
+  "Auto-improved by The Judge" docstrings, marked syntax errors with a comment, and
+  created a `judge.json` whose critical requirement no test could satisfy (a permanent
+  ABSTAIN). It could not fix behaviour. `--apply` now exits 3 and `apply=True` raises
+  `ValueError`, both pointing to `--agent`.
+- Dead code: `BehaviorEngine` (it had returned no probes since the generic probes were
+  removed), `ContractParser`, `parse_pytest_output`,
+  `SandboxRunner.execute_fresh_process_probe`, `CritiqueResult.get_open_by_severity`, the
+  legacy `judge` import shim, `setup.py`, the quick-start scripts.
+- The simulated agent benchmark (`benchmark/`), superseded by the pre-registered
+  evaluations in `eval_results/`; the duplicated `docs/security.md` and
+  `docs/threat-model.md` (stale "v4.0" copies of SECURITY.md / THREAT_MODEL.md); unused
+  `assets/`; `examples/alex_morgan_portfolio/run_improvement_experiment.py`, which printed
+  hard-coded scores as an experiment; the duplicate `tests.yml` workflow.
+- PLUGIN_GUIDE.md no longer documents settings that never existed (`~/.judge/config.json`,
+  `exclude_patterns`, `quality_threshold` in judge.json).
 
 ### Fixed
+- docs/API.md and examples/INTEGRATION_EXAMPLES.md showed repair callbacks returning
+  `{"changed": True}`; the loop reads `"improved"`, so they aborted after one round. The
+  examples also read result keys that do not exist (`final_score`, `rounds`,
+  `feedback["verification"]`).
+- The CI "self-verify" job ran `judge verify .` on an unchanged checkout, which is
+  always ABSTAIN (exit 2); it is replaced by the walk-through job.
 - False FAIL with "COLLECTION TAMPERING DETECTED" / `restore_tests` on correct,
   untouched projects, from three causes:
   - tests reading fixtures through `__file__` (e.g. `tests/data/sample.csv`) failed to

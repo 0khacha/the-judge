@@ -134,8 +134,7 @@ Follow `next_actions` in order; `findings[]` holds the details. `loop` compares 
 ### Quick reference
 
 ```bash
-judge improve .                # Read-only review: critique + suggestions, changes no files
-judge improve . --apply        # Let the built-in improver edit files between rounds
+judge improve .                # Read-only review: verdict, next actions, critique; changes no files
 judge verify .                 # Human-readable evaluation report
 judge verify . --json          # Machine-readable JSON for agents
 judge freeze .                 # Freeze the current tests (do this before implementing)
@@ -151,7 +150,8 @@ judge init vscode             # Generate VS Code tasks
 
 ```
 the_judge/
-  api.py                 # Entry point: verify()
+  api.py                 # Entry points: verify(), freeze(), improve(), critique()
+  hook.py                # Claude Code Stop hook (judge hook run)
   core/
     sandbox.py           # Subprocess isolation
     evidence.py          # Evidence capture
@@ -163,6 +163,7 @@ the_judge/
     cli.py               # CLI driver (judge command)
     agent_adapter.py     # Agent feedback formatter
     repair_loop.py       # Multi-round repair loop
+    agent_runner.py      # Runs a coding agent for judge improve --agent
     hooks.py             # Git hook management
     ide.py               # VS Code integration
     watcher.py           # File watcher mode

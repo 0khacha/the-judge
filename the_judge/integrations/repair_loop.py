@@ -94,6 +94,10 @@ class AgentRepairLoop:
             "node_modules",
             ".venv",
             "venv",
+            # The Judge's own state and reports: writing them is not an improvement.
+            ".judge",
+            "_judge_report",
+            "_judge_visual",
         }
     )
 
@@ -247,6 +251,7 @@ class AgentRepairLoop:
                 "quality": quality,
                 "findings": [f.to_dict() for f in verification_result.findings],
                 "blocking_issues": verification_result.blocking_issues,
+                "next_actions": verification_result.next_actions,
                 "critique": critique_result.to_dict(),
                 "evidence_summary": {
                     "passed_tests": verification_result.provenance.get("passed_tests", 0),

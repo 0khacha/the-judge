@@ -1,0 +1,286 @@
+{
+  "decision": "ABSTAIN",
+  "numeric_score": 65.0,
+  "trust_profile": {
+    "evidence_level": 1,
+    "total_tests": 6,
+    "passed_tests": 6,
+    "failed_tests": 0,
+    "requirement_checks": [
+      {
+        "id": "REQ-test_properties",
+        "description": "Verified behavior in test_properties",
+        "status": "pass",
+        "evidence_ref": "test_properties",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_zero",
+        "description": "Verified behavior in test_zero",
+        "status": "pass",
+        "evidence_ref": "test_zero",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_remainder_first",
+        "description": "Verified behavior in test_remainder_first",
+        "status": "pass",
+        "evidence_ref": "test_remainder_first",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_invalid",
+        "description": "Verified behavior in test_invalid",
+        "status": "pass",
+        "evidence_ref": "test_invalid",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_even_four",
+        "description": "Verified behavior in test_even_four",
+        "status": "pass",
+        "evidence_ref": "test_even_four",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      },
+      {
+        "id": "REQ-test_even_three",
+        "description": "Verified behavior in test_even_three",
+        "status": "pass",
+        "evidence_ref": "test_even_three",
+        "evidence_source": "public_visible_test",
+        "independence_level": "externally_verified",
+        "evidence_strength": "level_1",
+        "verification": "sufficient"
+      }
+    ],
+    "probe_coverage": {
+      "triggers": "heuristic, keyword-based (see README 'Judge probes')",
+      "ran": [],
+      "not_run": [
+        {
+          "module": "bill",
+          "symbol": "split_bill",
+          "kind": "idempotency",
+          "reason": "no keyword trigger matched; this probe runs only for a function with one str-annotated parameter whose name contains sanitize/clean/strip/normalize/purify/harden"
+        }
+      ]
+    },
+    "evidence_integrity_subdimensions": {
+      "challenge_integrity": "VERIFIED",
+      "collection_integrity": "VERIFIED",
+      "execution_integrity": "VERIFIED",
+      "result_integrity": "VERIFIED",
+      "evidence_independence": "PARTIAL"
+    },
+    "environment_isolation_subdimensions": {
+      "process_isolation": "VERIFIED",
+      "filesystem_isolation": "PARTIAL",
+      "environment_isolation": "VERIFIED",
+      "import_isolation": "PARTIAL",
+      "cross_run_isolation": "VERIFIED"
+    },
+    "behavioral_coverage_subdimensions": {
+      "boundary_coverage": "NOT_CHECKED",
+      "perturbation_coverage": "NOT_CHECKED",
+      "state_coverage": "NOT_CHECKED",
+      "semantic_coverage": "WORKSPACE_TESTS_ONLY"
+    },
+    "adversarial_robustness_subdimensions": {
+      "known_attack_resistance": "CHECKED",
+      "adaptive_attack_resistance": "NOT_ASSESSED",
+      "temporal_attack_resistance": "NOT_ASSESSED",
+      "evasion_resistance": "CHECKED"
+    },
+    "abstention_correctness_subdimensions": {
+      "insufficient_evidence": "VERIFIED",
+      "conflicting_evidence": "VERIFIED",
+      "synthesis_failure": "VERIFIED",
+      "verification_denial": "VERIFIED"
+    },
+    "specification_coverage": {
+      "requirements": [
+        {
+          "id": "REQ-001",
+          "description": "Behavioral verification of property test_even_four",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_even_four",
+              "requirement_id": "REQ-001",
+              "property_name": "test_even_four",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_even_four' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-002",
+          "description": "Behavioral verification of property test_even_three",
+          "category": "functional",
+          "priority": "critical",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_even_three",
+              "requirement_id": "REQ-002",
+              "property_name": "test_even_three",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_even_three' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-003",
+          "description": "Behavioral verification of property test_invalid",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_invalid",
+              "requirement_id": "REQ-003",
+              "property_name": "test_invalid",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_invalid' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-004",
+          "description": "Behavioral verification of property test_properties",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_properties",
+              "requirement_id": "REQ-004",
+              "property_name": "test_properties",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_properties' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-005",
+          "description": "Behavioral verification of property test_remainder_first",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_remainder_first",
+              "requirement_id": "REQ-005",
+              "property_name": "test_remainder_first",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_remainder_first' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        },
+        {
+          "id": "REQ-006",
+          "description": "Behavioral verification of property test_zero",
+          "category": "functional",
+          "priority": "important",
+          "status": "VERIFIED",
+          "mapped_properties": [
+            {
+              "property_id": "PROP-test_zero",
+              "requirement_id": "REQ-006",
+              "property_name": "test_zero",
+              "provenance": "contract_derived",
+              "confidence": "MEDIUM",
+              "justification": "Behavioral test 'test_zero' passed ground-truth execution.",
+              "status": "VERIFIED"
+            }
+          ],
+          "unverified_reason": null
+        }
+      ],
+      "summary": {
+        "total_requirements": 6,
+        "verified_count": 6,
+        "partially_verified_count": 0,
+        "unverified_count": 0,
+        "conflicting_count": 0,
+        "critical_coverage_pct": 100.0,
+        "important_coverage_pct": 100.0,
+        "overall_coverage_pct": 100.0,
+        "specification_escape_rate_pct": 0.0,
+        "critical_unverified_ids": []
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "COVER-001",
+      "category": "coverage",
+      "severity": "low",
+      "description": "No judge probe ran for some behaviour (probe triggers are keyword based); it is evidenced only by the workspace tests: bill.split_bill",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Add tests (or a judge.json contract with tests) for the behaviour of these symbols."
+    },
+    {
+      "id": "EVID-001",
+      "category": "collection",
+      "severity": "medium",
+      "description": "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification.",
+      "property": null,
+      "observed": null,
+      "expected": null,
+      "suggested_focus": "Provide independent behavioral property tests or implementation code that allows verification."
+    }
+  ],
+  "provenance": {
+    "workspace_path": "C:\\Users\\moham\\AppData\\Local\\Temp\\claude\\C--projects-the-judge\\6207043a-0e2e-4938-b71c-7d30fd1878fc\\scratchpad\\ws\\T5_split_bill__B__r2",
+    "workspace_hash": "40b5b96a385a5a7563b5fa46be774751e09c605f28ff65ec9c0f03fa51f26c21",
+    "judge_version": "v1.0.0",
+    "timestamp": "2026-10-28T20:58:16Z",
+    "evidence_level": 1,
+    "total_tests": 6,
+    "passed_tests": 6,
+    "failed_tests": 0
+  },
+  "blocking_issues": [],
+  "insufficient_notes": [
+    "ABSTAIN Level 1 (Synthesis Evasion Policy): Zero independent property challenge tests passed. The Judge refuses to grant PASS on visible workspace tests alone without independent behavioral verification."
+  ],
+  "runtime": {
+    "duration_seconds": 13.307,
+    "judge_version": "v1.0.0"
+  }
+}

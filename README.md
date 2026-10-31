@@ -24,7 +24,18 @@ pip install the-judge-verify
 > The PyPI project named `the-judge` is an **unrelated package** by another author.
 > This project is published as **`the-judge-verify`**.
 
-Copy/paste into your AI assistant prompt:
+**Claude Code plugin** (after the pip install):
+
+```text
+/plugin install the-judge --marketplace 0khacha/the-judge
+```
+
+It adds a Stop hook that verifies every turn that changed code and sends the work back to
+Claude with the judge's next actions until PASS, a skill with the test-first protocol, and
+`/the-judge:verify`, `/the-judge:freeze`, `/the-judge:improve`. See the
+[plugin guide](https://github.com/0khacha/the-judge/blob/main/PLUGIN_GUIDE.md).
+
+**Other AI assistants.** Copy/paste into your AI assistant prompt:
 
 ```text
 Run `pip install the-judge-verify` to install the verification tool, then read
@@ -145,8 +156,10 @@ Action: fix and re-verify.
 </tr>
 </table>
 
-*Reproduce (requires browser): `judge improve examples/alex_morgan_portfolio/ --apply`.
-`judge improve` without `--apply` is a read-only review and changes no files.*
+*These numbers came from a built-in heuristic improver that 1.1.0 removed (it could only
+make cosmetic edits). To reproduce a multi-round run, let an agent make the changes:
+`judge improve examples/alex_morgan_portfolio/ --agent` (requires a browser for screenshots).
+`judge improve` without `--agent` is a read-only review and changes no files.*
 
 ## The rules
 
@@ -169,6 +182,8 @@ Action: fix and re-verify.
 judge verify .                 # Human-readable report
 judge verify . --json          # Machine-readable JSON for agents
 judge contract .              # Inspect requirement coverage
+judge improve .               # Read-only review: verdict, next actions, critique
+judge improve . --agent       # A coding agent fixes, the judge re-verifies, until PASS
 judge demo                    # 60-second interactive demo
 ```
 
@@ -177,7 +192,7 @@ judge demo                    # 60-second interactive demo
 ```bash
 judge hook install            # Pre-commit verification hook
 judge hook install --pre-push # Pre-push verification hook
-judge hook run                # PostToolUse hook (reads JSON from stdin; used by Claude Code)
+judge hook run                # Claude Code Stop hook (reads the event JSON from stdin)
 judge init vscode             # Generate VS Code tasks
 judge watch .                 # Re-verify on every file save
 ```
@@ -215,6 +230,16 @@ result = verify(".", task_spec=None, agent_claims={
 ```
 
 ### Iterative improvement API
+
+```python
+from the_judge import improve
+
+# A coding agent makes the changes; the judge verifies after every round.
+result = improve(".", agent_command="claude -p --permission-mode acceptEdits", max_rounds=4)
+print(result["outcome"], result["final_decision"])
+```
+
+With your own repair step and quality bar:
 
 ```python
 from the_judge.integrations import AgentRepairLoop
@@ -369,7 +394,7 @@ function, multi-input variance, and state isolation.
 
 ## Project Status
 
-**Status**: v1.0.2 · MIT License · Python 3.9+
+**Status**: v1.1.0 · MIT License · Python 3.9+
 
 ## Contributing
 

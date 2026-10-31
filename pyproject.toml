@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "the-judge-verify"
-version = "1.0.2"
+version = "1.1.0"
 description = "Adversarial evidence-based verification & continuous improvement engine for AI coding agents"
 readme = "README.md"
 authors = [{ name = "@0khacha" }]
@@ -85,15 +85,14 @@ zip-safe = false
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["the_judge*", "judge*"]
-exclude = ["tests*", "benchmark*", "examples*", "docs*"]
+include = ["the_judge*"]
 
 [tool.setuptools.package-data]
 the_judge = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-norecursedirs = ["benchmark", "examples", "demo", "_judge_visual", "regression_audit"]
+norecursedirs = ["examples", "eval_results", "_judge_visual", "regression_audit"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]

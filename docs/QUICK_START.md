@@ -57,18 +57,16 @@ Action: fix and re-verify.
 3. Run `judge verify .` again
 4. Repeat until you get `DECISION: PASS`
 
-### 4. Continuous Improvement
-
-For projects that need iterative refinement:
+### 4. Let an agent do the fixing
 
 ```bash
-judge improve .            # read-only review
-judge improve . --apply    # let the built-in improver edit files
+judge improve .                     # read-only review: verdict, next actions, critique
+judge improve . --agent             # a coding agent (Claude Code) fixes, the judge re-verifies
 ```
 
-By default this is a read-only review: one round of evaluation and critique, with the
-findings listed as suggestions; no file is changed. `judge improve . --apply` lets the
-built-in improver edit files between rounds (it never writes tests).
+Without `--agent` nothing is changed. With it, each round the agent gets the judge's
+next actions as its prompt, then the judge verifies independently, until PASS or
+`--max-rounds`. A walk-through: [examples/simple_cache](../examples/simple_cache/README.md).
 
 ## Decision Types
 
@@ -80,7 +78,13 @@ built-in improver edit files between rounds (it never writes tests).
 
 ## Integration with AI Agents
 
-### Claude Code / Cursor / Windsurf
+### Claude Code
+
+Install the plugin (`/plugin install the-judge --marketplace 0khacha/the-judge`): its Stop
+hook verifies every turn that changed code and sends the work back until PASS. See
+[PLUGIN_GUIDE.md](../PLUGIN_GUIDE.md).
+
+### Cursor / Windsurf / Codex
 
 Add `AGENTS.md` to your project root:
 

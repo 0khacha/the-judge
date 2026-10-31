@@ -16,7 +16,6 @@ import shutil
 import pytest
 from audit_helpers import CORPUS, write
 
-from the_judge.core.behavior_engine import BehaviorEngine
 from the_judge.core.property_engine import generate_property_tests
 from the_judge.core.sandbox import SandboxRunner
 
@@ -86,8 +85,6 @@ PAIRS = {
 
 def _probes(ws):
     probes = [(c.kind, c.source_symbol, c.challenge_code) for c in generate_property_tests(ws)]
-    probes += [(p.property_kind, p.target_symbol, p.executable_code)
-               for p in BehaviorEngine().generate_behavioral_probes(ws)]
     return probes
 
 
