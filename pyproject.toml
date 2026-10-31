@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "the-judge-verify"
-version = "1.1.0"
+version = "1.1.1"
 description = "Adversarial evidence-based verification & continuous improvement engine for AI coding agents"
 readme = "README.md"
 authors = [{ name = "@0khacha" }]
