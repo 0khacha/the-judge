@@ -24,4 +24,4 @@ pip install the-judge-verify
 - **Skill `judge-loop`**: the test-first protocol Claude follows.
 - **Commands**: `/the-judge:freeze`, `/the-judge:verify`, `/the-judge:improve`.
 
-Details: [PLUGIN_GUIDE.md](https://github.com/0khacha/the-judge/blob/main/PLUGIN_GUIDE.md).
+Details: [the plugin guide](https://github.com/0khacha/the-judge/blob/main/docs/claude-code-plugin.md).

@@ -9,8 +9,8 @@ This file is the map for AI coding agents working with [The Judge](https://githu
 ## Start here
 
 1. Read `README.md` for the purpose and user-facing behavior.
-2. Read `INSTALL.md` for installation paths and platform-specific setup.
-3. Read `SECURITY.md` and `THREAT_MODEL.md` for the adversarial boundary.
+2. Read `docs/installation.md` for installation paths and platform-specific setup.
+3. Read `SECURITY.md` and `docs/threat-model.md` for the adversarial boundary.
 4. Read `CONTRIBUTING.md` before proposing changes.
 
 ## The verification-repair loop

@@ -5,6 +5,32 @@ All notable changes to The Judge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- README rewritten: what the judge checks, the verdicts and next actions, the Claude Code
+  plugin, measured results and limitations, each matched to the current code.
+- Documentation lives in `docs/` (index: `docs/README.md`): `INSTALL.md` is now
+  `docs/installation.md`, `PLUGIN_GUIDE.md` is `docs/claude-code-plugin.md`,
+  `THREAT_MODEL.md` is `docs/threat-model.md`, `docs/QUICK_START.md` is
+  `docs/quick-start.md`, `docs/API.md` is `docs/python-api.md`, and
+  `examples/INTEGRATION_EXAMPLES.md` is `docs/recipes.md` (rewritten: two recipes showed
+  output the judge does not produce). The stale `docs/integration.md` is removed.
+- Tests are grouped by topic (`tests/verdicts`, `evidence`, `sandbox`, `integrations`,
+  `packaging`), with names that say what they check.
+- Examples: `simple_cache` (the full loop), `agent_loop` (rewritten; it previously ended
+  with NO_MEANINGFUL_IMPROVEMENT), and `visual_portfolio` (renamed from
+  `alex_morgan_portfolio`; now has a spec and HTML tests that find six dead links). The
+  redundant `basic`, `sample_project` and `sample_web_app` examples are removed.
+- CONTRIBUTING.md describes the actual layout and commands (it linked a missing
+  `docs/DEVELOPMENT.md` and an `examples/broken_cache` that never existed).
+
+### Fixed
+- Evaluation archives are stored byte-for-byte (`eval_results/** -text`). Line-ending
+  normalization had made 51 of evaluation 4's 348 benchmark files differ from their
+  recorded SHA-256 in a fresh clone. The `lib/` ignore rule had kept evaluation 4's
+  library sources (72 files) out of the repository entirely.
+
 ## [1.1.0] - 2026-10-31
 
 ### Added

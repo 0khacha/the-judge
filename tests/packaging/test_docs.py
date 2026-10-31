@@ -1,0 +1,110 @@
+"""P2-9: packaging and documentation honesty.
+
+* `pip install the-judge` from PyPI installs an UNRELATED package, so no doc may
+  tell users to install from PyPI by that name; install from git instead.
+* No tracked file may point at audit documents that are not in the repository.
+* README documents optional tooling and current known limitations.
+"""
+
+import os
+import re
+import subprocess
+
+import pytest
+from audit_helpers import repo_root
+
+REPO = repo_root()
+GIT_INSTALL = "git+https://github.com/0khacha/the-judge.git"
+# `pip install [flags such as --upgrade / -U] the-judge[extras]`, i.e. the other package.
+PYPI_INSTALL = re.compile(
+    r"pip3? install(\s+-{1,2}[\w-]+)*\s+[\"']?the[-_]judge(\[[^\]]*\])?[\"']?(?![\w.+/-])"
+)
+
+
+def _tracked(*suffixes):
+    out = subprocess.run(["git", "ls-files"], cwd=REPO, capture_output=True, text=True,
+                         stdin=subprocess.DEVNULL, check=True).stdout.split()
+    # eval_results/ holds archived evidence (e.g. the README as published at the time of
+    # an evaluation); it documents history and must not be rewritten to match today.
+    return [p for p in out if p.endswith(suffixes)
+            and not p.startswith(("tests/", "eval_results/"))]
+
+
+def _read(rel):
+    with open(os.path.join(REPO, rel), encoding="utf-8", errors="replace") as f:
+        return f.read()
+
+
+def test_no_doc_installs_the_unrelated_pypi_package():
+    offenders = []
+    for rel in _tracked(".md", ".txt", ".sh", ".bat", ".yml", ".yaml", ".toml"):
+        for n, line in enumerate(_read(rel).splitlines(), 1):
+            if PYPI_INSTALL.search(line):
+                offenders.append(f"{rel}:{n}: {line.strip()}")
+    assert offenders == []
+
+
+@pytest.mark.parametrize("rel", ["README.md", "docs/installation.md", "AGENTS.md", "docs/quick-start.md"])
+def test_install_docs_use_the_published_distribution(rel):
+    # the-judge-verify 1.0.0 is on PyPI; the git URL is only a "latest from main" option.
+    text = _read(rel)
+    assert "pip install the-judge-verify" in text
+    assert "not yet on PyPI" not in text and "Until it is published" not in text
+
+
+def test_git_install_only_as_latest_from_main():
+    offenders = [f"{rel}:{n}" for rel in _tracked(".md", ".yml", ".yaml")
+                 for n, line in enumerate(_read(rel).splitlines(), 1)
+                 if GIT_INSTALL in line and rel != "README.md"]
+    assert offenders == []
+
+
+def test_readme_copy_paste_prompt_installs_the_renamed_distribution():
+    # The README is frozen into the PyPI project page at upload, so it already
+    # names the published distribution; git stays as the "latest from main" option.
+    readme = _read("README.md")
+    prompt = readme[readme.index("Copy/paste into your AI assistant"):]
+    prompt = prompt[:prompt.index("```", prompt.index("```") + 3)]
+    assert "pip install the-judge-verify" in prompt
+    assert GIT_INSTALL in readme
+    assert "not yet on PyPI" not in readme
+    assert "pypi.org/project/the-judge/" not in readme  # badges pointed at the other package
+
+
+def test_readme_has_no_relative_links_or_images():
+    # README.md is the PyPI long description; relative paths break there.
+    readme = _read("README.md")
+    refs = re.findall(r'\]\(([^)]+)\)|(?:src|href)="([^"]+)"', readme)
+    relative = [a or b for a, b in refs
+                if not re.match(r"(https?://|mailto:|#)", a or b)]
+    assert relative == []
+    assert "https://raw.githubusercontent.com/0khacha/the-judge/main/logo.svg" in readme
+
+
+def test_no_dangling_references_to_missing_audit_documents():
+    missing = [name for name in ("LEVEL2_AUDIT_REPORT.md", "JUDGE_CORE_DEFECTS.md")
+               if not any(p.endswith(name) for p in _tracked(".md"))]
+    offenders = []
+    for rel in _tracked(".md", ".py", ".txt"):
+        text = _read(rel)
+        offenders += [f"{rel}: {name}" for name in missing if name in text]
+    assert offenders == []
+
+
+def test_readme_documents_optional_tools_and_limitations():
+    readme = _read("README.md")
+    assert "known limitations" in readme.lower()
+    assert "mypy" in readme and "ruff" in readme and "optional" in readme.lower()
+    for rel in ("docs/installation.md", "docs/quick-start.md"):
+        text = _read(rel)
+        assert "optional" in text.lower() and "mypy" in text, rel
+
+
+def test_distribution_name_does_not_collide_with_the_pypi_project():
+    # 'the-judge' on PyPI belongs to another author. The distribution is published as
+    # 'the-judge-verify'; the import package stays `the_judge` and the CLI `judge`.
+    pyproject = _read("pyproject.toml")
+    assert re.search(r'^name = "the-judge-verify"$', pyproject, re.M)
+    readme = _read("README.md")
+    assert "the-judge-verify" in readme and "import the_judge" in readme
+    assert "pip uninstall the-judge-verify" in _read("docs/installation.md")

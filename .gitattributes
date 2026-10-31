@@ -26,3 +26,7 @@
 *.ttf binary
 *.woff binary
 *.woff2 binary
+
+# Archived evaluation evidence: store byte-for-byte, so the recorded SHA-256 manifests
+# (benchmark_frozen_sha256.txt, PROTOCOL*.sha256) still match a fresh clone.
+eval_results/** -text

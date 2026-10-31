@@ -1,236 +1,67 @@
-# Contributing to The Judge
+# Contributing
 
-Thank you for your interest in contributing to The Judge! This document provides guidelines and instructions for contributing.
+Bug reports, fixes and new integrations are welcome. For anything larger than a fix,
+open an [issue](https://github.com/0khacha/the-judge/issues) first so the approach can
+be agreed before you write it.
 
-## Code of Conduct
-
-Be respectful and professional. We're here to build quality tools together.
-
-## How to Contribute
-
-### 1. Report Bugs
-
-Use [GitHub Issues](https://github.com/0khacha/the-judge/issues) with the bug report template:
-
-- Clear description of the bug
-- Steps to reproduce
-- Expected vs actual behavior
-- Environment details (OS, Python version, The Judge version)
-- Relevant logs or output
-
-### 2. Suggest Features
-
-Use [GitHub Issues](https://github.com/0khacha/the-judge/issues) with the feature request template:
-
-- Clear description of the feature
-- Use case and problem it solves
-- Proposed solution
-- Alternatives considered
-
-### 3. Submit Pull Requests
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/my-feature`
-3. **Make your changes**
-4. **Write tests** for your changes
-5. **Run the test suite**: `make test`
-6. **Run linters**: `make lint`
-7. **Format code**: `make format`
-8. **Verify the project**: `make verify`
-9. **Commit with clear messages**
-10. **Push and create a pull request**
-
-## Development Setup
-
-See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for detailed development instructions.
-
-Quick setup:
+## Setup
 
 ```bash
-# Clone the repository
 git clone https://github.com/0khacha/the-judge.git
 cd the-judge
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install with dev dependencies
-make dev-install
-
-# Run tests
-make test
-
-# Run linters
-make lint
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"          # Python 3.10+
 ```
 
-## Code Style
+| Command | What it runs |
+|---|---|
+| `make test` | `pytest tests/` (about 5-10 minutes: many tests run the judge end to end) |
+| `make lint` | `ruff check` and `mypy` |
+| `make format` | `ruff format` and autofixes |
+| `make plugin` | `claude plugin validate` for the marketplace and the plugin (needs the `claude` CLI) |
 
-- **Line length**: 100 characters
-- **Formatter**: Ruff
-- **Linter**: Ruff + mypy
-- **Type hints**: Required for all public functions
-- **Docstrings**: Google style for all public APIs
+CI runs lint and tests on Ubuntu, Windows and macOS with Python 3.10-3.13, then the
+`examples/simple_cache` walk-through through the installed CLI.
 
-Example:
+## Where things are
 
-```python
-from typing import Optional
+| Path | Contents |
+|---|---|
+| `the_judge/core/` | The verifier: evidence capture, sandbox, scoring, mutation, checklist |
+| `the_judge/integrations/` | CLI, repair loop, agent runner, git hooks, VS Code, watch mode |
+| `the_judge/hook.py` | Claude Code Stop hook |
+| `plugin/` | Claude Code plugin: hook config, skill, slash commands |
+| `tests/verdicts/` | What decides PASS / FAIL / ABSTAIN, false-PASS regressions |
+| `tests/evidence/` | Independence, freeze, checklist, mutation, probes, contracts |
+| `tests/sandbox/` | Test discovery, isolation, failure messages |
+| `tests/integrations/` | Hook, improve, repair loop, critique, CLI output |
+| `tests/packaging/` | Distribution contents, version, documentation checks |
+| `tests/regression_audit/` | Labelled corpus: does a change make the judge less discriminating? |
+| `eval_results/` | Pre-registered evaluations (archived evidence; do not edit) |
 
-def verify_workspace(
-    workspace: str,
-    task_spec: Optional[dict] = None
-) -> VerificationResult:
-    """Verify code in a workspace.
-    
-    Args:
-        workspace: Path to workspace directory.
-        task_spec: Optional task specification contract.
-    
-    Returns:
-        VerificationResult containing decision and findings.
-    
-    Raises:
-        ValueError: If workspace path is invalid.
-    """
-    pass
-```
+Architecture: [docs/architecture.md](docs/architecture.md).
 
-## Testing
+## Rules for changes
 
-- Write tests for all new features
-- Maintain or improve code coverage
-- Use descriptive test names
-- Test both success and failure cases
+- **A change to a verdict needs a test that shows it.** A wrong PASS is the worst bug this
+  project can have. Every fix for one gets a regression test in `tests/verdicts/` that
+  failed before the fix.
+- **Do not weaken an existing test to make a change pass.** If a test is wrong, say why
+  in the pull request.
+- **Check the corpus when you touch `core/`:** `python tests/regression_audit/run_audit.py`
+  should not get worse.
+- **Docs must match the code.** `tests/packaging/test_docs.py` enforces part of this.
+  README.md is also the PyPI page, so it uses absolute links only.
+- **Update CHANGELOG.md** under the next version.
 
-```python
-def test_verify_pass():
-    """Test successful verification."""
-    result = verify("examples/simple_cache")
-    assert result.decision == "PASS"
+## Commits and pull requests
 
-def test_verify_fail_on_broken_code():
-    """Test verification fails on broken code."""
-    result = verify("examples/broken_cache")
-    assert result.decision == "FAIL"
-    assert len(result.findings) > 0
-```
-
-## Commit Messages
-
-Use clear, descriptive commit messages:
-
-```
-type: brief description
-
-Longer explanation if needed.
-
-- Details
-- More details
-```
-
-Types:
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `refactor`: Code refactoring
-- `test`: Test additions or changes
-- `chore`: Maintenance tasks
-
-Examples:
-```
-feat: add visual quality evaluator for web projects
-
-fix: handle edge case in cache expiration logic
-
-docs: add examples for custom quality evaluators
-
-refactor: simplify evidence capture pipeline
-
-test: add regression tests for boundary conditions
-```
-
-## Pull Request Guidelines
-
-1. **One feature per PR** - Keep PRs focused
-2. **Update documentation** - If you change APIs, update docs
-3. **Add tests** - No PR without tests (unless docs-only)
-4. **Update CHANGELOG.md** - Add entry for your change
-5. **Pass CI checks** - All tests and lints must pass
-6. **Verify with The Judge** - Run `make verify` before submitting
-
-### PR Description Template
-
-```markdown
-## Description
-Brief description of changes.
-
-## Motivation
-Why is this change needed?
-
-## Changes
-- List of changes
-- Another change
-
-## Testing
-How was this tested?
-
-## Checklist
-- [ ] Tests added/updated
-- [ ] Documentation updated
-- [ ] CHANGELOG.md updated
-- [ ] Code formatted (`make format`)
-- [ ] Linters pass (`make lint`)
-- [ ] Tests pass (`make test`)
-- [ ] Verification passes (`make verify`)
-```
-
-## Areas for Contribution
-
-### High Priority
-
-- Additional integration examples
-- Performance optimizations
-- Documentation improvements
-- Bug fixes
-
-### Medium Priority
-
-- New IDE integrations (JetBrains, etc.)
-- Additional quality evaluators (security, accessibility)
-- Enhanced visual evaluation engine
-- Better error messages
-
-### Ideas Welcome
-
-- New features (discuss in an issue first)
-- Architecture improvements
-- Better test coverage
-- Usability enhancements
-
-## What NOT to Contribute
-
-- Breaking changes without discussion
-- Features that don't fit the core mission
-- Code without tests
-- Poorly documented code
-- Code that doesn't pass linters
-
-## Questions?
-
-- **Issues**: [GitHub Issues](https://github.com/0khacha/the-judge/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/0khacha/the-judge/discussions)
+Commit messages: `type: summary` (`feat`, `fix`, `docs`, `test`, `refactor`, `build`,
+`ci`), with a body that explains why. One topic per pull request; describe what changed
+and how you tested it.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
-
-## Recognition
-
-Contributors are recognized in:
-- GitHub contributors list
-- Release notes
-- Project documentation (for significant contributions)
-
-Thank you for contributing to The Judge!
+By contributing you agree that your contributions are licensed under the
+[MIT License](LICENSE).
