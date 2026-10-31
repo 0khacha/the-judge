@@ -45,6 +45,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    # tests/test_packaging_sdist.py builds with --no-isolation: the backend must be here.
+    "setuptools>=61.0",
+    "wheel",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "pytest-asyncio>=0.20.0",
@@ -97,6 +100,7 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "--tb=short -q"
+asyncio_default_fixture_loop_scope = "function"
 
 [tool.ruff]
 line-length = 100

@@ -31,6 +31,21 @@ def shorten(text: str, limit: int) -> str:
     return text[:head] + marker + text[-(limit - len(marker) - head):]
 
 
+# pytest >= 9.2 cuts a long JUnit ``message`` attribute and ends it with this note; the
+# full report (traceback with the "E   " error lines) is in the element text.
+_TRUNCATED_MESSAGE = "full report in element text"
+
+
+def failure_message(message: Optional[str], text: Optional[str]) -> str:
+    """The failure message of a JUnit <failure>/<error>, complete even when pytest cut it."""
+    if message and _TRUNCATED_MESSAGE not in message:
+        return message
+    error_lines = [line[1:].strip() for line in (text or "").splitlines() if line.startswith("E ")]
+    if error_lines:
+        return "\n".join(error_lines)
+    return text or message or ""
+
+
 # pytest's own norecursedirs default, kept when workspace patterns are added.
 _PYTEST_DEFAULT_NORECURSE = [
     "*.egg", ".*", "_darcs", "build", "CVS", "dist", "node_modules", "venv", "{arch}",
@@ -308,7 +323,8 @@ class SandboxRunner:
                         if problem is not None:
                             failed_tests.append(name)
                             failure_messages[name] = shorten(
-                                problem.get('message') or problem.text or "", MAX_FAILURE_MESSAGE)
+                                failure_message(problem.get('message'), problem.text),
+                                MAX_FAILURE_MESSAGE)
                         elif testcase.find('skipped') is not None:
                             skipped_tests.append(name)
                         else:

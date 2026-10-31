@@ -27,3 +27,16 @@ def test_failing_test_with_long_message_reports_its_end(tmp_path):
     assert "REAL_CAUSE" in action["detail"]
     finding = next(f for f in result.findings if f.category == "behavior")
     assert "REAL_CAUSE" in (finding.observed or "")
+
+
+def test_truncated_junit_message_is_rebuilt_from_the_report():
+    """pytest >= 9.2 cuts the JUnit message attribute; the E-lines of the report are whole."""
+    from the_judge.core.sandbox import failure_message
+
+    cut = "AssertionError: noise noise...\n[+2 more lines; full report in element text]"
+    report = ("def test_add():\n>       assert add(2, 3) == 5, msg\n"
+              "E       AssertionError: noise noise REAL_CAUSE\n"
+              "E       assert -1 == 5\n\ntest_calc.py:5: AssertionError")
+    assert failure_message(cut, report) == "AssertionError: noise noise REAL_CAUSE\nassert -1 == 5"
+    assert failure_message("assert 1 == 2", report) == "assert 1 == 2"  # untruncated: unchanged
+    assert failure_message(None, None) == ""
