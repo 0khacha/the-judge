@@ -11,6 +11,7 @@ import subprocess
 import sys
 
 import pytest
+from audit_helpers import repo_root
 
 
 class TestBug4Hook:
@@ -110,10 +111,7 @@ class TestBug4Hook:
 
     def test_settings_json_uses_cross_platform_command(self):
         """settings.json must use python -m the_judge.hook (not py -m judge.hook)."""
-        settings_path = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            ".claude", "settings.json"
-        )
+        settings_path = os.path.join(repo_root(), ".claude", "settings.json")
         if not os.path.exists(settings_path):
             pytest.skip("No .claude/settings.json found")
 
