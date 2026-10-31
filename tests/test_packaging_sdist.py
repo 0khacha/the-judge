@@ -10,6 +10,7 @@ wheel would then be empty.
 import subprocess
 import sys
 import tarfile
+import time
 import zipfile
 
 import pytest
@@ -25,10 +26,20 @@ REQUIRED = ("the_judge/__init__.py", "the_judge/api.py", "the_judge/core/sandbox
 def built(tmp_path_factory):
     pytest.importorskip("build")
     out = tmp_path_factory.mktemp("dist")
-    proc = subprocess.run(
-        [sys.executable, "-m", "build", "--no-isolation", "--outdir", str(out), REPO],
-        capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=900,
-    )
+    # setuptools assembles the sdist in a temporary directory inside the checkout and
+    # deletes it afterwards; on Windows a scanner (antivirus, indexer) can briefly hold
+    # one of its new files open ("could not delete ..."). Retry only that error.
+    for attempt in range(3):
+        proc = subprocess.run(
+            [sys.executable, "-m", "build", "--no-isolation", "--outdir", str(out), REPO],
+            capture_output=True, text=True, errors="replace", stdin=subprocess.DEVNULL,
+            timeout=900,
+        )
+        if proc.returncode == 0 or "could not delete" not in proc.stderr or attempt == 2:
+            break
+        time.sleep(2)
+        for leftover in out.iterdir():
+            leftover.unlink()
     assert proc.returncode == 0, proc.stderr[-2000:]
     (sdist,) = list(out.glob("*.tar.gz"))
     (wheel,) = list(out.glob("*.whl"))
