@@ -2,11 +2,9 @@
 include README.md
 include LICENSE
 include CHANGELOG.md
-include INSTALL.md
 include AGENTS.md
 include CONTRIBUTING.md
 include SECURITY.md
-include THREAT_MODEL.md
 
 # Include configuration files
 include pyproject.toml

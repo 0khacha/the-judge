@@ -87,4 +87,4 @@ evaluations), `tests/` (including `tests/regression_audit`, a labelled corpus).
 - **Weakened evidence is FAIL**: a frozen or committed test deleted, skipped or
   weakened, or a test result rewritten by a hook.
 - **The sandbox is isolation, not security.** See [SECURITY.md](../SECURITY.md) and
-  [THREAT_MODEL.md](../THREAT_MODEL.md).
+  [threat-model.md](threat-model.md).
